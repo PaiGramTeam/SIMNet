@@ -1,0 +1,106 @@
+import hashlib
+import json
+import random
+import string
+import time
+from enum import Enum
+from typing import Any, Optional
+
+from simnet.utils.enum_ import Region
+from simnet.utils.types import QueryParamTypes
+
+
+class DSType(Enum):
+    """
+    Enumeration of dynamic secret types.
+
+    Attributes:
+        ANDROID (str): Android dynamic secret type.
+        ANDROID_NEW (str): New Android dynamic secret type.
+        SIGN (str): Sign dynamic secret type.
+    """
+
+    ANDROID = "android"
+    ANDROID_NEW = "android_new"
+    SIGN = "sign"
+
+
+def hex_digest(text):
+    """
+    Computes the MD5 hash digest of the given text.
+
+    Args:
+        text (str): The text to hash.
+
+    Returns:
+        str: The MD5 hash digest of the given text.
+    """
+    _md5 = hashlib.md5()  # nosec B303
+    _md5.update(text.encode())
+    return _md5.hexdigest()
+
+
+def generate_dynamic_secret(
+    region: Region,
+    ds_type: Optional[DSType] = None,
+    new_ds: bool = False,
+    data: Any = None,
+    params: Optional[QueryParamTypes] = None,
+):
+    """
+    Generates a dynamic secret.
+
+    Args:
+        region (Region): The region for which to generate the dynamic secret.
+        ds_type (Optional[DSType], optional): The dynamic secret type. Defaults to None.
+        new_ds (bool, optional): Whether to generate a new or old dynamic secret. Defaults to False.
+        data (Any, optional): The data to include in the dynamic secret. Defaults to None.
+        params (Optional[QueryParamTypes], optional): The query parameters to include in the dynamic secret.
+            Defaults to None.
+
+    Raises:
+        ValueError: If the region or ds_type is not recognized.
+
+    Returns:
+        Tuple[str, str, str]: A tuple containing the app version, client type, and dynamic secret.
+    """
+
+    def new():
+        """Create a new dynamic secret 2."""
+        t = str(int(time.time()))
+        r = str(random.randint(100001, 200000))  # nosec
+        b = json.dumps(data) if data else ""
+        q = "&".join(f"{k}={v}" for k, v in sorted(params.items())) if params else ""
+        c = hex_digest(f"salt={salt}&t={t}&r={r}&b={b}&q={q}")
+        return f"{t},{r},{c}"
+
+    def old():
+        """Create a new dynamic secret."""
+        t = str(int(time.time()))
+        r = "".join(random.sample(string.ascii_lowercase + string.digits, 6))
+        c = hex_digest(f"salt={salt}&t={t}&r={r}")
+        return f"{t},{r},{c}"
+
+    app_version = "2.46.1"
+    client_type = "5"
+    if region == Region.OVERSEAS:
+        salt = "6s25p5ox5y14umn1p61aqyyvbvvl3lrt"
+        app_version = "1.5.0"
+    elif region == Region.CHINESE:
+        if ds_type is None:
+            salt = "xV8v4Qu54lUKrEYFZkJhB8cuOh9Asafs"
+        elif ds_type == DSType.ANDROID:
+            salt = "KZazpG4cO2QECFDBUCxdhS8cYCsQHfzn"
+            client_type = "2"
+        elif ds_type == DSType.ANDROID_NEW:
+            client_type = "2"
+            salt = "t0qEgfub6cvueAPgR5m9aQWWVciEer7v"
+        else:
+            raise ValueError(f"Unknown ds_type: {ds_type}")
+    else:
+        raise ValueError(f"Unknown region: {region}")
+    if new_ds:
+        ds = new()
+    else:
+        ds = old()
+    return app_version, client_type, ds

@@ -1,0 +1,116 @@
+"""This module contains functions for recognizing servers associated with different player IDs."""
+
+from typing import Optional, Mapping, Sequence
+from simnet.utils.enum_ import Game, Region
+
+UID_RANGE: Mapping[Game, Mapping[Region, Sequence[int]]] = {
+    Game.GENSHIN: {
+        Region.OVERSEAS: (6, 7, 8, 9),
+        Region.CHINESE: (1, 2, 5),
+    },
+    Game.STARRAIL: {
+        Region.OVERSEAS: (6, 7, 8, 9),
+        Region.CHINESE: (1, 2),
+    },
+    Game.HONKAI: {
+        Region.OVERSEAS: (1, 2),
+        Region.CHINESE: (3, 4),
+    },
+}
+
+
+def recognize_genshin_server(player_id: int) -> str:
+    """Recognize which server a Genshin UID is from.
+
+    Args:
+        player_id (int): The player ID to recognize the server for.
+
+    Returns:
+        str: The name of the server associated with the given player ID.
+
+    Raises:
+        ValueError: If the player ID is not associated with any server.
+    """
+    server = {
+        "1": "cn_gf01",
+        "2": "cn_gf01",
+        "5": "cn_qd01",
+        "6": "os_usa",
+        "7": "os_euro",
+        "8": "os_asia",
+        "9": "os_cht",
+    }.get(str(player_id)[0])
+
+    if server:
+        return server
+
+    raise ValueError(f"Player id {player_id} isn't associated with any server")
+
+
+def recognize_starrail_server(player_id: int) -> str:
+    """Recognize which server a StarRail UID is from.
+
+    Args:
+        player_id (int): The player ID to recognize the server for.
+
+    Returns:
+        str: The name of the server associated with the given player ID.
+
+    Raises:
+        ValueError: If the player ID is not associated with any server.
+    """
+    server = {
+        "1": "prod_gf_cn",
+        "2": "prod_gf_cn",
+        "5": "",
+        "6": "",
+        "7": "",
+        "8": "",
+        "9": "",
+    }.get(str(player_id)[0])
+
+    if server:
+        return server
+
+    raise ValueError(f"player id {player_id} isn't associated with any server")
+
+
+def recognize_region(player_id: int, game: Game) -> Optional[Region]:
+    """
+    Recognizes the region of a player ID for a given game.
+
+    Args:
+        player_id (int): The player ID to recognize the region for.
+        game (Game): The game the player ID belongs to.
+
+    Returns:
+        Optional[Region]: The region the player ID belongs to if it can be recognized, None otherwise.
+    """
+    first = int(str(player_id)[0])
+
+    for region, digits in UID_RANGE[game].items():
+        if first in digits:
+            return region
+
+    return None
+
+
+def recognize_server(player_id: int, game: Game) -> str:
+    """
+    Recognizes the server of a player ID for a given game.
+
+    Args:
+        player_id (int): The player ID to recognize the server for.
+        game (Game): The game the player ID belongs to.
+
+    Returns:
+        str: The server the player ID belongs to.
+
+    Raises:
+        ValueError: If the specified game is not supported.
+    """
+    if game == Game.GENSHIN:
+        return recognize_genshin_server(player_id)
+    if game == Game.STARRAIL:
+        return recognize_starrail_server(player_id)
+    raise ValueError(f"{game} is not a valid game")
