@@ -3,7 +3,7 @@ from typing import Optional
 from simnet.client.chronicle.starrail import StarRailBattleChronicleClient
 from simnet.client.wish.starrail import WishClient
 from simnet.utils.enum_ import Region
-from simnet.utils.types import CookieTypes, HeaderTypes
+from simnet.utils.types import CookieTypes, HeaderTypes, TimeoutTypes
 
 
 class StarRailClient(StarRailBattleChronicleClient, WishClient):
@@ -15,4 +15,5 @@ class StarRailClient(StarRailBattleChronicleClient, WishClient):
         player_id: Optional[int] = None,
         region: Region = Region.OVERSEAS,
         lang: str = "en-us",
+        timeout: Optional[TimeoutTypes] = None,
     ): ...

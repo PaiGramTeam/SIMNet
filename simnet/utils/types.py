@@ -21,3 +21,8 @@ HeaderTypes = Union[
     Sequence[Tuple[str, str]],
     Sequence[Tuple[bytes, bytes]],
 ]
+TimeoutTypes = Union[
+    Optional[float],
+    Tuple[Optional[float], Optional[float], Optional[float], Optional[float]],
+    "Timeout",
+]

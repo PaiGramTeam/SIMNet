@@ -3,7 +3,7 @@ import uuid
 from types import TracebackType
 from typing import AsyncContextManager, Type, Optional, Any
 
-from httpx import AsyncClient, TimeoutException, Response, HTTPError
+from httpx import AsyncClient, TimeoutException, Response, HTTPError, Timeout
 
 from simnet.client.cookies import Cookies
 from simnet.client.headers import Headers
@@ -16,46 +16,32 @@ from simnet.utils.types import (
     CookieTypes,
     RequestData,
     QueryParamTypes,
+    TimeoutTypes,
 )
 
-_LOGGER = logging.getLogger("simnet.BaseClient")
+_LOGGER = logging.getLogger("SIMNet.BaseClient")
 
 
 class BaseClient(AsyncContextManager["BaseClient"]):
     """
     This is the base class for simnet clients. It provides common methods and properties for simnet clients.
 
-    Parameters:
-    -----------
-    cookies: Optional[CookieTypes]
-        The cookies used for the client.
-    headers: Optional[HeaderTypes]
-        The headers used for the client.
-    account_id: Optional[int]
-        The account id used for the client.
-    player_id: Optional[int]
-        The player id used for the client.
-    region: Region
-        The region used for the client.
-    lang: str
-        The language used for the client.
+    Args:
+        cookies (Optional[CookieTypes], optional): The cookies used for the client.
+        headers (Optional[HeaderTypes], optional): The headers used for the client.
+        account_id (Optional[int], optional): The account id used for the client.
+        player_id (Optional[int], optional): The player id used for the client.
+        region (Region, optional): The region used for the client.
+        lang (str, optional): The language used for the client.
+        timeout (Optional[TimeoutTypes], optional): Timeout configuration for the client.
 
     Attributes:
-    -----------
-    cookies: Cookies
-        The cookies used for the client.
-    headers: Headers
-        The headers used for the client.
-    player_id: Optional[int]
-        The player id used for the client.
-    account_id: Optional[int]
-        The account id used for the client.
-    client: AsyncClient
-        The httpx async client instance.
-    region: Region
-        The region used for the client.
-    lang: str
-        The language used for the client.
+        cookies (CookieTypes): The cookies used for the client.
+        headers (HeaderTypes): The headers used for the client.
+        account_id (Optional[int]): The account id used for the client.
+        player_id (Optional[int]): The player id used for the client.
+        region (Region): The region used for the client.
+        lang (str): The language used for the client.
     """
 
     _device_id = str(uuid.uuid3(uuid.NAMESPACE_URL, "SIMNet"))
@@ -68,13 +54,22 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         player_id: Optional[int] = None,
         region: Region = Region.OVERSEAS,
         lang: str = "en-us",
+        timeout: Optional[TimeoutTypes] = None,
     ) -> None:
         """Initialize the client with the given parameters."""
+        if timeout is None:
+            timeout = Timeout(
+                connect=5.0,
+                read=5.0,
+                write=5.0,
+                pool=1.0,
+            )
+
         self.cookies = Cookies(cookies)
         self.headers = Headers(headers)
         self.player_id = player_id
         self.account_id = account_id
-        self.client = AsyncClient(cookies=self.cookies)
+        self.client = AsyncClient(cookies=self.cookies, timeout=timeout)
         self.region = region
         self.lang = lang
 
