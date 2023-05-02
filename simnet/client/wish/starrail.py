@@ -1,7 +1,9 @@
+from functools import partial
 from typing import Optional, List
 from simnet.client.wish.base import BaseWishClient
 from simnet.models.starrail.wish import StarRailWish
 from simnet.utils.enum_ import Game
+from simnet.utils.paginator import WishPaginator
 
 
 class WishClient(BaseWishClient):
@@ -9,7 +11,7 @@ class WishClient(BaseWishClient):
 
     async def wish_history(
         self,
-        banner_types: List[int],
+        banner_type: int,
         limit: Optional[int] = None,
         lang: Optional[str] = None,
         authkey: Optional[str] = None,
@@ -19,7 +21,7 @@ class WishClient(BaseWishClient):
         Get the wish history for a list of banner types.
 
         Args:
-            banner_types (List[int], optional): The list of banner types to get the wish history for.
+            banner_type (int, optional): The banner types to get the wish history for.
             limit (Optional[int] , optional): The maximum number of wishes to retrieve.
                 If not provided, all available wishes will be returned.
             lang (Optional[str], optional): The language code to use for the request.
@@ -30,12 +32,19 @@ class WishClient(BaseWishClient):
         Returns:
             List[StarRailWish]: A list of StarRailWish objects representing the retrieved wishes.
         """
-        wish: List[StarRailWish] = []
         banner_names = await self.get_banner_names(
             game=Game.STARRAIL, lang=lang, authkey=authkey
         )
-        for banner_type in banner_types:
-            data = await self.get_wish_page(end_id, banner_type, Game.STARRAIL)
-            banner_name = banner_names[banner_type]
-            wish = [StarRailWish(**i, banner_name=banner_name) for i in data["list"]]
+        paginator = WishPaginator(
+            end_id,
+            partial(
+                self.get_wish_page,
+                banner_type=banner_type,
+                game=Game.STARRAIL,
+                authkey=authkey,
+            ),
+        )
+        items = await paginator.get(limit)
+        banner_name = banner_names[banner_type]
+        wish = [StarRailWish(**i, banner_name=banner_name) for i in items]
         return wish
