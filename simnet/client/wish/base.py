@@ -76,6 +76,7 @@ class BaseWishClient(BaseClient):
         end_id: int,
         banner_type: int,
         game: Game,
+        size: int = 20,
         lang: Optional[str] = None,
         authkey: Optional[str] = None,
     ) -> Dict[str, Any]:
@@ -86,6 +87,7 @@ class BaseWishClient(BaseClient):
             end_id (int): The ending ID of the last wish to retrieve.
             banner_type (int): The type of banner to retrieve wishes from.
             game (Game): The game to make the request for.
+            size (int, optional): : The number of wishes to retrieve per page, with a default value of 20.
             lang (Optional[str], optional): The language code to use for the request.
                 If not provided, the class default will be used.
             authkey (Optional[str], optional): The authorization key for making the request.
@@ -98,7 +100,7 @@ class BaseWishClient(BaseClient):
             game=game,
             lang=lang,
             authkey=authkey,
-            params=dict(gacha_type=banner_type, size=20, end_id=end_id),
+            params=dict(gacha_type=banner_type, size=size, end_id=end_id),
         )
 
     async def get_banner_names(
