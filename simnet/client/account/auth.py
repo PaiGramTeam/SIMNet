@@ -26,8 +26,11 @@ class AuthClient(BaseClient):
             bool: `True` if the super ticket successfully retrieved, otherwise `False`.
 
         Raises:
+            ValueError: If the `region` property of the object is not set to `Region.CHINESE`.
             ValueError: If `login_ticket` is not found in the cookies.
         """
+        if self.region != Region.CHINESE:
+            raise ValueError("This method is only available for the Chinese region.")
         url = AUTH_URL.get_url(Region.CHINESE).join("getMultiTokenByLoginTicket")
         login_ticket = self.cookies.get("login_ticket")
         if login_ticket is None:
@@ -60,8 +63,11 @@ class AuthClient(BaseClient):
             bool: `True` if the cookie token was successfully retrieved, otherwise `False`.
 
         Raises:
+            ValueError: If the `region` property of the object is not set to `Region.CHINESE`.
             ValueError: If `stoken` is not found in the cookies.
         """
+        if self.region != Region.CHINESE:
+            raise ValueError("This method is only available for the Chinese region.")
         stoken = self.cookies.get("stoken")
         if stoken is None:
             raise ValueError("stoken not found in cookies.")
@@ -86,8 +92,11 @@ class AuthClient(BaseClient):
             bool: `True` if the login token was successfully retrieved, otherwise `False`.
 
         Raises:
+            ValueError: If the `region` property of the object is not set to `Region.CHINESE`.
             ValueError: If `stoken` is not found in the cookies.
         """
+        if self.region != Region.CHINESE:
+            raise ValueError("This method is only available for the Chinese region.")
         stoken = self.cookies.get("stoken")
         if stoken is None:
             raise ValueError("stoken not found in cookies.")
@@ -120,8 +129,11 @@ class AuthClient(BaseClient):
             str or None: The authentication key, or None if not found.
 
         Raises:
+            ValueError: If the `region` property of the object is not set to `Region.CHINESE`.
             ValueError: If `stoken` is not found in the cookies.
         """
+        if self.region != Region.CHINESE:
+            raise ValueError("This method is only available for the Chinese region.")
         stoken = self.cookies.get("stoken")
         if stoken is None:
             raise ValueError("stoken not found in cookies.")
