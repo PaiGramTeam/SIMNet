@@ -39,9 +39,9 @@ class GenshinAccount(APIModel):
     def game(self) -> Union[Game, str]:
         if "hk4e" in self.game_biz:
             return Game.GENSHIN
-        elif "bh3" in self.game_biz:
+        if "bh3" in self.game_biz:
             return Game.HONKAI
-        elif "hkrpg" in self.game_biz:
+        if "hkrpg" in self.game_biz:
             return Game.STARRAIL
 
         try:
