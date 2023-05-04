@@ -12,6 +12,12 @@ from simnet.utils.enum_ import Region
 
 
 class AuthClient(BaseClient):
+    """
+    The AuthClient class is a client for authentication services.
+    It is derived from the BaseClient class and provides methods for retrieving
+    different authentication tokens and keys.
+    """
+
     async def get_stoken_by_login_ticket(self) -> bool:
         """
         Retrieves a super ticket (`stoken`) using a login ticket (`login_ticket`) .
