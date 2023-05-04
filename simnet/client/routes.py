@@ -149,11 +149,12 @@ class GameRoute(BaseRoute):
             raise RuntimeError(f"URL does not support {region.name} region.")
 
         if not self.urls[region][game]:
-            raise RuntimeError(
-                f"URL does not support {game.name} game for {region.name} region."
-            )
+            raise RuntimeError(f"URL does not support {game.name} game for {region.name} region.")
 
         return self.urls[region][game]
+
+
+PASSPORT_HOST = "passport-api.mihoyo.com"
 
 
 RECORD_URL = InternationalRoute(
@@ -170,4 +171,26 @@ GACHA_INFO_URL = GameRoute(
         genshin="https://hk4e-api.mihoyo.com/event/gacha_info/api",
         hkrpg="https://api-takumi.mihoyo.com/common/gacha_record/api",
     ),
+)
+
+AUTH_URL = InternationalRoute(
+    overseas="",
+    chinese="https://api-takumi.mihoyo.com/auth/api",
+)
+
+GET_COOKIES_TOKEN_BY_STOKEN_URL = InternationalRoute(
+    overseas="",
+    chinese=f"https://{PASSPORT_HOST}/account/auth/api/getCookieAccountInfoBySToken",
+)
+
+GET_LTOKEN_BY_STOKEN_URL = InternationalRoute(
+    overseas="",
+    chinese=f"https://{PASSPORT_HOST}/account/auth/api/getLTokenBySToken",
+)
+
+AUTH_KEY_URL = InternationalRoute(overseas="", chinese="https://api-takumi.mihoyo.com/binding/api/genAuthKey")
+
+HK4E_LOGIN_URL = InternationalRoute(
+    overseas="https://sg-public-api.hoyoverse.com/common/badge/v1/login/account",
+    chinese="https://api-takumi.mihoyo.com/common/badge/v1/login/account",
 )
