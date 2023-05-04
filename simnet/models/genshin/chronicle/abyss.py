@@ -36,12 +36,30 @@ class AbyssCharacter(BaseCharacter):
 class CharacterRanks(APIModel):
     """Collection of rankings achieved during spiral abyss runs."""
 
-    most_played: List[AbyssRankCharacter] = Field(default=[], alias="reveal_rank", )
-    most_kills: List[AbyssRankCharacter] = Field(default=[], alias="defeat_rank", )
-    strongest_strike: List[AbyssRankCharacter] = Field(default=[], alias="damage_rank", )
-    most_damage_taken: List[AbyssRankCharacter] = Field(default=[], alias="take_damage_rank", )
-    most_bursts_used: List[AbyssRankCharacter] = Field(default=[], alias="energy_skill_rank", )
-    most_skills_used: List[AbyssRankCharacter] = Field(default=[], alias="normal_skill_rank", )
+    most_played: List[AbyssRankCharacter] = Field(
+        default=[],
+        alias="reveal_rank",
+    )
+    most_kills: List[AbyssRankCharacter] = Field(
+        default=[],
+        alias="defeat_rank",
+    )
+    strongest_strike: List[AbyssRankCharacter] = Field(
+        default=[],
+        alias="damage_rank",
+    )
+    most_damage_taken: List[AbyssRankCharacter] = Field(
+        default=[],
+        alias="take_damage_rank",
+    )
+    most_bursts_used: List[AbyssRankCharacter] = Field(
+        default=[],
+        alias="energy_skill_rank",
+    )
+    most_skills_used: List[AbyssRankCharacter] = Field(
+        default=[],
+        alias="normal_skill_rank",
+    )
 
 
 class Battle(APIModel):

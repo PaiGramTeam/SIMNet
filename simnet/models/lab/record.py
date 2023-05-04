@@ -83,7 +83,6 @@ class RecordCardSettingType(enum.IntEnum):
 
 
 class Gender(enum.IntEnum):
-
     unknown = 0
     male = 1
     female = 2
@@ -168,7 +167,9 @@ class RecordCard(GenshinAccount):
 
     def as_dict(self) -> Dict[str, Any]:
         """Return data as a dictionary."""
-        return {d.name: (int(d.value) if d.value.isdigit() else d.value) for d in self.data}
+        return {
+            d.name: (int(d.value) if d.value.isdigit() else d.value) for d in self.data
+        }
 
 
 class GenshinRecordCard(RecordCard):
