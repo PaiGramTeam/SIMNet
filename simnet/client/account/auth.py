@@ -91,7 +91,7 @@ class AuthClient(BaseClient):
         self, game_biz: str, region: str, auth_appid: str
     ) -> Optional[str]:
         """
-        Get the authentication key for a game and region using a stoken.
+        Get the auth key (`authkey`) for a game and region using a super ticket (`stoken`).
 
         Args:
             game_biz (str): The name of the game.
@@ -116,7 +116,8 @@ class AuthClient(BaseClient):
         self, game_biz: str, region: str
     ) -> NoReturn:
         """
-        Get HK4E token using cookie token. The resulting HK4E token will be automatically saved in self.cookies.
+        Get HK4E token (`stoken`) using cookie token (`cookie_token`).
+        The resulting HK4E token will be automatically saved in self.cookies.
 
         Args:
             game_biz (str): The name of the game.
