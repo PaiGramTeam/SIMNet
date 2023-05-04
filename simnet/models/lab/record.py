@@ -2,8 +2,11 @@ import enum
 import re
 from typing import Optional, Any, Dict, List, Union
 
-import pydantic
 
+from pydantic import Field, validator
+
+from simnet.models.base import APIModel
+from simnet.utils.enum_ import Game
 
 __all__ = (
     "FullUser",
@@ -18,11 +21,6 @@ __all__ = (
     "RecordCardSettingType",
     "UserInfo",
 )
-
-from pydantic import Field
-
-from simnet.models.base import APIModel
-from simnet.utils.enum_ import Game
 
 
 class GenshinAccount(APIModel):
@@ -99,8 +97,8 @@ class PartialUser(APIModel):
     gender: Gender
     icon: str = Field(alias="avatar_url")
 
-    @pydantic.validator("nickname")
-    def __remove_highlight(cls, v: str) -> str:
+    @validator("nickname")
+    def remove_highlight(cls, v: str) -> str:
         return re.sub(r"<.+?>", "", v)
 
 

@@ -111,7 +111,7 @@ class BannerDetails(APIModel):
     r3_items: List[BannerDetailItem] = Field(alias="r3_prob_list")
 
     @validator("r5_up_items", "r4_up_items", pre=True)
-    def __replace_none(cls, v: Optional[List[Any]]) -> List[Any]:
+    def replace_none(cls, v: Optional[List[Any]]) -> List[Any]:
         return v or []
 
     @validator(
@@ -125,7 +125,7 @@ class BannerDetails(APIModel):
         "r3_guarantee_prob",
         pre=True,
     )
-    def __parse_percentage(cls, v: Optional[str]) -> Optional[float]:
+    def parse_percentage(cls, v: Optional[str]) -> Optional[float]:
         if v is None or isinstance(v, (int, float)):
             return v
 

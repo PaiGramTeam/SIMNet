@@ -1,15 +1,13 @@
 from datetime import timedelta, datetime
 from typing import Union, Literal, Tuple, List, Optional, Dict, Any
 
-import pydantic
 
-
-__all__ = ("Expedition", "ExpeditionCharacter", "Notes")
-
-from pydantic import Field
+from pydantic import Field, root_validator, validator
 
 from simnet.models.base import APIModel
 from simnet.models.genshin.character import BaseCharacter
+
+__all__ = ("Expedition", "ExpeditionCharacter", "Notes")
 
 
 def _process_timedelta(time: Union[int, timedelta, datetime]) -> datetime:
@@ -48,8 +46,8 @@ class Expedition(APIModel):
     def completion_time(self) -> datetime:
         return datetime.now().astimezone() + self.remaining_time
 
-    @pydantic.validator("character", pre=True)
-    def __complete_character(cls, v: Any) -> Any:
+    @validator("character", pre=True)
+    def complete_character(cls, v: Any) -> Any:
         if isinstance(v, str):
             return dict(icon=v)  # type: ignore
 
@@ -127,8 +125,8 @@ class Notes(APIModel):
         )
         return remaining
 
-    @pydantic.root_validator(pre=True)
-    def __flatten_transformer(cls, values: Dict[str, Any]) -> Dict[str, Any]:
+    @root_validator(pre=True)
+    def flatten_transformer(cls, values: Dict[str, Any]) -> Dict[str, Any]:
         if "transformer_recovery_time" in values:
             return values
 
