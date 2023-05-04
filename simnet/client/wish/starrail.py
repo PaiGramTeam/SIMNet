@@ -32,9 +32,6 @@ class WishClient(BaseWishClient):
         Returns:
             List[StarRailWish]: A list of StarRailWish objects representing the retrieved wishes.
         """
-        banner_names = await self.get_banner_names(
-            game=Game.STARRAIL, lang=lang, authkey=authkey
-        )
         paginator = WishPaginator(
             end_id,
             partial(
@@ -45,6 +42,5 @@ class WishClient(BaseWishClient):
             ),
         )
         items = await paginator.get(limit)
-        banner_name = banner_names[banner_type]
-        wish = [StarRailWish(**i, banner_name=banner_name) for i in items]
+        wish = [StarRailWish(**i) for i in items]
         return wish

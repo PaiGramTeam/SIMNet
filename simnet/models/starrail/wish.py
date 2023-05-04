@@ -47,9 +47,6 @@ class StarRailWish(APIModel):
     banner_type: StarRailBannerType = Field(alias="gacha_type")
     """Type of the banner the wish was made on."""
 
-    banner_name: str
-    """Name of the banner the wish was made on."""
-
     @validator("banner_type", pre=True)
     def cast_banner_type(cls, v: Any) -> int:
         """Converts the banner type from any type to int."""
