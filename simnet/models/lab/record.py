@@ -47,7 +47,8 @@ class Account(APIModel):
         """Returns the game associated with the account.
 
         Returns:
-            Union[Game, str]: The game associated with the account. If the game cannot be determined, the game business code is returned.
+            Union[Game, str]: The game associated with the account. If the game cannot be determined,
+                the game business code is returned.
         """
         if "hk4e" in self.game_biz:
             return Game.GENSHIN

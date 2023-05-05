@@ -123,7 +123,8 @@ class Notes(APIModel):
         claimed_commission_reward (bool): Whether the commission reward has been claimed.
         remaining_resin_discounts (int): The number of remaining resin discounts.
         max_resin_discounts (int): The maximum number of resin discounts.
-        remaining_transformer_recovery_time (Optional[TransformerTimedelta]): The remaining time until transformer recovery.
+        remaining_transformer_recovery_time (Optional[TransformerTimedelta]): The remaining time until
+            transformer recovery.
         expeditions (List[Expedition]): The list of expeditions.
         max_expeditions (int): The maximum number of expeditions.
 

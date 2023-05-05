@@ -121,11 +121,11 @@ class Floor(APIModel):
         chambers (List[Chamber]): The chambers that make up the floor.
     """
 
-    floor: int = Field(alias="index")
+    floor: int = Field(alias="index")  # skipcq: PTC-W0052
     unlocked: Literal[True] = Field(alias="is_unlock")
     stars: int = Field(alias="star")
     max_stars: Literal[9] = Field(alias="max_star")  # maybe one day
-    chambers: List[Chamber] = Field(alias="levels")  # skipcq: PTC-W0052
+    chambers: List[Chamber] = Field(alias="levels")
 
 
 class SpiralAbyss(APIModel):
