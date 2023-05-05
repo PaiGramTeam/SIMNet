@@ -39,7 +39,6 @@ class DailyRewardClient(BaseClient):
         Returns:
             A dictionary containing the response data.
         """
-
         base_url = REWARD_URL.get_url(self.region, game)
         url = (base_url / endpoint).update_query(**base_url.query)
 
@@ -126,7 +125,6 @@ class DailyRewardClient(BaseClient):
         Returns:
             A list of ClaimedDailyReward objects representing the claimed rewards for the current user.
         """
-
         result = []
         index = 0
         page = 1
