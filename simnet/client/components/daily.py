@@ -130,6 +130,9 @@ class DailyRewardClient(BaseClient):
         page = 1
 
         while True:
+            if page >= 10:
+                break
+
             fetched_items = await self._get_claimed_rewards_page(
                 page, game=game, lang=lang
             )
