@@ -235,10 +235,10 @@ class RecordCard(BaseRecordCard):
         """Create the appropriate record card."""
         game_id = kwargs.get("game_id", 0)
         if game_id == 1:
-            cls = HonkaiRecordCard
+            cls = HonkaiRecordCard  # skipcq:  PYL-W0642
         elif game_id == 2:
-            cls = GenshinRecordCard
+            cls = GenshinRecordCard  # skipcq:  PYL-W0642
         elif game_id == 6:
-            cls = StarRailRecodeCard
+            cls = StarRailRecodeCard  # skipcq:  PYL-W0642
 
-        return super().__new__(cls)
+        return super().__new__(cls)  # skipcq: PYL-E1120

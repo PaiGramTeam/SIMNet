@@ -73,7 +73,7 @@ class Battle(APIModel):
 class Chamber(APIModel):
     """Chamber of the spiral abyss."""
 
-    chamber: int = Field(alias="index")
+    chamber: int = Field(alias="index")  # skipcq: PTC-W0052
     stars: int = Field(alias="star")
     max_stars: Literal[3] = Field(alias="max_star")
     battles: List[Battle]
@@ -88,7 +88,7 @@ class Floor(APIModel):
     unlocked: Literal[True] = Field(alias="is_unlock")
     stars: int = Field(alias="star")
     max_stars: Literal[9] = Field(alias="max_star")  # maybe one day
-    chambers: List[Chamber] = Field(alias="levels")
+    chambers: List[Chamber] = Field(alias="levels")  # skipcq: PTC-W0052
 
 
 class SpiralAbyss(APIModel):
