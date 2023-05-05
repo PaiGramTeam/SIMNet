@@ -1,6 +1,6 @@
-from simnet.client.account.auth import AuthClient
-from simnet.client.chronicle.genshin import GenshinChronicleClient
-from simnet.client.wish.genshin import WishClient
+from simnet.client.components.account.auth import AuthClient
+from simnet.client.components.chronicle.genshin import GenshinChronicleClient
+from simnet.client.components.wish.genshin import WishClient
 
 __all__ = ("GenshinClient",)
 

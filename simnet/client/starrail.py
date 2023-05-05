@@ -1,6 +1,6 @@
-from simnet.client.account.auth import AuthClient
-from simnet.client.chronicle.starrail import StarRailBattleChronicleClient
-from simnet.client.wish.starrail import WishClient
+from simnet.client.components.account.auth import AuthClient
+from simnet.client.components.chronicle.starrail import StarRailBattleChronicleClient
+from simnet.client.components.wish.starrail import WishClient
 
 __all__ = ("StarRailClient",)
 

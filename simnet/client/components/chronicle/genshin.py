@@ -1,7 +1,7 @@
 import asyncio
 from typing import Optional, Any, List, Dict
 
-from simnet.client.chronicle.base import BaseChronicleClient
+from simnet.client.components.chronicle.base import BaseChronicleClient
 from simnet.errors import DataNotPublic, BadRequest
 from simnet.models.genshin.chronicle.abyss import SpiralAbyss, SpiralAbyssPair
 from simnet.models.genshin.chronicle.characters import Character

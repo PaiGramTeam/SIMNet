@@ -1,8 +1,8 @@
 from typing import Optional
 
-from simnet.client.account.auth import AuthClient
-from simnet.client.chronicle.starrail import StarRailBattleChronicleClient
-from simnet.client.wish.starrail import WishClient
+from simnet.client.components.account.auth import AuthClient
+from simnet.client.components.chronicle.starrail import StarRailBattleChronicleClient
+from simnet.client.components.wish.starrail import WishClient
 from simnet.utils.enum_ import Region
 from simnet.utils.types import CookieTypes, HeaderTypes, TimeoutTypes
 

@@ -1,6 +1,6 @@
 from functools import partial
 from typing import Optional, List
-from simnet.client.wish.base import BaseWishClient
+from simnet.client.components.wish.base import BaseWishClient
 from simnet.models.starrail.wish import StarRailWish
 from simnet.utils.enum_ import Game
 from simnet.utils.paginator import WishPaginator
