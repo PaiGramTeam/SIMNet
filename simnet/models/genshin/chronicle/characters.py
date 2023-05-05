@@ -67,7 +67,8 @@ class ArtifactSetEffect(APIModel):
     Attributes:
         pieces (int): The number of artifact pieces required to activate the effect.
         effect (str): The description of the effect.
-        enabled (bool): Whether the effect is currently enabled for the character's equipped artifacts. Defaults to False.
+        enabled (bool): Whether the effect is currently enabled for the character's equipped artifacts.
+            Defaults to False.
     """
 
     pieces: int = Field(alias="activation_number")
