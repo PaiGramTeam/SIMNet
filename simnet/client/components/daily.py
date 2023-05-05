@@ -4,7 +4,6 @@ from typing import Optional, Dict, Any, List
 
 from simnet.client.base import BaseClient
 from simnet.utils.ds import hex_digest
-from simnet.utils.types import HeaderTypes
 from simnet.client.routes import REWARD_URL
 from simnet.models.lab.daily import DailyRewardInfo, DailyReward, ClaimedDailyReward
 from simnet.utils.enum_ import Game, Region
@@ -20,10 +19,11 @@ class DailyRewardClient(BaseClient):
         endpoint: str,
         *,
         method: str = "GET",
+        challenge: Optional[str] = None,
+        validate: Optional[str] = None,
         game: Optional[Game] = None,
         lang: Optional[str] = None,
         params: Optional[Dict[str, Any]] = None,
-        headers: Optional[HeaderTypes] = None,
     ) -> Dict[str, Any]:
         """
         Makes a request to the daily reward endpoint.
@@ -31,25 +31,42 @@ class DailyRewardClient(BaseClient):
         Args:
             endpoint (str): The endpoint to request.
             method (str): The HTTP method to use. Defaults to "GET".
+            challenge (str): A challenge string for validating the request. Defaults to None.
+            validate (str): A validation string for validating the request. Defaults to None.
             game (Game): The game to request data for. Defaults to None.
             lang (str): The language to use. Defaults to None.
             params (Dict[str, Any]): Any parameters to include in the request.
-            headers (HeaderTypes): Any headers to include in the request.
 
         Returns:
             A dictionary containing the response data.
         """
         new_ds: bool = False
+        headers: Optional[Dict[str, str]] = None
+        if self.region == Region.CHINESE:
+            headers = {}
+            if challenge is not None and validate is not None:
+                headers["x-rpc-challenge"] = challenge
+                headers["x-rpc-validate"] = validate
+                headers["x-rpc-seccode"] = f"{validate}|jordan"
+            headers["Referer"] = (
+                "https://webstatic.mihoyo.com/bbs/event/signin-ys/index.html?"
+                "bbs_auth_required=true&act_id=e202009291139501&utm_source=bbs&utm_medium=mys&utm_campaign=icon"
+            )
+
+            headers["x-rpc-device_name"] = "Chrome 20 2023"
+            headers["x-rpc-channel"] = "chrome"
+            headers["x-rpc-device_model"] = "Chrome 2023"
+            headers["x-rpc-sys_version"] = "13"
+            headers["x-rpc-platform"] = "android"
+            device_id = self.device_id
+            hash_value = hex_digest(device_id)
+            headers["x-rpc-device_fp"] = hash_value[:13]
+            new_ds = endpoint == "sign"
 
         base_url = REWARD_URL.get_url(self.region, self.game or game)
         url = (base_url / endpoint).update_query(**base_url.query)
 
-        if self.region == Region.CHINESE:
-            new_ds = endpoint == "sign"
-
-        return await self.request_lab(
-            method, url, params=params, headers=headers, lang=lang, new_ds=new_ds
-        )
+        return await self.request_lab(method, url, params=params, headers=headers, lang=lang, new_ds=new_ds)
 
     async def get_reward_info(
         self,
@@ -109,9 +126,7 @@ class DailyRewardClient(BaseClient):
             A list of ClaimedDailyReward objects representing the claimed rewards for the current user on the specified
                 page.
         """
-        data = await self.request_daily_reward(
-            "award", params=dict(current_page=page), game=game, lang=lang
-        )
+        data = await self.request_daily_reward("award", params=dict(current_page=page), game=game, lang=lang)
         return [ClaimedDailyReward(**i) for i in data["list"]]
 
     async def claimed_rewards(
@@ -139,17 +154,13 @@ class DailyRewardClient(BaseClient):
             if page >= 10:
                 break
 
-            fetched_items = await self._get_claimed_rewards_page(
-                page, game=game, lang=lang
-            )
+            fetched_items = await self._get_claimed_rewards_page(page, game=game, lang=lang)
             if not fetched_items:
                 break
 
             # Calculate how many items should be added
             items_to_add = (
-                limit - index
-                if limit is not None and limit - index < len(fetched_items)
-                else len(fetched_items)
+                limit - index if limit is not None and limit - index < len(fetched_items) else len(fetched_items)
             )
 
             result.extend(fetched_items[:items_to_add])
@@ -184,28 +195,9 @@ class DailyRewardClient(BaseClient):
         Returns:
             If `reward` is True, a DailyReward object representing the claimed reward. Otherwise, None.
         """
-        headers: dict = {}
-        if self.region == Region.CHINESE:
-            if challenge is not None and validate is not None:
-                headers["x-rpc-challenge"] = challenge
-                headers["x-rpc-validate"] = validate
-                headers["x-rpc-seccode"] = f"{validate}|jordan"
-            headers["Referer"] = (
-                "https://webstatic.mihoyo.com/bbs/event/signin-ys/index.html?"
-                "bbs_auth_required=true&act_id=e202009291139501&utm_source=bbs&utm_medium=mys&utm_campaign=icon"
-            )
-
-            headers["x-rpc-device_name"] = "Chrome 20 2023"
-            headers["x-rpc-channel"] = "chrome"
-            headers["x-rpc-device_model"] = "Chrome 2023"
-            headers["x-rpc-sys_version"] = 13
-            headers["x-rpc-platform"] = "android"
-            device_id = self.device_id
-            hash_value = hex_digest(device_id)
-            headers["x-rpc-device_fp"] = hash_value[:13]
 
         await self.request_daily_reward(
-            "sign", method="POST", game=game, lang=lang, headers=headers
+            "sign", method="POST", game=game, lang=lang, challenge=challenge, validate=validate
         )
 
         if not reward:
