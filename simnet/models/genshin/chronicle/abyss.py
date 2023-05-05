@@ -19,22 +19,40 @@ __all__ = (
 
 
 class AbyssRankCharacter(BaseCharacter):
-    """Character with a value of a rank."""
+    """A character in Spiral Abyss with a rank.
+
+    Attributes:
+        id (int): The ID of the character.
+        icon (str): The icon of the character.
+        value (int): The rank of the character.
+    """
 
     id: int = Field(alias="avatar_id")
     icon: str = Field(alias="avatar_icon")
-
     value: int
 
 
 class AbyssCharacter(BaseCharacter):
-    """Character with just a level."""
+    """A character in Spiral Abyss with just a level.
+
+    Attributes:
+        level (int): The level of the character.
+    """
 
     level: int
 
 
 class CharacterRanks(APIModel):
-    """Collection of rankings achieved during spiral abyss runs."""
+    """A collection of character rankings achieved during Spiral Abyss runs.
+
+    Attributes:
+        most_played (List[AbyssRankCharacter]): The characters played the most.
+        most_kills (List[AbyssRankCharacter]): The characters that have killed the most enemies.
+        strongest_strike (List[AbyssRankCharacter]): The characters that have dealt the most damage in a single hit.
+        most_damage_taken (List[AbyssRankCharacter]): The characters that have taken the most damage.
+        most_bursts_used (List[AbyssRankCharacter]): The characters that have used their elemental burst skill the most.
+        most_skills_used (List[AbyssRankCharacter]): The characters that have used their elemental skill the most.
+    """
 
     most_played: List[AbyssRankCharacter] = Field(
         default=[],
@@ -63,7 +81,13 @@ class CharacterRanks(APIModel):
 
 
 class Battle(APIModel):
-    """Battle in the spiral abyss."""
+    """A battle in Spiral Abyss.
+
+    Attributes:
+        half (int): The half (1 or 2) of the chamber in which the battle took place.
+        timestamp (datetime.datetime): The timestamp when the battle took place.
+        characters (List[AbyssCharacter]): The characters that participated in the battle.
+    """
 
     half: int = Field(alias="index")
     timestamp: datetime.datetime
@@ -71,7 +95,14 @@ class Battle(APIModel):
 
 
 class Chamber(APIModel):
-    """Chamber of the spiral abyss."""
+    """A chamber in Spiral Abyss.
+
+    Attributes:
+        chamber (int): The index of the chamber.
+        stars (int): The number of stars obtained in the chamber.
+        max_stars (Literal[3]): The maximum number of stars that can be obtained in the chamber (currently always 3).
+        battles (List[Battle]): The battles that took place in the chamber.
+    """
 
     chamber: int = Field(alias="index")  # skipcq: PTC-W0052
     stars: int = Field(alias="star")
@@ -80,11 +111,17 @@ class Chamber(APIModel):
 
 
 class Floor(APIModel):
-    """Floor of the spiral abyss."""
+    """A floor in Spiral Abyss.
+
+    Attributes:
+        floor (int): The index of the floor.
+        unlocked (Literal[True]): Whether the floor is unlocked (always True).
+        stars (int): The total number of stars obtained in the floor.
+        max_stars (Literal[9]): The maximum number of stars that can be obtained in the floor (currently always 9).
+        chambers (List[Chamber]): The chambers that make up the floor.
+    """
 
     floor: int = Field(alias="index")
-    # icon: str - unused
-    # settle_time: int - appsample might be using this?
     unlocked: Literal[True] = Field(alias="is_unlock")
     stars: int = Field(alias="star")
     max_stars: Literal[9] = Field(alias="max_star")  # maybe one day
@@ -92,7 +129,20 @@ class Floor(APIModel):
 
 
 class SpiralAbyss(APIModel):
-    """Information about Spiral Abyss runs during a specific season."""
+    """Information about Spiral Abyss runs during a specific season.
+
+    Attributes:
+        unlocked (bool): Whether the Spiral Abyss is unlocked.
+        season (int): The ID of the season.
+        start_time (datetime.datetime): The start time of the season.
+        end_time (datetime.datetime): The end time of the season.
+        total_battles (int): The total number of battles fought during the season.
+        total_wins (str): The total number of battles won during the season.
+        max_floor (str): The highest floor reached during the season.
+        total_stars (int): The total number of stars obtained during the season.
+        ranks (CharacterRanks): The rankings achieved during the season.
+        floors (List[Floor]): The floors of the Spiral Abyss during the season.
+    """
 
     unlocked: bool = Field(alias="is_unlock")
     season: int = Field(alias="schedule_id")
@@ -116,9 +166,11 @@ class SpiralAbyss(APIModel):
 
 
 class SpiralAbyssPair(APIModel):
-    """Pair of both current and previous spiral abyss.
+    """A pair of both current and previous Spiral Abyss information.
 
-    This may not be a namedtuple due to how pydantic handles them.
+    Attributes:
+        current (SpiralAbyss): The current Spiral Abyss information.
+        previous (SpiralAbyss): The previous Spiral Abyss information.
     """
 
     current: SpiralAbyss

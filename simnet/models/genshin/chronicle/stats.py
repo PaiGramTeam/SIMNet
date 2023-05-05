@@ -10,7 +10,25 @@ from simnet.models.lab.record import UserInfo
 
 
 class Stats(APIModel):
-    """Overall user stats."""
+    """Overall user stats.
+
+    Attributes:
+        achievements (int): Number of achievements completed by the user.
+        days_active (int): Number of days the user has been active.
+        characters (int): Number of characters owned by the user.
+        spiral_abyss (str): The floor and level reached by the user in Spiral Abyss.
+        anemoculi (int): Number of Anemoculus collected by the user.
+        geoculi (int): Number of Geoculus collected by the user.
+        dendroculi (int): Number of Dendroculus collected by the user.
+        electroculi (int): Number of Electroculus collected by the user.
+        common_chests (int): Number of Common Chests opened by the user.
+        exquisite_chests (int): Number of Exquisite Chests opened by the user.
+        precious_chests (int): Number of Precious Chests opened by the user.
+        luxurious_chests (int): Number of Luxurious Chests opened by the user.
+        remarkable_chests (int): Number of Magic Chests opened by the user.
+        unlocked_waypoints (int): Number of waypoints unlocked by the user.
+        unlocked_domains (int): Number of domains unlocked by the user.
+    """
 
     achievements: int = Field(alias="achievement_number")
     days_active: int = Field(alias="active_day_number")
@@ -30,7 +48,13 @@ class Stats(APIModel):
 
 
 class Offering(APIModel):
-    """Exploration offering."""
+    """Exploration offering.
+
+    Attributes:
+        name (str): The name of the offering.
+        level (int): The level of the offering.
+        icon (str): The icon of the offering.
+    """
 
     name: str
     level: int
@@ -38,7 +62,22 @@ class Offering(APIModel):
 
 
 class Exploration(APIModel):
-    """Exploration data."""
+    """Exploration data.
+
+    Attributes:
+        id (int): The ID of the exploration.
+        parent_id (int): The ID of the parent exploration.
+        name (str): The name of the exploration.
+        raw_explored (int): The raw percentage of the exploration completed.
+        type (str): The type of the exploration.
+        level (int): The level of the exploration.
+        icon (str): The icon of the exploration.
+        inner_icon (str): The inner icon of the exploration.
+        background_image (str): The background image of the exploration.
+        cover (str): The cover of the exploration.
+        map_url (str): The URL of the exploration map.
+        offerings (List[Offering]): The list of offerings of the exploration.
+    """
 
     id: int
     parent_id: int
@@ -59,35 +98,64 @@ class Exploration(APIModel):
 
     @property
     def explored(self) -> float:
-        """The percentage explored."""
+        """The percentage of the exploration completed.
+
+        Returns:
+            The percentage of the exploration completed.
+        """
         return self.raw_explored / 10
 
     @validator("offerings", pre=True)
-    def add_base_offering(
-        cls, offerings: List[Any], values: Dict[str, Any]
-    ) -> List[Any]:
-        if values["type"] == "Reputation" and not any(
-            values["type"] == o["name"] for o in offerings
-        ):
+    def add_base_offering(cls, offerings: List[Any], values: Dict[str, Any]) -> List[Any]:
+        """Add a base offering if the exploration type is Reputation.
+
+        Args:
+            offerings (List[Any]): The list of offerings.
+            values (Dict[str, Any]): The dict of attribute values.
+
+        Returns:
+            The updated list of offerings.
+        """
+        if values["type"] == "Reputation" and not any(values["type"] == o["name"] for o in offerings):
             offerings = [*offerings, dict(name=values["type"], level=values["level"])]
 
         return offerings
 
 
 class TeapotRealm(APIModel):
-    """A specific teapot realm."""
+    """A specific teapot realm.
+
+    Attributes:
+        name (str): The name of the teapot realm.
+        icon (str): The icon of the teapot realm.
+    """
 
     name: str
     icon: str
 
     @property
     def id(self) -> int:
+        """The ID of the teapot realm.
+
+        Returns:
+            The ID of the teapot realm.
+        """
         match = re.search(r"\d", self.icon)
         return int(match.group()) if match else 0
 
 
 class Teapot(APIModel):
-    """User's Serenitea Teapot."""
+    """User's Serenitea Teapot.
+
+    Attributes:
+        realms (List[TeapotRealm]): The list of teapot realms of the user.
+        level (int): The level of the teapot.
+        visitors (int): The number of visitors to the teapot.
+        comfort (int): The comfort level of the teapot.
+        items (int): The number of items in the teapot.
+        comfort_name (str): The name of the comfort level.
+        comfort_icon (str): The icon of the comfort level.
+    """
 
     realms: List[TeapotRealm]
     level: int
@@ -99,7 +167,15 @@ class Teapot(APIModel):
 
 
 class PartialGenshinUserStats(APIModel):
-    """User stats with characters without equipment."""
+    """User stats with characters without equipment.
+
+    Attributes:
+        info (UserInfo): The user's information.
+        stats (Stats): The user's stats.
+        characters (List[PartialCharacter]): The list of the user's characters without equipment.
+        explorations (List[Exploration]): The list of the user's explorations.
+        teapot (Optional[Teapot]): The user's Serenitea Teapot.
+    """
 
     info: UserInfo = Field("role")
     stats: Stats
@@ -109,6 +185,14 @@ class PartialGenshinUserStats(APIModel):
 
     @validator("teapot", pre=True)
     def format_teapot(cls, v: Any) -> Optional[Dict[str, Any]]:
+        """Format the user's Serenitea Teapot.
+
+        Args:
+            v (Any): The original value of the user's Serenitea Teapot.
+
+        Returns:
+            The formatted user's Serenitea Teapot.
+        """
         if not v:
             return None
         if isinstance(v, dict):
@@ -117,13 +201,22 @@ class PartialGenshinUserStats(APIModel):
 
 
 class GenshinUserStats(PartialGenshinUserStats):
-    """User stats with characters with equipment"""
+    """User stats with characters with equipment.
+
+    Attributes:
+        characters (List[Character]): The list of the user's characters with equipment.
+    """
 
     characters: List[Character] = Field(alias="avatars")
 
 
 class FullGenshinUserStats(GenshinUserStats):
-    """User stats with all data a user can have"""
+    """User stats with all data a user can have.
+
+    Attributes:
+        abyss (SpiralAbyssPair): The user's Spiral Abyss data.
+        activities (Dict): The user's activities data.
+    """
 
     abyss: SpiralAbyssPair
     activities: Dict
