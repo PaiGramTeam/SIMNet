@@ -153,7 +153,9 @@ class BaseRecordCard(Account):
 
     def as_dict(self) -> Dict[str, Any]:
         """Return data as a dictionary."""
-        return {d.name: (int(d.value) if d.value.isdigit() else d.value) for d in self.data}
+        return {
+            d.name: (int(d.value) if d.value.isdigit() else d.value) for d in self.data
+        }
 
 
 class GenshinRecordCard(BaseRecordCard):
