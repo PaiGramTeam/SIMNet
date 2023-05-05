@@ -39,10 +39,13 @@ class DailyRewardClient(BaseClient):
         Returns:
             A dictionary containing the response data.
         """
+        new_ds: bool = False
+
         base_url = REWARD_URL.get_url(self.region, self.game or game)
         url = (base_url / endpoint).update_query(**base_url.query)
 
-        new_ds = endpoint == "sign"
+        if self.region == Region.CHINESE:
+            new_ds = endpoint == "sign"
 
         return await self.request_lab(
             method, url, params=params, headers=headers, lang=lang, new_ds=new_ds
