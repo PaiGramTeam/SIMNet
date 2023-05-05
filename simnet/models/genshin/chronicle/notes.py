@@ -1,7 +1,6 @@
 from datetime import timedelta, datetime
 from typing import Union, Literal, Tuple, List, Optional, Dict, Any
 
-
 from pydantic import Field, root_validator, validator
 
 from simnet.models.base import APIModel

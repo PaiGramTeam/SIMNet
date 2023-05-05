@@ -1,5 +1,5 @@
 import asyncio
-from typing import Optional, Mapping, Any, List, Dict
+from typing import Optional, Any, List, Dict
 
 from simnet.client.chronicle.base import BaseChronicleClient
 from simnet.errors import DataNotPublic, BadRequest

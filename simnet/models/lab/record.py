@@ -2,7 +2,6 @@ import enum
 import re
 from typing import Optional, Any, Dict, List, Union
 
-
 from pydantic import Field, validator
 
 from simnet.models.base import APIModel

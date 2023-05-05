@@ -1,6 +1,5 @@
 from typing import List, Dict
 
-
 from pydantic import Field, validator
 
 from simnet.models.base import APIModel
