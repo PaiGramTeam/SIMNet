@@ -101,7 +101,8 @@ class DailyRewardClient(BaseClient):
             lang (str): The language to use. Defaults to None.
 
         Returns:
-            A list of ClaimedDailyReward objects representing the claimed rewards for the current user on the specified page.
+            A list of ClaimedDailyReward objects representing the claimed rewards for the current user on the specified
+                page.
         """
         data = await self.request_daily_reward(
             "award", params=dict(current_page=page), game=game, lang=lang
