@@ -33,6 +33,7 @@ class WishClient(BaseWishClient):
         Returns:
             List[Wish]: A list of GenshinWish objects representing the retrieved wishes.
         """
+        banner_names = await self.get_banner_names(game=Game.GENSHIN, lang=lang, authkey=authkey)
         paginator = WishPaginator(
             end_id,
             partial(
@@ -43,5 +44,6 @@ class WishClient(BaseWishClient):
             ),
         )
         items = await paginator.get(limit)
-        wish = [Wish(**i) for i in items]
+        banner_name = banner_names[banner_type]
+        wish = [Wish(**i, banner_name=banner_name) for i in items]
         return wish
