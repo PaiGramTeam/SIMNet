@@ -106,7 +106,9 @@ class DailyRewardClient(BaseClient):
             A list of ClaimedDailyReward objects representing the claimed rewards for the current user on the specified
                 page.
         """
-        data = await self.request_daily_reward("award", params=dict(current_page=page), game=game, lang=lang)
+        data = await self.request_daily_reward(
+            "award", params=dict(current_page=page), game=game, lang=lang
+        )
         return [ClaimedDailyReward(**i) for i in data["list"]]
 
     async def claimed_rewards(
@@ -134,13 +136,17 @@ class DailyRewardClient(BaseClient):
             if page >= 10:
                 break
 
-            fetched_items = await self._get_claimed_rewards_page(page, game=game, lang=lang)
+            fetched_items = await self._get_claimed_rewards_page(
+                page, game=game, lang=lang
+            )
             if not fetched_items:
                 break
 
             # Calculate how many items should be added
             items_to_add = (
-                limit - index if limit is not None and limit - index < len(fetched_items) else len(fetched_items)
+                limit - index
+                if limit is not None and limit - index < len(fetched_items)
+                else len(fetched_items)
             )
 
             result.extend(fetched_items[:items_to_add])
@@ -195,7 +201,9 @@ class DailyRewardClient(BaseClient):
             hash_value = hex_digest(device_id)
             headers["x-rpc-device_fp"] = hash_value[:13]
 
-        await self.request_daily_reward("sign", method="POST", game=game, lang=lang, headers=headers)
+        await self.request_daily_reward(
+            "sign", method="POST", game=game, lang=lang, headers=headers
+        )
 
         if not reward:
             return None
