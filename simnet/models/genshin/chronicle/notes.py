@@ -138,7 +138,9 @@ class Notes(APIModel):
 
     current_realm_currency: int = Field(alias="current_home_coin")
     max_realm_currency: int = Field(alias="max_home_coin")
-    remaining_realm_currency_recovery_time: timedelta = Field(alias="home_coin_recovery_time")
+    remaining_realm_currency_recovery_time: timedelta = Field(
+        alias="home_coin_recovery_time"
+    )
 
     completed_commissions: int = Field(alias="finished_task_num")
     max_commissions: int = Field(alias="total_task_num")
@@ -168,7 +170,9 @@ class Notes(APIModel):
         if self.remaining_transformer_recovery_time is None:
             return None
 
-        remaining = datetime.now().astimezone() + self.remaining_transformer_recovery_time
+        remaining = (
+            datetime.now().astimezone() + self.remaining_transformer_recovery_time
+        )
         return remaining
 
     @root_validator(pre=True)
@@ -191,7 +195,9 @@ class Notes(APIModel):
 
         if values.get("transformer") and values["transformer"]["obtained"]:
             t = values["transformer"]["recovery_time"]
-            delta = TransformerTimedelta(days=t["Day"], hours=t["Hour"], minutes=t["Minute"], seconds=t["Second"])
+            delta = TransformerTimedelta(
+                days=t["Day"], hours=t["Hour"], minutes=t["Minute"], seconds=t["Second"]
+            )
             values["remaining_transformer_recovery_time"] = delta
         else:
             values["remaining_transformer_recovery_time"] = None

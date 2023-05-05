@@ -106,7 +106,9 @@ class Exploration(APIModel):
         return self.raw_explored / 10
 
     @validator("offerings", pre=True)
-    def add_base_offering(cls, offerings: List[Any], values: Dict[str, Any]) -> List[Any]:
+    def add_base_offering(
+        cls, offerings: List[Any], values: Dict[str, Any]
+    ) -> List[Any]:
         """Add a base offering if the exploration type is Reputation.
 
         Args:
@@ -116,7 +118,9 @@ class Exploration(APIModel):
         Returns:
             The updated list of offerings.
         """
-        if values["type"] == "Reputation" and not any(values["type"] == o["name"] for o in offerings):
+        if values["type"] == "Reputation" and not any(
+            values["type"] == o["name"] for o in offerings
+        ):
             offerings = [*offerings, dict(name=values["type"], level=values["level"])]
 
         return offerings
