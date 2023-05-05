@@ -1,7 +1,7 @@
 import asyncio
 from typing import Optional, Any, List, Dict
 
-from simnet.client.chronicle.base import BaseChronicleClient
+from simnet.client.components.chronicle.base import BaseChronicleClient
 from simnet.errors import DataNotPublic, BadRequest
 from simnet.models.genshin.chronicle.abyss import SpiralAbyss, SpiralAbyssPair
 from simnet.models.genshin.chronicle.characters import Character
@@ -14,8 +14,10 @@ from simnet.models.genshin.chronicle.stats import (
 from simnet.utils.enum_ import Game
 from simnet.utils.player import recognize_genshin_server, recognize_region
 
+__all__ = ("GenshinBattleChronicleClient",)
 
-class GenshinChronicleClient(BaseChronicleClient):
+
+class GenshinBattleChronicleClient(BaseChronicleClient):
     """A client for retrieving data from Genshin's battle chronicle component.
 
     This class is used to retrieve various data objects from StarRail's battle chronicle component,

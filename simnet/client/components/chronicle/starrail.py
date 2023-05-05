@@ -1,12 +1,14 @@
 from typing import Optional, Mapping, Dict, Any
 
-from simnet.client.chronicle.base import BaseChronicleClient
+from simnet.client.components.chronicle.base import BaseChronicleClient
 from simnet.errors import BadRequest, DataNotPublic
 from simnet.models.starrail.chronicle.characters import StarShipDetailCharacters
 from simnet.models.starrail.chronicle.notes import StarRailNote
 from simnet.models.starrail.chronicle.stats import StarRailUserStats
 from simnet.utils.enum_ import Game
 from simnet.utils.player import recognize_starrail_server, recognize_region
+
+__all__ = ("StarRailBattleChronicleClient",)
 
 
 class StarRailBattleChronicleClient(BaseChronicleClient):

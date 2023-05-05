@@ -4,6 +4,8 @@ from simnet.client.routes import RECORD_URL
 from simnet.utils.enum_ import Region, Game
 from simnet.utils.types import QueryParamTypes
 
+__all__ = ("BaseChronicleClient",)
+
 
 class BaseChronicleClient(BaseClient):
     """The base class for the Chronicle API client.

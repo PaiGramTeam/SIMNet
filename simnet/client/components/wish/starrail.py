@@ -1,14 +1,15 @@
 from functools import partial
 from typing import Optional, List
-
-from simnet.client.wish.base import BaseWishClient
-from simnet.models.genshin.wish import Wish
+from simnet.client.components.wish.base import BaseWishClient
+from simnet.models.starrail.wish import StarRailWish
 from simnet.utils.enum_ import Game
 from simnet.utils.paginator import WishPaginator
 
+__all__ = ("StarRailWishClient",)
 
-class WishClient(BaseWishClient):
-    """The WishClient class for making requests towards the Wish API."""
+
+class StarRailWishClient(BaseWishClient):
+    """The StarRailWishClient class for making requests towards the Wish API."""
 
     async def wish_history(
         self,
@@ -17,7 +18,7 @@ class WishClient(BaseWishClient):
         lang: Optional[str] = None,
         authkey: Optional[str] = None,
         end_id: int = 0,
-    ) -> List[Wish]:
+    ) -> List[StarRailWish]:
         """
         Get the wish history for a list of banner types.
 
@@ -31,21 +32,17 @@ class WishClient(BaseWishClient):
             end_id  (int, optional): The ending ID of the last wish to retrieve.
 
         Returns:
-            List[Wish]: A list of GenshinWish objects representing the retrieved wishes.
+            List[StarRailWish]: A list of StarRailWish objects representing the retrieved wishes.
         """
-        banner_names = await self.get_banner_names(
-            game=Game.GENSHIN, lang=lang, authkey=authkey
-        )
         paginator = WishPaginator(
             end_id,
             partial(
                 self.get_wish_page,
                 banner_type=banner_type,
-                game=Game.GENSHIN,
+                game=Game.STARRAIL,
                 authkey=authkey,
             ),
         )
         items = await paginator.get(limit)
-        banner_name = banner_names[banner_type]
-        wish = [Wish(**i, banner_name=banner_name) for i in items]
+        wish = [StarRailWish(**i) for i in items]
         return wish

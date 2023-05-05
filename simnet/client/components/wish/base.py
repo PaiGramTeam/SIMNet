@@ -6,6 +6,8 @@ from simnet.client.routes import GACHA_INFO_URL
 from simnet.utils.enum_ import Game
 from simnet.utils.lang import create_short_lang_code
 
+__all__ = ("BaseWishClient",)
+
 
 class BaseWishClient(BaseClient):
     """The base class for the Wish API client."""

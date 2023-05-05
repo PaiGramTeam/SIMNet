@@ -21,6 +21,8 @@ from simnet.utils.types import (
 
 _LOGGER = logging.getLogger("SIMNet.BaseClient")
 
+__all__ = ("BaseClient",)
+
 
 class BaseClient(AsyncContextManager["BaseClient"]):
     """

@@ -10,6 +10,8 @@ from simnet.client.routes import (
 )
 from simnet.utils.enum_ import Region
 
+__all__ = ("AuthClient",)
+
 
 class AuthClient(BaseClient):
     """
