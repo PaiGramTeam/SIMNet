@@ -202,7 +202,9 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         if self.region == Region.OVERSEAS:
             header["x-rpc-language"] = self.lang or lang
         if ds is None:
-            app_version, client_type, ds = generate_dynamic_secret(self.region, ds_type, new_ds, data, params)
+            app_version, client_type, ds = generate_dynamic_secret(
+                self.region, ds_type, new_ds, data, params
+            )
             header["x-rpc-app_version"] = app_version
             header["x-rpc-client_type"] = client_type
         header["DS"] = ds
@@ -331,5 +333,9 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         """
         if method is None:
             method = "POST" if data else "GET"
-        headers = self.get_lab_api_header(headers, ds_type=ds_type, new_ds=new_ds, lang=lang, data=data, params=params)
-        return await self.request_api(method=method, url=url, json=data, params=params, headers=headers)
+        headers = self.get_lab_api_header(
+            headers, ds_type=ds_type, new_ds=new_ds, lang=lang, data=data, params=params
+        )
+        return await self.request_api(
+            method=method, url=url, json=data, params=params, headers=headers
+        )
