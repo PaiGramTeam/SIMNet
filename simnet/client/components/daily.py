@@ -203,7 +203,6 @@ class DailyRewardClient(BaseClient):
         Returns:
             If `reward` is True, a DailyReward object representing the claimed reward. Otherwise, None.
         """
-
         await self.request_daily_reward(
             "sign",
             method="POST",
