@@ -20,6 +20,7 @@ __all__ = (
     "GET_LTOKEN_BY_STOKEN_URL",
     "AUTH_KEY_URL",
     "HK4E_LOGIN_URL",
+    "REWARD_URL",
 )
 
 
@@ -164,9 +165,7 @@ class GameRoute(BaseRoute):
             raise RuntimeError(f"URL does not support {region.name} region.")
 
         if not self.urls[region][game]:
-            raise RuntimeError(
-                f"URL does not support {game.name} game for {region.name} region."
-            )
+            raise RuntimeError(f"URL does not support {game.name} game for {region.name} region.")
 
         return self.urls[region][game]
 
@@ -205,11 +204,22 @@ GET_LTOKEN_BY_STOKEN_URL = InternationalRoute(
     chinese=f"https://{PASSPORT_HOST}/account/auth/api/getLTokenBySToken",
 )
 
-AUTH_KEY_URL = InternationalRoute(
-    overseas="", chinese="https://api-takumi.mihoyo.com/binding/api/genAuthKey"
-)
+AUTH_KEY_URL = InternationalRoute(overseas="", chinese="https://api-takumi.mihoyo.com/binding/api/genAuthKey")
 
 HK4E_LOGIN_URL = InternationalRoute(
     overseas="https://sg-public-api.hoyoverse.com/common/badge/v1/login/account",
     chinese="https://api-takumi.mihoyo.com/common/badge/v1/login/account",
+)
+
+REWARD_URL = GameRoute(
+    overseas=dict(
+        genshin="https://sg-hk4e-api.hoyolab.com/event/sol?act_id=e202102251931481",
+        honkai3rd="https://sg-public-api.hoyolab.com/event/mani?act_id=e202110291205111",
+        hkrpg="https://sg-public-api.hoyolab.com/event/luna/os/?act_id=e202303301540311",
+    ),
+    chinese=dict(
+        genshin="https://api-takumi.mihoyo.com/event/bbs_sign_reward/?act_id=e202009291139501",
+        honkai3rd="https://api-takumi.mihoyo.com/event/luna/?act_id=e202207181446311",
+        hkrpg="https://api-takumi.mihoyo.com/event/luna/?act_id=e202304121516551",
+    ),
 )
