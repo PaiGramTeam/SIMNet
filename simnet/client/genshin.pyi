@@ -1,12 +1,12 @@
 from typing import Optional
 
-from simnet.client.components.account.auth import AuthClient
-from simnet.client.components.chronicle.genshin import GenshinChronicleClient
-from simnet.client.components.wish.genshin import WishClient
+from simnet.client.components.auth import AuthClient
+from simnet.client.components.chronicle.genshin import GenshinBattleChronicleClient
+from simnet.client.components.wish.genshin import GenshinWishClient
 from simnet.utils.enum_ import Region
 from simnet.utils.types import CookieTypes, HeaderTypes, TimeoutTypes
 
-class GenshinClient(GenshinChronicleClient, WishClient, AuthClient):
+class GenshinClient(GenshinBattleChronicleClient, GenshinWishClient, AuthClient):
     def __init__(
         self,
         cookies: Optional[CookieTypes] = None,

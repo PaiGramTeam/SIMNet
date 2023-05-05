@@ -5,9 +5,11 @@ from simnet.models.starrail.wish import StarRailWish
 from simnet.utils.enum_ import Game
 from simnet.utils.paginator import WishPaginator
 
+__all__ = ("StarRailWishClient",)
 
-class WishClient(BaseWishClient):
-    """The WishClient class for making requests towards the Wish API."""
+
+class StarRailWishClient(BaseWishClient):
+    """The StarRailWishClient class for making requests towards the Wish API."""
 
     async def wish_history(
         self,

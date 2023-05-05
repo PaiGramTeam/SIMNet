@@ -8,6 +8,8 @@ from simnet.models.starrail.chronicle.stats import StarRailUserStats
 from simnet.utils.enum_ import Game
 from simnet.utils.player import recognize_starrail_server, recognize_region
 
+__all__ = ("StarRailBattleChronicleClient",)
+
 
 class StarRailBattleChronicleClient(BaseChronicleClient):
     """A client for retrieving data from StarRail's battle chronicle component.
@@ -43,9 +45,7 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         payload = dict(payload or {})
 
         player_id = player_id or self.player_id
-        payload = dict(
-            role_id=player_id, server=recognize_starrail_server(player_id), **payload
-        )
+        payload = dict(role_id=player_id, server=recognize_starrail_server(player_id), **payload)
 
         data, params = None, None
         if method == "POST":
@@ -87,9 +87,7 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         except DataNotPublic as e:
             # error raised only when real-time notes are not enabled
             if player_id and self.player_id != player_id:
-                raise BadRequest(
-                    e.response, "Cannot view real-time notes of other users."
-                ) from e
+                raise BadRequest(e.response, "Cannot view real-time notes of other users.") from e
             if not autoauth:
                 raise BadRequest(e.response, "Real-time notes are not enabled.") from e
             data = await self._request_starrail_record("note", player_id, lang=lang)
@@ -137,7 +135,5 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
             DataNotPublic: If the requested data is not public.
         """
         payload = {"need_wiki": "true"}
-        data = await self._request_starrail_record(
-            "avatar/info", player_id, lang=lang, payload=payload
-        )
+        data = await self._request_starrail_record("avatar/info", player_id, lang=lang, payload=payload)
         return StarShipDetailCharacters(**data)

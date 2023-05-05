@@ -2,6 +2,8 @@ from typing import Optional
 
 from httpx import Cookies as _Cookies
 
+__all__ = ("Cookies",)
+
 
 class Cookies(_Cookies):
     """An extension of the `httpx.Cookies` class that includes additional functionality."""

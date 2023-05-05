@@ -7,6 +7,21 @@ from simnet.utils.enum_ import Region, Game
 
 URLTypes = Union["URL", str]
 
+__all__ = (
+    "URL",
+    "BaseRoute",
+    "Route",
+    "InternationalRoute",
+    "GameRoute",
+    "RECORD_URL",
+    "GACHA_INFO_URL",
+    "AUTH_URL",
+    "GET_COOKIES_TOKEN_BY_STOKEN_URL",
+    "GET_LTOKEN_BY_STOKEN_URL",
+    "AUTH_KEY_URL",
+    "HK4E_LOGIN_URL",
+)
+
 
 class URL(_URL):
     """A subclass of httpx's URL class, with additional convenience methods for URL manipulation."""
@@ -149,9 +164,7 @@ class GameRoute(BaseRoute):
             raise RuntimeError(f"URL does not support {region.name} region.")
 
         if not self.urls[region][game]:
-            raise RuntimeError(
-                f"URL does not support {game.name} game for {region.name} region."
-            )
+            raise RuntimeError(f"URL does not support {game.name} game for {region.name} region.")
 
         return self.urls[region][game]
 
@@ -190,9 +203,7 @@ GET_LTOKEN_BY_STOKEN_URL = InternationalRoute(
     chinese=f"https://{PASSPORT_HOST}/account/auth/api/getLTokenBySToken",
 )
 
-AUTH_KEY_URL = InternationalRoute(
-    overseas="", chinese="https://api-takumi.mihoyo.com/binding/api/genAuthKey"
-)
+AUTH_KEY_URL = InternationalRoute(overseas="", chinese="https://api-takumi.mihoyo.com/binding/api/genAuthKey")
 
 HK4E_LOGIN_URL = InternationalRoute(
     overseas="https://sg-public-api.hoyoverse.com/common/badge/v1/login/account",

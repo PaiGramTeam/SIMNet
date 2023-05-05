@@ -4,6 +4,8 @@ from simnet.client.routes import RECORD_URL
 from simnet.utils.enum_ import Region, Game
 from simnet.utils.types import QueryParamTypes
 
+__all__ = ("BaseChronicleClient",)
+
 
 class BaseChronicleClient(BaseClient):
     """The base class for the Chronicle API client.
@@ -51,9 +53,7 @@ class BaseChronicleClient(BaseClient):
         url = base_url / endpoint
         new_ds = self.region == Region.CHINESE
 
-        return await self.request_lab(
-            url, data=data, params=params, lang=lang, new_ds=new_ds
-        )
+        return await self.request_lab(url, data=data, params=params, lang=lang, new_ds=new_ds)
 
     async def update_settings(
         self,

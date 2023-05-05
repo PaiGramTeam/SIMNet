@@ -10,6 +10,8 @@ from simnet.client.routes import (
 )
 from simnet.utils.enum_ import Region
 
+__all__ = ("AuthClient",)
+
 
 class AuthClient(BaseClient):
     """
@@ -113,9 +115,7 @@ class AuthClient(BaseClient):
             return True
         return False
 
-    async def get_authkey_by_stoken(
-        self, game_biz: str, region: str, auth_appid: str
-    ) -> Optional[str]:
+    async def get_authkey_by_stoken(self, game_biz: str, region: str, auth_appid: str) -> Optional[str]:
         """
         Get the auth key (`authkey`) for a game and region using a super ticket (`stoken`).
 
@@ -147,9 +147,7 @@ class AuthClient(BaseClient):
         data = await self.request_lab(url, data=json)
         return data.get("authkey")
 
-    async def get_hk4e_token_by_cookie_token(
-        self, game_biz: str, region: str
-    ) -> NoReturn:
+    async def get_hk4e_token_by_cookie_token(self, game_biz: str, region: str) -> NoReturn:
         """
         Get HK4E token (`hk4e_token`) using cookie token (`cookie_token`).
         The resulting HK4E token will be automatically saved in self.cookies.

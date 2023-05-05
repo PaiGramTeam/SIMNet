@@ -7,8 +7,11 @@ from simnet.utils.enum_ import Game
 from simnet.utils.paginator import WishPaginator
 
 
-class WishClient(BaseWishClient):
-    """The WishClient class for making requests towards the Wish API."""
+__all__ = ("GenshinWishClient",)
+
+
+class GenshinWishClient(BaseWishClient):
+    """The GenshinWishClient class for making requests towards the Wish API."""
 
     async def wish_history(
         self,
@@ -33,9 +36,7 @@ class WishClient(BaseWishClient):
         Returns:
             List[Wish]: A list of GenshinWish objects representing the retrieved wishes.
         """
-        banner_names = await self.get_banner_names(
-            game=Game.GENSHIN, lang=lang, authkey=authkey
-        )
+        banner_names = await self.get_banner_names(game=Game.GENSHIN, lang=lang, authkey=authkey)
         paginator = WishPaginator(
             end_id,
             partial(
