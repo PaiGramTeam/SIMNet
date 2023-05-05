@@ -45,16 +45,17 @@ class GenshinChronicleClient(BaseChronicleClient):
         Raises:
             BadRequest: If the request is invalid.
             DataNotPublic: If the requested data is not public.
+            ValueError: If the player ID is not specified.
         """
         player_id = player_id or self.player_id
+
+        if player_id is None:
+            raise ValueError("Player ID is not specified.")
+
         if payload is None:
-            payload = dict(
-                role_id=player_id, server=recognize_genshin_server(player_id)
-            )
+            payload = dict(role_id=player_id, server=recognize_genshin_server(player_id))
         else:
-            payload = dict(
-                role_id=player_id, server=recognize_genshin_server(player_id), **payload
-            )
+            payload = dict(role_id=player_id, server=recognize_genshin_server(player_id), **payload)
 
         data, params = None, None
         if method == "POST":
