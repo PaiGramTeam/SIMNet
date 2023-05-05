@@ -9,7 +9,7 @@ from simnet.client.cookies import Cookies
 from simnet.client.headers import Headers
 from simnet.errors import TimedOut, NetworkError, BadRequest, raise_for_ret_code
 from simnet.utils.ds import generate_dynamic_secret
-from simnet.utils.enum_ import Region
+from simnet.utils.enum_ import Region, Game
 from simnet.utils.types import (
     RT,
     HeaderTypes,
@@ -44,8 +44,10 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         player_id (Optional[int]): The player id used for the client.
         region (Region): The region used for the client.
         lang (str): The language used for the client.
+        game (Optional[Game]): The game used for the client.
     """
 
+    game: Optional[Game] = None
     _device_id = str(uuid.uuid3(uuid.NAMESPACE_URL, "SIMNet"))
 
     def __init__(
@@ -200,9 +202,7 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         if self.region == Region.OVERSEAS:
             header["x-rpc-language"] = self.lang or lang
         if ds is None:
-            app_version, client_type, ds = generate_dynamic_secret(
-                self.region, ds_type, new_ds, data, params
-            )
+            app_version, client_type, ds = generate_dynamic_secret(self.region, ds_type, new_ds, data, params)
             header["x-rpc-app_version"] = app_version
             header["x-rpc-client_type"] = client_type
         header["DS"] = ds
@@ -331,9 +331,5 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         """
         if method is None:
             method = "POST" if data else "GET"
-        headers = self.get_lab_api_header(
-            headers, ds_type=ds_type, new_ds=new_ds, lang=lang, data=data, params=params
-        )
-        return await self.request_api(
-            method=method, url=url, json=data, params=params, headers=headers
-        )
+        headers = self.get_lab_api_header(headers, ds_type=ds_type, new_ds=new_ds, lang=lang, data=data, params=params)
+        return await self.request_api(method=method, url=url, json=data, params=params, headers=headers)
