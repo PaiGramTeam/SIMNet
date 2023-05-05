@@ -9,7 +9,7 @@ from simnet.client.cookies import Cookies
 from simnet.client.headers import Headers
 from simnet.errors import TimedOut, NetworkError, BadRequest, raise_for_ret_code
 from simnet.utils.ds import generate_dynamic_secret
-from simnet.utils.enum_ import Region
+from simnet.utils.enum_ import Region, Game
 from simnet.utils.types import (
     RT,
     HeaderTypes,
@@ -44,8 +44,10 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         player_id (Optional[int]): The player id used for the client.
         region (Region): The region used for the client.
         lang (str): The language used for the client.
+        game (Optional[Game]): The game used for the client.
     """
 
+    game: Optional[Game] = None
     _device_id = str(uuid.uuid3(uuid.NAMESPACE_URL, "SIMNet"))
 
     def __init__(
