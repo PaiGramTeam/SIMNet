@@ -47,9 +47,10 @@ class GenshinChronicleClient(BaseChronicleClient):
             DataNotPublic: If the requested data is not public.
         """
         player_id = player_id or self.player_id
-        payload = dict(
-            role_id=player_id, server=recognize_genshin_server(player_id), **payload
-        )
+        if payload is None:
+            payload = dict(role_id=player_id, server=recognize_genshin_server(player_id))
+        else:
+            payload = dict(role_id=player_id, server=recognize_genshin_server(player_id), **payload)
 
         data, params = None, None
         if method == "POST":
