@@ -11,7 +11,7 @@ from simnet.utils.enum_ import Game
 __all__ = (
     "FullUser",
     "Gender",
-    "GenshinAccount",
+    "Account",
     "UserCertification",
     "UserLevel",
     "PartialUser",
@@ -23,8 +23,8 @@ __all__ = (
 )
 
 
-class GenshinAccount(APIModel):
-    """Genshin account."""
+class Account(APIModel):
+    """Account."""
 
     game_biz: str
     uid: int = Field(alias="game_uid")
@@ -136,20 +136,8 @@ class FullUser(PartialUser):
     pc_bg_url: Optional[str] = None
 
 
-class RecordCard(GenshinAccount):
+class BaseRecordCard(Account):
     """record card."""
-
-    def __new__(cls, **kwargs: Any) -> "RecordCard":
-        """Create the appropriate record card."""
-        game_id = kwargs.get("game_id", 0)
-        if game_id == 1:
-            cls = HonkaiRecordCard
-        elif game_id == 2:
-            cls = GenshinRecordCard
-        elif game_id == 6:
-            cls = StarRailRecodeCard
-
-        return super().__new__(cls)
 
     game_id: int
     game_biz: str = ""
@@ -165,12 +153,10 @@ class RecordCard(GenshinAccount):
 
     def as_dict(self) -> Dict[str, Any]:
         """Return data as a dictionary."""
-        return {
-            d.name: (int(d.value) if d.value.isdigit() else d.value) for d in self.data
-        }
+        return {d.name: (int(d.value) if d.value.isdigit() else d.value) for d in self.data}
 
 
-class GenshinRecordCard(RecordCard):
+class GenshinRecordCard(BaseRecordCard):
     """Genshin record card."""
 
     @property
@@ -194,7 +180,7 @@ class GenshinRecordCard(RecordCard):
         return self.data[3].value
 
 
-class HonkaiRecordCard(RecordCard):
+class HonkaiRecordCard(BaseRecordCard):
     """Honkai record card."""
 
     @property
@@ -218,7 +204,7 @@ class HonkaiRecordCard(RecordCard):
         return int(self.data[3].value)
 
 
-class StarRailRecodeCard(RecordCard):
+class StarRailRecodeCard(BaseRecordCard):
     """Star rail record card."""
 
     @property
@@ -240,3 +226,17 @@ class StarRailRecodeCard(RecordCard):
     @property
     def chests(self) -> int:
         return int(self.data[3].value)
+
+
+class RecordCard(BaseRecordCard):
+    def __new__(cls, **kwargs: Any) -> BaseRecordCard:
+        """Create the appropriate record card."""
+        game_id = kwargs.get("game_id", 0)
+        if game_id == 1:
+            cls = HonkaiRecordCard
+        elif game_id == 2:
+            cls = GenshinRecordCard
+        elif game_id == 6:
+            cls = StarRailRecodeCard
+
+        return super().__new__(cls)
