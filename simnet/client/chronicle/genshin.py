@@ -18,9 +18,10 @@ from simnet.utils.player import recognize_genshin_server, recognize_region
 class GenshinChronicleClient(BaseChronicleClient):
     """A client for retrieving data from Genshin's battle chronicle component.
 
-        This class is used to retrieve various data objects from StarRail's battle chronicle component,
-        including real-time notes, user statistics, and character information.
-        """
+    This class is used to retrieve various data objects from StarRail's battle chronicle component,
+    including real-time notes, user statistics, and character information.
+    """
+
     async def _request_genshin_record(
         self,
         endpoint: str,
