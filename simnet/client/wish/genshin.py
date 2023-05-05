@@ -38,7 +38,7 @@ class WishClient(BaseWishClient):
             partial(
                 self.get_wish_page,
                 banner_type=banner_type,
-                game=Game.STARRAIL,
+                game=Game.GENSHIN,
                 authkey=authkey,
             ),
         )

@@ -104,9 +104,7 @@ class GenshinChronicleClient(BaseChronicleClient):
         Returns:
             Character: The requested genshin user characters.
         """
-        data = await self._request_genshin_record(
-            "character", player_id, lang=lang, method="POST"
-        )
+        data = await self._request_genshin_record("character", player_id, lang=lang, method="POST")
         return [Character(**i) for i in data["avatars"]]
 
     async def get_genshin_user(
@@ -126,9 +124,7 @@ class GenshinChronicleClient(BaseChronicleClient):
         """
         data, character_data = await asyncio.gather(
             self._request_genshin_record("index", player_id, lang=lang),
-            self._request_genshin_record(
-                "character", player_id, lang=lang, method="POST"
-            ),
+            self._request_genshin_record("character", player_id, lang=lang, method="POST"),
         )
         data = {**data, **character_data}
 
@@ -153,9 +149,7 @@ class GenshinChronicleClient(BaseChronicleClient):
             SpiralAbyss: genshin spiral abyss runs.
         """
         payload = dict(schedule_type=2 if previous else 1)
-        data = await self._request_genshin_record(
-            "spiralAbyss", player_id, lang=lang, payload=payload
-        )
+        data = await self._request_genshin_record("spiralAbyss", player_id, lang=lang, payload=payload)
 
         return SpiralAbyss(**data)
 
@@ -185,12 +179,11 @@ class GenshinChronicleClient(BaseChronicleClient):
         except DataNotPublic as e:
             # error raised only when real-time notes are not enabled
             if player_id and self.player_id != player_id:
-                raise BadRequest(
-                    e.response, "Cannot view real-time notes of other users."
-                ) from e
+                raise BadRequest(e.response, "Cannot view real-time notes of other users.") from e
             if not autoauth:
                 raise BadRequest(e.response, "Real-time notes are not enabled.") from e
 
+            await self.update_settings(3, True, game=Game.GENSHIN)
             data = await self._request_genshin_record("dailyNote", lang=lang)
 
         return Notes(**data)
@@ -220,9 +213,7 @@ class GenshinChronicleClient(BaseChronicleClient):
 
         return FullGenshinUserStats(**user.dict(), abyss=abyss, activities=activities)
 
-    async def get_genshin_activities(
-        self, player_id: Optional[int] = None, *, lang: Optional[str] = None
-    ) -> Dict:
+    async def get_genshin_activities(self, player_id: Optional[int] = None, *, lang: Optional[str] = None) -> Dict:
         """Get genshin activities.
 
         Args:
