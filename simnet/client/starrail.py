@@ -11,4 +11,4 @@ __all__ = ("StarRailClient",)
 class StarRailClient(StarRailBattleChronicleClient, StarRailWishClient, AuthClient):
     """A simple http client for StarRail endpoints."""
 
-    game: Optional[Game] = Game.GENSHIN
+    game: Optional[Game] = Game.STARRAIL
