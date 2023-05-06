@@ -25,7 +25,3 @@ class Cookies(_Cookies):
             if value is not None:
                 return int(value)
         return None
-
-    @property
-    def lang(self) -> Optional[str]:
-        return self.get("mi18nLang")

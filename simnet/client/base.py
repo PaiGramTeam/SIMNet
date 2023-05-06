@@ -58,7 +58,7 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         account_id: Optional[int] = None,
         player_id: Optional[int] = None,
         region: Region = Region.OVERSEAS,
-        lang: str = "en-us",
+        lang: str = "zh-cn",
         timeout: Optional[TimeoutTypes] = None,
     ) -> None:
         """Initialize the client with the given parameters."""
@@ -81,10 +81,11 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         self._account_id = account_id
         self.client = AsyncClient(cookies=self.cookies, timeout=timeout)
         self.region = region
-        self._lang = lang
+        self.lang = lang
 
     @property
     def account_id(self) -> Optional[int]:
+        """Get the account id used for the client."""
         return self._account_id or self.cookies.account_id
 
     @property
@@ -94,6 +95,7 @@ class BaseClient(AsyncContextManager["BaseClient"]):
 
     @player_id.setter
     def player_id(self, player_id: Optional[int]) -> None:
+        """Set the player id used for the client."""
         if player_id is None:
             self._player_id = None
             self.player_ids.clear()
@@ -101,10 +103,6 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         if self.game is None:
             raise RuntimeError("No default game set. Cannot set player_id.")
         self.player_ids[self.game] = player_id
-
-    @property
-    def lang(self) -> str:
-        return self.cookies.lang or self._lang
 
     @property
     def device_name(self) -> str:
