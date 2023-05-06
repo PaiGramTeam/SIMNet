@@ -1,8 +1,8 @@
-from typing import Optional, Any, List
+from typing import Optional, Any, List, Union
 from simnet.client.base import BaseClient
 from simnet.client.routes import RECORD_URL
-from simnet.errors import DataNotPublic
-from simnet.models.lab.record import RecordCard
+from simnet.errors import DataNotPublic, AccountNotFound
+from simnet.models.lab.record import RecordCard, GenshinRecordCard, StarRailRecodeCard
 from simnet.utils.enum_ import Region, Game
 from simnet.utils.types import QueryParamTypes
 
@@ -124,3 +124,31 @@ class BaseChronicleClient(BaseClient):
             raise DataNotPublic({"retcode": 10102})
 
         return [RecordCard(**card) for card in data["list"]]
+
+    async def get_record_card(
+        self,
+        game: Optional[Game] = None,
+        account_id: Optional[int] = None,
+        *,
+        lang: Optional[str] = None,
+    ) -> Union[GenshinRecordCard, StarRailRecodeCard]:
+        """Get a user's record card.
+
+        Args:
+            game: Optional[Game], the game to get the record card for, defaults to None
+            account_id: Optional[int], the user's account ID, defaults to None
+            lang: Optional[str], the language version of the request, defaults to None
+
+        Returns:
+            A RecordCard object.
+
+        Raises:
+            DataNotPublic: If data is empty.
+        """
+        game = game or self.game
+        game_model = {Game.GENSHIN: GenshinRecordCard, Game.STARRAIL: StarRailRecodeCard}[game]
+        datas = await self.get_record_cards(account_id, lang=lang)
+        for card in datas:
+            if isinstance(card, game_model):
+                return card
+        raise AccountNotFound()
