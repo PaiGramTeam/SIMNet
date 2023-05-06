@@ -7,6 +7,7 @@ from simnet.client.components.wish.genshin import GenshinWishClient
 from simnet.utils.enum_ import Region
 from simnet.utils.types import CookieTypes, HeaderTypes, TimeoutTypes
 
+
 class GenshinClient(GenshinBattleChronicleClient, GenshinWishClient, AuthClient, DailyRewardClient):
     def __init__(
         self,
