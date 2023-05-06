@@ -417,9 +417,9 @@ class RecordCard(BaseRecordCard):
         game_id = kwargs.get("game_id", 0)
         if game_id == 1:
             return HonkaiRecordCard(**kwargs)
-        elif game_id == 2:
+        if game_id == 2:
             return GenshinRecordCard(**kwargs)
-        elif game_id == 6:
+        if game_id == 6:
             return StarRailRecodeCard(**kwargs)
 
         raise ValueError(f"Invalid game ID provided: {game_id}")
