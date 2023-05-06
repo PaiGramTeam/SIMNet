@@ -27,6 +27,7 @@ class PartialCharacter(BaseCharacter):
         constellation (int): The number of constellations that are currently active for the character.
     """
 
+    icon: str = Field(alias="image")
     level: int
     friendship: int = Field(alias="fetter")
     constellation: int = Field(alias="actived_constellation_num")

@@ -9,7 +9,45 @@ from simnet.models.genshin.chronicle.characters import PartialCharacter, Charact
 from simnet.models.lab.record import UserInfo
 
 
-class Stats(APIModel):
+class BaseStats(APIModel):
+    """Overall user stats.
+
+    Attributes:
+        achievements (int): Number of achievements completed by the user.
+        days_active (int): Number of days the user has been active.
+        characters (int): Number of characters owned by the user.
+        spiral_abyss (str): The floor and level reached by the user in Spiral Abyss.
+        anemoculi (int): Number of Anemoculus collected by the user.
+        geoculi (int): Number of Geoculus collected by the user.
+        dendroculi (int): Number of Dendroculus collected by the user.
+        electroculi (int): Number of Electroculus collected by the user.
+        common_chests (int): Number of Common Chests opened by the user.
+        exquisite_chests (int): Number of Exquisite Chests opened by the user.
+        precious_chests (int): Number of Precious Chests opened by the user.
+        luxurious_chests (int): Number of Luxurious Chests opened by the user.
+        remarkable_chests (int): Number of Magic Chests opened by the user.
+        unlocked_waypoints (int): Number of waypoints unlocked by the user.
+        unlocked_domains (int): Number of domains unlocked by the user.
+    """
+
+    achievements: int
+    days_active: int
+    characters: int
+    spiral_abyss: str
+    anemoculi: int
+    geoculi: int
+    dendroculi: int
+    electroculi: int
+    common_chests: int
+    exquisite_chests: int
+    precious_chests: int
+    luxurious_chests: int
+    remarkable_chests: int
+    unlocked_waypoints: int
+    unlocked_domains: int
+
+
+class OSStats(BaseStats):
     """Overall user stats.
 
     Attributes:
@@ -45,6 +83,34 @@ class Stats(APIModel):
     remarkable_chests: int = Field(alias="magic_chest_number")
     unlocked_waypoints: int = Field(alias="way_point_number")
     unlocked_domains: int = Field(alias="domain_number")
+
+
+class Stats(BaseStats):
+    """Overall user stats.
+
+    Attributes:
+        achievements (int): Number of achievements completed by the user.
+        days_active (int): Number of days the user has been active.
+        characters (int): Number of characters owned by the user.
+        spiral_abyss (str): The floor and level reached by the user in Spiral Abyss.
+        anemoculi (int): Number of Anemoculus collected by the user.
+        geoculi (int): Number of Geoculus collected by the user.
+        dendroculi (int): Number of Dendroculus collected by the user.
+        electroculi (int): Number of Electroculus collected by the user.
+        common_chests (int): Number of Common Chests opened by the user.
+        exquisite_chests (int): Number of Exquisite Chests opened by the user.
+        precious_chests (int): Number of Precious Chests opened by the user.
+        luxurious_chests (int): Number of Luxurious Chests opened by the user.
+        remarkable_chests (int): Number of Magic Chests opened by the user.
+        unlocked_waypoints (int): Number of waypoints unlocked by the user.
+        unlocked_domains (int): Number of domains unlocked by the user.
+    """
+
+    def __new__(cls, **kwargs):
+        domain_number = kwargs.get("domain_number")
+        if domain_number:
+            return OSStats(**kwargs)
+        return cls
 
 
 class Offering(APIModel):
@@ -106,9 +172,7 @@ class Exploration(APIModel):
         return self.raw_explored / 10
 
     @validator("offerings", pre=True)
-    def add_base_offering(
-        cls, offerings: List[Any], values: Dict[str, Any]
-    ) -> List[Any]:
+    def add_base_offering(cls, offerings: List[Any], values: Dict[str, Any]) -> List[Any]:
         """Add a base offering if the exploration type is Reputation.
 
         Args:
@@ -118,9 +182,7 @@ class Exploration(APIModel):
         Returns:
             The updated list of offerings.
         """
-        if values["type"] == "Reputation" and not any(
-            values["type"] == o["name"] for o in offerings
-        ):
+        if values["type"] == "Reputation" and not any(values["type"] == o["name"] for o in offerings):
             offerings = [*offerings, dict(name=values["type"], level=values["level"])]
 
         return offerings
@@ -170,7 +232,7 @@ class Teapot(APIModel):
     comfort_icon: str = Field(alias="comfort_level_icon")
 
 
-class PartialGenshinUserStats(APIModel):
+class BasePartialGenshinUserStats(APIModel):
     """User stats with characters without equipment.
 
     Attributes:
@@ -183,9 +245,9 @@ class PartialGenshinUserStats(APIModel):
 
     info: UserInfo = Field("role")
     stats: Stats
-    characters: List[PartialCharacter] = Field(alias="avatars")
-    explorations: List[Exploration] = Field(alias="world_explorations")
-    teapot: Optional[Teapot] = Field(alias="homes")
+    characters: List[PartialCharacter]
+    explorations: List[Exploration]
+    teapot: Optional[Teapot]
 
     @validator("teapot", pre=True)
     def format_teapot(cls, v: Any) -> Optional[Dict[str, Any]]:
@@ -202,6 +264,41 @@ class PartialGenshinUserStats(APIModel):
         if isinstance(v, dict):
             return cast("dict[str, Any]", v)
         return {**v[0], "realms": v}
+
+
+class OSPartialGenshinUserStats(BasePartialGenshinUserStats):
+    """User stats with characters without equipment.
+
+    Attributes:
+        info (UserInfo): The user's information.
+        stats (Stats): The user's stats.
+        characters (List[PartialCharacter]): The list of the user's characters without equipment.
+        explorations (List[Exploration]): The list of the user's explorations.
+        teapot (Optional[Teapot]): The user's Serenitea Teapot.
+    """
+
+    stats: Stats
+    characters: List[PartialCharacter] = Field(alias="avatars")
+    explorations: List[Exploration] = Field(alias="world_explorations")
+    teapot: Optional[Teapot] = Field(alias="homes")
+
+
+class PartialGenshinUserStats(BasePartialGenshinUserStats):
+    """User stats with characters without equipment.
+
+    Attributes:
+        info (UserInfo): The user's information.
+        stats (Stats): The user's stats.
+        characters (List[PartialCharacter]): The list of the user's characters without equipment.
+        explorations (List[Exploration]): The list of the user's explorations.
+        teapot (Optional[Teapot]): The user's Serenitea Teapot.
+    """
+
+    def __new__(cls, **kwargs):
+        world_explorations = kwargs.get("world_explorations")
+        if world_explorations:
+            return OSPartialGenshinUserStats(**kwargs)
+        return cls
 
 
 class GenshinUserStats(PartialGenshinUserStats):
