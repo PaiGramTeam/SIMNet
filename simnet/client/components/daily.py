@@ -3,7 +3,7 @@ import asyncio
 from typing import Optional, Dict, Any, List
 
 from simnet.client.base import BaseClient
-from simnet.utils.ds import hex_digest
+from simnet.utils.ds import hex_digest, DSType
 from simnet.client.routes import REWARD_URL
 from simnet.models.lab.daily import DailyRewardInfo, DailyReward, ClaimedDailyReward
 from simnet.utils.enum_ import Game, Region
@@ -42,7 +42,7 @@ class DailyRewardClient(BaseClient):
         Returns:
             A dictionary containing the response data.
         """
-        new_ds: bool = False
+        ds_type = None
         headers: Dict[str, str] = {}
         params = dict(params or {})
         game = game or self.game
@@ -67,13 +67,13 @@ class DailyRewardClient(BaseClient):
             device_id = self.device_id
             hash_value = hex_digest(device_id)
             headers["x-rpc-device_fp"] = hash_value[:13]
-            new_ds = endpoint == "sign"
+            ds_type = DSType.ANDROID
 
         base_url = REWARD_URL.get_url(self.region, self.game or game)
         url = (base_url / endpoint).copy_merge_params(base_url.params)
 
         return await self.request_lab(
-            url, method, params=params, headers=headers, lang=lang, new_ds=new_ds
+            url, method, params=params, headers=headers, lang=lang, ds_type=ds_type
         )
 
     async def get_reward_info(
