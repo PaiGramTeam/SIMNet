@@ -9,7 +9,9 @@ from simnet.utils.enum_ import Game
 __all__ = ("GenshinClient",)
 
 
-class GenshinClient(GenshinBattleChronicleClient, GenshinWishClient, AuthClient, DailyRewardClient):
+class GenshinClient(
+    GenshinBattleChronicleClient, GenshinWishClient, AuthClient, DailyRewardClient
+):
     """A simple http client for StarRail endpoints."""
 
     game: Optional[Game] = Game.GENSHIN

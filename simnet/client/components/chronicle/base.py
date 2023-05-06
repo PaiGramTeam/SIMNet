@@ -146,7 +146,10 @@ class BaseChronicleClient(BaseClient):
             DataNotPublic: If data is empty.
         """
         game = game or self.game
-        game_model = {Game.GENSHIN: GenshinRecordCard, Game.STARRAIL: StarRailRecodeCard}[game]
+        game_model = {
+            Game.GENSHIN: GenshinRecordCard,
+            Game.STARRAIL: StarRailRecodeCard,
+        }[game]
         datas = await self.get_record_cards(account_id, lang=lang)
         for card in datas:
             if isinstance(card, game_model):

@@ -37,9 +37,7 @@ def cookies() -> str:  # skipcq: PY-D0003
 
 
 @pytest_asyncio.fixture
-async def starrail_client(  # skipcq: PY-D0003
-    cookies: str  # skipcq: PYL-W0621
-):
+async def starrail_client(cookies: str):  # skipcq: PY-D0003  # skipcq: PYL-W0621
     async with StarRailClient(
         cookies=cookies,
         region=Region.CHINESE,
