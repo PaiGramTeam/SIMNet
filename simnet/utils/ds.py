@@ -17,6 +17,7 @@ class DSType(Enum):
     Attributes:
         ANDROID (str): Android dynamic secret type.
     """
+
     ANDROID = "android"
 
 
