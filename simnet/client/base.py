@@ -71,7 +71,7 @@ class BaseClient(AsyncContextManager["BaseClient"]):
             )
 
         if isinstance(cookies, str):
-            cookies = Cookies(parse_cookie(cookies))
+            cookies = parse_cookie(cookies)
         self.cookies = Cookies(cookies)
         self.headers = Headers(headers)
         self._player_id = player_id
@@ -81,7 +81,7 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         self._account_id = account_id
         self.client = AsyncClient(cookies=self.cookies, timeout=timeout)
         self.region = region
-        self.lang = lang
+        self._lang = lang
 
     @property
     def account_id(self) -> Optional[int]:
@@ -101,6 +101,10 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         if self.game is None:
             raise RuntimeError("No default game set. Cannot set player_id.")
         self.player_ids[self.game] = player_id
+
+    @property
+    def lang(self) -> str:
+        return self.cookies.lang or self._lang
 
     @property
     def device_name(self) -> str:

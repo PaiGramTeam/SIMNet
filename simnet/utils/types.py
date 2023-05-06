@@ -3,7 +3,7 @@ from typing import TypeVar, Union, Mapping, Optional, Sequence, Dict, List, Tupl
 RT = TypeVar("RT", bound="BaseClient")
 
 
-CookieTypes = Union["Cookie", Dict[str, str], List[Tuple[str, str]]]
+CookieTypes = Union[str, "Cookie", Dict[str, str], List[Tuple[str, str]]]
 RequestData = Mapping[str, Any]
 PrimitiveData = Optional[Union[str, int, float, bool]]
 QueryParamTypes = Union[
