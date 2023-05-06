@@ -67,7 +67,7 @@ class DailyRewardClient(BaseClient):
             device_id = self.device_id
             hash_value = hex_digest(device_id)
             headers["x-rpc-device_fp"] = hash_value[:13]
-            ds_type = DSType.ANDROID
+            ds_type = DSType.WEB
 
         base_url = REWARD_URL.get_url(self.region, self.game or game)
         url = (base_url / endpoint).copy_merge_params(base_url.params)

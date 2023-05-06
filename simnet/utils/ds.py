@@ -4,7 +4,7 @@ import random
 import string
 import time
 from enum import Enum
-from typing import Any, Optional
+from typing import Any, Optional, Dict
 
 from simnet.utils.enum_ import Region
 from simnet.utils.types import QueryParamTypes
@@ -15,14 +15,36 @@ class DSType(Enum):
     Enumeration of dynamic secret types.
 
     Attributes:
-        ANDROID (str): Android dynamic secret type.
-        ANDROID_NEW (str): New Android dynamic secret type.
-        SIGN (str): Sign dynamic secret type.
+        WEB (str): The web dynamic secret type.
+        ANDROID_WEB (str): The Android web dynamic secret type.
     """
 
-    ANDROID = "android"
-    ANDROID_NEW = "android_new"
-    SIGN = "sign"
+    WEB = "web"
+    ANDROID_WEB = "android_web"
+
+
+DS_VERSION: Dict[Region, str] = {
+    Region.OVERSEAS: "1.5.0",
+    Region.CHINESE: "2.49.1",
+}
+DS_CLIENT_TYPE: Dict[Region, Dict[DSType, str]] = {
+    Region.OVERSEAS: {
+        DSType.ANDROID_WEB: "5",
+    },
+    Region.CHINESE: {
+        DSType.WEB: "2",
+        DSType.ANDROID_WEB: "5",
+    },
+}
+DS_SALT: Dict[Region, Dict[DSType, str]] = {
+    Region.OVERSEAS: {
+        DSType.ANDROID_WEB: "6s25p5ox5y14umn1p61aqyyvbvvl3lrt",
+    },
+    Region.CHINESE: {
+        DSType.ANDROID_WEB: "xV8v4Qu54lUKrEYFZkJhB8cuOh9Asafs",
+        DSType.WEB: "DG8lqMyc9gquwAUFc7zBS62ijQRX9XF7",
+    },
+}
 
 
 def hex_digest(text):
@@ -42,7 +64,7 @@ def hex_digest(text):
 
 def generate_dynamic_secret(
     region: Region,
-    ds_type: Optional[DSType] = None,
+    ds_type: Optional[DSType] = DSType.WEB,
     new_ds: bool = False,
     data: Any = None,
     params: Optional[QueryParamTypes] = None,
@@ -81,24 +103,11 @@ def generate_dynamic_secret(
         c = hex_digest(f"salt={salt}&t={t}&r={r}")
         return f"{t},{r},{c}"
 
-    app_version = "2.46.1"
-    client_type = "5"
-    if region == Region.OVERSEAS:
-        salt = "6s25p5ox5y14umn1p61aqyyvbvvl3lrt"
-        app_version = "1.5.0"
-    elif region == Region.CHINESE:
-        if ds_type is None:
-            salt = "xV8v4Qu54lUKrEYFZkJhB8cuOh9Asafs"
-        elif ds_type == DSType.ANDROID:
-            salt = "KZazpG4cO2QECFDBUCxdhS8cYCsQHfzn"
-            client_type = "2"
-        elif ds_type == DSType.ANDROID_NEW:
-            client_type = "2"
-            salt = "t0qEgfub6cvueAPgR5m9aQWWVciEer7v"
-        else:
-            raise ValueError(f"Unknown ds_type: {ds_type}")
-    else:
-        raise ValueError(f"Unknown region: {region}")
+    app_version = DS_VERSION[region]
+    ds_type = ds_type or DSType.ANDROID_WEB
+    client_type = DS_CLIENT_TYPE[region][ds_type]
+    salt = DS_SALT[region][ds_type]
+    new_ds = new_ds or (Region.CHINESE and ds_type == DSType.ANDROID_WEB)
     if new_ds:
         ds = new()
     else:
