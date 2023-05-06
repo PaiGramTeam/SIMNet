@@ -10,6 +10,8 @@ from simnet.utils.enum_ import Game, Region
 
 __all__ = ("DailyRewardClient",)
 
+from simnet.utils.player import recognize_server
+
 
 class DailyRewardClient(BaseClient):
     """A client for interacting with the daily reward system."""
@@ -41,9 +43,13 @@ class DailyRewardClient(BaseClient):
             A dictionary containing the response data.
         """
         new_ds: bool = False
-        headers: Optional[Dict[str, str]] = None
+        headers: Dict[str, str] = {}
+        params = dict(params or {})
+        game = game or self.game
         if self.region == Region.CHINESE:
-            headers = {}
+            uid = self.player_ids[game]
+            params["uid"] = uid
+            params["region"] = recognize_server(uid, game)
             if challenge is not None and validate is not None:
                 headers["x-rpc-challenge"] = challenge
                 headers["x-rpc-validate"] = validate
@@ -64,10 +70,10 @@ class DailyRewardClient(BaseClient):
             new_ds = endpoint == "sign"
 
         base_url = REWARD_URL.get_url(self.region, self.game or game)
-        url = (base_url / endpoint).update_query(**base_url.query)
+        url = (base_url / endpoint).copy_merge_params(base_url.params)
 
         return await self.request_lab(
-            method, url, params=params, headers=headers, lang=lang, new_ds=new_ds
+            url, method, params=params, headers=headers, lang=lang, new_ds=new_ds
         )
 
     async def get_reward_info(

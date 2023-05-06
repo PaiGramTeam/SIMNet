@@ -1,4 +1,3 @@
-import calendar
 from datetime import timezone, timedelta, datetime
 from typing import NamedTuple
 
@@ -25,8 +24,7 @@ class DailyRewardInfo(NamedTuple):
         """The number of rewards that the user has missed since the start of the month."""
         cn_timezone = timezone(timedelta(hours=8))
         now = datetime.now(cn_timezone)
-        month_days = calendar.monthrange(now.year, now.month)[1]
-        return month_days - self.claimed_rewards
+        return now.day - self.claimed_rewards
 
 
 class DailyReward(APIModel):

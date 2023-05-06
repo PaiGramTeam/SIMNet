@@ -62,11 +62,11 @@ def recognize_starrail_server(player_id: int) -> str:
     server = {
         "1": "prod_gf_cn",
         "2": "prod_gf_cn",
-        "5": "",
-        "6": "",
-        "7": "",
-        "8": "",
-        "9": "",
+        "5": "prod_qd_cn",
+        "6": "prod_official_usa",
+        "7": "prod_official_eur",
+        "8": "prod_official_asia",
+        "9": "prod_official_cht",
     }.get(str(player_id)[0])
 
     if server:
