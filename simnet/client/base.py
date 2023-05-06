@@ -8,6 +8,7 @@ from httpx import AsyncClient, TimeoutException, Response, HTTPError, Timeout
 from simnet.client.cookies import Cookies
 from simnet.client.headers import Headers
 from simnet.errors import TimedOut, NetworkError, BadRequest, raise_for_ret_code
+from simnet.utils.cookies import parse_cookie
 from simnet.utils.ds import generate_dynamic_secret
 from simnet.utils.enum_ import Region, Game
 from simnet.utils.types import (
@@ -69,18 +70,37 @@ class BaseClient(AsyncContextManager["BaseClient"]):
                 pool=1.0,
             )
 
+        if isinstance(cookies, str):
+            cookies = Cookies(parse_cookie(cookies))
         self.cookies = Cookies(cookies)
         self.headers = Headers(headers)
-        self.player_id = player_id
-        self.account_id = account_id
+        self._player_id = player_id
+        self.player_ids = {}
+        if self.game is not None:
+            self.player_ids[self.game] = player_id
+        self._account_id = account_id
         self.client = AsyncClient(cookies=self.cookies, timeout=timeout)
         self.region = region
         self.lang = lang
 
-    def get_player_id(self) -> Optional[int]:
+    @property
+    def account_id(self) -> Optional[int]:
+        return self._account_id or self.cookies.account_id
+
+    @property
+    def player_id(self) -> Optional[int]:
         """Get the player id used for the client."""
-        player_id = self.player_id or self.cookies.account_id
-        return player_id
+        return self.player_ids.get(self.game)
+
+    @player_id.setter
+    def player_id(self, player_id: Optional[int]) -> None:
+        if player_id is None:
+            self._player_id = None
+            self.player_ids.clear()
+            return
+        if self.game is None:
+            raise RuntimeError("No default game set. Cannot set player_id.")
+        self.player_ids[self.game] = player_id
 
     @property
     def device_name(self) -> str:
