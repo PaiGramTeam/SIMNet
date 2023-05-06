@@ -1,3 +1,4 @@
+import os
 from typing import TYPE_CHECKING
 
 import pytest
@@ -5,7 +6,7 @@ import pytest
 if TYPE_CHECKING:
     from simnet.client.starrail import StarRailClient
 
-player_id = None
+player_id = int(os.environ.get("STARRAIL_PLAYER_ID"))
 
 
 @pytest.mark.asyncio
@@ -15,8 +16,7 @@ class TestStarRailClient:
         global player_id
         record = await starrail_client.get_record_card()
         assert record is not None
-        assert record.uid > 0
-        player_id = record.uid
+        assert player_id == record.uid
 
     @staticmethod
     async def test_get_starrail_user(starrail_client: "StarRailClient"):
