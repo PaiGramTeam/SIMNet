@@ -1,6 +1,8 @@
-from typing import Optional, Any
+from typing import Optional, Any, List
 from simnet.client.base import BaseClient
 from simnet.client.routes import RECORD_URL
+from simnet.errors import DataNotPublic
+from simnet.models.lab.record import RecordCard
 from simnet.utils.enum_ import Region, Game
 from simnet.utils.types import QueryParamTypes
 
@@ -92,3 +94,33 @@ class BaseChronicleClient(BaseClient):
             "card/wapi/changeDataSwitch",
             data=dict(switch_id=switch_id, is_public=on, game_id=game_id),
         )
+
+    async def get_record_cards(
+        self,
+        account_id: Optional[int] = None,
+        *,
+        lang: Optional[str] = None,
+    ) -> List[RecordCard]:
+        """Get a user's record cards.
+
+        Args:
+            account_id: Optional[int], the user's account ID, defaults to None
+            lang: Optional[str], the language version of the request, defaults to None
+
+        Returns:
+            A list of RecordCard objects.
+
+        Raises:
+            DataNotPublic: If data is empty.
+        """
+        account_id = account_id or self.account_id
+
+        data = await self.request_game_record(
+            "card/wapi/getGameRecordCard",
+            lang=lang,
+            params=dict(uid=account_id),
+        )
+        if not data["list"]:
+            raise DataNotPublic({"retcode": 10102})
+
+        return [RecordCard(**card) for card in data["list"]]

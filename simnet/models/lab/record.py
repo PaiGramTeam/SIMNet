@@ -403,20 +403,23 @@ class RecordCard(BaseRecordCard):
     """
 
     def __new__(cls, **kwargs: Any) -> BaseRecordCard:
-        """Creates the appropriate record card.
+        """Creates an appropriate record card instance based on the provided game ID.
 
         Args:
             **kwargs: The arguments passed in to create the record card.
 
         Returns:
-            BaseRecordCard: The record card object.
+            BaseRecordCard: An instance of a subclass of `BaseRecordCard` based on the provided game ID.
+
+        Raises:
+            ValueError: If the provided game ID is invalid.
         """
         game_id = kwargs.get("game_id", 0)
         if game_id == 1:
-            cls = HonkaiRecordCard  # skipcq:  PYL-W0642
-        elif game_id == 2:
-            cls = GenshinRecordCard  # skipcq:  PYL-W0642
-        elif game_id == 6:
-            cls = StarRailRecodeCard  # skipcq:  PYL-W0642
+            return HonkaiRecordCard(**kwargs)
+        if game_id == 2:
+            return GenshinRecordCard(**kwargs)
+        if game_id == 6:
+            return StarRailRecodeCard(**kwargs)
 
-        return super().__new__(cls)  # skipcq: PYL-E1120
+        raise ValueError(f"Invalid game ID provided: {game_id}")
