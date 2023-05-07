@@ -34,7 +34,10 @@ class StarRailWishClient(BaseWishClient):
         Returns:
             List[StarRailWish]: A list of StarRailWish objects representing the retrieved wishes.
         """
-        default_banner = {Game.GENSHIN: [100, 200, 301, 302], Game.STARRAIL: [1, 2, 11, 12]}
+        default_banner = {
+            Game.GENSHIN: [100, 200, 301, 302],
+            Game.STARRAIL: [1, 2, 11, 12],
+        }
         banner_types = banner_type or default_banner[self.game]
         if not isinstance(banner_types, Sequence):
             banner_types = [banner_types]
