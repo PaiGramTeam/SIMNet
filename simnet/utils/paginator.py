@@ -1,3 +1,4 @@
+from asyncio import sleep as asleep
 from typing import List, Dict, Callable, Any, Awaitable
 
 
@@ -45,6 +46,7 @@ class WishPaginator:
                 break
 
             all_items.extend(filtered_items)
+            await asleep(.5)
 
         # Return up to the specified limit.
-        return all_items[: min(len(all_items), limit)]
+        return all_items[: min(len(all_items), limit)] if limit else all_items

@@ -97,12 +97,15 @@ class BaseWishClient(BaseClient):
         Returns:
             Dict[str, Any]: The response data as a dictionary.
         """
+        params = dict(gacha_type=banner_type, size=size, end_id=end_id)
+        if game == Game.STARRAIL:
+            params["game_biz"] = Game.STARRAIL.value
         return await self.request_gacha_info(
             "getGachaLog",
             game=game,
             lang=lang,
             authkey=authkey,
-            params=dict(gacha_type=banner_type, size=size, end_id=end_id),
+            params=params,
         )
 
     async def get_banner_names(
