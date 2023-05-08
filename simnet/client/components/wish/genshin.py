@@ -51,5 +51,5 @@ class GenshinWishClient(BaseWishClient):
             )
             items = await paginator.get(limit)
             banner_name = banner_names[banner_type]
-            wishes.extend([Wish(**i,banner_name=banner_name) for i in items])
+            wishes.extend([Wish(**i, banner_name=banner_name) for i in items])
         return sorted(wishes, key=lambda wish: wish.time.timestamp())
