@@ -8,7 +8,7 @@ from httpx import AsyncClient, TimeoutException, Response, HTTPError, Timeout
 from simnet.client.cookies import Cookies
 from simnet.client.headers import Headers
 from simnet.errors import TimedOut, NetworkError, BadRequest, raise_for_ret_code
-from simnet.utils.ds import generate_dynamic_secret
+from simnet.utils.ds import generate_dynamic_secret, DSType
 from simnet.utils.enum_ import Region, Game
 from simnet.utils.types import (
     RT,
@@ -187,7 +187,7 @@ class BaseClient(AsyncContextManager["BaseClient"]):
             header (HeaderTypes): The header to use.
             lang (Optional[str], optional): The language to use for overseas regions. Defaults to None.
             ds (str, optional): The DS string to use. Defaults to None.
-            ds_type (str, optional): The DS type to use. Defaults to None.
+            ds_type (Optional[DSType], optional): The DS type to use. Defaults to None.
             new_ds (bool, optional): Whether to generate a new DS. Defaults to False.
             data (Any, optional): The data to use. Defaults to None.
             params (Optional[QueryParamTypes], optional): The query parameters to use. Defaults to None.
@@ -309,7 +309,7 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         headers: Optional[HeaderTypes] = None,
         lang: Optional[str] = None,
         new_ds: bool = False,
-        ds_type: str = None,
+        ds_type: Optional[DSType] = None,
     ):
         """Make a request to the lab API and return the data.
 
@@ -325,7 +325,7 @@ class BaseClient(AsyncContextManager["BaseClient"]):
             headers (Optional[HeaderTypes]): The headers to include in the request.
             lang (Optional[str]): The language of the request (e.g., "en", "zh").
             new_ds (bool): Whether to use a new dataset for the request.
-            ds_type (str): The type of dataset to use for the request (e.g., "news", "qa").
+            ds_type (Optional[DSType]): The type of dataset to use for the request (e.g., "news", "qa").
 
         Returns:
             Any: The data returned by the lab API.

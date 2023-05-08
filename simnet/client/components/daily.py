@@ -2,11 +2,14 @@
 import asyncio
 from typing import Optional, Dict, Any, List
 
+from httpx import QueryParams
+
 from simnet.client.base import BaseClient
-from simnet.utils.ds import hex_digest
 from simnet.client.routes import REWARD_URL
 from simnet.models.lab.daily import DailyRewardInfo, DailyReward, ClaimedDailyReward
+from simnet.utils.ds import hex_digest
 from simnet.utils.enum_ import Game, Region
+from simnet.utils.player import recognize_genshin_server, recognize_starrail_server
 
 __all__ = ("DailyRewardClient",)
 
@@ -40,19 +43,18 @@ class DailyRewardClient(BaseClient):
         Returns:
             A dictionary containing the response data.
         """
-        new_ds: bool = False
         headers: Optional[Dict[str, str]] = None
+        params = QueryParams(params)
+
+        base_url = REWARD_URL.get_url(self.region, self.game or game)
+        params = params.merge(base_url.params)
+
         if self.region == Region.CHINESE:
             headers = {}
             if challenge is not None and validate is not None:
                 headers["x-rpc-challenge"] = challenge
                 headers["x-rpc-validate"] = validate
                 headers["x-rpc-seccode"] = f"{validate}|jordan"
-            headers["Referer"] = (
-                "https://webstatic.mihoyo.com/bbs/event/signin-ys/index.html?"
-                "bbs_auth_required=true&act_id=e202009291139501&utm_source=bbs&utm_medium=mys&utm_campaign=icon"
-            )
-
             headers["x-rpc-device_name"] = "Chrome 20 2023"
             headers["x-rpc-channel"] = "chrome"
             headers["x-rpc-device_model"] = "Chrome 2023"
@@ -61,13 +63,31 @@ class DailyRewardClient(BaseClient):
             device_id = self.device_id
             hash_value = hex_digest(device_id)
             headers["x-rpc-device_fp"] = hash_value[:13]
-            new_ds = endpoint == "sign"
+            if self.game == Game.GENSHIN:
+                headers["referer"] = (
+                    "https://webstatic.mihoyo.com/bbs/event/signin-ys/index.html?"
+                    "bbs_auth_required=true&act_id=e202009291139501&utm_source=bbs&utm_medium=mys&utm_campaign=icon"
+                )
+                params = params.set("uid", self.player_id)
+                params = params.set("region", recognize_genshin_server(self.player_id))
+            if self.game == Game.STARRAIL:
+                headers["referer"] = (
+                    "https://webstatic.mihoyo.com/bbs/event/signin/hkrpg/index.html?"
+                    "bbs_auth_required=true&act_id=e202304121516551&"
+                    "bbs_auth_required=true&bbs_presentation_style=fullscreen&"
+                    "utm_source=bbs&utm_medium=mys&utm_campaign=icon"
+                )
+                params = params.set("uid", self.player_id)
+                params = params.set("region", recognize_starrail_server(self.player_id))
 
-        base_url = REWARD_URL.get_url(self.region, self.game or game)
-        url = (base_url / endpoint).update_query(**base_url.query)
+        url = base_url / endpoint
 
         return await self.request_lab(
-            method, url, params=params, headers=headers, lang=lang, new_ds=new_ds
+            url,
+            method,
+            params=params,
+            headers=headers,
+            lang=lang,
         )
 
     async def get_reward_info(
@@ -105,7 +125,7 @@ class DailyRewardClient(BaseClient):
         """
         data = await self.request_daily_reward(
             "home",
-            game=game,
+            game=game or self.game,
             lang=lang,
         )
         return [DailyReward(**i) for i in data["awards"]]
@@ -129,7 +149,7 @@ class DailyRewardClient(BaseClient):
                 page.
         """
         data = await self.request_daily_reward(
-            "award", params=dict(current_page=page), game=game, lang=lang
+            "award", params=dict(current_page=page), game=game or self.game, lang=lang
         )
         return [ClaimedDailyReward(**i) for i in data["list"]]
 
@@ -159,7 +179,7 @@ class DailyRewardClient(BaseClient):
                 break
 
             fetched_items = await self._get_claimed_rewards_page(
-                page, game=game, lang=lang
+                page, game=game or self.game, lang=lang
             )
             if not fetched_items:
                 break
@@ -206,7 +226,7 @@ class DailyRewardClient(BaseClient):
         await self.request_daily_reward(
             "sign",
             method="POST",
-            game=game,
+            game=game or self.game,
             lang=lang,
             challenge=challenge,
             validate=validate,
@@ -216,7 +236,7 @@ class DailyRewardClient(BaseClient):
             return None
 
         info, rewards = await asyncio.gather(
-            self.get_reward_info(game=game, lang=lang),
-            self.get_monthly_rewards(game=game, lang=lang),
+            self.get_reward_info(game=game or self.game, lang=lang),
+            self.get_monthly_rewards(game=game or self.game, lang=lang),
         )
         return rewards[info.claimed_rewards - 1]

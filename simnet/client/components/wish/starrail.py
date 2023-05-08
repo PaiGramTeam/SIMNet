@@ -1,5 +1,6 @@
 from functools import partial
 from typing import Optional, List
+
 from simnet.client.components.wish.base import BaseWishClient
 from simnet.models.starrail.wish import StarRailWish
 from simnet.utils.enum_ import Game
@@ -13,7 +14,7 @@ class StarRailWishClient(BaseWishClient):
 
     async def wish_history(
         self,
-        banner_type: int,
+        banner_types: Optional[List[int]] = None,
         limit: Optional[int] = None,
         lang: Optional[str] = None,
         authkey: Optional[str] = None,
@@ -23,7 +24,7 @@ class StarRailWishClient(BaseWishClient):
         Get the wish history for a list of banner types.
 
         Args:
-            banner_type (int, optional): The banner types to get the wish history for.
+            banner_types (Optional[List[int]], optional): The banner types to get the wish history for.
             limit (Optional[int] , optional): The maximum number of wishes to retrieve.
                 If not provided, all available wishes will be returned.
             lang (Optional[str], optional): The language code to use for the request.
@@ -34,15 +35,18 @@ class StarRailWishClient(BaseWishClient):
         Returns:
             List[StarRailWish]: A list of StarRailWish objects representing the retrieved wishes.
         """
-        paginator = WishPaginator(
-            end_id,
-            partial(
-                self.get_wish_page,
-                banner_type=banner_type,
-                game=Game.STARRAIL,
-                authkey=authkey,
-            ),
-        )
-        items = await paginator.get(limit)
-        wish = [StarRailWish(**i) for i in items]
-        return wish
+        banner_types = banner_types or [1, 2, 11, 12]
+        wishes = []
+        for banner_type in banner_types:
+            paginator = WishPaginator(
+                end_id,
+                partial(
+                    self.get_wish_page,
+                    banner_type=banner_type,
+                    game=Game.STARRAIL,
+                    authkey=authkey,
+                ),
+            )
+            items = await paginator.get(limit)
+            wishes.extend([StarRailWish(**i) for i in items])
+        return sorted(wishes, key=lambda wish: wish.time.timestamp())

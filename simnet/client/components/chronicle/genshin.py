@@ -218,15 +218,19 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         Returns:
             Character: The requested genshin user with all their possible data.
         """
-        user, abyss1, abyss2, activities = await asyncio.gather(
-            self.get_genshin_user(player_id, lang=lang),
+        index, character, abyss1, abyss2, activities = await asyncio.gather(
+            self._request_genshin_record("index", player_id, lang=lang),
+            self._request_genshin_record(
+                "character", player_id, lang=lang, method="POST"
+            ),
             self.get_genshin_spiral_abyss(player_id, lang=lang, previous=False),
             self.get_genshin_spiral_abyss(player_id, lang=lang, previous=True),
             self.get_genshin_activities(player_id, lang=lang),
         )
+        user = {**index, **character}
         abyss = SpiralAbyssPair(current=abyss1, previous=abyss2)
 
-        return FullGenshinUserStats(**user.dict(), abyss=abyss, activities=activities)
+        return FullGenshinUserStats(**user, abyss=abyss, activities=activities)
 
     async def get_genshin_activities(
         self, player_id: Optional[int] = None, *, lang: Optional[str] = None

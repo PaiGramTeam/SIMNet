@@ -30,21 +30,21 @@ class Stats(APIModel):
         unlocked_domains (int): Number of domains unlocked by the user.
     """
 
-    achievements: int = Field(alias="achievement_number")
-    days_active: int = Field(alias="active_day_number")
-    characters: int = Field(alias="avatar_number")
-    spiral_abyss: str = Field(alias="spiral_abyss")
-    anemoculi: int = Field(alias="anemoculus_number")
-    geoculi: int = Field(alias="geoculus_number")
-    dendroculi: int = Field(alias="dendroculus_number")
-    electroculi: int = Field(alias="electroculus_number")
-    common_chests: int = Field(alias="common_chest_number")
-    exquisite_chests: int = Field(alias="exquisite_chest_number")
-    precious_chests: int = Field(alias="precious_chest_number")
-    luxurious_chests: int = Field(alias="luxurious_chest_number")
-    remarkable_chests: int = Field(alias="magic_chest_number")
-    unlocked_waypoints: int = Field(alias="way_point_number")
-    unlocked_domains: int = Field(alias="domain_number")
+    achievements: int = Field(aliases="achievement_number")
+    days_active: int = Field(aliases="active_day_number")
+    characters: int = Field(aliases="avatar_number")
+    spiral_abyss: str = Field(aliases="spiral_abyss")
+    anemoculi: int = Field(aliases="anemoculus_number")
+    geoculi: int = Field(aliases="geoculus_number")
+    dendroculi: int = Field(aliases="dendroculus_number")
+    electroculi: int = Field(aliases="electroculus_number")
+    common_chests: int = Field(aliases="common_chest_number")
+    exquisite_chests: int = Field(aliases="exquisite_chest_number")
+    precious_chests: int = Field(aliases="precious_chest_number")
+    luxurious_chests: int = Field(aliases="luxurious_chest_number")
+    remarkable_chests: int = Field(aliases="magic_chest_number")
+    unlocked_waypoints: int = Field(aliases="way_point_number")
+    unlocked_domains: int = Field(aliases="domain_number")
 
 
 class Offering(APIModel):
@@ -183,9 +183,9 @@ class PartialGenshinUserStats(APIModel):
 
     info: UserInfo = Field("role")
     stats: Stats
-    characters: List[PartialCharacter] = Field(alias="avatars")
-    explorations: List[Exploration] = Field(alias="world_explorations")
-    teapot: Optional[Teapot] = Field(alias="homes")
+    characters: List[PartialCharacter] = Field(aliases="avatars")
+    explorations: List[Exploration] = Field(aliases="world_explorations")
+    teapot: Optional[Teapot] = Field(aliases="homes")
 
     @validator("teapot", pre=True)
     def format_teapot(cls, v: Any) -> Optional[Dict[str, Any]]:

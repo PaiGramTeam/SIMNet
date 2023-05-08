@@ -6,7 +6,6 @@ from simnet.models.genshin.wish import Wish
 from simnet.utils.enum_ import Game
 from simnet.utils.paginator import WishPaginator
 
-
 __all__ = ("GenshinWishClient",)
 
 
@@ -15,17 +14,16 @@ class GenshinWishClient(BaseWishClient):
 
     async def wish_history(
         self,
-        banner_type: int,
+        banner_types: Optional[List[int]] = None,
         limit: Optional[int] = None,
         lang: Optional[str] = None,
         authkey: Optional[str] = None,
         end_id: int = 0,
     ) -> List[Wish]:
-        """
-        Get the wish history for a list of banner types.
+        """Get the wish history for a list of banner types.
 
         Args:
-            banner_type (int, optional): The banner types to get the wish history for.
+            banner_types (Optional[List[int]], optional): The banner types to get the wish history for.
             limit (Optional[int] , optional): The maximum number of wishes to retrieve.
                 If not provided, all available wishes will be returned.
             lang (Optional[str], optional): The language code to use for the request.
@@ -36,19 +34,22 @@ class GenshinWishClient(BaseWishClient):
         Returns:
             List[Wish]: A list of GenshinWish objects representing the retrieved wishes.
         """
+        banner_types = banner_types or [100, 200, 301, 302]
         banner_names = await self.get_banner_names(
             game=Game.GENSHIN, lang=lang, authkey=authkey
         )
-        paginator = WishPaginator(
-            end_id,
-            partial(
-                self.get_wish_page,
-                banner_type=banner_type,
-                game=Game.GENSHIN,
-                authkey=authkey,
-            ),
-        )
-        items = await paginator.get(limit)
-        banner_name = banner_names[banner_type]
-        wish = [Wish(**i, banner_name=banner_name) for i in items]
-        return wish
+        wishes = []
+        for banner_type in banner_types:
+            paginator = WishPaginator(
+                end_id,
+                partial(
+                    self.get_wish_page,
+                    banner_type=banner_type,
+                    game=Game.GENSHIN,
+                    authkey=authkey,
+                ),
+            )
+            items = await paginator.get(limit)
+            banner_name = banner_names[banner_type]
+            wishes.extend([Wish(**i, banner_name=banner_name) for i in items])
+        return sorted(wishes, key=lambda wish: wish.time.timestamp())

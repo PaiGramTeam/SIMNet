@@ -15,14 +15,12 @@ class DSType(Enum):
     Enumeration of dynamic secret types.
 
     Attributes:
+        WEB (str): Android dynamic secret type.
         ANDROID (str): Android dynamic secret type.
-        ANDROID_NEW (str): New Android dynamic secret type.
-        SIGN (str): Sign dynamic secret type.
     """
 
+    WEB = "web"
     ANDROID = "android"
-    ANDROID_NEW = "android_new"
-    SIGN = "sign"
 
 
 def hex_digest(text):
@@ -87,16 +85,22 @@ def generate_dynamic_secret(
         salt = "6s25p5ox5y14umn1p61aqyyvbvvl3lrt"
         app_version = "1.5.0"
     elif region == Region.CHINESE:
-        if ds_type is None:
-            salt = "xV8v4Qu54lUKrEYFZkJhB8cuOh9Asafs"
-        elif ds_type == DSType.ANDROID:
-            salt = "KZazpG4cO2QECFDBUCxdhS8cYCsQHfzn"
-            client_type = "2"
-        elif ds_type == DSType.ANDROID_NEW:
-            client_type = "2"
-            salt = "t0qEgfub6cvueAPgR5m9aQWWVciEer7v"
+        if new_ds:
+            if ds_type is None:
+                salt = "xV8v4Qu54lUKrEYFZkJhB8cuOh9Asafs"
+            elif ds_type == DSType.ANDROID:
+                client_type = "2"
+                salt = "KZazpG4cO2QECFDBUCxdhS8cYCsQHfzn"
+            else:
+                raise ValueError(f"Unknown ds_type: {ds_type}")
         else:
-            raise ValueError(f"Unknown ds_type: {ds_type}")
+            if ds_type is None:
+                salt = "X7UOLLnTuNS3kgTJ1BUHOvKpiqp3kmym"
+            elif ds_type == DSType.ANDROID:
+                salt = "t0qEgfub6cvueAPgR5m9aQWWVciEer7v"
+                client_type = "2"
+            else:
+                raise ValueError(f"Unknown ds_type: {ds_type}")
     else:
         raise ValueError(f"Unknown region: {region}")
     if new_ds:
