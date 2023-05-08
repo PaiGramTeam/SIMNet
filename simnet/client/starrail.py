@@ -10,7 +10,13 @@ from simnet.utils.enum_ import Game
 __all__ = ("StarRailClient",)
 
 
-class StarRailClient(StarRailBattleChronicleClient, StarRailWishClient, DailyRewardClient, AuthClient,LabClient):
+class StarRailClient(
+    StarRailBattleChronicleClient,
+    StarRailWishClient,
+    DailyRewardClient,
+    AuthClient,
+    LabClient,
+):
     """A simple http client for StarRail endpoints."""
 
     game: Optional[Game] = Game.STARRAIL

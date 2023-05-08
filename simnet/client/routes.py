@@ -169,7 +169,9 @@ class GameRoute(BaseRoute):
             raise RuntimeError(f"URL does not support {region.name} region.")
 
         if not self.urls[region][game]:
-            raise RuntimeError(f"URL does not support {game.name} game for {region.name} region.")
+            raise RuntimeError(
+                f"URL does not support {game.name} game for {region.name} region."
+            )
 
         return self.urls[region][game]
 
@@ -208,7 +210,9 @@ GET_LTOKEN_BY_STOKEN_URL = InternationalRoute(
     chinese=f"https://{PASSPORT_HOST}/account/auth/api/getLTokenBySToken",
 )
 
-AUTH_KEY_URL = InternationalRoute(overseas="", chinese="https://api-takumi.mihoyo.com/binding/api/genAuthKey")
+AUTH_KEY_URL = InternationalRoute(
+    overseas="", chinese="https://api-takumi.mihoyo.com/binding/api/genAuthKey"
+)
 
 HK4E_LOGIN_URL = InternationalRoute(
     overseas="https://sg-public-api.hoyoverse.com/common/badge/v1/login/account",
@@ -241,4 +245,6 @@ CALCULATOR_URL = InternationalRoute(
 HK4E_URL = Route("https://sg-hk4e-api.hoyoverse.com/common/hk4e_global/")
 
 
-CODE_URL = Route("https://sg-hk4e-api.hoyoverse.com/common/apicdkey/api/webExchangeCdkey")
+CODE_URL = Route(
+    "https://sg-hk4e-api.hoyoverse.com/common/apicdkey/api/webExchangeCdkey"
+)

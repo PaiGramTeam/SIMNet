@@ -11,7 +11,11 @@ __all__ = ("GenshinClient",)
 
 
 class GenshinClient(
-    GenshinBattleChronicleClient, GenshinWishClient, AuthClient, DailyRewardClient,LabClient
+    GenshinBattleChronicleClient,
+    GenshinWishClient,
+    AuthClient,
+    DailyRewardClient,
+    LabClient,
 ):
     """A simple http client for StarRail endpoints."""
 

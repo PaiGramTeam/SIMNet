@@ -175,7 +175,9 @@ class LabClient(BaseClient):
         announcements: List[Dict[str, Any]] = []
         for sublist in info["list"]:
             for info in sublist["list"]:
-                detail = next((i for i in details["list"] if i["ann_id"] == info["ann_id"]), None)
+                detail = next(
+                    (i for i in details["list"] if i["ann_id"] == info["ann_id"]), None
+                )
                 announcements.append({**info, **(detail or {})})
 
         return [Announcement(**i) for i in announcements]
