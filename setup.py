@@ -24,7 +24,7 @@ def get_setup_kwargs():
     requirements = get_requirements()
 
     kwargs = dict(
-        script_name=f"setup.py",
+        script_name="setup.py",
         name="SIMNet",
         version=__version__,
         author="PaiGramTeam",
