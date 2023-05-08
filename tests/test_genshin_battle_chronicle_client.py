@@ -24,15 +24,21 @@ async def genshin_client(genshin_player_id: int, account_id: int, cookies: "Cook
 
 @pytest.mark.asyncio
 class TestGenshinBattleChronicleClient:
-    async def test_get_battle_chronicle(self, genshin_client: GenshinBattleChronicleClient):
+    async def test_get_battle_chronicle(
+        self, genshin_client: GenshinBattleChronicleClient
+    ):
         user = await genshin_client.get_genshin_user()
         assert user.stats.days_active >= 0
 
-    async def test_get_full_genshin_user(self, genshin_client: GenshinBattleChronicleClient):
+    async def test_get_full_genshin_user(
+        self, genshin_client: GenshinBattleChronicleClient
+    ):
         user = await genshin_client.get_full_genshin_user()
         assert isinstance(user, FullGenshinUserStats)
         assert isinstance(user.stats, Stats)
 
-    async def test_get_partial_genshin_user(self, genshin_client: GenshinBattleChronicleClient):
+    async def test_get_partial_genshin_user(
+        self, genshin_client: GenshinBattleChronicleClient
+    ):
         user = await genshin_client.get_partial_genshin_user()
         assert user.stats.days_active >= 0

@@ -38,7 +38,9 @@ class TestStarrailBattleChronicleClient:
         assert notes is not None
 
     @staticmethod
-    async def test_get_starrail_characters(starrail_client: "StarRailBattleChronicleClient"):
+    async def test_get_starrail_characters(
+        starrail_client: "StarRailBattleChronicleClient",
+    ):
         characters = await starrail_client.get_starrail_characters()
         assert len(characters.avatar_list) > 0
         character = characters.avatar_list[-1]
