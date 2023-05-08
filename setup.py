@@ -30,7 +30,7 @@ def get_setup_kwargs():
         author="PaiGramTeam",
         url="https://github.com/PaiGramTeam/SIMNet",
         keywords="genshin and honkai api wrapper",
-        description="We have made you a wrapper you can't refuse, maybe",
+        description="Modern API wrapper for Genshin Impact & Honkai: Star Rail built on asyncio and pydantic.",
         long_description=open("README.md", "r", encoding="utf-8").read(),
         long_description_content_type="text/markdown",
         packages=find_packages(exclude=["tests*"]),
