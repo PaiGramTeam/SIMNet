@@ -21,6 +21,10 @@ __all__ = (
     "AUTH_KEY_URL",
     "HK4E_LOGIN_URL",
     "REWARD_URL",
+    "TAKUMI_URL",
+    "CALCULATOR_URL",
+    "HK4E_URL",
+    "CODE_URL",
 )
 
 
@@ -165,9 +169,7 @@ class GameRoute(BaseRoute):
             raise RuntimeError(f"URL does not support {region.name} region.")
 
         if not self.urls[region][game]:
-            raise RuntimeError(
-                f"URL does not support {game.name} game for {region.name} region."
-            )
+            raise RuntimeError(f"URL does not support {game.name} game for {region.name} region.")
 
         return self.urls[region][game]
 
@@ -206,9 +208,7 @@ GET_LTOKEN_BY_STOKEN_URL = InternationalRoute(
     chinese=f"https://{PASSPORT_HOST}/account/auth/api/getLTokenBySToken",
 )
 
-AUTH_KEY_URL = InternationalRoute(
-    overseas="", chinese="https://api-takumi.mihoyo.com/binding/api/genAuthKey"
-)
+AUTH_KEY_URL = InternationalRoute(overseas="", chinese="https://api-takumi.mihoyo.com/binding/api/genAuthKey")
 
 HK4E_LOGIN_URL = InternationalRoute(
     overseas="https://sg-public-api.hoyoverse.com/common/badge/v1/login/account",
@@ -227,3 +227,18 @@ REWARD_URL = GameRoute(
         hkrpg="https://api-takumi.mihoyo.com/event/luna/?act_id=e202304121516551",
     ),
 )
+TAKUMI_URL = InternationalRoute(
+    overseas="https://api-os-takumi.mihoyo.com/",
+    chinese="https://api-takumi.mihoyo.com/",
+)
+
+CALCULATOR_URL = InternationalRoute(
+    overseas="https://sg-public-api.hoyoverse.com/event/calculateos/",
+    chinese="https://api-takumi.mihoyo.com/event/e20200928calculate/v1/",
+)
+
+
+HK4E_URL = Route("https://sg-hk4e-api.hoyoverse.com/common/hk4e_global/")
+
+
+CODE_URL = Route("https://sg-hk4e-api.hoyoverse.com/common/apicdkey/api/webExchangeCdkey")
