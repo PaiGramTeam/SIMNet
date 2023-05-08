@@ -1,14 +1,17 @@
 import asyncio
 import os
 import warnings
+from pathlib import Path
 
 import pytest
-import pytest_asyncio
+from dotenv import load_dotenv
 
 from simnet.client.cookies import Cookies
-from simnet.client.starrail import StarRailClient
 from simnet.utils.cookies import parse_cookie
-from simnet.utils.enum_ import Region
+
+env_path = Path(".env")
+if env_path.exists():
+    load_dotenv()
 
 
 @pytest.fixture(scope="session")
@@ -34,8 +37,16 @@ def cookies() -> "Cookies":  # skipcq: PY-D0003
 
 
 @pytest.fixture(scope="session")
-def player_id() -> int:  # skipcq: PY-D0003
-    _player_id = os.environ.get("PLAYER_ID")
+def genshin_player_id() -> int:  # skipcq: PY-D0003
+    _player_id = os.environ.get("GENSHIN_PLAYER_ID")
+    if not _player_id:
+        pytest.exit("No player id set", 1)
+    return int(_player_id)
+
+
+@pytest.fixture(scope="session")
+def starrail_player_id() -> int:  # skipcq: PY-D0003
+    _player_id = os.environ.get("STARRAIL_PLAYER_ID")
     if not _player_id:
         pytest.exit("No player id set", 1)
     return int(_player_id)
@@ -47,16 +58,3 @@ def account_id() -> int:  # skipcq: PY-D0003
     if not _account_id:
         pytest.exit("No player id set", 1)
     return int(_account_id)
-
-
-@pytest_asyncio.fixture
-async def starrail_client(  # skipcq: PY-D0003
-    player_id: int, account_id: int, cookies: "Cookies"  # skipcq: PYL-W0621
-):
-    async with StarRailClient(
-        player_id=player_id,
-        cookies=cookies,
-        account_id=account_id,
-        region=Region.CHINESE,
-    ) as client_instance:
-        yield client_instance
