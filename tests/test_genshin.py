@@ -25,5 +25,6 @@ async def genshin_client(
 
 @pytest.mark.asyncio
 class TestGenshinClient:
-    async def test_game(self, genshin_client: "GenshinClient"):
+    @staticmethod
+    async def test_game(genshin_client: "GenshinClient"):
         assert genshin_client.game == Game.GENSHIN

@@ -25,5 +25,6 @@ async def starrail_client(
 
 @pytest.mark.asyncio
 class TestStarRailClient:
-    async def test_game(self, starrail_client: "StarRailClient"):
+    @staticmethod
+    async def test_game(starrail_client: "StarRailClient"):
         assert starrail_client.game == Game.STARRAIL

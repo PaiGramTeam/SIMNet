@@ -22,7 +22,8 @@ async def base_chronicle_client(account_id: int, cookies: "Cookies"):
 
 @pytest.mark.asyncio
 class TestBaseChronicleClient:
-    async def test_get_record_cards(self, base_chronicle_client: "BaseChronicleClient"):
+    @staticmethod
+    async def test_get_record_cards(base_chronicle_client: "BaseChronicleClient"):
         record_cards = await base_chronicle_client.get_record_cards()
         assert len(record_cards) > 0
         record_card = record_cards[0]
