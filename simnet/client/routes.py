@@ -21,6 +21,10 @@ __all__ = (
     "AUTH_KEY_URL",
     "HK4E_LOGIN_URL",
     "REWARD_URL",
+    "TAKUMI_URL",
+    "CALCULATOR_URL",
+    "HK4E_URL",
+    "CODE_URL",
 )
 
 
@@ -226,4 +230,21 @@ REWARD_URL = GameRoute(
         honkai3rd="https://api-takumi.mihoyo.com/event/luna/?act_id=e202207181446311",
         hkrpg="https://api-takumi.mihoyo.com/event/luna/?act_id=e202304121516551",
     ),
+)
+TAKUMI_URL = InternationalRoute(
+    overseas="https://api-os-takumi.mihoyo.com/",
+    chinese="https://api-takumi.mihoyo.com/",
+)
+
+CALCULATOR_URL = InternationalRoute(
+    overseas="https://sg-public-api.hoyoverse.com/event/calculateos/",
+    chinese="https://api-takumi.mihoyo.com/event/e20200928calculate/v1/",
+)
+
+
+HK4E_URL = Route("https://sg-hk4e-api.hoyoverse.com/common/hk4e_global/")
+
+
+CODE_URL = Route(
+    "https://sg-hk4e-api.hoyoverse.com/common/apicdkey/api/webExchangeCdkey"
 )
