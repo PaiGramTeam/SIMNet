@@ -59,7 +59,7 @@ class LabClient(BaseClient):
             data=data,
             headers=headers,
             lang=lang,
-            new_ds=True if self.region == Region.CHINESE else False,
+            new_ds=self.region == Region.CHINESE,
         )
         return data
 
