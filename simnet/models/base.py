@@ -14,9 +14,8 @@ class APIModel(BaseModel):
     def __init__(self, **data: Any) -> None:
         for field_name, field in self.__fields__.items():
             aliases = field.field_info.extra.get("aliases")
-            if aliases:
-                if aliases in data:
-                    data[field_name] = data.pop(aliases)
+            if aliases and aliases in data:
+                data[field_name] = data.pop(aliases)
         super().__init__(**data)
 
     class Config:
