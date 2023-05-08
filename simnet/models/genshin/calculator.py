@@ -206,16 +206,15 @@ class CalculatorTalent(APIModel):
 
         if identifier == 2:
             return "passive"
-        elif order == 1:
+        if order == 1:
             return "attack"
-        elif order == 2:
+        if order == 2:
             return "skill"
-        elif order == 9:
+        if order == 9:
             return "burst"
-        elif order == 3:
+        if order == 3:
             return "dash"
-        else:
-            return None
+        return None
 
     @property
     def upgradeable(self) -> bool:
@@ -275,8 +274,7 @@ class CalculatorCharacterDetails(APIModel):
         """All talents that can be leveled up."""
         if self.talents[2].type == "dash":
             return [self.talents[0], self.talents[1], self.talents[3]]
-        else:
-            return [self.talents[0], self.talents[1], self.talents[2]]
+        return [self.talents[0], self.talents[1], self.talents[2]]
 
 
 class CalculatorConsumable(APIModel):

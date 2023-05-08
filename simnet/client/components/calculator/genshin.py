@@ -39,7 +39,6 @@ class CalculatorClient(BaseClient):
         Returns:
             dict: The data returned by the calculator endpoint.
         """
-
         params = dict(params or {})
 
         base_url = CALCULATOR_URL.get_url(self.region)
