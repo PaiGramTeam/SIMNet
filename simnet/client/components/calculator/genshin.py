@@ -80,7 +80,9 @@ class CalculatorClient(BaseClient):
         Args:
             enabled (bool): Whether to enable syncing (default True).
         """
-        await self.request_calculator("avatar/auth", method="POST", data=dict(avatar_auth=int(enabled)))
+        await self.request_calculator(
+            "avatar/auth", method="POST", data=dict(avatar_auth=int(enabled))
+        )
 
     async def _get_calculator_items(
         self,
