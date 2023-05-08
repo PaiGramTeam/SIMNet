@@ -40,7 +40,7 @@ def cookies() -> "Cookies":  # skipcq: PY-D0003
 def genshin_player_id() -> int:  # skipcq: PY-D0003
     _player_id = os.environ.get("GENSHIN_PLAYER_ID")
     if not _player_id:
-        pytest.exit("No player id set", 1)
+        pytest.exit("No genshin player id set", 1)
     return int(_player_id)
 
 
@@ -48,7 +48,7 @@ def genshin_player_id() -> int:  # skipcq: PY-D0003
 def starrail_player_id() -> int:  # skipcq: PY-D0003
     _player_id = os.environ.get("STARRAIL_PLAYER_ID")
     if not _player_id:
-        pytest.exit("No player id set", 1)
+        pytest.exit("No genshin player id set", 1)
     return int(_player_id)
 
 
@@ -56,5 +56,5 @@ def starrail_player_id() -> int:  # skipcq: PY-D0003
 def account_id() -> int:  # skipcq: PY-D0003
     _account_id = os.environ.get("ACCOUNT_ID")
     if not _account_id:
-        pytest.exit("No player id set", 1)
+        pytest.exit("No account id set", 1)
     return int(_account_id)
