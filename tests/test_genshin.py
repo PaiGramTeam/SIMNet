@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 import pytest
 import pytest_asyncio
 
-from simnet.client.starrail import StarRailClient
+from simnet.client.genshin import GenshinClient
 from simnet.utils.enum_ import Region, Game
 
 if TYPE_CHECKING:
@@ -11,11 +11,11 @@ if TYPE_CHECKING:
 
 
 @pytest_asyncio.fixture
-async def starrail_client(
-    starrail_player_id: int, account_id: int, cookies: "Cookies"
+async def genshin_client(
+    genshin_player_id: int, account_id: int, cookies: "Cookies"
 ):  # skipcq: PY-D0003  # skipcq: PYL-W0621
-    async with StarRailClient(
-        player_id=starrail_player_id,
+    async with GenshinClient(
+        player_id=genshin_player_id,
         cookies=cookies,
         account_id=account_id,
         region=Region.CHINESE,
@@ -24,7 +24,7 @@ async def starrail_client(
 
 
 @pytest.mark.asyncio
-class TestStarRailClient:
+class TestGenshinClient:
     @staticmethod
-    async def test_game(starrail_client: "StarRailClient"):
-        assert starrail_client.game == Game.STARRAIL
+    async def test_game(genshin_client: "GenshinClient"):
+        assert genshin_client.game == Game.GENSHIN
