@@ -41,7 +41,6 @@ def get_setup_kwargs():
 
 
 def main():
-
     setup(**get_setup_kwargs())
 
 
