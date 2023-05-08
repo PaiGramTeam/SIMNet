@@ -55,13 +55,9 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
             raise ValueError("Player ID is not specified.")
 
         if payload is None:
-            payload = dict(
-                role_id=player_id, server=recognize_genshin_server(player_id)
-            )
+            payload = dict(role_id=player_id, server=recognize_genshin_server(player_id))
         else:
-            payload = dict(
-                role_id=player_id, server=recognize_genshin_server(player_id), **payload
-            )
+            payload = dict(role_id=player_id, server=recognize_genshin_server(player_id), **payload)
 
         data, params = None, None
         if method == "POST":
@@ -111,9 +107,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         Returns:
             Character: The requested genshin user characters.
         """
-        data = await self._request_genshin_record(
-            "character", player_id, lang=lang, method="POST"
-        )
+        data = await self._request_genshin_record("character", player_id, lang=lang, method="POST")
         return [Character(**i) for i in data["avatars"]]
 
     async def get_genshin_user(
@@ -133,9 +127,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         """
         data, character_data = await asyncio.gather(
             self._request_genshin_record("index", player_id, lang=lang),
-            self._request_genshin_record(
-                "character", player_id, lang=lang, method="POST"
-            ),
+            self._request_genshin_record("character", player_id, lang=lang, method="POST"),
         )
         data = {**data, **character_data}
 
@@ -160,9 +152,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
             SpiralAbyss: genshin spiral abyss runs.
         """
         payload = dict(schedule_type=2 if previous else 1)
-        data = await self._request_genshin_record(
-            "spiralAbyss", player_id, lang=lang, payload=payload
-        )
+        data = await self._request_genshin_record("spiralAbyss", player_id, lang=lang, payload=payload)
 
         return SpiralAbyss(**data)
 
@@ -192,9 +182,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         except DataNotPublic as e:
             # error raised only when real-time notes are not enabled
             if player_id and self.player_id != player_id:
-                raise BadRequest(
-                    e.response, "Cannot view real-time notes of other users."
-                ) from e
+                raise BadRequest(e.response, "Cannot view real-time notes of other users.") from e
             if not autoauth:
                 raise BadRequest(e.response, "Real-time notes are not enabled.") from e
 
@@ -218,19 +206,19 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         Returns:
             Character: The requested genshin user with all their possible data.
         """
-        user, abyss1, abyss2, activities = await asyncio.gather(
-            self.get_genshin_user(player_id, lang=lang),
+        index, character, abyss1, abyss2, activities = await asyncio.gather(
+            self._request_genshin_record("index", player_id, lang=lang),
+            self._request_genshin_record("character", player_id, lang=lang, method="POST"),
             self.get_genshin_spiral_abyss(player_id, lang=lang, previous=False),
             self.get_genshin_spiral_abyss(player_id, lang=lang, previous=True),
             self.get_genshin_activities(player_id, lang=lang),
         )
+        user = {**index, **character}
         abyss = SpiralAbyssPair(current=abyss1, previous=abyss2)
 
-        return FullGenshinUserStats(**user.dict(), abyss=abyss, activities=activities)
+        return FullGenshinUserStats(**user, abyss=abyss, activities=activities)
 
-    async def get_genshin_activities(
-        self, player_id: Optional[int] = None, *, lang: Optional[str] = None
-    ) -> Dict:
+    async def get_genshin_activities(self, player_id: Optional[int] = None, *, lang: Optional[str] = None) -> Dict:
         """Get genshin activities.
 
         Args:

@@ -15,9 +15,11 @@ class DSType(Enum):
     Enumeration of dynamic secret types.
 
     Attributes:
+        WEB (str): Android dynamic secret type.
         ANDROID (str): Android dynamic secret type.
     """
 
+    WEB = "web"
     ANDROID = "android"
 
 
