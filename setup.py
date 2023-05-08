@@ -31,7 +31,7 @@ def get_setup_kwargs():
         url="https://github.com/PaiGramTeam/SIMNet",
         keywords="genshin and honkai api wrapper",
         description="We have made you a wrapper you can't refuse, maybe",
-        packages=find_packages(exclude=["tests.*"]),
+        packages=find_packages(exclude=["tests*"]),
         install_requires=requirements,
         include_package_data=True,
         python_requires=">=3.8",
