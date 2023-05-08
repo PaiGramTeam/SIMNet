@@ -12,7 +12,7 @@ class Version(NamedTuple):
     release_level: str
     serial: int
 
-    def _rl_shorthand(self) -> str:
+    def _rl_shorthand(self) -> str:  # skipcq: PY-D0003
         return {
             "alpha": "a",
             "beta": "b",

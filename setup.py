@@ -40,7 +40,7 @@ def get_setup_kwargs():
     return kwargs
 
 
-def main():
+def main():  # skipcq: PY-D0003
     setup(**get_setup_kwargs())
 
 
