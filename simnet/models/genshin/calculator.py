@@ -259,7 +259,9 @@ class CalculatorCharacterDetails(APIModel):
     artifacts: List[CalculatorArtifact] = Field(alias="reliquary_list")
 
     @validator("talents")
-    def correct_talent_current_level(cls, v: List[CalculatorTalent]) -> List[CalculatorTalent]:
+    def correct_talent_current_level(
+        cls, v: List[CalculatorTalent]
+    ) -> List[CalculatorTalent]:
         """Validates the current level of each calculator talent in the talents list and sets it to 1 if it is 0.
 
         Args:
