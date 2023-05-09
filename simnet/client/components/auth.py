@@ -62,9 +62,8 @@ class AuthClient(BaseClient):
                 self.cookies[name] = token
         stoken = self.cookies.get("stoken")
         stuid = self.cookies.get("stuid")
-        if stoken:
-            if stuid:
-                self.cookies["stuid"] = self.account_id
+        if stoken and stuid:
+            self.cookies["stuid"] = self.account_id
         return stoken
 
     async def get_cookie_token_by_stoken(
