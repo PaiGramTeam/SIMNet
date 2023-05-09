@@ -13,3 +13,5 @@ class TestBaseClient:
             client.cookies = {"account_id": "114514"}
             assert isinstance(client.cookies, Cookies)
             assert client.cookies.get("account_id") == "114514"
+            client.cookies.set("stuid", "114514")
+            assert client.cookies.get("stuid") == "114514"

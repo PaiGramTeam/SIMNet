@@ -3,7 +3,7 @@ import uuid
 from types import TracebackType
 from typing import AsyncContextManager, Type, Optional, Any
 
-from httpx import AsyncClient as _AsyncClient, TimeoutException, Response, HTTPError, Timeout
+from httpx import AsyncClient, TimeoutException, Response, HTTPError, Timeout
 
 from simnet.client.cookies import Cookies
 from simnet.client.headers import Headers
@@ -22,33 +22,6 @@ from simnet.utils.types import (
 _LOGGER = logging.getLogger("SIMNet.BaseClient")
 
 __all__ = ("BaseClient",)
-
-
-class AsyncClient(_AsyncClient):
-    """This is the async client for httpx.AsyncClient clients."""
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._cookies = Cookies(self._cookies)
-
-    def _merge_cookies(self, cookies: Optional[CookieTypes] = None) -> Optional[CookieTypes]:
-        """Merge a cookies argument together with any cookies on the client,
-        to create the cookies used for the outgoing request.
-        """
-        if cookies or self.cookies:
-            merged_cookies = Cookies(self.cookies)
-            merged_cookies.update(cookies)
-            return merged_cookies
-        return cookies
-
-    @property
-    def cookies(self) -> Cookies:
-        """Cookie values to include when sending requests."""
-        return self._cookies
-
-    @cookies.setter
-    def cookies(self, cookies: CookieTypes) -> None:
-        self._cookies = Cookies(cookies)
 
 
 class BaseClient(AsyncContextManager["BaseClient"]):
@@ -107,11 +80,10 @@ class BaseClient(AsyncContextManager["BaseClient"]):
     @property
     def cookies(self) -> Cookies:
         """Get the cookies used for the client."""
-        return self.client.cookies
+        return Cookies(self.client.cookies.jar)
 
     @cookies.setter
     def cookies(self, cookies: CookieTypes) -> None:
-        """Set the cookies to the client."""
         self.client.cookies = cookies
 
     @property
