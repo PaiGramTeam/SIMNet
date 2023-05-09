@@ -25,14 +25,13 @@ __all__ = ("BaseClient",)
 
 
 class AsyncClient(_AsyncClient):
-    """ This is the async client for httpx.AsyncClient clients."""
+    """This is the async client for httpx.AsyncClient clients."""
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._cookies = Cookies(self._cookies)
 
-    def _merge_cookies(
-        self, cookies: Optional[CookieTypes] = None
-    ) -> Optional[CookieTypes]:
+    def _merge_cookies(self, cookies: Optional[CookieTypes] = None) -> Optional[CookieTypes]:
         """Merge a cookies argument together with any cookies on the client,
         to create the cookies used for the outgoing request.
         """
