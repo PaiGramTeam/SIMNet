@@ -74,6 +74,6 @@ def login_ticket() -> Optional[str]:  # skipcq: PY-D0003
 
 
 @pytest.fixture(scope="session")
-def test_build() -> bool:  # skipcq: PY-D0003
-    _test_build = bool(os.getenv("TEST_BUILD", False))
+def if_test_build() -> bool:  # skipcq: PY-D0003
+    _test_build = bool(os.environ.get("TEST_BUILD", False))
     return _test_build
