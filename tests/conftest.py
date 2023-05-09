@@ -71,3 +71,9 @@ def stoken() -> Optional[str]:  # skipcq: PY-D0003
 def login_ticket() -> Optional[str]:  # skipcq: PY-D0003
     _login_ticket = os.environ.get("LOGIN_TICKET")
     return _login_ticket
+
+
+@pytest.fixture(scope="session")
+def if_test_build() -> bool:  # skipcq: PY-D0003
+    _test_build = bool(os.environ.get("TEST_BUILD", False))
+    return _test_build
