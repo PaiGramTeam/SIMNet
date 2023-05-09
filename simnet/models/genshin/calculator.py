@@ -246,16 +246,29 @@ class CalculatorFurnishing(APIModel):
 
 
 class CalculatorCharacterDetails(APIModel):
-    """Details of a synced calculator"""
+    """Details of a synced calculator
+
+    Attributes:
+        weapon (CalculatorWeapon): The calculator weapon.
+        talents (List[CalculatorTalent]): A list of calculator talents.
+        artifacts (List[CalculatorArtifact]): A list of calculator artifacts.
+    """
 
     weapon: CalculatorWeapon = Field(alias="weapon")
     talents: List[CalculatorTalent] = Field(alias="skill_list")
     artifacts: List[CalculatorArtifact] = Field(alias="reliquary_list")
 
     @validator("talents")
-    def correct_talent_current_level(
-        cls, v: List[CalculatorTalent]
-    ) -> List[CalculatorTalent]:
+    def correct_talent_current_level(cls, v: List[CalculatorTalent]) -> List[CalculatorTalent]:
+        """Validates the current level of each calculator talent in the talents list and sets it to 1 if it is 0.
+
+        Args:
+            cls: The class.
+            v (List[CalculatorTalent]): The list of calculator talents to validate.
+
+        Returns:
+            List[CalculatorTalent]: The list of validated calculator talents.
+        """
         # passive talent have current levels at 0 for some reason
         talents: List[CalculatorTalent] = []
 
@@ -271,14 +284,25 @@ class CalculatorCharacterDetails(APIModel):
 
     @property
     def upgradeable_talents(self) -> List[CalculatorTalent]:
-        """All talents that can be leveled up."""
+        """Returns a list of all calculator talents that can be leveled up.
+
+        Returns:
+            List[CalculatorTalent]: A list of all calculator talents that can be leveled up.
+        """
         if self.talents[2].type == "dash":
             return [self.talents[0], self.talents[1], self.talents[3]]
         return [self.talents[0], self.talents[1], self.talents[2]]
 
 
 class CalculatorConsumable(APIModel):
-    """Item consumed when upgrading."""
+    """Item consumed when upgrading.
+
+    Attributes:
+        id (int): The ID of the consumable.
+        name (str): The name of the consumable.
+        icon (str): The URL of the icon of the consumable.
+        amount (int): The number of this consumable used.
+    """
 
     id: int
     name: str
@@ -287,14 +311,28 @@ class CalculatorConsumable(APIModel):
 
 
 class CalculatorArtifactResult(APIModel):
-    """Calculation result for a specific artifact."""
+    """Calculation result for a specific artifact.
+
+    Attributes:
+        artifact_id (int): The ID of the artifact.
+        list (List[CalculatorConsumable]): A list of CalculatorConsumable objects representing the consumables
+            used by this artifact.
+    """
 
     artifact_id: int = Field(alias="reliquary_id")
     list: List[CalculatorConsumable] = Field(alias="id_consume_list")
 
 
 class CalculatorResult(APIModel):
-    """Calculation result."""
+    """
+    Calculation result.
+
+    Attributes:
+        character (List[CalculatorConsumable]): Consumables used by characters.
+        weapon (List[CalculatorConsumable]): Consumables used by weapons.
+        talents (List[CalculatorConsumable]): Consumables used by talents.
+        artifacts (List[CalculatorArtifactResult]): Artifacts used.
+    """
 
     character: List[CalculatorConsumable] = Field(alias="avatar_consume")
     weapon: List[CalculatorConsumable] = Field(alias="weapon_consume")
@@ -303,6 +341,12 @@ class CalculatorResult(APIModel):
 
     @property
     def total(self) -> List[CalculatorConsumable]:
+        """Returns the total consumables used across all categories.
+
+        Returns:
+            List[CalculatorConsumable]: A list of CalculatorConsumable objects representing the total
+            consumables used across all categories.
+        """
         artifacts = [i for a in self.artifacts for i in a.list]
         combined = self.character + self.weapon + self.talents + artifacts
 
@@ -324,10 +368,21 @@ class CalculatorResult(APIModel):
 
 
 class CalculatorFurnishingResults(APIModel):
-    """Furnishing calculation result."""
+    """Furnishing calculation result.
+
+    Attributes:
+        furnishings (List[CalculatorConsumable]): A list of CalculatorConsumable objects representing the
+            furnishings used.
+    """
 
     furnishings: List[CalculatorConsumable] = Field(alias="list")
 
     @property
     def total(self) -> List[CalculatorConsumable]:
+        """Returns the total furnishings used.
+
+        Returns:
+            List[CalculatorConsumable]: A list of CalculatorConsumable objects representing the total
+            furnishings used.
+        """
         return self.furnishings
