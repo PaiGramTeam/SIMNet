@@ -8,7 +8,7 @@ __all__ = ("Cookies",)
 class Cookies(_Cookies):
     """An extension of the `httpx.Cookies` class that includes additional functionality."""
 
-    COOKIE_USER_ID_NAMES = ("ltuid", "account_id", "ltuid_v2", "account_id_v2")
+    COOKIE_USER_ID_NAMES = ("ltuid", "account_id", "stuid", "ltuid_v2", "account_id_v2")
 
     @property
     def account_id(self) -> Optional[int]:

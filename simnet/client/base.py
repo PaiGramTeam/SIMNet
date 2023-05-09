@@ -38,13 +38,13 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         timeout (Optional[TimeoutTypes], optional): Timeout configuration for the client.
 
     Attributes:
-        cookies (CookieTypes): The cookies used for the client.
         headers (HeaderTypes): The headers used for the client.
         account_id (Optional[int]): The account id used for the client.
         player_id (Optional[int]): The player id used for the client.
         region (Region): The region used for the client.
         lang (str): The language used for the client.
         game (Optional[Game]): The game used for the client.
+
     """
 
     game: Optional[Game] = None
@@ -69,18 +69,22 @@ class BaseClient(AsyncContextManager["BaseClient"]):
                 pool=1.0,
             )
 
-        self.cookies = Cookies(cookies)
+        cookies = Cookies(cookies)
         self.headers = Headers(headers)
         self.player_id = player_id
-        self.account_id = account_id
-        self.client = AsyncClient(cookies=self.cookies, timeout=timeout)
+        self.account_id = account_id or cookies.account_id
+        self.client = AsyncClient(cookies=cookies, timeout=timeout)
         self.region = region
         self.lang = lang
 
-    def get_player_id(self) -> Optional[int]:
-        """Get the player id used for the client."""
-        player_id = self.player_id or self.cookies.account_id
-        return player_id
+    @property
+    def cookies(self) -> Cookies:
+        """Get the cookies used for the client."""
+        return Cookies(self.client.cookies.jar)
+
+    @cookies.setter
+    def cookies(self, cookies: CookieTypes) -> None:
+        self.client.cookies = cookies
 
     @property
     def device_name(self) -> str:
@@ -202,9 +206,7 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         if self.region == Region.OVERSEAS:
             header["x-rpc-language"] = self.lang or lang
         if ds is None:
-            app_version, client_type, ds = generate_dynamic_secret(
-                self.region, ds_type, new_ds, data, params
-            )
+            app_version, client_type, ds = generate_dynamic_secret(self.region, ds_type, new_ds, data, params)
             header["x-rpc-app_version"] = app_version
             header["x-rpc-client_type"] = client_type
         header["DS"] = ds
@@ -333,9 +335,5 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         """
         if method is None:
             method = "POST" if data else "GET"
-        headers = self.get_lab_api_header(
-            headers, ds_type=ds_type, new_ds=new_ds, lang=lang, data=data, params=params
-        )
-        return await self.request_api(
-            method=method, url=url, json=data, params=params, headers=headers
-        )
+        headers = self.get_lab_api_header(headers, ds_type=ds_type, new_ds=new_ds, lang=lang, data=data, params=params)
+        return await self.request_api(method=method, url=url, json=data, params=params, headers=headers)
