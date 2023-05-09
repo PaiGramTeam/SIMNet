@@ -12,11 +12,12 @@ from simnet.models.genshin.calculator import (
     CalculatorCharacterDetails,
     CalculatorTalent,
 )
+from simnet.utils.enum_ import Region
 from simnet.utils.player import recognize_genshin_server
 
 
 class CalculatorClient(BaseClient):
-    """Calculator component."""
+    """A client for retrieving data from Genshin's calculator component."""
 
     async def request_calculator(
         self,
@@ -51,7 +52,15 @@ class CalculatorClient(BaseClient):
             data = dict(data or {})
             data["lang"] = lang or self.lang
 
-        data = await self.request_lab(url, method=method, params=params, data=data)
+        headers = {}
+        if self.region == Region.CHINESE:
+            headers["Referer"] = (
+                "https://webstatic.mihoyo.com/ys/event/e20200923adopt_calculator/index.html?"
+                "bbs_presentation_style=fullscreen&bbs_auth_required=true&"
+                "utm_source=bbs&utm_medium=mys&utm_campaign=icon#/"
+            )
+
+        data = await self.request_lab(url, method=method, params=params, data=data, headers=headers)
 
         return data
 
@@ -79,9 +88,7 @@ class CalculatorClient(BaseClient):
         Args:
             enabled (bool): Whether to enable syncing (default True).
         """
-        await self.request_calculator(
-            "avatar/auth", method="POST", data=dict(avatar_auth=int(enabled))
-        )
+        await self.request_calculator("avatar/auth", method="POST", data=dict(avatar_auth=int(enabled)))
 
     async def _get_calculator_items(
         self,
@@ -262,7 +269,7 @@ class CalculatorClient(BaseClient):
             lang=lang,
             params=dict(
                 avatar_id=int(character),
-                player_id=player_id,
+                uid=player_id,
                 region=recognize_genshin_server(player_id),
             ),
         )
