@@ -26,7 +26,7 @@ async def calculator_client(
 @pytest.mark.asyncio
 class TestCalculatorClient:
     @staticmethod
-    async def test_get_battle_chronicle(calculator_client: "CalculatorClient"):
+    async def test_character_details(calculator_client: "CalculatorClient"):
         character_details = await calculator_client.get_character_details(10000046)
         assert len(character_details.talents) == 6
         for talent in character_details.talents:
