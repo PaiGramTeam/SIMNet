@@ -11,7 +11,9 @@ if TYPE_CHECKING:
 
 
 @pytest_asyncio.fixture
-async def calculator_client(genshin_player_id: int, account_id: int, cookies: "Cookies"):
+async def calculator_client(
+    genshin_player_id: int, account_id: int, cookies: "Cookies"
+):
     async with CalculatorClient(
         player_id=genshin_player_id,
         cookies=cookies,

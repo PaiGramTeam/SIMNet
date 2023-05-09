@@ -60,7 +60,9 @@ class CalculatorClient(BaseClient):
                 "utm_source=bbs&utm_medium=mys&utm_campaign=icon#/"
             )
 
-        data = await self.request_lab(url, method=method, params=params, data=data, headers=headers)
+        data = await self.request_lab(
+            url, method=method, params=params, data=data, headers=headers
+        )
 
         return data
 
@@ -88,7 +90,9 @@ class CalculatorClient(BaseClient):
         Args:
             enabled (bool): Whether to enable syncing (default True).
         """
-        await self.request_calculator("avatar/auth", method="POST", data=dict(avatar_auth=int(enabled)))
+        await self.request_calculator(
+            "avatar/auth", method="POST", data=dict(avatar_auth=int(enabled))
+        )
 
     async def _get_calculator_items(
         self,
