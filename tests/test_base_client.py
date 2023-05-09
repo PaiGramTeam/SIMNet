@@ -6,7 +6,8 @@ from simnet.client.cookies import Cookies
 
 @pytest.mark.asyncio
 class TestBaseClient:
-    async def test_cookies(self):
+    @staticmethod
+    async def test_cookies():
         async with BaseClient(cookies={"uid": "114514"}) as client:
             assert isinstance(client.cookies, Cookies)
             client.cookies = {"account_id": "114514"}

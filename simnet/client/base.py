@@ -43,9 +43,7 @@ class AsyncClient(_AsyncClient):
 
     @property
     def cookies(self) -> Cookies:
-        """
-        Cookie values to include when sending requests.
-        """
+        """Cookie values to include when sending requests."""
         return self._cookies
 
     @cookies.setter
