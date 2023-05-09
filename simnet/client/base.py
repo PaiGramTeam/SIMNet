@@ -3,7 +3,7 @@ import uuid
 from types import TracebackType
 from typing import AsyncContextManager, Type, Optional, Any
 
-from httpx import AsyncClient, TimeoutException, Response, HTTPError, Timeout
+from httpx import AsyncClient as _AsyncClient, TimeoutException, Response, HTTPError, Timeout
 
 from simnet.client.cookies import Cookies
 from simnet.client.headers import Headers
@@ -24,6 +24,36 @@ _LOGGER = logging.getLogger("SIMNet.BaseClient")
 __all__ = ("BaseClient",)
 
 
+class AsyncClient(_AsyncClient):
+    """ This is the async client for httpx.AsyncClient clients."""
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._cookies = Cookies(self._cookies)
+
+    def _merge_cookies(
+        self, cookies: Optional[CookieTypes] = None
+    ) -> Optional[CookieTypes]:
+        """Merge a cookies argument together with any cookies on the client,
+        to create the cookies used for the outgoing request.
+        """
+        if cookies or self.cookies:
+            merged_cookies = Cookies(self.cookies)
+            merged_cookies.update(cookies)
+            return merged_cookies
+        return cookies
+
+    @property
+    def cookies(self) -> Cookies:
+        """
+        Cookie values to include when sending requests.
+        """
+        return self._cookies
+
+    @cookies.setter
+    def cookies(self, cookies: CookieTypes) -> None:
+        self._cookies = Cookies(cookies)
+
+
 class BaseClient(AsyncContextManager["BaseClient"]):
     """
     This is the base class for simnet clients. It provides common methods and properties for simnet clients.
@@ -38,13 +68,13 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         timeout (Optional[TimeoutTypes], optional): Timeout configuration for the client.
 
     Attributes:
-        cookies (CookieTypes): The cookies used for the client.
         headers (HeaderTypes): The headers used for the client.
         account_id (Optional[int]): The account id used for the client.
         player_id (Optional[int]): The player id used for the client.
         region (Region): The region used for the client.
         lang (str): The language used for the client.
         game (Optional[Game]): The game used for the client.
+
     """
 
     game: Optional[Game] = None
@@ -69,18 +99,23 @@ class BaseClient(AsyncContextManager["BaseClient"]):
                 pool=1.0,
             )
 
-        self.cookies = Cookies(cookies)
+        cookies = Cookies(cookies)
         self.headers = Headers(headers)
         self.player_id = player_id
-        self.account_id = account_id
-        self.client = AsyncClient(cookies=self.cookies, timeout=timeout)
+        self.account_id = account_id or cookies.account_id
+        self.client = AsyncClient(cookies=cookies, timeout=timeout)
         self.region = region
         self.lang = lang
 
-    def get_player_id(self) -> Optional[int]:
-        """Get the player id used for the client."""
-        player_id = self.player_id or self.cookies.account_id
-        return player_id
+    @property
+    def cookies(self) -> Cookies:
+        """Get the cookies used for the client."""
+        return self.client.cookies
+
+    @cookies.setter
+    def cookies(self, cookies: CookieTypes) -> None:
+        """Set the cookies to the client."""
+        self.client.cookies = cookies
 
     @property
     def device_name(self) -> str:
@@ -202,9 +237,7 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         if self.region == Region.OVERSEAS:
             header["x-rpc-language"] = self.lang or lang
         if ds is None:
-            app_version, client_type, ds = generate_dynamic_secret(
-                self.region, ds_type, new_ds, data, params
-            )
+            app_version, client_type, ds = generate_dynamic_secret(self.region, ds_type, new_ds, data, params)
             header["x-rpc-app_version"] = app_version
             header["x-rpc-client_type"] = client_type
         header["DS"] = ds
@@ -333,9 +366,5 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         """
         if method is None:
             method = "POST" if data else "GET"
-        headers = self.get_lab_api_header(
-            headers, ds_type=ds_type, new_ds=new_ds, lang=lang, data=data, params=params
-        )
-        return await self.request_api(
-            method=method, url=url, json=data, params=params, headers=headers
-        )
+        headers = self.get_lab_api_header(headers, ds_type=ds_type, new_ds=new_ds, lang=lang, data=data, params=params)
+        return await self.request_api(method=method, url=url, json=data, params=params, headers=headers)
