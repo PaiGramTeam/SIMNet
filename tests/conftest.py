@@ -2,6 +2,7 @@ import asyncio
 import os
 import warnings
 from pathlib import Path
+from typing import Optional
 
 import pytest
 from dotenv import load_dotenv
@@ -58,3 +59,15 @@ def account_id() -> int:  # skipcq: PY-D0003
     if not _account_id:
         pytest.exit("No account id set", 1)
     return int(_account_id)
+
+
+@pytest.fixture(scope="session")
+def stoken() -> Optional[str]:  # skipcq: PY-D0003
+    _stoken = os.environ.get("STOKEN")
+    return _stoken
+
+
+@pytest.fixture(scope="session")
+def login_ticket() -> Optional[str]:  # skipcq: PY-D0003
+    _login_ticket = os.environ.get("LOGIN_TICKET")
+    return _login_ticket

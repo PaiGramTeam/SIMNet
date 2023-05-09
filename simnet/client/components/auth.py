@@ -20,26 +20,37 @@ class AuthClient(BaseClient):
     different authentication tokens and keys.
     """
 
-    async def get_stoken_by_login_ticket(self) -> bool:
+    async def get_stoken_by_login_ticket(
+        self, login_ticket: Optional[str] = None, account_id: Optional[int] = None
+    ) -> Optional[str]:
         """
         Retrieves a super ticket (`stoken`) using a login ticket (`login_ticket`) .
 
+        Args:
+            login_ticket (Optional[str]): The login ticket to use to retrieve the super ticket. If not provided, the
+                `login_ticket` cookie value will be used.
+            account_id (Optional[int]): The account ID to use to retrieve the super ticket. If not provided, the
+                `account_id` attribute value will be used.
+
         Returns:
-            bool: `True` if the super ticket successfully retrieved, otherwise `False`.
+            Optional[str]: The retrieved super ticket (`stoken`).
 
         Raises:
             RuntimeError: This method is only available for the Chinese region.
-            ValueError: If `login_ticket` is not found in the cookies.
+            ValueError: If the `login_ticket` argument is `None`, or if the `account_id` argument is `None`.
         """
         if self.region != Region.CHINESE:
             raise RuntimeError("This method is only available for the Chinese region.")
-        url = AUTH_URL.get_url(Region.CHINESE).join("getMultiTokenByLoginTicket")
-        login_ticket = self.cookies.get("login_ticket")
+        url = AUTH_URL.get_url(Region.CHINESE) / "getMultiTokenByLoginTicket"
+        login_ticket = login_ticket or self.cookies.get("login_ticket")
+        account_id = account_id or self.account_id
         if login_ticket is None:
-            raise ValueError("login_ticket not found in cookies.")
+            raise ValueError("The 'login_ticket' argument cannot be None.")
+        if account_id is None:
+            raise ValueError("The 'account_id' argument cannot be None.")
         params = {
             "login_ticket": login_ticket,
-            "uid": self.account_id,
+            "uid": account_id,
             "token_types": 3,
         }
         data = await self.request_lab(url, params=params)
@@ -51,73 +62,89 @@ class AuthClient(BaseClient):
                 self.cookies[name] = token
         stoken = self.cookies.get("stoken")
         stuid = self.cookies.get("stuid")
-        if stoken:
-            if stuid:
-                self.cookies["stuid"] = self.account_id
-            return True
-        return False
+        if stoken and stuid:
+            self.cookies["stuid"] = self.account_id
+        return stoken
 
-    async def get_cookie_token_by_stoken(self) -> bool:
+    async def get_cookie_token_by_stoken(
+        self, stoken: Optional[str] = None, account_id: Optional[int] = None
+    ) -> Optional[str]:
         """
         Retrieves a cookie token (`cookie_token`) using a super ticket (`stoken`).
 
+        Args:
+            stoken (Optional[str]): The super ticket to use to retrieve the cookie token. If not provided, the
+                `stoken` cookie value will be used.
+            account_id (Optional[int]): The account ID to use to retrieve the cookie token. If not provided, the
+                `account_id` attribute value will be used.
+
         Returns:
-            bool: `True` if the cookie token was successfully retrieved, otherwise `False`.
+            Optional[str]: The retrieved cookie token (`cookie_token`).
 
         Raises:
             RuntimeError: This method is only available for the Chinese region.
-            ValueError: If `stoken` is not found in the cookies.
+            ValueError: If the `login_ticket` argument is `None`, or if the `account_id` argument is `None`.
         """
         if self.region != Region.CHINESE:
             raise RuntimeError("This method is only available for the Chinese region.")
-        stoken = self.cookies.get("stoken")
+        stoken = stoken or self.cookies.get("stoken")
+        account_id = account_id or self.account_id
         if stoken is None:
-            raise ValueError("stoken not found in cookies.")
+            raise ValueError("The 'stoken' argument cannot be None.")
+        if account_id is None:
+            raise ValueError("The 'account_id' argument cannot be None.")
         url = GET_COOKIES_TOKEN_BY_STOKEN_URL.get_url(Region.CHINESE)
         params = {
             "stoken": stoken,
-            "uid": self.account_id,
+            "uid": account_id,
         }
         data = await self.request_lab(url, params=params)
-        cookie_token = data.get("cookie_token", "")
+        cookie_token = data.get("cookie_token")
         if cookie_token:
             self.cookies["cookie_token"] = cookie_token
             self.cookies["account_id"] = self.account_id
-            return True
-        return False
+        return cookie_token
 
-    async def get_ltoken_by_stoken(self) -> bool:
+    async def get_ltoken_by_stoken(
+        self, stoken: Optional[str] = None, account_id: Optional[int] = None
+    ) -> Optional[str]:
         """
         Retrieves a login token (`ltoken`) using a super ticket (`stoken`).
 
+        Args:
+            stoken (Optional[str]): The super ticket to use to retrieve the cookie token. If not provided, the
+                `stoken` cookie value will be used.
+            account_id (Optional[int]): The account ID to use to retrieve the cookie token. If not provided, the
+                `account_id` attribute value will be used.
+
         Returns:
-            bool: `True` if the login token was successfully retrieved, otherwise `False`.
+            Optional[str]: The retrieved cookie token (`cookie_token`).
 
         Raises:
             RuntimeError: This method is only available for the Chinese region.
-            ValueError: If `stoken` is not found in the cookies.
+            ValueError: If the `login_ticket` argument is `None`, or if the `account_id` argument is `None`.
         """
         if self.region != Region.CHINESE:
             raise RuntimeError("This method is only available for the Chinese region.")
-        stoken = self.cookies.get("stoken")
+        stoken = stoken or self.cookies.get("stoken")
+        account_id = account_id or self.account_id
         if stoken is None:
-            raise ValueError("stoken not found in cookies.")
+            raise ValueError("The 'stoken' argument cannot be None.")
+        if account_id is None:
+            raise ValueError("The 'account_id' argument cannot be None.")
         url = GET_LTOKEN_BY_STOKEN_URL.get_url(Region.CHINESE)
         params = {
             "stoken": stoken,
-            "uid": self.account_id,
+            "uid": account_id,
         }
         data = await self.request_lab(url, params=params)
         ltoken = data.get("ltoken", "")
         if ltoken:
             self.cookies["ltoken"] = ltoken
             self.cookies["ltuid"] = self.account_id
-            return True
-        return False
+        return ltoken
 
-    async def get_authkey_by_stoken(
-        self, game_biz: str, region: str, auth_appid: str
-    ) -> Optional[str]:
+    async def get_authkey_by_stoken(self, game_biz: str, region: str, auth_appid: str) -> Optional[str]:
         """
         Get the auth key (`authkey`) for a game and region using a super ticket (`stoken`).
 
@@ -128,17 +155,22 @@ class AuthClient(BaseClient):
                 For example, to request wish records, use `webview_gacha`.
 
         Returns:
-            str or None: The authentication key, or None if not found.
+            Optional[str]: The authentication key, or None if not found.
 
         Raises:
             RuntimeError: This method is only available for the Chinese region.
-            ValueError: If `stoken` is not found in the cookies.
+            ValueError: If `stoken` is not found in the cookies or `player_id` not found.
         """
         if self.region != Region.CHINESE:
             raise RuntimeError("This method is only available for the Chinese region.")
         stoken = self.cookies.get("stoken")
         if stoken is None:
             raise ValueError("stoken not found in cookies.")
+        stuid = self.cookies.get("stuid")
+        if stuid is None and self.account_id is None:
+            raise ValueError("account_id or stuid not found")
+        if self.account_id is not None and stuid is None:
+            self.cookies.set("stuid", str(self.account_id))
         url = AUTH_KEY_URL.get_url(self.region)
         json = {
             "auth_appid": auth_appid,
@@ -150,7 +182,7 @@ class AuthClient(BaseClient):
         return data.get("authkey")
 
     async def get_hk4e_token_by_cookie_token(
-        self, game_biz: str, region: str
+        self, game_biz: str, region: str, player_id: Optional[int] = None
     ) -> NoReturn:
         """
         Get HK4E token (`hk4e_token`) using cookie token (`cookie_token`).
@@ -159,6 +191,8 @@ class AuthClient(BaseClient):
         Args:
             game_biz (str): The name of the game.
             region (str): The region in which the game is registered.
+            player_id (Optional[int]): The player ID to use to retrieve the HK4E token. If not provided, the `player_id`
+                attribute value will be used.
 
         Raises:
             ValueError: If `cookie_token` is not found in the cookies.
@@ -169,7 +203,7 @@ class AuthClient(BaseClient):
         url = HK4E_LOGIN_URL.get_url(self.region)
         json = {
             "game_biz": game_biz,
-            "uid": self.player_id,
+            "uid": self.player_id or player_id,
             "region": region,
         }
         await self.request_lab(url, data=json)
