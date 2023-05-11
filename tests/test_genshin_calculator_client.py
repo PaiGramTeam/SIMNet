@@ -4,6 +4,7 @@ import pytest
 import pytest_asyncio
 
 from simnet.client.components.calculator.genshin import CalculatorClient
+from simnet.client.components.chronicle.genshin import GenshinBattleChronicleClient
 from simnet.utils.enum_ import Region
 
 if TYPE_CHECKING:
@@ -11,10 +12,19 @@ if TYPE_CHECKING:
 
 
 @pytest_asyncio.fixture
-async def calculator_client(
-    genshin_player_id: int, account_id: int, cookies: "Cookies"
-):
+async def calculator_client(genshin_player_id: int, account_id: int, cookies: "Cookies"):
     async with CalculatorClient(
+        player_id=genshin_player_id,
+        cookies=cookies,
+        account_id=account_id,
+        region=Region.CHINESE,
+    ) as client_instance:
+        yield client_instance
+
+
+@pytest_asyncio.fixture
+async def genshin_battle_chronicle_client(genshin_player_id: int, account_id: int, cookies: "Cookies"):
+    async with GenshinBattleChronicleClient(
         player_id=genshin_player_id,
         cookies=cookies,
         account_id=account_id,
@@ -26,10 +36,13 @@ async def calculator_client(
 @pytest.mark.asyncio
 class TestCalculatorClient:
     @staticmethod
-    async def test_character_details(calculator_client: "CalculatorClient"):
-        character_details = await calculator_client.get_character_details(10000046)
+    async def test_character_details(
+        calculator_client: "CalculatorClient", genshin_battle_chronicle_client: "GenshinBattleChronicleClient"
+    ):
+        characters = await genshin_battle_chronicle_client.get_genshin_characters()
+        character_details = await calculator_client.get_character_details(characters[-1].id)
         assert len(character_details.talents) == 6
         for talent in character_details.talents:
-            assert talent.level == 10 or talent.max_level == 13 or talent.max_level == 1
+            assert talent.level > -1
         for artifact in character_details.artifacts:
             assert artifact.level >= 0

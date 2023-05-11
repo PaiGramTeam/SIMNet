@@ -41,3 +41,13 @@ class TestGenshinBattleChronicleClient:
     ):
         user = await genshin_client.get_partial_genshin_user()
         assert user.stats.days_active >= 0
+
+    @staticmethod
+    async def test_get_genshin_characters(
+        genshin_client: GenshinBattleChronicleClient,
+    ):
+        characters = await genshin_client.get_genshin_characters()
+        assert len(characters) > 0
+        for character in characters:
+            assert character.id
+            assert character.level
