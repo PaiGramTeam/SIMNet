@@ -5,8 +5,8 @@ from simnet.client.base import BaseClient
 from simnet.client.headers import Headers
 from simnet.client.routes import TAKUMI_URL, HK4E_URL, CODE_URL
 from simnet.models.lab.announcement import Announcement
-from simnet.models.lab.record import PartialUser, FullUser
-from simnet.utils.enum_ import Region
+from simnet.models.lab.record import PartialUser, FullUser, Account
+from simnet.utils.enum_ import Region, Game
 from simnet.utils.lang import create_short_lang_code
 from simnet.utils.player import recognize_genshin_server
 from simnet.utils.types import HeaderTypes
@@ -40,7 +40,7 @@ class LabClient(BaseClient):
             headers (dict, optional): The headers to include in the request. Defaults to None.
 
         Returns:
-            dict: The response data from the request.
+            Dict[str, Any]: The response data from the request.
         """
         headers = Headers(headers)
 
@@ -76,7 +76,7 @@ class LabClient(BaseClient):
             lang (str, optional): The language code used for the request. Defaults to None.
 
         Returns:
-            list of PartialUser: A list of partial user objects that match the search criteria.
+            List[PartialUser]: A list of partial user objects that match the search criteria.
         """
         data = await self.request_bbs(
             "community/search/wapi/search/user",
@@ -142,7 +142,7 @@ class LabClient(BaseClient):
             lang (str, optional): The language code used for the request. Defaults to None.
 
         Returns:
-            list of Announcement: A list of announcement objects for the specified player.
+            List[Announcement]: A list of announcement objects for the specified player.
         """
         player_id = self.player_id or player_id
         if player_id is None:
@@ -175,9 +175,7 @@ class LabClient(BaseClient):
         announcements: List[Dict[str, Any]] = []
         for sublist in info["list"]:
             for info in sublist["list"]:
-                detail = next(
-                    (i for i in details["list"] if i["ann_id"] == info["ann_id"]), None
-                )
+                detail = next((i for i in details["list"] if i["ann_id"] == info["ann_id"]), None)
                 announcements.append({**info, **(detail or {})})
 
         return [Announcement(**i) for i in announcements]
@@ -208,3 +206,24 @@ class LabClient(BaseClient):
                 lang=create_short_lang_code(lang or self.lang),
             ),
         )
+
+    async def get_game_accounts(self, *, lang: Optional[str] = None) -> List[Account]:
+        """Get the game accounts of the currently logged-in user.
+
+        Returns:
+            List[Account]: A list of account info objects.
+        """
+        data = await self.request_bbs(
+            "binding/api/getUserGameRolesByCookie",
+            lang=lang,
+        )
+        return [Account(**i) for i in data["list"]]
+
+    async def get_genshin_accounts(self, *, lang: Optional[str] = None) -> List[Account]:
+        """Get the genshin accounts of the currently logged-in user.
+
+        Returns:
+            List[Account]: A list of account info objects of genshin accounts.
+        """
+        accounts = await self.get_game_accounts(lang=lang)
+        return [account for account in accounts if account.game == Game.GENSHIN]
