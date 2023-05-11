@@ -186,11 +186,11 @@ class CalculatorTalent(APIModel):
     max_level: int
 
     @property
-    def type(self) -> Literal["attack", "skill", "burst", "passive", "dash"] | None:
+    def type(self) -> Optional[Literal["attack", "skill", "burst", "passive", "dash"]]:
         """The type of the talent, parsed from the group ID.
 
         Returns:
-            Literal["attack", "skill", "burst", "passive", "dash"] | None: The type of the talent.
+            Optional[Literal["attack", "skill", "burst", "passive", "dash"]]: The type of the talent.
                 Returns `None` if the type cannot be determined.
         """
         # special cases
@@ -259,9 +259,7 @@ class CalculatorCharacterDetails(APIModel):
     artifacts: List[CalculatorArtifact] = Field(alias="reliquary_list")
 
     @validator("talents")
-    def correct_talent_current_level(
-        cls, v: List[CalculatorTalent]
-    ) -> List[CalculatorTalent]:
+    def correct_talent_current_level(cls, v: List[CalculatorTalent]) -> List[CalculatorTalent]:
         """Validates the current level of each calculator talent in the talents list and sets it to 1 if it is 0.
 
         Args:
