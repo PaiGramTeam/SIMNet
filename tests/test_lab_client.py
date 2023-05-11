@@ -28,7 +28,8 @@ class TestStarRailClient:
         assert user_info.nickname
         assert user_info.accident_id == account_id
 
-    async def test_get_genshin_accounts(self, client_instance: "LabClient"):
+    @staticmethod
+    async def test_get_genshin_accounts(client_instance: "LabClient"):
         genshin_accounts = await client_instance.get_genshin_accounts()
         for genshin_account in genshin_accounts:
             assert genshin_account.game == Game.GENSHIN

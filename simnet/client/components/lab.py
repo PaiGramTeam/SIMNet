@@ -213,7 +213,6 @@ class LabClient(BaseClient):
         Returns:
             List[Account]: A list of account info objects.
         """
-
         data = await self.request_bbs(
             "binding/api/getUserGameRolesByCookie",
             lang=lang,
