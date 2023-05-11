@@ -4,7 +4,7 @@ import pytest
 import pytest_asyncio
 
 from simnet.client.components.lab import LabClient
-from simnet.utils.enum_ import Region
+from simnet.utils.enum_ import Region, Game
 
 if TYPE_CHECKING:
     from simnet.client.cookies import Cookies
@@ -27,3 +27,9 @@ class TestStarRailClient:
         user_info = await client_instance.get_user_info()
         assert user_info.nickname
         assert user_info.accident_id == account_id
+
+    async def test_get_genshin_accounts(self, client_instance: "LabClient"):
+        genshin_accounts = await client_instance.get_genshin_accounts()
+        for genshin_account in genshin_accounts:
+            assert genshin_account.game == Game.GENSHIN
+            assert len(str(genshin_account.uid)) == 9
