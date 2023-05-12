@@ -5,30 +5,32 @@ import pytest_asyncio
 
 from simnet.client.components.calculator.genshin import CalculatorClient
 from simnet.client.components.chronicle.genshin import GenshinBattleChronicleClient
-from simnet.utils.enum_ import Region
 
 if TYPE_CHECKING:
     from simnet.client.cookies import Cookies
+    from simnet.utils.enum_ import Region
 
 
 @pytest_asyncio.fixture
-async def calculator_client(genshin_player_id: int, account_id: int, cookies: "Cookies"):
+async def calculator_client(genshin_player_id: int, account_id: int, region: "Region", cookies: "Cookies"):
     async with CalculatorClient(
         player_id=genshin_player_id,
         cookies=cookies,
         account_id=account_id,
-        region=Region.CHINESE,
+        region=region,
     ) as client_instance:
         yield client_instance
 
 
 @pytest_asyncio.fixture
-async def genshin_battle_chronicle_client(genshin_player_id: int, account_id: int, cookies: "Cookies"):
+async def genshin_battle_chronicle_client(
+    genshin_player_id: int, account_id: int, region: "Region", cookies: "Cookies"
+):
     async with GenshinBattleChronicleClient(
         player_id=genshin_player_id,
         cookies=cookies,
         account_id=account_id,
-        region=Region.CHINESE,
+        region=region,
     ) as client_instance:
         yield client_instance
 

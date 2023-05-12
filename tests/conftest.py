@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 
 from simnet.client.cookies import Cookies
 from simnet.utils.cookies import parse_cookie
+from simnet.utils.enum_ import Region
 
 env_path = Path(".env")
 if env_path.exists():
@@ -59,6 +60,14 @@ def account_id() -> int:  # skipcq: PY-D0003
     if not _account_id:
         pytest.exit("No account id set", 1)
     return int(_account_id)
+
+
+@pytest.fixture(scope="session")
+def region() -> Region:  # skipcq: PY-D0003
+    _region = os.environ.get("REGION")
+    if not _region:
+        return Region.CHINESE
+    return Region(_region)
 
 
 @pytest.fixture(scope="session")
