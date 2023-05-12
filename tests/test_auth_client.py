@@ -53,14 +53,14 @@ class TestAuthClient:
         assert ltoken is not None
 
     @staticmethod
-    async def test_get_authkey_by_stoken(stoken: str, account_id: int, genshin_player_id: int):
+    async def test_get_authkey_by_stoken(stoken: str, account_id: int, region: "Region", genshin_player_id: int):
         if stoken is None:
             pytest.skip("Test case test_get_authkey_by_stoken skipped: Parameter stoken  is None")
         async with AuthClient(
             cookies={"stoken": stoken},
             player_id=genshin_player_id,
             account_id=account_id,
-            region=Region.CHINESE,
+            region=region,
         ) as client_instance:
             authkey = await client_instance.get_authkey_by_stoken(
                 "hk4e_cn", recognize_genshin_server(genshin_player_id), "webview_gacha"

@@ -23,12 +23,14 @@ async def calculator_client(genshin_player_id: int, account_id: int, region: "Re
 
 
 @pytest_asyncio.fixture
-async def genshin_battle_chronicle_client(genshin_player_id: int, account_id: int, cookies: "Cookies"):
+async def genshin_battle_chronicle_client(
+    genshin_player_id: int, account_id: int, region: "Region", cookies: "Cookies"
+):
     async with GenshinBattleChronicleClient(
         player_id=genshin_player_id,
         cookies=cookies,
         account_id=account_id,
-        region=Region.CHINESE,
+        region=region,
     ) as client_instance:
         yield client_instance
 
