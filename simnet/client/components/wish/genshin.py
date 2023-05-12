@@ -35,9 +35,7 @@ class GenshinWishClient(BaseWishClient):
             List[Wish]: A list of GenshinWish objects representing the retrieved wishes.
         """
         banner_types = banner_types or [100, 200, 301, 302]
-        banner_names = await self.get_banner_names(
-            game=Game.GENSHIN, lang=lang, authkey=authkey
-        )
+        banner_names = await self.get_banner_names(game=Game.GENSHIN, lang=lang, authkey=authkey)
         wishes = []
         for banner_type in banner_types:
             paginator = WishPaginator(
