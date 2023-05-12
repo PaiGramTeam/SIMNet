@@ -5,7 +5,7 @@ import pytest_asyncio
 
 from simnet.client.components.auth import AuthClient
 from simnet.utils.enum_ import Region
-from simnet.utils.player import recognize_genshin_server
+from simnet.utils.player import recognize_genshin_server, recognize_genshin_game_biz
 
 if TYPE_CHECKING:
     from simnet.client.cookies import Cookies
@@ -25,8 +25,11 @@ async def auth_client(account_id: int, region: "Region", cookies: "Cookies"):
 class TestAuthClient:
     @staticmethod
     async def test_get_hk4e_token_by_cookie_token(auth_client: "AuthClient", genshin_player_id: int):
+        if genshin_player_id is None:
+            pytest.skip("Test case test_get_hk4e_token_by_cookie_token skipped: No genshin player id set.")
+        game_biz = recognize_genshin_game_biz(genshin_player_id)
         await auth_client.get_hk4e_token_by_cookie_token(
-            "hk4e_cn", recognize_genshin_server(genshin_player_id), player_id=genshin_player_id
+            game_biz, recognize_genshin_server(genshin_player_id), player_id=genshin_player_id
         )
         hk4e_token = auth_client.client.cookies.get("e_hk4e_token")
         assert hk4e_token is not None
