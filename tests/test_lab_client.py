@@ -4,18 +4,19 @@ import pytest
 import pytest_asyncio
 
 from simnet.client.components.lab import LabClient
-from simnet.utils.enum_ import Region, Game
+from simnet.utils.enum_ import Game
 
 if TYPE_CHECKING:
     from simnet.client.cookies import Cookies
+    from simnet.utils.enum_ import Region
 
 
 @pytest_asyncio.fixture
-async def client_instance(account_id: int, cookies: "Cookies"):
+async def client_instance(account_id: int, region: "Region", cookies: "Cookies"):
     async with LabClient(
         cookies=cookies,
         account_id=account_id,
-        region=Region.CHINESE,
+        region=region,
     ) as client_instance:
         yield client_instance
 

@@ -4,19 +4,19 @@ import pytest
 import pytest_asyncio
 
 from simnet.client.components.auth import AuthClient
-from simnet.utils.enum_ import Region
 from simnet.utils.player import recognize_genshin_server
 
 if TYPE_CHECKING:
     from simnet.client.cookies import Cookies
+    from simnet.utils.enum_ import Region
 
 
 @pytest_asyncio.fixture
-async def auth_client(account_id: int, cookies: "Cookies"):
+async def auth_client(account_id: int, region: "Region", cookies: "Cookies"):
     async with AuthClient(
         cookies=cookies,
         account_id=account_id,
-        region=Region.CHINESE,
+        region=region,
     ) as client_instance:
         yield client_instance
 
