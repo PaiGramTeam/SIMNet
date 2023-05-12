@@ -13,6 +13,8 @@ if TYPE_CHECKING:
 
 @pytest_asyncio.fixture
 async def starrail_client(starrail_player_id: int, account_id: int, region: "Region", cookies: "Cookies"):
+    if starrail_player_id is None:
+        pytest.skip("Test case test_starrail skipped: No starrail player id set.")
     async with StarRailClient(
         player_id=starrail_player_id,
         cookies=cookies,

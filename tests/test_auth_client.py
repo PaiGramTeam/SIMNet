@@ -68,12 +68,12 @@ class TestAuthClient:
 
     @staticmethod
     async def test_get_authkey_by_stoken(stoken: str, account_id: int, region: "Region", genshin_player_id: int):
-        if auth_client.region != Region.CHINESE:
+        if region != Region.CHINESE:
             pytest.skip(
                 "Test case test_get_authkey_by_stoken skipped:This method is only available for the Chinese region."
             )
         if stoken is None:
-            pytest.skip("Test case test_get_authkey_by_stoken skipped: Parameter stoken  is None")
+            pytest.skip("Test case test_get_authkey_by_stoken skipped: Parameter stoken is None")
         async with AuthClient(
             cookies={"stoken": stoken},
             player_id=genshin_player_id,

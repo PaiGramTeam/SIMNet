@@ -34,31 +34,36 @@ def cookies() -> "Cookies":  # skipcq: PY-D0003
         pytest.exit("No cookies set", 1)
 
     _cookies = Cookies(parse_cookie(cookies_str))
+    if _cookies.account_id is None:
+        warnings.warn("can not found account id in cookies")
 
     return _cookies
 
 
 @pytest.fixture(scope="session")
-def genshin_player_id() -> int:  # skipcq: PY-D0003
+def genshin_player_id() -> Optional[int]:  # skipcq: PY-D0003
     _player_id = os.environ.get("GENSHIN_PLAYER_ID")
     if not _player_id:
-        pytest.exit("No genshin player id set", 1)
+        warnings.warn("No genshin player id set")
+        return None
     return int(_player_id)
 
 
 @pytest.fixture(scope="session")
-def starrail_player_id() -> int:  # skipcq: PY-D0003
+def starrail_player_id() -> Optional[int]:  # skipcq: PY-D0003
     _player_id = os.environ.get("STARRAIL_PLAYER_ID")
     if not _player_id:
-        pytest.exit("No genshin player id set", 1)
+        warnings.warn("No starrail player id set")
+        return None
     return int(_player_id)
 
 
 @pytest.fixture(scope="session")
-def account_id() -> int:  # skipcq: PY-D0003
+def account_id() -> Optional[int]:  # skipcq: PY-D0003
     _account_id = os.environ.get("ACCOUNT_ID")
     if not _account_id:
-        pytest.exit("No account id set", 1)
+        warnings.warn("No account id id set")
+        return None
     return int(_account_id)
 
 
