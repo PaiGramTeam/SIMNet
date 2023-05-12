@@ -4,11 +4,11 @@ import pytest
 import pytest_asyncio
 
 from simnet.client.components.auth import AuthClient
+from simnet.utils.enum_ import Region
 from simnet.utils.player import recognize_genshin_server
 
 if TYPE_CHECKING:
     from simnet.client.cookies import Cookies
-    from simnet.utils.enum_ import Region
 
 
 @pytest_asyncio.fixture
@@ -33,6 +33,11 @@ class TestAuthClient:
 
     @staticmethod
     async def test_get_stoken_by_login_ticket(auth_client: "AuthClient", login_ticket: str, account_id: int):
+        if auth_client.region != Region.CHINESE:
+            pytest.skip(
+                "Test case test_get_stoken_by_login_ticket skipped:"
+                "This method is only available for the Chinese region."
+            )
         if login_ticket is None:
             pytest.skip("Test case test_get_stoken_by_login_ticket skipped: Parameter login_ticket is None")
         stoken = await auth_client.get_stoken_by_login_ticket(login_ticket, account_id)
@@ -40,6 +45,11 @@ class TestAuthClient:
 
     @staticmethod
     async def test_get_cookie_token_by_stoken(auth_client: "AuthClient", stoken: str, account_id: int):
+        if auth_client.region != Region.CHINESE:
+            pytest.skip(
+                "Test case test_get_cookie_token_by_stoken skipped:"
+                "This method is only available for the Chinese region."
+            )
         if stoken is None:
             pytest.skip("Test case test_get_cookie_token_by_stoken skipped: Parameter stoken is None")
         cookie_token = await auth_client.get_cookie_token_by_stoken(stoken, account_id)
@@ -47,6 +57,10 @@ class TestAuthClient:
 
     @staticmethod
     async def test_get_ltoken_by_stoken(auth_client: "AuthClient", stoken: str, account_id: int):
+        if auth_client.region != Region.CHINESE:
+            pytest.skip(
+                "Test case test_get_ltoken_by_stoken skipped:This method is only available for the Chinese region."
+            )
         if stoken is None:
             pytest.skip("Test case test_get_ltoken_by_stoken skipped: Parameter stoken is None")
         ltoken = await auth_client.get_ltoken_by_stoken(stoken, account_id)
@@ -54,6 +68,10 @@ class TestAuthClient:
 
     @staticmethod
     async def test_get_authkey_by_stoken(stoken: str, account_id: int, region: "Region", genshin_player_id: int):
+        if auth_client.region != Region.CHINESE:
+            pytest.skip(
+                "Test case test_get_authkey_by_stoken skipped:This method is only available for the Chinese region."
+            )
         if stoken is None:
             pytest.skip("Test case test_get_authkey_by_stoken skipped: Parameter stoken  is None")
         async with AuthClient(
