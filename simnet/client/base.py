@@ -52,14 +52,14 @@ class BaseClient(AsyncContextManager["BaseClient"]):
     _device_id = str(uuid.uuid3(uuid.NAMESPACE_URL, "SIMNet"))
 
     def __init__(
-            self,
-            cookies: Optional[str, CookieTypes] = None,
-            headers: Optional[HeaderTypes] = None,
-            account_id: Optional[int] = None,
-            player_id: Optional[int] = None,
-            region: Region = Region.OVERSEAS,
-            lang: str = "en-us",
-            timeout: Optional[TimeoutTypes] = None,
+        self,
+        cookies: Optional[str, CookieTypes] = None,
+        headers: Optional[HeaderTypes] = None,
+        account_id: Optional[int] = None,
+        player_id: Optional[int] = None,
+        region: Region = Region.OVERSEAS,
+        lang: str = "en-us",
+        timeout: Optional[TimeoutTypes] = None,
     ) -> None:
         """Initialize the client with the given parameters."""
         if timeout is None:
@@ -140,10 +140,10 @@ class BaseClient(AsyncContextManager["BaseClient"]):
             raise exc
 
     async def __aexit__(
-            self,
-            exc_type: Optional[Type[BaseException]],
-            exc_val: Optional[BaseException],
-            exc_tb: Optional[TracebackType],
+        self,
+        exc_type: Optional[Type[BaseException]],
+        exc_val: Optional[BaseException],
+        exc_tb: Optional[TracebackType],
     ) -> None:
         """Exit the async context manager and shutdown the client."""
         await self.shutdown()
@@ -176,14 +176,14 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         return header
 
     def get_lab_api_header(
-            self,
-            header: HeaderTypes,
-            lang: Optional[str] = None,
-            ds: str = None,
-            ds_type: str = None,
-            new_ds: bool = False,
-            data: Any = None,
-            params: Optional[QueryParamTypes] = None,
+        self,
+        header: HeaderTypes,
+        lang: Optional[str] = None,
+        ds: str = None,
+        ds_type: str = None,
+        new_ds: bool = False,
+        data: Any = None,
+        params: Optional[QueryParamTypes] = None,
     ):
         """Get the lab API header for API requests.
 
@@ -213,13 +213,13 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         return header
 
     async def request(
-            self,
-            method: str,
-            url: str,
-            data: Optional[RequestData] = None,
-            json: Optional[Any] = None,
-            params: Optional[QueryParamTypes] = None,
-            headers: Optional[HeaderTypes] = None,
+        self,
+        method: str,
+        url: str,
+        data: Optional[RequestData] = None,
+        json: Optional[Any] = None,
+        params: Optional[QueryParamTypes] = None,
+        headers: Optional[HeaderTypes] = None,
     ) -> Response:
         """Make an HTTP request and return the response.
 
@@ -258,12 +258,12 @@ class BaseClient(AsyncContextManager["BaseClient"]):
             raise NetworkError from exc
 
     async def request_api(
-            self,
-            method: str,
-            url: str,
-            json: Optional[Any] = None,
-            params: Optional[QueryParamTypes] = None,
-            headers: Optional[HeaderTypes] = None,
+        self,
+        method: str,
+        url: str,
+        json: Optional[Any] = None,
+        params: Optional[QueryParamTypes] = None,
+        headers: Optional[HeaderTypes] = None,
     ):
         """Make an API request and return the data.
 
@@ -303,15 +303,15 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         raise BadRequest(status_code=response.status_code, message=response.text)
 
     async def request_lab(
-            self,
-            url: str,
-            method: Optional[str] = None,
-            data: Optional[Any] = None,
-            params: Optional[QueryParamTypes] = None,
-            headers: Optional[HeaderTypes] = None,
-            lang: Optional[str] = None,
-            new_ds: bool = False,
-            ds_type: Optional[DSType] = None,
+        self,
+        url: str,
+        method: Optional[str] = None,
+        data: Optional[Any] = None,
+        params: Optional[QueryParamTypes] = None,
+        headers: Optional[HeaderTypes] = None,
+        lang: Optional[str] = None,
+        new_ds: bool = False,
+        ds_type: Optional[DSType] = None,
     ):
         """Make a request to the lab API and return the data.
 
