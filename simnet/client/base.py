@@ -30,7 +30,7 @@ class BaseClient(AsyncContextManager["BaseClient"]):
     This is the base class for simnet clients. It provides common methods and properties for simnet clients.
 
     Args:
-        cookies (Optional[CookieTypes], optional): The cookies used for the client.
+        cookies (Optional[str, CookieTypes], optional): The cookies used for the client.
         headers (Optional[HeaderTypes], optional): The headers used for the client.
         account_id (Optional[int], optional): The account id used for the client.
         player_id (Optional[int], optional): The player id used for the client.
@@ -53,7 +53,7 @@ class BaseClient(AsyncContextManager["BaseClient"]):
 
     def __init__(
         self,
-        cookies: Optional[CookieTypes] = None,
+        cookies: Optional[str, CookieTypes] = None,
         headers: Optional[HeaderTypes] = None,
         account_id: Optional[int] = None,
         player_id: Optional[int] = None,
@@ -69,7 +69,6 @@ class BaseClient(AsyncContextManager["BaseClient"]):
                 write=5.0,
                 pool=1.0,
             )
-
         cookies = Cookies(parse_cookie(cookies)) if isinstance(cookies, str) else cookies
         self.headers = Headers(headers)
         self.player_id = player_id
