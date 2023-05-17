@@ -8,7 +8,6 @@ from httpx import AsyncClient, TimeoutException, Response, HTTPError, Timeout
 from simnet.client.cookies import Cookies
 from simnet.client.headers import Headers
 from simnet.errors import TimedOut, NetworkError, BadRequest, raise_for_ret_code
-from simnet.utils.cookies import parse_cookie
 from simnet.utils.ds import generate_dynamic_secret, DSType
 from simnet.utils.enum_ import Region, Game
 from simnet.utils.types import (
@@ -30,7 +29,7 @@ class BaseClient(AsyncContextManager["BaseClient"]):
     This is the base class for simnet clients. It provides common methods and properties for simnet clients.
 
     Args:
-        cookies (Optional[str, CookieTypes], optional): The cookies used for the client.
+        cookies (Optional[CookieTypes], optional): The cookies used for the client.
         headers (Optional[HeaderTypes], optional): The headers used for the client.
         account_id (Optional[int], optional): The account id used for the client.
         player_id (Optional[int], optional): The player id used for the client.
@@ -53,7 +52,7 @@ class BaseClient(AsyncContextManager["BaseClient"]):
 
     def __init__(
         self,
-        cookies: Optional[str, CookieTypes] = None,
+        cookies: Optional[CookieTypes] = None,
         headers: Optional[HeaderTypes] = None,
         account_id: Optional[int] = None,
         player_id: Optional[int] = None,
@@ -69,7 +68,8 @@ class BaseClient(AsyncContextManager["BaseClient"]):
                 write=5.0,
                 pool=1.0,
             )
-        cookies = Cookies(parse_cookie(cookies)) if isinstance(cookies, str) else cookies
+
+        cookies = Cookies(cookies)
         self.headers = Headers(headers)
         self.player_id = player_id
         self.account_id = account_id or cookies.account_id
