@@ -26,5 +26,8 @@ async def main():
 asyncio.run(main())
 ```
 
+> Note that Hoyolab has not implemented Battle Chronicle for Honkai Star Rail yet (as of 05/16/2023).
+> HSR related features will be unavailable for global players. For more details, check issue #24
+
 ## Credits
 - [genshin.py](https://github.com/thesadru/genshin.py/): fork source 
