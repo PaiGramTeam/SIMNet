@@ -1,3 +1,4 @@
+import asyncio
 from typing import Optional, Mapping, Dict, Any
 
 from simnet.client.components.chronicle.base import BaseChronicleClient
@@ -113,8 +114,12 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
             BadRequest: If the request is invalid.
             DataNotPublic: If the requested data is not public.
         """
-        data = await self._request_starrail_record("index", player_id, lang=lang)
-        return StarRailUserStats(**data)
+        index_data, basic_info = await asyncio.gather(
+            self._request_starrail_record("index", player_id, lang=lang),
+            self._request_starrail_record("role/basicInfo", player_id, lang=lang),
+        )
+        index_data["info"] = basic_info
+        return StarRailUserStats(**index_data)
 
     async def get_starrail_characters(
         self,

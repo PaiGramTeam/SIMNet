@@ -36,5 +36,24 @@ class PartialStarRailUserStats(APIModel):
     characters: List[PartialCharacter] = Field(alias="avatar_list")
 
 
+class StarRailUserInfo(APIModel):
+    """
+    Information of StarRail user.
+
+    Attributes:
+        nickname (str): User's nickname.
+        server (str): User's server.
+        level (int): User's level.
+        avatar (str): User's avatar url.
+    """
+
+    nickname: str
+    server: str = Field(alias="region")
+    level: int
+    avatar: str
+
+
 class StarRailUserStats(PartialStarRailUserStats):
     """Complete data of StarRail user, containing statistics and character information."""
+
+    info: StarRailUserInfo
