@@ -102,7 +102,7 @@ class BaseWishClient(BaseClient):
             game=game,
             lang=lang,
             authkey=authkey,
-            params=dict(gacha_type=banner_type, size=size, end_id=end_id, game_biz=Game.value),
+            params=dict(gacha_type=banner_type, size=size, end_id=end_id, game_biz=game.value),
         )
 
     async def get_banner_names(

@@ -35,6 +35,9 @@ class StarRailWish(APIModel):
     type: str = Field(alias="item_type")
     """Type of the wished item."""
 
+    item_id: int = Field(alias="item_id")
+    """ID of the wished item."""
+
     name: str
     """Name of the wished item."""
 
@@ -43,6 +46,9 @@ class StarRailWish(APIModel):
 
     time: datetime
     """Time when the wish was made."""
+
+    banner_id: int = Field(alias="gacha_id")
+    """ID of the banner the wish was made on."""
 
     banner_type: StarRailBannerType = Field(alias="gacha_type")
     """Type of the banner the wish was made on."""

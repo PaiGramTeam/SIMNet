@@ -1,7 +1,7 @@
 import logging
 import uuid
 from types import TracebackType
-from typing import AsyncContextManager, Type, Optional, Any
+from typing import AsyncContextManager, Type, Optional, Any, Union
 
 from httpx import AsyncClient, TimeoutException, Response, HTTPError, Timeout
 
@@ -53,7 +53,7 @@ class BaseClient(AsyncContextManager["BaseClient"]):
 
     def __init__(
         self,
-        cookies: Optional[str, CookieTypes] = None,
+        cookies: Optional[Union[str, CookieTypes]] = None,
         headers: Optional[HeaderTypes] = None,
         account_id: Optional[int] = None,
         player_id: Optional[int] = None,
