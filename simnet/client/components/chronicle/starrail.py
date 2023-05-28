@@ -3,6 +3,7 @@ from typing import Optional, Mapping, Dict, Any
 
 from simnet.client.components.chronicle.base import BaseChronicleClient
 from simnet.errors import BadRequest, DataNotPublic
+from simnet.models.lab.record import RecordCard
 from simnet.models.starrail.chronicle.characters import StarShipDetailCharacters
 from simnet.models.starrail.chronicle.notes import StarRailNote
 from simnet.models.starrail.chronicle.stats import StarRailUserStats
@@ -142,3 +143,31 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         payload = {"need_wiki": "true"}
         data = await self._request_starrail_record("avatar/info", player_id, lang=lang, payload=payload)
         return StarShipDetailCharacters(**data)
+
+    async def get_record_card(
+        self,
+        account_id: Optional[int] = None,
+        *,
+        lang: Optional[str] = None,
+    ) -> Optional[RecordCard]:
+        """Get a starrail player record cards.
+
+        Args:
+            account_id: Optional[int], the user's account ID, defaults to None
+            lang: Optional[str], the language version of the request, defaults to None
+
+        Returns:
+            Starrail user record cards.
+
+        Returns:
+            Optional[RecordCard]: RecordCard objects.
+        """
+        account_id = account_id or self.account_id
+
+        record_cards = await self.get_record_cards(account_id, lang=lang)
+
+        for record_card in record_cards:
+            if record_card.game == Game.STARRAIL:
+                return record_card
+
+        return None

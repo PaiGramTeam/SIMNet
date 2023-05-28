@@ -11,6 +11,7 @@ from simnet.models.genshin.chronicle.stats import (
     GenshinUserStats,
     FullGenshinUserStats,
 )
+from simnet.models.lab.record import RecordCard
 from simnet.utils.enum_ import Game
 from simnet.utils.player import recognize_genshin_server, recognize_region
 
@@ -229,3 +230,31 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
             Dict: The requested get_genshin_activities.
         """
         return await self._request_genshin_record("activities", player_id, lang=lang)
+
+    async def get_record_card(
+        self,
+        account_id: Optional[int] = None,
+        *,
+        lang: Optional[str] = None,
+    ) -> Optional[RecordCard]:
+        """Get a genshin player record cards.
+
+        Args:
+            account_id: Optional[int], the user's account ID, defaults to None
+            lang: Optional[str], the language version of the request, defaults to None
+
+        Returns:
+            Genshin player record cards.
+
+        Returns:
+            Optional[RecordCard]: RecordCard objects.
+        """
+        account_id = account_id or self.account_id
+
+        record_cards = await self.get_record_cards(account_id, lang=lang)
+
+        for record_card in record_cards:
+            if record_card.game == Game.GENSHIN:
+                return record_card
+
+        return None
