@@ -21,12 +21,12 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
     """
 
     async def _request_starrail_record(
-            self,
-            endpoint: str,
-            player_id: Optional[int] = None,
-            method: str = "GET",
-            lang: Optional[str] = None,
-            payload: Optional[Dict[str, Any]] = None,
+        self,
+        endpoint: str,
+        player_id: Optional[int] = None,
+        method: str = "GET",
+        lang: Optional[str] = None,
+        payload: Optional[Dict[str, Any]] = None,
     ) -> Mapping[str, Any]:
         """Get an arbitrary object from StarRail's battle chronicle.
 
@@ -65,10 +65,10 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         )
 
     async def get_starrail_notes(
-            self,
-            player_id: Optional[int] = None,
-            lang: Optional[str] = None,
-            autoauth: bool = True,
+        self,
+        player_id: Optional[int] = None,
+        lang: Optional[str] = None,
+        autoauth: bool = True,
     ) -> StarRailNote:
         """Get StarRail's real-time notes.
 
@@ -97,10 +97,10 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         return StarRailNote(**data)
 
     async def get_starrail_user(
-            self,
-            player_id: Optional[int] = None,
-            *,
-            lang: Optional[str] = None,
+        self,
+        player_id: Optional[int] = None,
+        *,
+        lang: Optional[str] = None,
     ) -> StarRailUserStats:
         """Get StarRail user statistics.
 
@@ -123,9 +123,9 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         return StarRailUserStats(**index_data)
 
     async def get_starrail_characters(
-            self,
-            player_id: Optional[int] = None,
-            lang: Optional[str] = None,
+        self,
+        player_id: Optional[int] = None,
+        lang: Optional[str] = None,
     ) -> StarShipDetailCharacters:
         """Get StarRail character information.
 
@@ -145,10 +145,10 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         return StarShipDetailCharacters(**data)
 
     async def get_record_card(
-            self,
-            account_id: Optional[int] = None,
-            *,
-            lang: Optional[str] = None,
+        self,
+        account_id: Optional[int] = None,
+        *,
+        lang: Optional[str] = None,
     ) -> Optional[RecordCard]:
         """Get a starrail player record cards.
 
