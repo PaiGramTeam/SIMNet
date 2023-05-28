@@ -3,6 +3,7 @@ from typing import Optional, Mapping, Dict, Any
 
 from simnet.client.components.chronicle.base import BaseChronicleClient
 from simnet.errors import BadRequest, DataNotPublic
+from simnet.models.lab.record import RecordCard
 from simnet.models.starrail.chronicle.characters import StarShipDetailCharacters
 from simnet.models.starrail.chronicle.notes import StarRailNote
 from simnet.models.starrail.chronicle.stats import StarRailUserStats
@@ -20,12 +21,12 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
     """
 
     async def _request_starrail_record(
-        self,
-        endpoint: str,
-        player_id: Optional[int] = None,
-        method: str = "GET",
-        lang: Optional[str] = None,
-        payload: Optional[Dict[str, Any]] = None,
+            self,
+            endpoint: str,
+            player_id: Optional[int] = None,
+            method: str = "GET",
+            lang: Optional[str] = None,
+            payload: Optional[Dict[str, Any]] = None,
     ) -> Mapping[str, Any]:
         """Get an arbitrary object from StarRail's battle chronicle.
 
@@ -64,10 +65,10 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         )
 
     async def get_starrail_notes(
-        self,
-        player_id: Optional[int] = None,
-        lang: Optional[str] = None,
-        autoauth: bool = True,
+            self,
+            player_id: Optional[int] = None,
+            lang: Optional[str] = None,
+            autoauth: bool = True,
     ) -> StarRailNote:
         """Get StarRail's real-time notes.
 
@@ -96,10 +97,10 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         return StarRailNote(**data)
 
     async def get_starrail_user(
-        self,
-        player_id: Optional[int] = None,
-        *,
-        lang: Optional[str] = None,
+            self,
+            player_id: Optional[int] = None,
+            *,
+            lang: Optional[str] = None,
     ) -> StarRailUserStats:
         """Get StarRail user statistics.
 
@@ -122,9 +123,9 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         return StarRailUserStats(**index_data)
 
     async def get_starrail_characters(
-        self,
-        player_id: Optional[int] = None,
-        lang: Optional[str] = None,
+            self,
+            player_id: Optional[int] = None,
+            lang: Optional[str] = None,
     ) -> StarShipDetailCharacters:
         """Get StarRail character information.
 
@@ -142,3 +143,31 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         payload = {"need_wiki": "true"}
         data = await self._request_starrail_record("avatar/info", player_id, lang=lang, payload=payload)
         return StarShipDetailCharacters(**data)
+
+    async def get_record_card(
+            self,
+            account_id: Optional[int] = None,
+            *,
+            lang: Optional[str] = None,
+    ) -> Optional[RecordCard]:
+        """Get a starrail player record cards.
+
+        Args:
+            account_id: Optional[int], the user's account ID, defaults to None
+            lang: Optional[str], the language version of the request, defaults to None
+
+        Returns:
+            Starrail user record cards.
+
+        Returns:
+            Optional[RecordCard]: RecordCard objects.
+        """
+        account_id = account_id or self.account_id
+
+        record_cards = await self.get_record_cards(account_id, lang=lang)
+
+        for record_card in record_cards:
+            if record_card.game == Game.STARRAIL:
+                return record_card
+
+        return None

@@ -1,4 +1,5 @@
 from typing import Optional, Any, List
+
 from simnet.client.base import BaseClient
 from simnet.client.routes import RECORD_URL
 from simnet.errors import DataNotPublic
@@ -99,11 +100,11 @@ class BaseChronicleClient(BaseClient):
         *,
         lang: Optional[str] = None,
     ) -> List[RecordCard]:
-        """Get a user's record cards.
+        """Get a player record cards.
 
         Args:
-            account_id: Optional[int], the user's account ID, defaults to None
-            lang: Optional[str], the language version of the request, defaults to None
+            account_id: (int, optional), the user's account ID, defaults to None
+            lang: (str, optional), the language version of the request, defaults to None
 
         Returns:
             A list of RecordCard objects.

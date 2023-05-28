@@ -11,6 +11,7 @@ from simnet.models.genshin.chronicle.stats import (
     GenshinUserStats,
     FullGenshinUserStats,
 )
+from simnet.models.lab.record import RecordCard
 from simnet.utils.enum_ import Game
 from simnet.utils.player import recognize_genshin_server, recognize_region
 
@@ -25,12 +26,12 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
     """
 
     async def _request_genshin_record(
-        self,
-        endpoint: str,
-        player_id: Optional[int] = None,
-        method: str = "GET",
-        lang: Optional[str] = None,
-        payload: Optional[Dict[str, Any]] = None,
+            self,
+            endpoint: str,
+            player_id: Optional[int] = None,
+            method: str = "GET",
+            lang: Optional[str] = None,
+            payload: Optional[Dict[str, Any]] = None,
     ):
         """Get an arbitrary object from StarRail's battle chronicle.
 
@@ -75,10 +76,10 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         )
 
     async def get_partial_genshin_user(
-        self,
-        player_id: Optional[int] = None,
-        *,
-        lang: Optional[str] = None,
+            self,
+            player_id: Optional[int] = None,
+            *,
+            lang: Optional[str] = None,
     ) -> PartialGenshinUserStats:
         """Get partial genshin user without character equipment.
 
@@ -93,10 +94,10 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         return PartialGenshinUserStats(**data)
 
     async def get_genshin_characters(
-        self,
-        player_id: Optional[int] = None,
-        *,
-        lang: Optional[str] = None,
+            self,
+            player_id: Optional[int] = None,
+            *,
+            lang: Optional[str] = None,
     ) -> List[Character]:
         """Get genshin user characters.
 
@@ -111,10 +112,10 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         return [Character(**i) for i in data["avatars"]]
 
     async def get_genshin_user(
-        self,
-        player_id: Optional[int] = None,
-        *,
-        lang: Optional[str] = None,
+            self,
+            player_id: Optional[int] = None,
+            *,
+            lang: Optional[str] = None,
     ) -> GenshinUserStats:
         """Get genshin user stats.
 
@@ -134,11 +135,11 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         return GenshinUserStats(**data)
 
     async def get_genshin_spiral_abyss(
-        self,
-        player_id: Optional[int] = None,
-        *,
-        previous: bool = False,
-        lang: Optional[str] = None,
+            self,
+            player_id: Optional[int] = None,
+            *,
+            previous: bool = False,
+            lang: Optional[str] = None,
     ) -> SpiralAbyss:
         """Get genshin spiral abyss runs.
 
@@ -157,11 +158,11 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         return SpiralAbyss(**data)
 
     async def get_genshin_notes(
-        self,
-        player_id: Optional[int] = None,
-        *,
-        lang: Optional[str] = None,
-        autoauth: bool = True,
+            self,
+            player_id: Optional[int] = None,
+            *,
+            lang: Optional[str] = None,
+            autoauth: bool = True,
     ) -> Notes:
         """Get Genshin's real-time notes.
 
@@ -192,10 +193,10 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         return Notes(**data)
 
     async def get_full_genshin_user(
-        self,
-        player_id: Optional[int] = None,
-        *,
-        lang: Optional[str] = None,
+            self,
+            player_id: Optional[int] = None,
+            *,
+            lang: Optional[str] = None,
     ) -> FullGenshinUserStats:
         """Get a genshin user with all their possible data.
 
@@ -229,3 +230,31 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
             Dict: The requested get_genshin_activities.
         """
         return await self._request_genshin_record("activities", player_id, lang=lang)
+
+    async def get_record_card(
+            self,
+            account_id: Optional[int] = None,
+            *,
+            lang: Optional[str] = None,
+    ) -> Optional[RecordCard]:
+        """Get a genshin player record cards.
+
+        Args:
+            account_id: Optional[int], the user's account ID, defaults to None
+            lang: Optional[str], the language version of the request, defaults to None
+
+        Returns:
+            Genshin player record cards.
+
+        Returns:
+            Optional[RecordCard]: RecordCard objects.
+        """
+        account_id = account_id or self.account_id
+
+        record_cards = await self.get_record_cards(account_id, lang=lang)
+
+        for record_card in record_cards:
+            if record_card.game == Game.GENSHIN:
+                return record_card
+
+        return None
