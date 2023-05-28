@@ -7,9 +7,12 @@ license = "MIT license"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.8"
 httpx = "^0.24.0"
 pydantic = "^1.10.7"
+pytest = { version = "^7.3.1", optional = true }
+pytest-asyncio = { version = "^0.21.0", optional = true }
+python-dotenv = { version = "^1.0.0", optional = true }
 
 [tool.poetry.extras]
 test = ["pytest", "pytest-asyncio", "python-dotenv"]
@@ -18,7 +21,6 @@ test = ["pytest", "pytest-asyncio", "python-dotenv"]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 log_cli = true
@@ -26,8 +28,10 @@ log_cli_level = "INFO"
 log_cli_format = "%(message)s"
 log_cli_date_format = "%Y-%m-%d %H:%M:%S"
 
-
 [tool.black]
 include = '\.pyi?$'
 line-length = 120
 target-version = ['py39']
+
+[project]
+include_package_data = true
