@@ -14,8 +14,11 @@ pytest = { version = "^7.3.1", optional = true }
 pytest-asyncio = { version = "^0.21.0", optional = true }
 python-dotenv = { version = "^1.0.0", optional = true }
 
-[tool.poetry.extras]
-test = ["pytest", "pytest-asyncio", "python-dotenv"]
+[tool.poetry.dev-dependencies]
+pytest = "^7.3.1"
+pytest-asyncio = "^0.21.0"
+python-dotenv = "^1.0.0"
+black = "^22.10.0"
 
 [build-system]
 requires = ["poetry-core"]
@@ -31,7 +34,8 @@ log_cli_date_format = "%Y-%m-%d %H:%M:%S"
 [tool.black]
 include = '\.pyi?$'
 line-length = 120
-target-version = ['py39']
+target-version = ['py38']
 
-[project]
-include_package_data = true
+
+[tool.setuptools.package-data]
+simnet = ["py.typed"]
