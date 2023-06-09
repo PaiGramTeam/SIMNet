@@ -1,0 +1,18 @@
+from typing import Optional
+
+from simnet.client.components.diary.base import BaseDiaryClient
+from simnet.models.genshin.diary import Diary
+from simnet.utils.enum_ import Game
+
+
+class GenshinDiaryClient(BaseDiaryClient):
+    async def get_genshin_diary(
+        self,
+        player_id: Optional[int] = None,
+        *,
+        month: Optional[int] = None,
+        lang: Optional[str] = None,
+    ) -> Diary:
+        """Get a traveler's diary with earning details for the month."""
+        data = await self.request_ledger(player_id, game=Game.GENSHIN, month=month, lang=lang)
+        return Diary(**data)

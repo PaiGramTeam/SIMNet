@@ -23,6 +23,8 @@ __all__ = (
     "REWARD_URL",
     "TAKUMI_URL",
     "CALCULATOR_URL",
+    "DETAIL_LEDGER_URL",
+    "INFO_LEDGER_URL",
     "HK4E_URL",
     "CODE_URL",
 )
@@ -235,6 +237,22 @@ TAKUMI_URL = InternationalRoute(
 CALCULATOR_URL = InternationalRoute(
     overseas="https://sg-public-api.hoyoverse.com/event/calculateos/",
     chinese="https://api-takumi.mihoyo.com/event/e20200928calculate/v1/",
+)
+
+DETAIL_LEDGER_URL = InternationalRoute(
+    overseas="https://sg-hk4e-api.hoyolab.com/event/ysledgeros/month_detail",
+    chinese="https://hk4e-api.mihoyo.com/event/ys_ledger/monthDetail",
+)
+
+INFO_LEDGER_URL = GameRoute(
+    overseas=dict(
+        genshin="https://sg-hk4e-api.hoyolab.com/event/ysledgeros/month_info",
+        hkrpg="",
+    ),
+    chinese=dict(
+        genshin="https://hk4e-api.mihoyo.com/event/ys_ledger/monthInfo",
+        hkrpg="https://api-takumi.mihoyo.com/event/srledger/month_info",
+    ),
 )
 
 
