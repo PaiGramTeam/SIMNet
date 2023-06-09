@@ -28,7 +28,6 @@ class BaseDiaryClient(BaseClient):
         **kwargs: Any,
     ) -> Dict[str, Any]:
         """Make a request towards the ys ledger endpoint."""
-
         url = (
             DETAIL_LEDGER_URL.get_url(self.region)
             if detail
