@@ -229,18 +229,19 @@ class DailyRewardClient(BaseClient):
             validate=validate,
         )
 
-        if self.region == Region.CHINESE:
-            if daily_reward.get("success", 0) == 1:
-                gt = daily_reward.get("gt", "")
-                challenge = daily_reward.get("challenge", "")
-                raise GeetestTriggered(gt, challenge)
+        if (
+            self.region == Region.CHINESE
+            and daily_reward.get("success", 0) == 1
+        ):
+            gt = daily_reward.get("gt", "")
+            challenge = daily_reward.get("challenge", "")
+            raise GeetestTriggered(gt, challenge)
         if self.region == Region.OVERSEAS:
             gt_result = daily_reward.get("gt_result")
-            if gt_result is not None:
-                if gt_result["success"] != 0:
-                    gt = gt_result.get("gt", "")
-                    challenge = gt_result.get("challenge", "")
-                    raise GeetestTriggered(gt, challenge)
+            if gt_result is not None and gt_result["success"] != 0:
+                gt = gt_result.get("gt", "")
+                challenge = gt_result.get("challenge", "")
+                raise GeetestTriggered(gt, challenge)
 
         if not reward:
             return None
