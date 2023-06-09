@@ -17,7 +17,14 @@ __all__ = (
 
 
 class DiaryActionCategory(APIModel):
-    """Diary category for primogems."""
+    """Diary category for primogems.
+
+    Attributes:
+        id: Category ID.
+        name: Category name.
+        amount: Amount of primogems.
+        percentage: Percentage of primogems.
+    """
 
     id: int = Field(alias="action_id")
     name: str = Field(alias="action")
@@ -26,7 +33,17 @@ class DiaryActionCategory(APIModel):
 
 
 class MonthDiaryData(APIModel):
-    """Diary data for a month."""
+    """Diary data for a month.
+
+    Attributes:
+        current_primogems: Current amount of primogems.
+        current_mora: Current amount of mora.
+        last_primogems: Last amount of primogems.
+        last_mora: Last amount of mora.
+        primogems_rate: Primogems rate.
+        mora_rate: Mora rate.
+        categories: List of diary categories.
+    """
 
     current_primogems: int
     current_mora: int
@@ -38,14 +55,24 @@ class MonthDiaryData(APIModel):
 
 
 class DayDiaryData(APIModel):
-    """Diary data for a day."""
+    """Diary data for a day.
+
+    Attributes:
+        current_primogems: Current amount of primogems.
+        current_mora: Current amount of mora.
+    """
 
     current_primogems: int
     current_mora: int
 
 
 class Diary(BaseDiary):
-    """Traveler's diary."""
+    """Traveler's diary.
+
+    Attributes:
+        data: Diary data for a month.
+        day_data: Diary data for a day.
+    """
 
     data: MonthDiaryData = Field(alias="month_data")
     day_data: DayDiaryData
@@ -56,7 +83,14 @@ class Diary(BaseDiary):
 
 
 class DiaryAction(APIModel):
-    """Action which earned currency."""
+    """Action which earned currency.
+
+    Attributes:
+        action_id: Action ID.
+        action: Action name.
+        time: Time of the action.
+        amount: Amount of the action.
+    """
 
     action_id: int
     action: str
@@ -65,6 +99,10 @@ class DiaryAction(APIModel):
 
 
 class DiaryPage(BaseDiary):
-    """Page of a diary."""
+    """Page of a diary.
+
+    Attributes:
+        actions: List of diary actions.
+    """
 
     actions: List[DiaryAction] = Field(alias="list")

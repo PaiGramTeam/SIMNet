@@ -13,6 +13,15 @@ class StarrailDiaryClient(BaseDiaryClient):
         month: Optional[int] = None,
         lang: Optional[str] = None,
     ) -> StarRailDiary:
-        """Get a blazer's diary with earning details for the month."""
+        """Get a traveler's diary with earning details for the month.
+
+        Args:
+            player_id (int, optional): The player's ID. Defaults to None.
+            month (int, optional): The month to get the diary for. Defaults to None.
+            lang (str, optional): The language to get the diary in. Defaults to None.
+
+        Returns:
+            Diary: The diary for the month.
+        """
         data = await self.request_ledger(player_id, game=Game.STARRAIL, month=month, lang=lang)
         return StarRailDiary(**data)

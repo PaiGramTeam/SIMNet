@@ -27,7 +27,23 @@ class BaseDiaryClient(BaseClient):
         params: Optional[Dict[str, Any]] = None,
         **kwargs: Any,
     ) -> Dict[str, Any]:
-        """Make a request towards the ys ledger endpoint."""
+        """Make a request towards the ys ledger endpoint.
+
+        Args:
+            player_id (Optional[int], optional): The player ID to get the ledger for.
+            game (Optional[Game], optional): The game to get the ledger for.
+            detail (bool, optional): Whether to get the detailed ledger.
+            month (Optional[int], optional): The month to get the ledger for.
+            lang (Optional[str], optional): The language code to use for the request.
+            params (Optional[Dict[str, Any]], optional): The query parameters to use for the request.
+            **kwargs (Any): The keyword arguments to pass to the request.
+
+        Returns:
+            Dict[str, Any]: The response data.
+        """
+
+        game = game or self.game
+
         url = (
             DETAIL_LEDGER_URL.get_url(self.region)
             if detail
@@ -60,6 +76,19 @@ class BaseDiaryClient(BaseClient):
         month: Optional[int] = None,
         lang: Optional[str] = None,
     ) -> DiaryPage:
+        """Get a diary page.
+
+        Args:
+            page (int): The page number to get.
+            game (Optional[Game], optional): The game to get the diary page for.
+            player_id (Optional[int], optional): The player ID to get the diary page for.
+            diary_type (int, optional): The diary type to get the diary page for.
+            month (Optional[int], optional): The month to get the diary page for.
+            lang (Optional[str], optional): The language code to use for the request.
+
+        Returns:
+            DiaryPage: The diary page.
+        """
         data = await self.request_ledger(
             player_id,
             game=game,

@@ -11,7 +11,14 @@ __all__ = (
 
 
 class DiaryType(IntEnum):
-    """Type of diary pages."""
+    """Type of diary pages.
+
+    0: Unknown
+    1: Primogems
+    2: Mora
+    """
+
+    UNKNOWN = 0
 
     PRIMOGEMS = 1
     """Primogems."""
@@ -21,7 +28,14 @@ class DiaryType(IntEnum):
 
 
 class BaseDiary(APIModel):
-    """Base model for diary and diary page."""
+    """Base model for diary and diary page.
+
+    Attributes:
+        uid: User ID.
+        server: Server name.
+        nickname: User nickname.
+        month: Month of the diary page.
+    """
 
     uid: int
     server: str = Field(alias="region")
