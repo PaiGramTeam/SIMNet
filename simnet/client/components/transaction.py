@@ -73,7 +73,7 @@ class TransactionClient(BaseClient):
 
         return transactions
 
-    def transaction_log(
+    async def transaction_log(
         self,
         authkey: str,
         kind: Optional[Union[str, List[str]]] = None,
