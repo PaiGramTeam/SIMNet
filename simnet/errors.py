@@ -156,7 +156,7 @@ class RedemptionCooldown(RedemptionException):
 class NeedChallenge(BadRequest):
     """Need to complete a captcha challenge."""
 
-    ret_code = -1035
+    ret_code = 1034
     message = "Need to complete a captcha challenge."
 
 
