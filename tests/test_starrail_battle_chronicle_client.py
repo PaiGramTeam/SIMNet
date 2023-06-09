@@ -45,3 +45,13 @@ class TestStarrailBattleChronicleClient:
         assert len(characters.avatar_list) > 0
         character = characters.avatar_list[-1]
         assert character.id > 0
+
+    @staticmethod
+    async def test_get_starrail_challenge(starrail_client: "StarRailBattleChronicleClient"):
+        challenge = await starrail_client.get_starrail_challenge()
+        assert challenge.season > 0
+
+    @staticmethod
+    async def test_get_starrail_rogue(starrail_client: "StarRailBattleChronicleClient"):
+        rogue = await starrail_client.get_starrail_rogue()
+        assert rogue.role is not None

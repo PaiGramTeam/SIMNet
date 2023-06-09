@@ -11,7 +11,7 @@ UID_RANGE: Mapping[Game, Mapping[Region, Sequence[int]]] = {
     },
     Game.STARRAIL: {
         Region.OVERSEAS: (6, 7, 8, 9),
-        Region.CHINESE: (1, 2),
+        Region.CHINESE: (1, 2, 5),
     },
     Game.HONKAI: {
         Region.OVERSEAS: (1, 2),

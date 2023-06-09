@@ -87,7 +87,7 @@ class BaseChronicleClient(BaseClient):
         if game is None and switch_id == 3:
             game = Game.GENSHIN
 
-        game_id = {Game.HONKAI: 1, Game.GENSHIN: 2, Game.STARRAIL: 3}[game]
+        game_id = {Game.HONKAI: 1, Game.GENSHIN: 2, Game.STARRAIL: 6}[game]
 
         await self.request_game_record(
             "card/wapi/changeDataSwitch",
