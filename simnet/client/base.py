@@ -9,7 +9,7 @@ from simnet.client.cookies import Cookies
 from simnet.client.headers import Headers
 from simnet.errors import TimedOut, NetworkError, BadRequest, raise_for_ret_code
 from simnet.utils.cookies import parse_cookie
-from simnet.utils.ds import generate_dynamic_secret, DSType
+from simnet.utils.ds import generate_dynamic_secret, DSType, hex_digest
 from simnet.utils.enum_ import Region, Game
 from simnet.utils.types import (
     RT,
@@ -99,6 +99,11 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         return self._device_id
 
     @property
+    def device_fp(self) -> str:
+        """Get the device fingerprint used for the client."""
+        return hex_digest(self.device_id)[:13]
+
+    @property
     def app_version(self) -> str:
         """Get the app version used for the client."""
         if self.region == Region.CHINESE:
@@ -159,25 +164,26 @@ class BaseClient(AsyncContextManager["BaseClient"]):
     async def initialize(self):
         """Initialize the client."""
 
-    def get_default_header(self, header: HeaderTypes):
+    def get_default_header(self, headers: HeaderTypes):
         """Get the default header for API requests.
 
         Args:
-            header (HeaderTypes): The header to use.
+            headers (HeaderTypes): The header to use.
 
         Returns:
             Headers: The default header with added fields.
         """
-        header = Headers(header)
-        header["user-agent"] = self.user_agent
-        header["x-rpc-app_version"] = self.app_version
-        header["x-rpc-client_type"] = self.client_type
-        header["x-rpc-device_id"] = self.device_id
-        return header
+        headers = Headers(headers)
+        headers["user-agent"] = self.user_agent
+        headers["x-rpc-app_version"] = self.app_version
+        headers["x-rpc-client_type"] = self.client_type
+        headers["x-rpc-device_id"] = self.device_id
+        headers["x-rpc-device_fp"] = self.device_fp
+        return headers
 
     def get_lab_api_header(
         self,
-        header: HeaderTypes,
+        headers: HeaderTypes,
         lang: Optional[str] = None,
         ds: str = None,
         ds_type: str = None,
@@ -188,7 +194,7 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         """Get the lab API header for API requests.
 
         Args:
-            header (HeaderTypes): The header to use.
+            headers (HeaderTypes): The header to use.
             lang (Optional[str], optional): The language to use for overseas regions. Defaults to None.
             ds (str, optional): The DS string to use. Defaults to None.
             ds_type (Optional[DSType], optional): The DS type to use. Defaults to None.
@@ -198,19 +204,20 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         Returns:
             Headers: The lab API header with added fields.
         """
-        header = Headers(header)
-        header["user-agent"] = self.user_agent
-        header["x-rpc-app_version"] = self.app_version
-        header["x-rpc-client_type"] = self.client_type
-        header["x-rpc-device_id"] = self.device_id
+        headers = Headers(headers)
+        headers["user-agent"] = self.user_agent
+        headers["x-rpc-app_version"] = self.app_version
+        headers["x-rpc-client_type"] = self.client_type
+        headers["x-rpc-device_id"] = self.device_id
+        headers["x-rpc-device_fp"] = self.device_fp
         if self.region == Region.OVERSEAS:
-            header["x-rpc-language"] = self.lang or lang
+            headers["x-rpc-language"] = self.lang or lang
         if ds is None:
             app_version, client_type, ds = generate_dynamic_secret(self.region, ds_type, new_ds, data, params)
-            header["x-rpc-app_version"] = app_version
-            header["x-rpc-client_type"] = client_type
-        header["DS"] = ds
-        return header
+            headers["x-rpc-app_version"] = app_version
+            headers["x-rpc-client_type"] = client_type
+        headers["DS"] = ds
+        return headers
 
     async def request(
         self,
