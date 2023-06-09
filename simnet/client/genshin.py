@@ -5,6 +5,7 @@ from simnet.client.components.chronicle.genshin import GenshinBattleChronicleCli
 from simnet.client.components.daily import DailyRewardClient
 from simnet.client.components.diary.genshin import GenshinDiaryClient
 from simnet.client.components.lab import LabClient
+from simnet.client.components.transaction import TransactionClient
 from simnet.client.components.wish.genshin import GenshinWishClient
 from simnet.utils.enum_ import Game
 
@@ -18,7 +19,8 @@ class GenshinClient(
     AuthClient,
     DailyRewardClient,
     LabClient,
+    TransactionClient,
 ):
-    """A simple http client for StarRail endpoints."""
+    """A simple http client for Genshin endpoints."""
 
     game: Optional[Game] = Game.GENSHIN
