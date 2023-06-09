@@ -45,11 +45,16 @@ class MonthDiaryData(APIModel):
         categories: List of diary categories.
     """
 
+    def __init__(self, **data):
+        if data.get("primogem_rate"):
+            data["primogems_rate"] = data.pop("primogem_rate")
+        super().__init__(**data)
+
     current_primogems: int
     current_mora: int
     last_primogems: int
     last_mora: int
-    primogems_rate: int = Field(alias="primogem_rate")
+    primogems_rate: int
     mora_rate: int
     categories: List[DiaryActionCategory] = Field(alias="group_by")
 

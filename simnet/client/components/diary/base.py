@@ -25,7 +25,6 @@ class BaseDiaryClient(BaseClient):
         month: Optional[int] = None,
         lang: Optional[str] = None,
         params: Optional[Dict[str, Any]] = None,
-        **kwargs: Any,
     ) -> Dict[str, Any]:
         """Make a request towards the ys ledger endpoint.
 
@@ -36,12 +35,13 @@ class BaseDiaryClient(BaseClient):
             month (Optional[int], optional): The month to get the ledger for.
             lang (Optional[str], optional): The language code to use for the request.
             params (Optional[Dict[str, Any]], optional): The query parameters to use for the request.
-            **kwargs (Any): The keyword arguments to pass to the request.
 
         Returns:
             Dict[str, Any]: The response data.
         """
         game = game or self.game
+        player_id = player_id or self.player_id
+        params = params or {}
 
         url = (
             DETAIL_LEDGER_URL.get_url(self.region)
@@ -63,7 +63,7 @@ class BaseDiaryClient(BaseClient):
         params["month"] = month or (datetime.now().strftime("%Y%m") if game == Game.STARRAIL else datetime.now().month)
         params["lang"] = lang or self.lang
 
-        return await self.request_lab(url, params=params, **kwargs)
+        return await self.request_lab(url, params=params)
 
     async def _get_diary_page(
         self,
