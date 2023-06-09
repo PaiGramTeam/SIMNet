@@ -4,9 +4,11 @@ from typing import Optional, Mapping, Dict, Any
 from simnet.client.components.chronicle.base import BaseChronicleClient
 from simnet.errors import BadRequest, DataNotPublic
 from simnet.models.lab.record import RecordCard
-from simnet.models.starrail.chronicle.characters import StarShipDetailCharacters
+from simnet.models.starrail.chronicle.challenge import StarRailChallenge
+from simnet.models.starrail.chronicle.characters import StarRailDetailCharacters
 from simnet.models.starrail.chronicle.notes import StarRailNote
-from simnet.models.starrail.chronicle.stats import StarRailUserStats
+from simnet.models.starrail.chronicle.rogue import StarRailRogue
+from simnet.models.starrail.chronicle.stats import StarRailUserStats, StarRailUserInfo
 from simnet.utils.enum_ import Game
 from simnet.utils.player import recognize_starrail_server, recognize_region
 
@@ -92,6 +94,7 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
                 raise BadRequest(e.response, "Cannot view real-time notes of other users.") from e
             if not autoauth:
                 raise BadRequest(e.response, "Real-time notes are not enabled.") from e
+            await self.update_settings(3, True, game=Game.STARRAIL)
             data = await self._request_starrail_record("note", player_id, lang=lang)
 
         return StarRailNote(**data)
@@ -119,14 +122,14 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
             self._request_starrail_record("index", player_id, lang=lang),
             self._request_starrail_record("role/basicInfo", player_id, lang=lang),
         )
-        index_data["info"] = basic_info
-        return StarRailUserStats(**index_data)
+        basic_data = StarRailUserInfo(**basic_info)
+        return StarRailUserStats(**index_data, info=basic_data)
 
     async def get_starrail_characters(
         self,
         player_id: Optional[int] = None,
         lang: Optional[str] = None,
-    ) -> StarShipDetailCharacters:
+    ) -> StarRailDetailCharacters:
         """Get StarRail character information.
 
         Args:
@@ -134,7 +137,7 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
             lang (Optional[str], optional): The language of the data. Defaults to None.
 
         Returns:
-            StarShipDetailCharacters: The requested character information.
+            StarRailDetailCharacters: The requested character information.
 
         Raises:
             BadRequest: If the request is invalid.
@@ -142,7 +145,7 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         """
         payload = {"need_wiki": "true"}
         data = await self._request_starrail_record("avatar/info", player_id, lang=lang, payload=payload)
-        return StarShipDetailCharacters(**data)
+        return StarRailDetailCharacters(**data)
 
     async def get_record_card(
         self,
@@ -171,3 +174,51 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
                 return record_card
 
         return None
+
+    async def get_starrail_challenge(
+        self,
+        player_id: Optional[int] = None,
+        previous: bool = False,
+        lang: Optional[str] = None,
+    ) -> StarRailChallenge:
+        """Get starrail challenge runs.
+
+        Args:
+            player_id (Optional[int], optional): The player ID. Defaults to None.
+            previous (bool, optional): Whether to get previous runs. Defaults to False.
+            lang (Optional[str], optional): The language of the data. Defaults to None.
+
+        Returns:
+            StarRailChallenge: The requested challenge runs.
+
+        Raises:
+            BadRequest: If the request is invalid.
+            DataNotPublic: If the requested data is not public.
+        """
+        payload = dict(schedule_type=2 if previous else 1, need_all="true")
+        data = await self._request_starrail_record("challenge", player_id, lang=lang, payload=payload)
+        return StarRailChallenge(**data)
+
+    async def get_starrail_rogue(
+        self,
+        player_id: Optional[int] = None,
+        schedule_type: int = 3,
+        lang: Optional[str] = None,
+    ) -> StarRailRogue:
+        """Get starrail rogue runs.
+
+        Args:
+            player_id (Optional[int], optional): The player ID. Defaults to None.
+            schedule_type (int, optional): The schedule type. Defaults to 3.
+            lang (Optional[str], optional): The language of the data. Defaults to None.
+
+        Returns:
+            StarRailRogue: The requested rogue runs.
+
+        Raises:
+            BadRequest: If the request is invalid.
+            DataNotPublic: If the requested data is not public.
+        """
+        payload = dict(schedule_type=schedule_type, need_detail="true")
+        data = await self._request_starrail_record("rogue", player_id, lang=lang, payload=payload)
+        return StarRailRogue(**data)

@@ -1,19 +1,31 @@
+"""Starrail base character model."""
 from simnet.models.base import APIModel
 
 
-class BaseCharacter(APIModel):
-    """
-    A class representing a character in a game.
-
-    Attributes:
-        id (:obj:`int`): The unique identifier of the character.
-        name (:obj:`str`): The name of the character.
-        element (:obj:`str`): The element that the character represents (e.g. fire, water, etc.).
-        rarity (:obj:`int`): The rarity of the character (e.g. 1-5 stars).
-    """
+class StarRailBaseCharacter(APIModel):
+    """Base character model."""
 
     id: int
-    name: str
     element: str
     rarity: int
     icon: str
+
+
+class StarRailPartialCharacter(StarRailBaseCharacter):
+    """Character without any equipment."""
+
+    name: str
+    level: int
+    rank: int
+
+
+class FloorCharacter(StarRailBaseCharacter):
+    """Character in a floor."""
+
+    level: int
+
+
+class RogueCharacter(StarRailBaseCharacter):
+    """Rogue character model."""
+
+    level: int

@@ -69,7 +69,8 @@ class BaseClient(AsyncContextManager["BaseClient"]):
                 write=5.0,
                 pool=1.0,
             )
-        cookies = Cookies(parse_cookie(cookies)) if isinstance(cookies, str) else cookies
+        cookies = parse_cookie(cookies) if isinstance(cookies, str) else cookies
+        cookies = Cookies(cookies)
         self.headers = Headers(headers)
         self.player_id = player_id
         self.account_id = account_id or cookies.account_id
