@@ -6,6 +6,8 @@ from simnet.utils.enum_ import Game
 
 
 class GenshinDiaryClient(BaseDiaryClient):
+    """Genshin diary component."""
+
     async def get_genshin_diary(
         self,
         player_id: Optional[int] = None,

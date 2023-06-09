@@ -6,6 +6,8 @@ from simnet.utils.enum_ import Game
 
 
 class StarrailDiaryClient(BaseDiaryClient):
+    """Starrail diary component."""
+
     async def get_starrail_diary(
         self,
         player_id: Optional[int] = None,

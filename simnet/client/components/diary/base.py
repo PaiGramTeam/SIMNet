@@ -14,7 +14,7 @@ CN_TIMEZONE = timezone(timedelta(hours=8))
 
 
 class BaseDiaryClient(BaseClient):
-    """Diary component."""
+    """Base diary component."""
 
     async def request_ledger(
         self,
