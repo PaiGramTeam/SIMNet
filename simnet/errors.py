@@ -1,6 +1,7 @@
-from typing import Any, Optional, Dict, Union, Tuple, Type, NoReturn
+from typing import Any, Optional, Dict, Union, Tuple, Type, NoReturn, TYPE_CHECKING
 
-from simnet.utils.enum_ import Region
+if TYPE_CHECKING:
+    from simnet.utils.enum_ import Region, Game
 
 
 class ApiHelperException(Exception):
@@ -31,10 +32,10 @@ class BadRequest(ApiHelperException):
     message: str = ""
 
     def __init__(
-        self,
-        response: Optional[Dict[str, Any]] = None,
-        message: Optional[str] = None,
-        status_code: Optional[int] = None,
+            self,
+            response: Optional[Dict[str, Any]] = None,
+            message: Optional[str] = None,
+            status_code: Optional[int] = None,
     ) -> None:
         if status_code is not None:
             self.status_code = status_code
@@ -177,13 +178,29 @@ class GeetestChallengeFailed(NeedChallenge):
     message = "Geetest challenge failed."
 
 
-class RegionNotSupported(BadRequest):
+class NotSupported(BadRequest):
+    """API not supported."""
+
+
+class RegionNotSupported(NotSupported):
     """API not supported for this region."""
 
+    def __init__(self, *args, region: "Region", **kwargs):
+        super().__init__(message=f"API not supported for this region: {region.value}", *args, **kwargs)
+
+
+class GameNotSupported(NotSupported):
+    """API not supported for this game."""
+
+    def __init__(self, *args, game: "Game", **kwargs):
+        super().__init__(message=f"API not supported for this game: {game.value}", *args, **kwargs)
+
+
+class RequestNotSupported(BadRequest):
     ret_code = -520
 
-    def __init__(self, *args, region: Region = Region.OVERSEAS, **kwargs):
-        super().__init__(message=f"API not supported for this region: {region.value}", *args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(message="API not supported for this request", *args, **kwargs)
 
 
 class RedemptionClaimed(RedemptionException):
