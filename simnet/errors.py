@@ -32,10 +32,10 @@ class BadRequest(ApiHelperException):
     message: str = ""
 
     def __init__(
-        self,
-        response: Optional[Dict[str, Any]] = None,
-        message: Optional[str] = None,
-        status_code: Optional[int] = None,
+            self,
+            response: Optional[Dict[str, Any]] = None,
+            message: Optional[str] = None,
+            status_code: Optional[int] = None,
     ) -> None:
         if status_code is not None:
             self.status_code = status_code
@@ -181,26 +181,30 @@ class GeetestChallengeFailed(NeedChallenge):
 class NotSupported(BadRequest):
     """API not supported."""
 
+    message = "API not supported."
+
 
 class RegionNotSupported(NotSupported):
     """API not supported for this region."""
 
     def __init__(self, *args, region: "Region", **kwargs):
-        super().__init__(message=f"API not supported for this region: {region.value}", *args, **kwargs)
+        super().__init__(message=f"API not supported for this region: {region.value} .", *args, **kwargs)
 
 
 class GameNotSupported(NotSupported):
     """API not supported for this game."""
 
     def __init__(self, *args, game: "Game", **kwargs):
-        super().__init__(message=f"API not supported for this game: {game.value}", *args, **kwargs)
+        super().__init__(message=f"API not supported for this game: {game.value} .", *args, **kwargs)
 
 
 class RequestNotSupported(BadRequest):
+    """API not supported for this request."""
+
     ret_code = -520
 
     def __init__(self, *args, **kwargs):
-        super().__init__(message="API not supported for this request", *args, **kwargs)
+        super().__init__(message="API not supported for this request.", *args, **kwargs)
 
 
 class RedemptionClaimed(RedemptionException):
