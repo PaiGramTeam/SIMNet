@@ -27,6 +27,7 @@ __all__ = (
     "INFO_LEDGER_URL",
     "HK4E_URL",
     "CODE_URL",
+    "YSULOG_URL",
 )
 
 
@@ -255,6 +256,10 @@ INFO_LEDGER_URL = GameRoute(
     ),
 )
 
+YSULOG_URL = InternationalRoute(
+    overseas="https://hk4e-api-os.hoyoverse.com/ysulog/api/",
+    chinese="https://hk4e-api.mihoyo.com/ysulog/api/",
+)
 
 HK4E_URL = Route("https://sg-hk4e-api.hoyoverse.com/common/hk4e_global/")
 
