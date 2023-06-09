@@ -10,7 +10,6 @@ __all__ = (
     "MonthDiaryData",
     "DayDiaryData",
     "StarRailDiary",
-
 )
 
 

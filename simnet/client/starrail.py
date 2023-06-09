@@ -14,7 +14,7 @@ __all__ = ("StarRailClient",)
 class StarRailClient(
     StarRailBattleChronicleClient,
     StarRailWishClient,
-StarrailDiaryClient,
+    StarrailDiaryClient,
     DailyRewardClient,
     AuthClient,
     LabClient,
