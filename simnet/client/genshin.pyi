@@ -5,13 +5,20 @@ from simnet.client.components.chronicle.genshin import GenshinBattleChronicleCli
 from simnet.client.components.daily import DailyRewardClient
 from simnet.client.components.diary.genshin import GenshinDiaryClient
 from simnet.client.components.lab import LabClient
+from simnet.client.components.transaction import TransactionClient
 from simnet.client.components.wish.genshin import GenshinWishClient
 from simnet.utils.enum_ import Region
 from simnet.utils.types import CookieTypes, HeaderTypes, TimeoutTypes
 
 
 class GenshinClient(
-    GenshinBattleChronicleClient, GenshinWishClient, GenshinDiaryClient, AuthClient, DailyRewardClient, LabClient
+    GenshinBattleChronicleClient,
+    GenshinWishClient,
+    GenshinDiaryClient,
+    AuthClient,
+    DailyRewardClient,
+    LabClient,
+    TransactionClient,
 ):
     def __init__(
         self,
