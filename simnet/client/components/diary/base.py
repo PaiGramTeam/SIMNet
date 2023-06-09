@@ -1,5 +1,3 @@
-__all__ = ("BaseDiaryClient",)
-
 from datetime import timedelta, timezone, datetime
 from typing import Optional, Any, Dict
 
@@ -9,6 +7,8 @@ from simnet.models.diary import DiaryType
 from simnet.models.genshin.diary import DiaryPage
 from simnet.utils.enum_ import Region, Game
 from simnet.utils.player import recognize_server
+
+__all__ = ("BaseDiaryClient",)
 
 CN_TIMEZONE = timezone(timedelta(hours=8))
 
