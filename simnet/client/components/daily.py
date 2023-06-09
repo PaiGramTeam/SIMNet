@@ -229,10 +229,7 @@ class DailyRewardClient(BaseClient):
             validate=validate,
         )
 
-        if (
-            self.region == Region.CHINESE
-            and daily_reward.get("success", 0) == 1
-        ):
+        if self.region == Region.CHINESE and daily_reward.get("success", 0) == 1:
             gt = daily_reward.get("gt", "")
             challenge = daily_reward.get("challenge", "")
             raise GeetestTriggered(gt, challenge)
