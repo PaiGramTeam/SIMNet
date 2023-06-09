@@ -41,7 +41,6 @@ class BaseDiaryClient(BaseClient):
         Returns:
             Dict[str, Any]: The response data.
         """
-
         game = game or self.game
 
         url = (
