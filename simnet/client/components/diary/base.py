@@ -53,7 +53,7 @@ class BaseDiaryClient(BaseClient):
         )
 
         if self.region == Region.OVERSEAS or game == Game.STARRAIL:
-            params["player_id"] = player_id
+            params["uid"] = player_id
             params["region"] = recognize_server(player_id, game)
         elif self.region == Region.CHINESE:
             params["bind_uid"] = player_id
