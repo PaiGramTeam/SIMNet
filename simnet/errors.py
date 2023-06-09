@@ -179,6 +179,7 @@ class GeetestChallengeFailed(NeedChallenge):
 
 class RegionNotSupported(BadRequest):
     """API not supported for this region."""
+
     ret_code = -520
 
     def __init__(self, *args, region: Region = Region.OVERSEAS, **kwargs):
