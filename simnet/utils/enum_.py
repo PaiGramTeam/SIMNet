@@ -1,5 +1,7 @@
 import enum as _enum
 
+__all__ = ("Region", "Game")
+
 
 class Region(str, _enum.Enum):
     """
