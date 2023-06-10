@@ -29,10 +29,10 @@ class BadRequest(ApiHelperException):
     message: str = ""
 
     def __init__(
-            self,
-            response: Optional[Dict[str, Any]] = None,
-            message: Optional[str] = None,
-            status_code: Optional[int] = None,
+        self,
+        response: Optional[Dict[str, Any]] = None,
+        message: Optional[str] = None,
+        status_code: Optional[int] = None,
     ) -> None:
         if status_code is not None:
             self.status_code = status_code
