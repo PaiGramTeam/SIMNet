@@ -8,6 +8,7 @@ from simnet.client.routes import (
     GET_COOKIES_TOKEN_BY_STOKEN_URL,
     GET_LTOKEN_BY_STOKEN_URL,
 )
+from simnet.errors import RegionNotSupported
 from simnet.utils.enum_ import Region
 
 __all__ = ("AuthClient",)
@@ -36,11 +37,11 @@ class AuthClient(BaseClient):
             Optional[str]: The retrieved super ticket (`stoken`).
 
         Raises:
-            RuntimeError: This method is only available for the Chinese region.
+            RegionNotSupported: This method is only available for the Chinese region.
             ValueError: If the `login_ticket` argument is `None`, or if the `account_id` argument is `None`.
         """
         if self.region != Region.CHINESE:
-            raise RuntimeError("This method is only available for the Chinese region.")
+            raise RegionNotSupported("This method is only available for the Chinese region.")
         url = AUTH_URL.get_url(Region.CHINESE) / "getMultiTokenByLoginTicket"
         login_ticket = login_ticket or self.cookies.get("login_ticket")
         account_id = account_id or self.account_id
@@ -82,11 +83,11 @@ class AuthClient(BaseClient):
             Optional[str]: The retrieved cookie token (`cookie_token`).
 
         Raises:
-            RuntimeError: This method is only available for the Chinese region.
+            RegionNotSupported: This method is only available for the Chinese region.
             ValueError: If the `login_ticket` argument is `None`, or if the `account_id` argument is `None`.
         """
         if self.region != Region.CHINESE:
-            raise RuntimeError("This method is only available for the Chinese region.")
+            raise RegionNotSupported("This method is only available for the Chinese region.")
         stoken = stoken or self.cookies.get("stoken")
         account_id = account_id or self.account_id
         if stoken is None:
@@ -121,11 +122,11 @@ class AuthClient(BaseClient):
             Optional[str]: The retrieved cookie token (`cookie_token`).
 
         Raises:
-            RuntimeError: This method is only available for the Chinese region.
+            RegionNotSupported: This method is only available for the Chinese region.
             ValueError: If the `login_ticket` argument is `None`, or if the `account_id` argument is `None`.
         """
         if self.region != Region.CHINESE:
-            raise RuntimeError("This method is only available for the Chinese region.")
+            raise RegionNotSupported("This method is only available for the Chinese region.")
         stoken = stoken or self.cookies.get("stoken")
         account_id = account_id or self.account_id
         if stoken is None:
@@ -158,11 +159,11 @@ class AuthClient(BaseClient):
             Optional[str]: The authentication key, or None if not found.
 
         Raises:
-            RuntimeError: This method is only available for the Chinese region.
+            RegionNotSupported: This method is only available for the Chinese region.
             ValueError: If `stoken` is not found in the cookies or `player_id` not found.
         """
         if self.region != Region.CHINESE:
-            raise RuntimeError("This method is only available for the Chinese region.")
+            raise RegionNotSupported("This method is only available for the Chinese region.")
         stoken = self.cookies.get("stoken")
         if stoken is None:
             raise ValueError("stoken not found in cookies.")
