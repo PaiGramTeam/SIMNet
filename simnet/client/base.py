@@ -7,7 +7,7 @@ from httpx import AsyncClient, TimeoutException, Response, HTTPError, Timeout
 
 from simnet.client.cookies import Cookies
 from simnet.client.headers import Headers
-from simnet.errors import TimedOut, NetworkError, BadRequest, raise_for_ret_code
+from simnet.errors import TimedOut, NetworkError, BadRequest, raise_for_ret_code, NotSupported
 from simnet.utils.cookies import parse_cookie
 from simnet.utils.ds import generate_dynamic_secret, DSType, hex_digest
 from simnet.utils.enum_ import Region, Game
@@ -308,6 +308,8 @@ class BaseClient(AsyncContextManager["BaseClient"]):
             if response.is_error or ret_code != 0:
                 raise_for_ret_code(data)
             return data["data"]
+        if response.status_code == 404:
+            raise NotSupported("API not supported or has been removed.")
         raise BadRequest(status_code=response.status_code, message=response.text)
 
     async def request_lab(

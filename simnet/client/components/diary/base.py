@@ -44,7 +44,7 @@ class BaseDiaryClient(BaseClient):
         params = params or {}
 
         url = (
-            DETAIL_LEDGER_URL.get_url(self.region)
+            DETAIL_LEDGER_URL.get_url(self.region, game)
             if detail
             else INFO_LEDGER_URL.get_url(
                 self.region,

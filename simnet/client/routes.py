@@ -61,6 +61,15 @@ class URL(_URL):
         """
         return URL(urljoin(str(self) + "/", str(URL(url))))
 
+    def __bool__(self):
+        """Return True if the URL is not empty.
+
+        Returns:
+            bool: True if the URL is not empty.
+
+        """
+        return str(self) != ""
+
 
 class BaseRoute:
     """A base class for defining routes with useful metadata."""
@@ -241,9 +250,15 @@ CALCULATOR_URL = InternationalRoute(
     chinese="https://api-takumi.mihoyo.com/event/e20200928calculate/v1/",
 )
 
-DETAIL_LEDGER_URL = InternationalRoute(
-    overseas="https://sg-hk4e-api.hoyolab.com/event/ysledgeros/month_detail",
-    chinese="https://hk4e-api.mihoyo.com/event/ys_ledger/monthDetail",
+DETAIL_LEDGER_URL = GameRoute(
+    overseas=dict(
+        genshin="https://sg-hk4e-api.hoyolab.com/event/ysledgeros/month_detail",
+        hkrpg="",
+    ),
+    chinese=dict(
+        genshin="https://hk4e-api.mihoyo.com/event/ys_ledger/monthDetail",
+        hkrpg="https://api-takumi.mihoyo.com/event/srledger/month_detail",
+    ),
 )
 
 INFO_LEDGER_URL = GameRoute(
