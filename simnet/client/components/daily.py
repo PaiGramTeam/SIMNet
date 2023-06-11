@@ -6,6 +6,7 @@ from httpx import QueryParams
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import REWARD_URL
+from simnet.errors import GeetestTriggered
 from simnet.models.lab.daily import DailyRewardInfo, DailyReward, ClaimedDailyReward
 from simnet.utils.ds import hex_digest
 from simnet.utils.enum_ import Game, Region
@@ -219,7 +220,7 @@ class DailyRewardClient(BaseClient):
         Returns:
             If `reward` is True, a DailyReward object representing the claimed reward. Otherwise, None.
         """
-        await self.request_daily_reward(
+        daily_reward = await self.request_daily_reward(
             "sign",
             method="POST",
             game=game or self.game,
@@ -227,6 +228,17 @@ class DailyRewardClient(BaseClient):
             challenge=challenge,
             validate=validate,
         )
+
+        if self.region == Region.CHINESE and daily_reward.get("success", 0) == 1:
+            gt = daily_reward.get("gt", "")
+            challenge = daily_reward.get("challenge", "")
+            raise GeetestTriggered(gt, challenge)
+        if self.region == Region.OVERSEAS:
+            gt_result = daily_reward.get("gt_result")
+            if gt_result is not None and gt_result["success"] != 0:
+                gt = gt_result.get("gt", "")
+                challenge = gt_result.get("challenge", "")
+                raise GeetestTriggered(gt, challenge)
 
         if not reward:
             return None

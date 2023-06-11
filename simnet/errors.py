@@ -23,16 +23,27 @@ class BadRequest(ApiHelperException):
         message (str): The formatted error message of the response.
     """
 
+    status_code: int = 200
+    ret_code: int = 0
+    original: str = ""
+    message: str = ""
+
     def __init__(
         self,
         response: Optional[Dict[str, Any]] = None,
         message: Optional[str] = None,
         status_code: Optional[int] = None,
     ) -> None:
-        self.status_code = status_code or 0
-        self.ret_code = response.get("retcode", 0) if response else 0
-        self.original = response.get("message", "") if response else ""
-        self.message = message or self.original
+        if status_code is not None:
+            self.status_code = status_code
+        ret_code = response.get("ret_code")
+        if ret_code is not None:
+            self.ret_code = ret_code
+        response_message = response.get("message")
+        if response_message is not None:
+            self.original = response_message
+        if message is not None or self.original is not None:
+            self.message = message or self.original
 
         display_code = self.ret_code or self.status_code
         display_message = f"[{display_code}] {self.message}" if display_code else self.message
@@ -139,6 +150,61 @@ class RedemptionCooldown(RedemptionException):
     message = "Redemption is on cooldown."
 
 
+class NeedChallenge(BadRequest):
+    """Need to complete a captcha challenge."""
+
+    ret_code = 1034
+    message = "Need to complete a captcha challenge."
+
+
+class GeetestTriggered(NeedChallenge):
+    """Geetest triggered during daily reward claim."""
+
+    ret_code = 0
+    message = "Geetest triggered during daily reward claim."
+
+    def __init__(self, gt: str, challenge: str, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.gt = gt
+        self.challenge = challenge
+
+
+class GeetestChallengeFailed(NeedChallenge):
+    """Geetest challenge failed."""
+
+    message = "Geetest challenge failed."
+
+
+class NotSupported(ApiHelperException):
+    """API not supported."""
+
+    def __init__(self, message: str = "API not supported."):
+        super().__init__(message)
+
+
+class RegionNotSupported(NotSupported):
+    """API not supported for this region."""
+
+    def __init__(self, message: str = "API not supported for this region."):
+        super().__init__(message)
+
+
+class GameNotSupported(NotSupported):
+    """API not supported for this game."""
+
+    def __init__(self, message: str = "API not supported for this game."):
+        super().__init__(message)
+
+
+class RequestNotSupported(BadRequest):
+    """Service not supported for this request."""
+
+    ret_code = -520
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(message="service not supported for this request.", *args, **kwargs)
+
+
 class RedemptionClaimed(RedemptionException):
     """Redemption code has been claimed already."""
 
@@ -191,8 +257,8 @@ _errors: Dict[int, Union[_TBR, str, Tuple[_TBR, Optional[str]]]] = {
     # chinese
     1008: AccountNotFound,
     -1104: "This action must be done in the app.",
+    1034: NeedChallenge,
 }
-
 
 ERRORS: Dict[int, Tuple[_TBR, Optional[str]]] = {
     ret_code: ((exc, None) if isinstance(exc, type) else (BadRequest, exc) if isinstance(exc, str) else exc)

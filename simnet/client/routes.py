@@ -3,6 +3,7 @@ from urllib.parse import urljoin
 
 from httpx import URL as _URL
 
+from simnet.errors import RegionNotSupported, NotSupported
 from simnet.utils.enum_ import Region, Game
 
 URLTypes = Union["URL", str]
@@ -121,11 +122,11 @@ class InternationalRoute(BaseRoute):
             URL: The URL for the given region.
 
         Raises:
-            RuntimeError: If the given region is not supported.
+            RegionNotSupported: If the given region is not supported.
 
         """
         if not self.urls[region]:
-            raise RuntimeError(f"URL does not support {region.name} region.")
+            raise RegionNotSupported(f"URL does not support {region.name} region.")
 
         return self.urls[region]
 
@@ -165,20 +166,20 @@ class GameRoute(BaseRoute):
             URL: The URL for the given region and game.
 
         Raises:
-            RuntimeError: If the given region or game is not supported.
+            RegionNotSupported: If the given region is not supported.
+            GameNotSupported: If the given game is not supported.
 
         """
         if not self.urls[region]:
-            raise RuntimeError(f"URL does not support {region.name} region.")
+            raise RegionNotSupported(f"URL does not support {region.name} region.")
 
         if not self.urls[region][game]:
-            raise RuntimeError(f"URL does not support {game.name} game for {region.name} region.")
+            raise NotSupported(f"URL does not support {game.name} game for {region.name} region.")
 
         return self.urls[region][game]
 
 
 PASSPORT_HOST = "passport-api.mihoyo.com"
-
 
 RECORD_URL = InternationalRoute(
     overseas="https://bbs-api-os.hoyolab.com/game_record",
@@ -262,6 +263,5 @@ YSULOG_URL = InternationalRoute(
 )
 
 HK4E_URL = Route("https://sg-hk4e-api.hoyoverse.com/common/hk4e_global/")
-
 
 CODE_URL = Route("https://sg-hk4e-api.hoyoverse.com/common/apicdkey/api/webExchangeCdkey")
