@@ -4,6 +4,7 @@ import pytest
 import pytest_asyncio
 
 from simnet.client.components.chronicle.starrail import StarRailBattleChronicleClient
+from simnet.errors import NeedChallenge
 
 if TYPE_CHECKING:
     from simnet.client.cookies import Cookies
@@ -35,11 +36,13 @@ class TestStarrailBattleChronicleClient:
         assert character.id > 0
 
     @staticmethod
+    @pytest.mark.xfail(raises=NeedChallenge, reason="Challenge is needed, but not implemented yet.")
     async def test_get_starrail_notes(starrail_client: "StarRailBattleChronicleClient"):
         notes = await starrail_client.get_starrail_notes()
         assert notes is not None
 
     @staticmethod
+    @pytest.mark.xfail(raises=NeedChallenge, reason="Challenge is needed, but not implemented yet.")
     async def test_get_starrail_characters(starrail_client: "StarRailBattleChronicleClient"):
         characters = await starrail_client.get_starrail_characters()
         assert len(characters.avatar_list) > 0
@@ -47,6 +50,7 @@ class TestStarrailBattleChronicleClient:
         assert character.id > 0
 
     @staticmethod
+    @pytest.mark.xfail(raises=NeedChallenge, reason="Challenge is needed, but not implemented yet.")
     async def test_get_starrail_challenge(starrail_client: "StarRailBattleChronicleClient"):
         challenge = await starrail_client.get_starrail_challenge()
         assert challenge.season > 0
