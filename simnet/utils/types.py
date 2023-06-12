@@ -2,6 +2,7 @@ from typing import TypeVar, Union, Mapping, Optional, Sequence, Dict, List, Tupl
 
 RT = TypeVar("RT", bound="BaseClient")
 
+URLTypes = Union["URL", str]
 
 CookieTypes = Union["Cookie", Dict[str, str], List[Tuple[str, str]]]
 RequestData = Mapping[str, Any]
