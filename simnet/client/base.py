@@ -17,7 +17,8 @@ from simnet.utils.types import (
     CookieTypes,
     RequestData,
     QueryParamTypes,
-    TimeoutTypes, URLTypes,
+    TimeoutTypes,
+    URLTypes,
 )
 
 _LOGGER = logging.getLogger("SIMNet.BaseClient")
