@@ -63,6 +63,10 @@ class BadRequest(ApiHelperException):
     def response(self) -> dict[str, Union[str, Any, None]]:
         return {"retcode": self.ret_code, "message": self.original}
 
+    @property
+    def retcode(self) -> int:
+        return self.ret_code
+
 
 class InternalDatabaseError(BadRequest):
     """Internal database error."""
