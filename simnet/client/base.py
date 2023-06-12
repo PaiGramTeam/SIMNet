@@ -17,7 +17,7 @@ from simnet.utils.types import (
     CookieTypes,
     RequestData,
     QueryParamTypes,
-    TimeoutTypes,
+    TimeoutTypes, URLTypes,
 )
 
 _LOGGER = logging.getLogger("SIMNet.BaseClient")
@@ -223,7 +223,7 @@ class BaseClient(AsyncContextManager["BaseClient"]):
     async def request(
         self,
         method: str,
-        url: str,
+        url: URLTypes,
         data: Optional[RequestData] = None,
         json: Optional[Any] = None,
         params: Optional[QueryParamTypes] = None,
@@ -237,7 +237,7 @@ class BaseClient(AsyncContextManager["BaseClient"]):
 
         Args:
             method (str): The HTTP method to use for the request (e.g., "GET", "POST").
-            url (str): The URL to send the request to.
+            url (URLTypes): The URL to send the request to.
             data (Optional[RequestData]): The request data to include in the body of the request.
             json (Optional[Any]): The JSON payload to include in the body of the request.
             params (Optional[QueryParamTypes]): The query parameters to include in the request.
@@ -268,7 +268,7 @@ class BaseClient(AsyncContextManager["BaseClient"]):
     async def request_api(
         self,
         method: str,
-        url: str,
+        url: URLTypes,
         json: Optional[Any] = None,
         params: Optional[QueryParamTypes] = None,
         headers: Optional[HeaderTypes] = None,
@@ -281,7 +281,7 @@ class BaseClient(AsyncContextManager["BaseClient"]):
 
         Args:
             method (str): The HTTP method to use for the request (e.g., "GET", "POST").
-            url (str): The URL to send the request to.
+            url (URLTypes): The URL to send the request to.
             json (Optional[Any]): The JSON payload to include in the body of the request.
             params (Optional[QueryParamTypes]): The query parameters to include in the request.
             headers (Optional[HeaderTypes]): The headers to include in the request.
@@ -314,7 +314,7 @@ class BaseClient(AsyncContextManager["BaseClient"]):
 
     async def request_lab(
         self,
-        url: str,
+        url: URLTypes,
         method: Optional[str] = None,
         data: Optional[Any] = None,
         params: Optional[QueryParamTypes] = None,
@@ -330,7 +330,7 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         It also adds headers for the lab API and handles the case where the method is not specified.
 
         Args:
-            url (str): The URL to send the request to.
+            url (URLTypes): The URL to send the request to.
             method (Optional[str]): The HTTP method to use for the request (e.g., "GET", "POST").
             data (Optional[Any]): The JSON payload to include in the body of the request.
             params (Optional[QueryParamTypes]): The query parameters to include in the request.
