@@ -1,5 +1,5 @@
 from datetime import timedelta, timezone, datetime
-from typing import Optional, Any, Dict
+from typing import Optional, Any, Dict, Union
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import DETAIL_LEDGER_URL, INFO_LEDGER_URL
@@ -22,7 +22,7 @@ class BaseDiaryClient(BaseClient):
         *,
         game: Optional[Game] = None,
         detail: bool = False,
-        month: Optional[int] = None,
+        month: Union[int, str, None] = None,
         lang: Optional[str] = None,
         params: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
@@ -43,14 +43,8 @@ class BaseDiaryClient(BaseClient):
         player_id = player_id or self.player_id
         params = params or {}
 
-        url = (
-            DETAIL_LEDGER_URL.get_url(self.region, game)
-            if detail
-            else INFO_LEDGER_URL.get_url(
-                self.region,
-                game,
-            )
-        )
+        base_url = DETAIL_LEDGER_URL if detail else INFO_LEDGER_URL
+        url = base_url.get_url(self.region, game)
 
         if self.region == Region.OVERSEAS or game == Game.STARRAIL:
             params["uid"] = player_id
@@ -60,7 +54,11 @@ class BaseDiaryClient(BaseClient):
             params["bind_region"] = recognize_server(player_id, game)
         else:
             raise TypeError(f"{self.region!r} is not a valid region.")
-        params["month"] = month or (datetime.now().strftime("%Y%m") if game == Game.STARRAIL else datetime.now().month)
+        if game == Game.STARRAIL:
+            month = month or datetime.now(CN_TIMEZONE).strftime("%Y%m")
+        elif game == Game.GENSHIN:
+            month = month or str(datetime.now(CN_TIMEZONE).month)
+        params["month"] = month
         params["lang"] = lang or self.lang
 
         return await self.request_lab(url, params=params)

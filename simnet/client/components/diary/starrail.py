@@ -12,7 +12,7 @@ class StarrailDiaryClient(BaseDiaryClient):
         self,
         player_id: Optional[int] = None,
         *,
-        month: Optional[int] = None,
+        month: Optional[str] = None,
         lang: Optional[str] = None,
     ) -> StarRailDiary:
         """Get a traveler's diary with earning details for the month.
