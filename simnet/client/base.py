@@ -50,7 +50,7 @@ class BaseClient(AsyncContextManager["BaseClient"]):
     """
 
     game: Optional[Game] = None
-    _device_id = str(uuid.uuid3(uuid.NAMESPACE_URL, "SIMNet"))
+    __device_id = str(uuid.uuid3(uuid.NAMESPACE_URL, "SIMNet"))
 
     def __init__(
         self,
@@ -61,6 +61,8 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         region: Region = Region.OVERSEAS,
         lang: str = "en-us",
         timeout: Optional[TimeoutTypes] = None,
+        device_id: Optional[str] = None,
+        device_fp: Optional[str] = None,
     ) -> None:
         """Initialize the client with the given parameters."""
         if timeout is None:
@@ -78,6 +80,8 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         self.client = AsyncClient(cookies=cookies, timeout=timeout)
         self.region = region
         self.lang = lang
+        self._device_id = device_id
+        self._device_fp = device_fp
 
     @property
     def cookies(self) -> Cookies:
@@ -96,14 +100,28 @@ class BaseClient(AsyncContextManager["BaseClient"]):
     @property
     def device_id(self) -> str:
         """Get the device id used for the client."""
+        if self._device_id:
+            return self._device_id
         if self.account_id is not None:
             return str(uuid.uuid3(uuid.NAMESPACE_URL, str(self.account_id)))
-        return self._device_id
+        return self.__device_id
+
+    @device_id.setter
+    def device_id(self, device_id: str) -> None:
+        """Set the device id used for the client."""
+        self._device_id = device_id
 
     @property
     def device_fp(self) -> str:
         """Get the device fingerprint used for the client."""
+        if self._device_fp:
+            return self._device_fp
         return hex_digest(self.device_id)[:13]
+
+    @device_fp.setter
+    def device_fp(self, device_fp: str) -> None:
+        """Set the device fingerprint used for the client."""
+        self._device_fp = device_fp
 
     @property
     def app_version(self) -> str:
