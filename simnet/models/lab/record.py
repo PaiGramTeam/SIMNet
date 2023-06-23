@@ -238,7 +238,42 @@ class BaseRecordCard(Account):
         return {d.name: (int(d.value) if d.value.isdigit() else d.value) for d in self.data}
 
 
-class GenshinRecordCard(BaseRecordCard):
+class RecordCard(BaseRecordCard):
+    """A representation of a record card.
+
+    Attributes:
+        game_id (int): The ID of the game associated with the record card.
+        game_biz (str): The game business code for the record card.
+        uid (int): The game user ID associated with the record card.
+        data (List[RecordCardData]): A list of data entries for the record card.
+        settings (List[RecordCardSetting]): A list of privacy settings for the record card.
+        public (bool): Whether the record card is public or not.
+        background_image (str): The URL of the background image for the record card.
+        has_uid (bool): Whether the record card has a user ID associated with it or not.
+        url (str): The URL of the record card.
+    """
+
+    def __new__(cls, **kwargs: Any) -> "RecordCard":
+        """Creates an appropriate record card instance based on the provided game ID.
+
+        Args:
+            **kwargs: The arguments passed in to create the record card.
+
+        Returns:
+            RecordCard: An instance of a subclass of `BaseRecordCard` based on the provided game ID.
+        """
+        game_id = kwargs.get("game_id", 0)
+        if game_id == 1:
+            cls = HonkaiRecordCard  # skipcq: PYL-W0642
+        if game_id == 2:
+            cls = GenshinRecordCard  # skipcq: PYL-W0642
+        if game_id == 6:
+            cls = StarRailRecodeCard  # skipcq: PYL-W0642
+
+        return super().__new__(cls)  # skipcq: PYL-E1120
+
+
+class GenshinRecordCard(RecordCard):
     """Genshin record card."""
 
     @property
@@ -287,7 +322,7 @@ class GenshinRecordCard(BaseRecordCard):
         return self.data[3].value
 
 
-class HonkaiRecordCard(BaseRecordCard):
+class HonkaiRecordCard(RecordCard):
     """Honkai record card."""
 
     @property
@@ -336,7 +371,7 @@ class HonkaiRecordCard(BaseRecordCard):
         return int(self.data[3].value)
 
 
-class StarRailRecodeCard(BaseRecordCard):
+class StarRailRecodeCard(RecordCard):
     """Star rail record card."""
 
     @property
@@ -383,41 +418,3 @@ class StarRailRecodeCard(BaseRecordCard):
             int: The number of chests the user has found.
         """
         return int(self.data[3].value)
-
-
-class RecordCard(BaseRecordCard):
-    """A representation of a record card.
-
-    Attributes:
-        game_id (int): The ID of the game associated with the record card.
-        game_biz (str): The game business code for the record card.
-        uid (int): The game user ID associated with the record card.
-        data (List[RecordCardData]): A list of data entries for the record card.
-        settings (List[RecordCardSetting]): A list of privacy settings for the record card.
-        public (bool): Whether the record card is public or not.
-        background_image (str): The URL of the background image for the record card.
-        has_uid (bool): Whether the record card has a user ID associated with it or not.
-        url (str): The URL of the record card.
-    """
-
-    def __new__(cls, **kwargs: Any) -> BaseRecordCard:
-        """Creates an appropriate record card instance based on the provided game ID.
-
-        Args:
-            **kwargs: The arguments passed in to create the record card.
-
-        Returns:
-            BaseRecordCard: An instance of a subclass of `BaseRecordCard` based on the provided game ID.
-
-        Raises:
-            ValueError: If the provided game ID is invalid.
-        """
-        game_id = kwargs.get("game_id", 0)
-        if game_id == 1:
-            return HonkaiRecordCard(**kwargs)
-        if game_id == 2:
-            return GenshinRecordCard(**kwargs)
-        if game_id == 6:
-            return StarRailRecodeCard(**kwargs)
-
-        raise ValueError(f"Invalid game ID provided: {game_id}")
