@@ -1,12 +1,40 @@
+from http.cookiejar import CookieJar
+from http.cookies import SimpleCookie
 from typing import Optional
 
 from httpx import Cookies as _Cookies
+
+from simnet.utils.types import CookieTypes
 
 __all__ = ("Cookies",)
 
 
 class Cookies(_Cookies):
-    """An extension of the `httpx.Cookies` class that includes additional functionality."""
+    """A wrapper around `httpx.Cookies` that provides additional functionality."""
+
+    def __init__(self, cookies: Optional[CookieTypes] = None):  # skipcq: PYL-W0231
+        if cookies is None or isinstance(cookies, dict):
+            self.jar = CookieJar()
+            if isinstance(cookies, dict):
+                for key, value in cookies.items():
+                    if isinstance(value, str):
+                        self.set(key, value)
+                    else:
+                        self.set(key, str(value))
+        elif isinstance(cookies, list):
+            self.jar = CookieJar()
+            for key, value in cookies:
+                self.set(key, value)
+        elif isinstance(cookies, Cookies):
+            self.jar = CookieJar()
+            for cookie in cookies.jar:
+                self.jar.set_cookie(cookie)
+        elif isinstance(cookies, str):
+            cookie = SimpleCookie(cookies)
+            for key, value in cookie.items():
+                self.set(key, value.value)
+        else:
+            self.jar = cookies
 
     COOKIE_USER_ID_NAMES = ("ltuid", "account_id", "stuid", "ltuid_v2", "account_id_v2")
 

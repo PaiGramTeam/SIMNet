@@ -8,7 +8,6 @@ from httpx import AsyncClient, TimeoutException, Response, HTTPError, Timeout
 from simnet.client.cookies import Cookies
 from simnet.client.headers import Headers
 from simnet.errors import TimedOut, NetworkError, BadRequest, raise_for_ret_code, NotSupported
-from simnet.utils.cookies import parse_cookie
 from simnet.utils.ds import generate_dynamic_secret, DSType, hex_digest
 from simnet.utils.enum_ import Region, Game
 from simnet.utils.types import (
@@ -72,7 +71,6 @@ class BaseClient(AsyncContextManager["BaseClient"]):
                 write=5.0,
                 pool=1.0,
             )
-        cookies = parse_cookie(cookies) if isinstance(cookies, str) else cookies
         cookies = Cookies(cookies)
         self.headers = Headers(headers)
         self.player_id = player_id
