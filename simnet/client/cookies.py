@@ -10,13 +10,7 @@ __all__ = ("Cookies",)
 
 
 class Cookies(_Cookies):
-    """A wrapper around `httpx.Cookies` that provides additional functionality.
-
-    Args:
-        cookies (Optional[CookieTypes], optional): The cookies to initialize the wrapper with.
-            Can be a `dict`, a `list` of tuples, a `str`, or a `httpx.Cookies` object.
-            Defaults to `None`.
-    """
+    """A wrapper around `httpx.Cookies` that provides additional functionality."""
 
     def __init__(self, cookies: Optional[CookieTypes] = None):
         if cookies is None or isinstance(cookies, dict):
