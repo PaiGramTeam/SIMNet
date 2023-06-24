@@ -17,6 +17,7 @@ class Cookies(_Cookies):
             Can be a `dict`, a `list` of tuples, a `str`, or a `httpx.Cookies` object.
             Defaults to `None`.
     """
+
     def __init__(self, cookies: Optional[CookieTypes] = None):
         if cookies is None or isinstance(cookies, dict):
             self.jar = CookieJar()
