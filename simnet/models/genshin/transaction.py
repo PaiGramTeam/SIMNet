@@ -33,10 +33,9 @@ class BaseTransaction(APIModel):
     kind: TransactionKind
 
     id: int
-    uid: int
-    time: datetime
+    time: datetime = Field(alias="datetime")
     amount: int = Field(alias="add_num")
-    reason_id: int = Field(alias="reason")
+    reason: str
 
 
 class Transaction(BaseTransaction):
@@ -51,4 +50,4 @@ class ItemTransaction(BaseTransaction):
     kind: Literal[TransactionKind.ARTIFACT, TransactionKind.WEAPON]
 
     name: str
-    rarity: int = Field(alias="rank")
+    rarity: int = Field(alias="quality")

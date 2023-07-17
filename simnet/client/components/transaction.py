@@ -57,7 +57,7 @@ class TransactionClient(BaseClient):
             lang (str, optional): The language to use for the request. Defaults to None.
         """
         kind = TransactionKind(kind)
-        endpoint = "get" + kind.value.capitalize() + "Log"
+        endpoint = "Get" + kind.value.capitalize() + "Log"
 
         data = await self.request_transaction(
             endpoint,
