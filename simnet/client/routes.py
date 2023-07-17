@@ -273,8 +273,8 @@ INFO_LEDGER_URL = GameRoute(
 )
 
 YSULOG_URL = InternationalRoute(
-    overseas="https://hk4e-api-os.hoyoverse.com/ysulog/api/",
-    chinese="https://hk4e-api.mihoyo.com/ysulog/api/",
+    overseas="https://hk4e-api-os.hoyoverse.com/common/hk4e_self_help_query/User/",
+    chinese="https://hk4e-api.mihoyo.com/common/hk4e_self_help_query/User/",
 )
 
 HK4E_URL = Route("https://sg-hk4e-api.hoyoverse.com/common/hk4e_global/")

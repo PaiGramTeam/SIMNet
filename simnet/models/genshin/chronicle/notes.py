@@ -1,12 +1,11 @@
 from datetime import timedelta, datetime
 from typing import Union, Literal, Tuple, List, Optional, Dict, Any
 
-from pydantic import Field, root_validator, validator
+from pydantic import Field, root_validator
 
 from simnet.models.base import APIModel
-from simnet.models.genshin.character import BaseCharacter
 
-__all__ = ("Expedition", "ExpeditionCharacter", "Notes")
+__all__ = ("Expedition", "Notes")
 
 
 def _process_timedelta(time: Union[int, timedelta, datetime]) -> datetime:
@@ -36,20 +35,16 @@ def _process_timedelta(time: Union[int, timedelta, datetime]) -> datetime:
     return time
 
 
-class ExpeditionCharacter(BaseCharacter):
-    """Expedition character."""
-
-
 class Expedition(APIModel):
     """The model for a real-time expedition.
 
     Attributes:
-        character (ExpeditionCharacter): The expedition character.
+        character (str): The expedition character icon url.
         status (Literal["Ongoing", "Finished"]): The status of the expedition.
         remaining_time (timedelta): The remaining time of the expedition.
     """
 
-    character: ExpeditionCharacter = Field(alias="avatar_side_icon")
+    character: str = Field(alias="avatar_side_icon")
     status: Literal["Ongoing", "Finished"]
     remaining_time: timedelta = Field(alias="remained_time")
 
@@ -62,20 +57,6 @@ class Expedition(APIModel):
     def completion_time(self) -> datetime:
         """A property that returns the completion time of the expedition."""
         return datetime.now().astimezone() + self.remaining_time
-
-    @validator("character", pre=True)
-    def complete_character(cls, v: Any) -> Any:
-        """A validator that completes the expedition character information.
-
-        Args:
-            v (Any): The input character information.
-
-        Returns:
-            Any: The completed character information.
-        """
-        if isinstance(v, str):
-            return dict(icon=v)  # type: ignore
-        return v
 
 
 class TransformerTimedelta(timedelta):
