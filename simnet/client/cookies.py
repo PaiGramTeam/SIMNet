@@ -30,6 +30,7 @@ class Cookies(_Cookies):
             for cookie in cookies.jar:
                 self.jar.set_cookie(cookie)
         elif isinstance(cookies, str):
+            self.jar = CookieJar()
             cookie = SimpleCookie(cookies)
             for key, value in cookie.items():
                 self.set(key, value.value)
