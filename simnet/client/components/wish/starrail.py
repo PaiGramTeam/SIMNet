@@ -36,6 +36,8 @@ class StarRailWishClient(BaseWishClient):
             List[StarRailWish]: A list of StarRailWish objects representing the retrieved wishes.
         """
         banner_types = banner_types or [1, 2, 11, 12]
+        if isinstance(banner_types, int):
+            banner_types = [banner_types]
         wishes = []
         for banner_type in banner_types:
             paginator = WishPaginator(

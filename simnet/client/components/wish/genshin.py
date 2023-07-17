@@ -35,6 +35,8 @@ class GenshinWishClient(BaseWishClient):
             List[Wish]: A list of GenshinWish objects representing the retrieved wishes.
         """
         banner_types = banner_types or [100, 200, 301, 302]
+        if isinstance(banner_types, int):
+            banner_types = [banner_types]
         banner_names = await self.get_banner_names(game=Game.GENSHIN, lang=lang, authkey=authkey)
         wishes = []
         for banner_type in banner_types:
@@ -48,6 +50,6 @@ class GenshinWishClient(BaseWishClient):
                 ),
             )
             items = await paginator.get(limit)
-            banner_name = banner_names[banner_type]
+            banner_name = banner_names[banner_type] if banner_type != 400 else banner_names[301]
             wishes.extend([Wish(**i, banner_name=banner_name) for i in items])
         return sorted(wishes, key=lambda wish: wish.time.timestamp())

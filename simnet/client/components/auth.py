@@ -206,5 +206,6 @@ class AuthClient(BaseClient):
             "game_biz": game_biz,
             "uid": self.player_id or player_id,
             "region": region,
+            "lang": self.lang,
         }
-        await self.request_lab(url, data=json)
+        await self.request_api("POST", url=url, json=json)
