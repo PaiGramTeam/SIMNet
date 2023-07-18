@@ -90,7 +90,7 @@ class AuthClient(BaseClient):
         cookie_token = cookie_info.get("cookie_token")
         if account_id:
             self.account_id = account_id
-            self.cookies["account_id"] = account_id
+            self.cookies["account_id"] = str(account_id)
         if cookie_token:
             self.cookies["cookie_token"] = cookie_token
         return cookie_token
