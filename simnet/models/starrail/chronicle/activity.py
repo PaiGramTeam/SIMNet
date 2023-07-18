@@ -10,7 +10,7 @@ __all__ = ["StarRailActivityBase", "StarRailStarFightRecord", "StarRailStarFight
 
 
 class StarRailActivityBase(APIModel):
-    """ StarRailActivity Base Model """
+    """StarRailActivity Base Model"""
 
     exists_data: bool
     is_hot: bool
@@ -18,7 +18,7 @@ class StarRailActivityBase(APIModel):
 
 
 class StarRailStarFightRecord(APIModel):
-    """ Stellar Flare Record """
+    """Stellar Flare Record"""
 
     name: str
     difficulty_id: int
@@ -37,7 +37,7 @@ class StarRailStarFightRecord(APIModel):
 
 
 class StarRailStarFight(StarRailActivityBase):
-    """ Stellar Flare """
+    """Stellar Flare"""
 
     records: List[StarRailStarFightRecord]
 
