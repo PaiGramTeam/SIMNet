@@ -177,7 +177,7 @@ class PartialGenshinUserStats(APIModel):
         teapot (Optional[Teapot]): The user's Serenitea Teapot.
     """
 
-    info: UserInfo = Field("role")
+    info: UserInfo = Field(aliases="role")
     stats: Stats
     characters: List[PartialCharacter] = Field(aliases="avatars")
     explorations: List[Exploration] = Field(aliases="world_explorations")
