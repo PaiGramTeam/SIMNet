@@ -4,6 +4,7 @@ from typing import Optional, Mapping, Dict, Any
 from simnet.client.components.chronicle.base import BaseChronicleClient
 from simnet.errors import BadRequest, DataNotPublic
 from simnet.models.lab.record import RecordCard
+from simnet.models.starrail.chronicle.activity import StarRailActivity
 from simnet.models.starrail.chronicle.challenge import StarRailChallenge
 from simnet.models.starrail.chronicle.characters import StarRailDetailCharacters
 from simnet.models.starrail.chronicle.museum import StarRailMuseumBasic, StarRailMuseumDetail
@@ -265,3 +266,24 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         """
         data = await self._request_starrail_record("museum/detail", uid, lang=lang)
         return StarRailMuseumDetail(**data)
+
+    async def get_starrail_activity(
+        self,
+        uid: Optional[int] = None,
+        lang: Optional[str] = None,
+    ) -> StarRailActivity:
+        """Get starrail activity info.
+
+        Args:
+            uid (Optional[int], optional): The player ID. Defaults to None.
+            lang (Optional[str], optional): The language of the data. Defaults to None.
+
+        Returns:
+            StarRailActivity: The requested activity info.
+
+        Raises:
+            BadRequest: If the request is invalid.
+            DataNotPublic: If the requested data is not public.
+        """
+        data = await self._request_starrail_record("activity", uid, lang=lang)
+        return StarRailActivity(**data)
