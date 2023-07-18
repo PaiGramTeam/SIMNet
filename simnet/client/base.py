@@ -78,8 +78,8 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         self.client = AsyncClient(cookies=cookies, timeout=timeout)
         self.region = region
         self.lang = lang
-        self._device_id = device_id
-        self._device_fp = device_fp
+        self.device_id = device_id
+        self.device_fp = device_fp
 
     @property
     def cookies(self) -> Cookies:
@@ -95,31 +95,19 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         """Get the device name used for the client."""
         return "SIMNet Build 114514"
 
-    @property
-    def device_id(self) -> str:
+    def get_device_id(self) -> str:
         """Get the device id used for the client."""
-        if self._device_id:
-            return self._device_id
+        if self.device_id:
+            return self.device_id
         if self.account_id is not None:
             return str(uuid.uuid3(uuid.NAMESPACE_URL, str(self.account_id)))
         return self.__device_id
 
-    @device_id.setter
-    def device_id(self, device_id: str) -> None:
-        """Set the device id used for the client."""
-        self._device_id = device_id
-
-    @property
-    def device_fp(self) -> str:
+    def get_device_fp(self) -> str:
         """Get the device fingerprint used for the client."""
-        if self._device_fp:
-            return self._device_fp
-        return hex_digest(self.device_id)[:13]
-
-    @device_fp.setter
-    def device_fp(self, device_fp: str) -> None:
-        """Set the device fingerprint used for the client."""
-        self._device_fp = device_fp
+        if self.device_fp:
+            return self.device_fp
+        return hex_digest(self.get_device_id())[:13]
 
     @property
     def app_version(self) -> str:
@@ -195,8 +183,8 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         headers["user-agent"] = self.user_agent
         headers["x-rpc-app_version"] = self.app_version
         headers["x-rpc-client_type"] = self.client_type
-        headers["x-rpc-device_id"] = self.device_id
-        headers["x-rpc-device_fp"] = self.device_fp
+        headers["x-rpc-device_id"] = self.get_device_id()
+        headers["x-rpc-device_fp"] = self.get_device_fp()
         return headers
 
     def get_lab_api_header(
@@ -226,8 +214,8 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         headers["user-agent"] = self.user_agent
         headers["x-rpc-app_version"] = self.app_version
         headers["x-rpc-client_type"] = self.client_type
-        headers["x-rpc-device_id"] = self.device_id
-        headers["x-rpc-device_fp"] = self.device_fp
+        headers["x-rpc-device_id"] = self.get_device_id()
+        headers["x-rpc-device_fp"] = self.get_device_fp()
         if self.region == Region.OVERSEAS:
             headers["x-rpc-language"] = self.lang or lang
         if ds is None:
