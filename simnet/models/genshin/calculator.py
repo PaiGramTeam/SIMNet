@@ -315,12 +315,12 @@ class CalculatorArtifactResult(APIModel):
 
     Attributes:
         artifact_id (int): The ID of the artifact.
-        list (List[CalculatorConsumable]): A list of CalculatorConsumable objects representing the consumables
-            used by this artifact.
+        consumable_list (List[CalculatorConsumable]): A list of CalculatorConsumable objects representing the
+            consumables used by this artifact.
     """
 
     artifact_id: int = Field(alias="reliquary_id")
-    list: List[CalculatorConsumable] = Field(alias="id_consume_list")
+    consumable_list: List[CalculatorConsumable] = Field(alias="id_consume_list")
 
 
 class CalculatorResult(APIModel):
@@ -347,7 +347,7 @@ class CalculatorResult(APIModel):
             List[CalculatorConsumable]: A list of CalculatorConsumable objects representing the total
             consumables used across all categories.
         """
-        artifacts = [i for a in self.artifacts for i in a.list]
+        artifacts = [i for a in self.artifacts for i in a.consumable_list]
         combined = self.character + self.weapon + self.talents + artifacts
 
         grouped: Dict[int, List[CalculatorConsumable]] = collections.defaultdict(list)
