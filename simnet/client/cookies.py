@@ -11,6 +11,7 @@ __all__ = ("Cookies",)
 
 class Cookies(_Cookies):
     """A wrapper around `httpx.Cookies` that provides additional functionality."""
+
     jar: CookieJar
 
     def __init__(self, cookies: Optional[CookieTypes] = None):  # skipcq: PYL-W0231
