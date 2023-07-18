@@ -8,7 +8,6 @@ from simnet.client.base import BaseClient
 from simnet.client.routes import REWARD_URL
 from simnet.errors import GeetestTriggered
 from simnet.models.lab.daily import DailyRewardInfo, DailyReward, ClaimedDailyReward
-from simnet.utils.ds import hex_digest
 from simnet.utils.enum_ import Game, Region
 from simnet.utils.player import recognize_genshin_server, recognize_starrail_server
 
@@ -44,26 +43,24 @@ class DailyRewardClient(BaseClient):
         Returns:
             A dictionary containing the response data.
         """
-        headers: Optional[Dict[str, str]] = None
+        headers: Dict[str, str] = {}
         params = QueryParams(params)
 
         base_url = REWARD_URL.get_url(self.region, self.game or game)
         params = params.merge(base_url.params)
 
+        if challenge is not None:
+            headers["x-rpc-challenge"] = challenge
+        if validate is not None:
+            headers["x-rpc-validate"] = validate
+            headers["x-rpc-seccode"] = f"{validate}|jordan"
+
         if self.region == Region.CHINESE:
-            headers = {}
-            if challenge is not None and validate is not None:
-                headers["x-rpc-challenge"] = challenge
-                headers["x-rpc-validate"] = validate
-                headers["x-rpc-seccode"] = f"{validate}|jordan"
             headers["x-rpc-device_name"] = "Chrome 20 2023"
             headers["x-rpc-channel"] = "chrome"
             headers["x-rpc-device_model"] = "Chrome 2023"
             headers["x-rpc-sys_version"] = "13"
             headers["x-rpc-platform"] = "android"
-            device_id = self.device_id
-            hash_value = hex_digest(device_id)
-            headers["x-rpc-device_fp"] = hash_value[:13]
             if self.game == Game.GENSHIN:
                 headers["referer"] = (
                     "https://webstatic.mihoyo.com/bbs/event/signin-ys/index.html?"
