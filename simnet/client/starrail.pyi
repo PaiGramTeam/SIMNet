@@ -22,4 +22,6 @@ class StarRailClient(
         region: Region = Region.OVERSEAS,
         lang: str = "en-us",
         timeout: Optional[TimeoutTypes] = None,
+        device_id: Optional[str] = None,
+        device_fp: Optional[str] = None,
     ): ...
