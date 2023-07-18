@@ -53,7 +53,7 @@ class Cookies(_Cookies):
                 return int(value)
         return None
 
-    def get(  # type: ignore
+    def get(
         self,
         name: str,
         default: Optional[str] = None,

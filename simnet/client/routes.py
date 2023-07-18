@@ -217,7 +217,10 @@ WEB_ACCOUNT_URL = InternationalRoute(
     chinese="https://webapi.account.mihoyo.com/Api/",
 )
 
-AUTH_KEY_URL = InternationalRoute(overseas="", chinese="https://api-takumi.mihoyo.com/binding/api/genAuthKey")
+AUTH_KEY_URL = InternationalRoute(
+    overseas="",
+    chinese="https://api-takumi.mihoyo.com/binding/api/genAuthKey"
+)
 
 HK4E_LOGIN_URL = InternationalRoute(
     overseas="https://sg-public-api.hoyoverse.com/common/badge/v1/login/account",

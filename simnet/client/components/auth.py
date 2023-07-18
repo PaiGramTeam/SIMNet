@@ -60,7 +60,7 @@ class AuthClient(BaseClient):
         stoken = self.cookies.get("stoken")
         stuid = self.cookies.get("stuid")
         if stoken and stuid:
-            self.cookies["stuid"] = self.account_id
+            self.cookies["stuid"] = str(self.account_id)
         return stoken
 
     async def get_cookie_token_by_login_ticket(self, login_ticket: Optional[str] = None) -> Optional[str]:
@@ -129,7 +129,7 @@ class AuthClient(BaseClient):
         cookie_token = data.get("cookie_token")
         if cookie_token:
             self.cookies["cookie_token"] = cookie_token
-            self.cookies["account_id"] = self.account_id
+            self.cookies["account_id"] = str(self.account_id)
         return cookie_token
 
     async def get_ltoken_by_stoken(
@@ -166,7 +166,7 @@ class AuthClient(BaseClient):
         ltoken = data.get("ltoken", "")
         if ltoken:
             self.cookies["ltoken"] = ltoken
-            self.cookies["ltuid"] = self.account_id
+            self.cookies["ltuid"] = str(self.account_id)
         return ltoken
 
     async def get_authkey_by_stoken(self, game_biz: str, region: str, auth_appid: str) -> Optional[str]:
