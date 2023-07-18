@@ -29,3 +29,10 @@ class RogueCharacter(StarRailBaseCharacter):
     """Rogue character model."""
 
     level: int
+
+
+class StarFightCharacter(StarRailBaseCharacter):
+    """Combat character model."""
+
+    level: int
+    is_trial: bool

@@ -227,3 +227,12 @@ class LabClient(BaseClient):
         """
         accounts = await self.get_game_accounts(lang=lang)
         return [account for account in accounts if account.game == Game.GENSHIN]
+
+    async def get_starrail_accounts(self, *, lang: Optional[str] = None) -> List[Account]:
+        """Get the starrail accounts of the currently logged-in user.
+
+        Returns:
+            List[Account]: A list of account info objects of starrail accounts.
+        """
+        accounts = await self.get_game_accounts(lang=lang)
+        return [account for account in accounts if account.game == Game.STARRAIL]
