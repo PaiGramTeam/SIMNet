@@ -7,7 +7,7 @@ license = "MIT license"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.8"
 httpx = "^0.24.0"
 pydantic = "^1.10.7"
 
@@ -30,4 +30,4 @@ log_cli_date_format = "%Y-%m-%d %H:%M:%S"
 [tool.black]
 include = '\.pyi?$'
 line-length = 120
-target-version = ['py39']
+target-version = ['py38']
