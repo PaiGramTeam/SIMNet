@@ -5,10 +5,9 @@ from simnet.client.routes import (
     AUTH_URL,
     AUTH_KEY_URL,
     HK4E_LOGIN_URL,
-    GET_COOKIES_TOKEN_BY_STOKEN_URL,
-    GET_LTOKEN_BY_STOKEN_URL,
+    PASSPORT_URL,
+    WEB_ACCOUNT_URL,
 )
-from simnet.errors import RegionNotSupported
 from simnet.utils.enum_ import Region
 
 __all__ = ("AuthClient",)
@@ -37,12 +36,9 @@ class AuthClient(BaseClient):
             Optional[str]: The retrieved super ticket (`stoken`).
 
         Raises:
-            RegionNotSupported: This method is only available for the Chinese region.
             ValueError: If the `login_ticket` argument is `None`, or if the `account_id` argument is `None`.
         """
-        if self.region != Region.CHINESE:
-            raise RegionNotSupported("This method is only available for the Chinese region.")
-        url = AUTH_URL.get_url(Region.CHINESE) / "getMultiTokenByLoginTicket"
+        url = AUTH_URL.get_url(self.region) / "getMultiTokenByLoginTicket"
         login_ticket = login_ticket or self.cookies.get("login_ticket")
         account_id = account_id or self.account_id
         if login_ticket is None:
@@ -64,8 +60,40 @@ class AuthClient(BaseClient):
         stoken = self.cookies.get("stoken")
         stuid = self.cookies.get("stuid")
         if stoken and stuid:
-            self.cookies["stuid"] = self.account_id
+            self.cookies["stuid"] = str(self.account_id)
         return stoken
+
+    async def get_cookie_token_by_login_ticket(self, login_ticket: Optional[str] = None) -> Optional[str]:
+        """
+        Retrieves a cookie token (`cookie_token`) using a login ticket (`login_ticket`).
+
+        Args:
+            login_ticket (Optional[str]): The login ticket to use to retrieve the cookie token. If not provided, the
+                `login_ticket` cookie value will be used.
+
+        Returns:
+            Optional[str]: The retrieved cookie token (`cookie_token`).
+
+        Raises:
+            ValueError: If the `login_ticket` argument is `None`.
+        """
+        url = WEB_ACCOUNT_URL.get_url(self.region) / "cookie_accountinfo_by_loginticket"
+        login_ticket = login_ticket or self.cookies.get("login_ticket")
+        if login_ticket is None:
+            raise ValueError("The 'login_ticket' argument cannot be None.")
+        params = {"login_ticket": login_ticket}
+        data = await self.request_lab(url, params=params)
+        cookie_info = data.get("cookie_info")
+        if not cookie_info:
+            raise ValueError("The 'login_ticket' is expired.")
+        account_id = cookie_info.get("account_id")
+        cookie_token = cookie_info.get("cookie_token")
+        if account_id:
+            self.account_id = account_id
+            self.cookies["account_id"] = str(account_id)
+        if cookie_token:
+            self.cookies["cookie_token"] = cookie_token
+        return cookie_token
 
     async def get_cookie_token_by_stoken(
         self, stoken: Optional[str] = None, account_id: Optional[int] = None
@@ -83,27 +111,25 @@ class AuthClient(BaseClient):
             Optional[str]: The retrieved cookie token (`cookie_token`).
 
         Raises:
-            RegionNotSupported: This method is only available for the Chinese region.
             ValueError: If the `login_ticket` argument is `None`, or if the `account_id` argument is `None`.
         """
-        if self.region != Region.CHINESE:
-            raise RegionNotSupported("This method is only available for the Chinese region.")
         stoken = stoken or self.cookies.get("stoken")
         account_id = account_id or self.account_id
         if stoken is None:
             raise ValueError("The 'stoken' argument cannot be None.")
         if account_id is None:
             raise ValueError("The 'account_id' argument cannot be None.")
-        url = GET_COOKIES_TOKEN_BY_STOKEN_URL.get_url(Region.CHINESE)
+        url = PASSPORT_URL.get_url(self.region) / "getCookieAccountInfoBySToken"
+        method = "GET" if self.region == Region.CHINESE else "POST"
         params = {
             "stoken": stoken,
             "uid": account_id,
         }
-        data = await self.request_lab(url, params=params)
+        data = await self.request_lab(url, method=method, params=params)
         cookie_token = data.get("cookie_token")
         if cookie_token:
             self.cookies["cookie_token"] = cookie_token
-            self.cookies["account_id"] = self.account_id
+            self.cookies["account_id"] = str(self.account_id)
         return cookie_token
 
     async def get_ltoken_by_stoken(
@@ -122,27 +148,25 @@ class AuthClient(BaseClient):
             Optional[str]: The retrieved cookie token (`cookie_token`).
 
         Raises:
-            RegionNotSupported: This method is only available for the Chinese region.
             ValueError: If the `login_ticket` argument is `None`, or if the `account_id` argument is `None`.
         """
-        if self.region != Region.CHINESE:
-            raise RegionNotSupported("This method is only available for the Chinese region.")
         stoken = stoken or self.cookies.get("stoken")
         account_id = account_id or self.account_id
         if stoken is None:
             raise ValueError("The 'stoken' argument cannot be None.")
         if account_id is None:
             raise ValueError("The 'account_id' argument cannot be None.")
-        url = GET_LTOKEN_BY_STOKEN_URL.get_url(Region.CHINESE)
+        url = PASSPORT_URL.get_url(self.region) / "getLTokenBySToken"
+        method = "GET" if self.region == Region.CHINESE else "POST"
         params = {
             "stoken": stoken,
             "uid": account_id,
         }
-        data = await self.request_lab(url, params=params)
+        data = await self.request_lab(url, method=method, params=params)
         ltoken = data.get("ltoken", "")
         if ltoken:
             self.cookies["ltoken"] = ltoken
-            self.cookies["ltuid"] = self.account_id
+            self.cookies["ltuid"] = str(self.account_id)
         return ltoken
 
     async def get_authkey_by_stoken(self, game_biz: str, region: str, auth_appid: str) -> Optional[str]:
@@ -159,11 +183,8 @@ class AuthClient(BaseClient):
             Optional[str]: The authentication key, or None if not found.
 
         Raises:
-            RegionNotSupported: This method is only available for the Chinese region.
             ValueError: If `stoken` is not found in the cookies or `player_id` not found.
         """
-        if self.region != Region.CHINESE:
-            raise RegionNotSupported("This method is only available for the Chinese region.")
         stoken = self.cookies.get("stoken")
         if stoken is None:
             raise ValueError("stoken not found in cookies.")

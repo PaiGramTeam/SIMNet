@@ -12,9 +12,11 @@ __all__ = ("Cookies",)
 class Cookies(_Cookies):
     """A wrapper around `httpx.Cookies` that provides additional functionality."""
 
+    jar: CookieJar
+
     def __init__(self, cookies: Optional[CookieTypes] = None):  # skipcq: PYL-W0231
+        self.jar = CookieJar()
         if cookies is None or isinstance(cookies, dict):
-            self.jar = CookieJar()
             if isinstance(cookies, dict):
                 for key, value in cookies.items():
                     if isinstance(value, str):
@@ -22,20 +24,17 @@ class Cookies(_Cookies):
                     else:
                         self.set(key, str(value))
         elif isinstance(cookies, list):
-            self.jar = CookieJar()
             for key, value in cookies:
                 self.set(key, value)
         elif isinstance(cookies, Cookies):
-            self.jar = CookieJar()
             for cookie in cookies.jar:
                 self.jar.set_cookie(cookie)
         elif isinstance(cookies, str):
-            self.jar = CookieJar()
             cookie = SimpleCookie(cookies)
             for key, value in cookie.items():
                 self.set(key, value.value)
         else:
-            self.jar = cookies
+            self.jar = cookies  # type: ignore
 
     COOKIE_USER_ID_NAMES = ("ltuid", "account_id", "stuid", "ltuid_v2", "account_id_v2")
 
@@ -54,3 +53,29 @@ class Cookies(_Cookies):
             if value is not None:
                 return int(value)
         return None
+
+    def get(
+        self,
+        name: str,
+        default: Optional[str] = None,
+        domain: Optional[str] = None,
+        path: Optional[str] = None,
+    ) -> Optional[str]:
+        """
+        Get a cookie by name. May optionally include domain and path
+        in order to specify exactly which cookie to retrieve.
+        """
+        value = None
+        for cookie in self.jar:
+            if (
+                cookie.name == name
+                and domain is None
+                or cookie.domain == domain
+                and path is None
+                or cookie.path == path
+                and cookie.value
+            ):
+                value = cookie.value
+        if value is None:
+            return default
+        return value
