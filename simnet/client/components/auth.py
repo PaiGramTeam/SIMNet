@@ -5,8 +5,7 @@ from simnet.client.routes import (
     AUTH_URL,
     AUTH_KEY_URL,
     HK4E_LOGIN_URL,
-    GET_COOKIES_TOKEN_BY_STOKEN_URL,
-    GET_LTOKEN_BY_STOKEN_URL,
+    PASSPORT_URL,
 )
 from simnet.errors import RegionNotSupported
 from simnet.utils.enum_ import Region
@@ -40,9 +39,7 @@ class AuthClient(BaseClient):
             RegionNotSupported: This method is only available for the Chinese region.
             ValueError: If the `login_ticket` argument is `None`, or if the `account_id` argument is `None`.
         """
-        if self.region != Region.CHINESE:
-            raise RegionNotSupported("This method is only available for the Chinese region.")
-        url = AUTH_URL.get_url(Region.CHINESE) / "getMultiTokenByLoginTicket"
+        url = AUTH_URL.get_url(self.region) / "getMultiTokenByLoginTicket"
         login_ticket = login_ticket or self.cookies.get("login_ticket")
         account_id = account_id or self.account_id
         if login_ticket is None:
@@ -86,20 +83,19 @@ class AuthClient(BaseClient):
             RegionNotSupported: This method is only available for the Chinese region.
             ValueError: If the `login_ticket` argument is `None`, or if the `account_id` argument is `None`.
         """
-        if self.region != Region.CHINESE:
-            raise RegionNotSupported("This method is only available for the Chinese region.")
         stoken = stoken or self.cookies.get("stoken")
         account_id = account_id or self.account_id
         if stoken is None:
             raise ValueError("The 'stoken' argument cannot be None.")
         if account_id is None:
             raise ValueError("The 'account_id' argument cannot be None.")
-        url = GET_COOKIES_TOKEN_BY_STOKEN_URL.get_url(Region.CHINESE)
+        url = PASSPORT_URL.get_url(self.region) / "getCookieAccountInfoBySToken"
+        method = "GET" if self.region == Region.CHINESE else "POST"
         params = {
             "stoken": stoken,
             "uid": account_id,
         }
-        data = await self.request_lab(url, params=params)
+        data = await self.request_lab(url, method=method, params=params)
         cookie_token = data.get("cookie_token")
         if cookie_token:
             self.cookies["cookie_token"] = cookie_token
@@ -125,20 +121,19 @@ class AuthClient(BaseClient):
             RegionNotSupported: This method is only available for the Chinese region.
             ValueError: If the `login_ticket` argument is `None`, or if the `account_id` argument is `None`.
         """
-        if self.region != Region.CHINESE:
-            raise RegionNotSupported("This method is only available for the Chinese region.")
         stoken = stoken or self.cookies.get("stoken")
         account_id = account_id or self.account_id
         if stoken is None:
             raise ValueError("The 'stoken' argument cannot be None.")
         if account_id is None:
             raise ValueError("The 'account_id' argument cannot be None.")
-        url = GET_LTOKEN_BY_STOKEN_URL.get_url(Region.CHINESE)
+        url = PASSPORT_URL.get_url(self.region) / "getLTokenBySToken"
+        method = "GET" if self.region == Region.CHINESE else "POST"
         params = {
             "stoken": stoken,
             "uid": account_id,
         }
-        data = await self.request_lab(url, params=params)
+        data = await self.request_lab(url, method=method, params=params)
         ltoken = data.get("ltoken", "")
         if ltoken:
             self.cookies["ltoken"] = ltoken

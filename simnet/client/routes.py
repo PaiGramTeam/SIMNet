@@ -17,8 +17,7 @@ __all__ = (
     "RECORD_URL",
     "GACHA_INFO_URL",
     "AUTH_URL",
-    "GET_COOKIES_TOKEN_BY_STOKEN_URL",
-    "GET_LTOKEN_BY_STOKEN_URL",
+    "PASSPORT_URL",
     "AUTH_KEY_URL",
     "HK4E_LOGIN_URL",
     "REWARD_URL",
@@ -188,8 +187,6 @@ class GameRoute(BaseRoute):
         return self.urls[region][game]
 
 
-PASSPORT_HOST = "passport-api.mihoyo.com"
-
 RECORD_URL = InternationalRoute(
     overseas="https://bbs-api-os.hoyolab.com/game_record",
     chinese="https://api-takumi-record.mihoyo.com/game_record/app",
@@ -207,18 +204,12 @@ GACHA_INFO_URL = GameRoute(
 )
 
 AUTH_URL = InternationalRoute(
-    overseas="",
+    overseas="https://api-os-takumi.mihoyo.com/auth/api",
     chinese="https://api-takumi.mihoyo.com/auth/api",
 )
-
-GET_COOKIES_TOKEN_BY_STOKEN_URL = InternationalRoute(
-    overseas="",
-    chinese=f"https://{PASSPORT_HOST}/account/auth/api/getCookieAccountInfoBySToken",
-)
-
-GET_LTOKEN_BY_STOKEN_URL = InternationalRoute(
-    overseas="",
-    chinese=f"https://{PASSPORT_HOST}/account/auth/api/getLTokenBySToken",
+PASSPORT_URL = InternationalRoute(
+    overseas="https://api-account-os.hoyoverse.com/account/auth/api/",
+    chinese="https://passport-api.mihoyo.com/account/auth/api/",
 )
 
 AUTH_KEY_URL = InternationalRoute(overseas="", chinese="https://api-takumi.mihoyo.com/binding/api/genAuthKey")
