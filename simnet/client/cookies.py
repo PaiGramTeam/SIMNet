@@ -67,11 +67,15 @@ class Cookies(_Cookies):
         """
         value = None
         for cookie in self.jar:
-            if cookie.name == name:
-                if domain is None or cookie.domain == domain:
-                    if path is None or cookie.path == path:
-                        if cookie.value:
-                            value = cookie.value
+            if (
+                cookie.name == name
+                and domain is None
+                or cookie.domain == domain
+                and path is None
+                or cookie.path == path
+                and cookie.value
+            ):
+                value = cookie.value
         if value is None:
             return default
         return value

@@ -318,7 +318,6 @@ class BaseClient(AsyncContextManager["BaseClient"]):
             params=params,
             headers=headers,
         )
-        # if "application/json" in response.headers.get("Content-Type", ""):
         if not response.is_error:
             data = response.json()
             ret_code = data.get("retcode", 0)
