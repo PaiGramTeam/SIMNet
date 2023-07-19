@@ -48,6 +48,7 @@ class DailyRewardClient(BaseClient):
 
         base_url = REWARD_URL.get_url(self.region, self.game or game)
         params = params.merge(base_url.params)
+        params = params.set("lang", lang or self.lang)
 
         if challenge is not None:
             headers["x-rpc-challenge"] = challenge
