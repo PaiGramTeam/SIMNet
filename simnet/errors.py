@@ -1,11 +1,11 @@
 from typing import Any, Optional, Dict, Union, Tuple, Type, NoReturn
 
 
-class ApiHelperException(Exception):
-    """Base class for ApiHelper errors."""
+class SIMNetException(Exception):
+    """Base class for SIMNet errors."""
 
 
-class NetworkError(ApiHelperException):
+class NetworkError(SIMNetException):
     """Base class for exceptions due to networking errors."""
 
 
@@ -13,7 +13,7 @@ class TimedOut(NetworkError):
     """Raised when a request took too long to finish."""
 
 
-class BadRequest(ApiHelperException):
+class BadRequest(SIMNetException):
     """Raised when an API request cannot be processed correctly.
 
     Attributes:
@@ -180,7 +180,7 @@ class GeetestChallengeFailed(NeedChallenge):
     message = "Geetest challenge failed."
 
 
-class NotSupported(ApiHelperException):
+class NotSupported(SIMNetException):
     """API not supported."""
 
     def __init__(self, message: str = "API not supported."):
