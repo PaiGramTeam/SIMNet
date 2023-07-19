@@ -37,7 +37,7 @@ class BadRequest(ApiHelperException):
         if status_code is not None:
             self.status_code = status_code
         if response is not None:
-            ret_code = response.get("ret_code")
+            ret_code = response.get("retcode")
             if ret_code is not None:
                 self.ret_code = ret_code
             response_message = response.get("message")
