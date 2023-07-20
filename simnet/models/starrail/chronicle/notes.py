@@ -1,6 +1,8 @@
 from datetime import timedelta, datetime
 from typing import List, Literal, Sequence
 
+from pydantic import Field
+
 from simnet.models.base import APIModel
 
 
@@ -41,7 +43,12 @@ class StarRailNote(APIModel):
         accepted_epedition_num (int): The number of expeditions the user has accepted.
         total_expedition_num (int): The total number of expeditions the user has participated in.
         expeditions (Sequence[StarRailExpedition]): A list of expeditions the user has participated in.
-
+        current_train_score (int): The current daily training activity.
+        max_train_score (int): The max daily training activity.
+        current_rogue_score (int): The current simulated universe weekly points.
+        max_rogue_score (int): The max simulated universe weekly points.
+        remaining_weekly_discounts (int): The remaining echo of war rewards.
+        max_weekly_discounts (int): The echo of war attempt limit.
     """
 
     current_stamina: int
@@ -50,3 +57,18 @@ class StarRailNote(APIModel):
     accepted_epedition_num: int
     total_expedition_num: int
     expeditions: Sequence[StarRailExpedition]
+
+    current_train_score: int
+    """Current daily training activity"""
+    max_train_score: int
+    """Max daily training activity"""
+
+    current_rogue_score: int
+    """Current simulated universe weekly points"""
+    max_rogue_score: int
+    """Max simulated universe weekly points"""
+
+    remaining_weekly_discounts: int = Field(alias="weekly_cocoon_cnt")
+    """Remaining echo of war rewards"""
+    max_weekly_discounts: int = Field(alias="weekly_cocoon_limit")
+    """Echo of war attempt limit"""
