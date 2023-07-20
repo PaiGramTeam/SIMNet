@@ -4,13 +4,13 @@ Modern API wrapper for Genshin Impact & Honkai: Star Rail built on asyncio and p
 
 ## Requirements
 
-- Python 3.9+
+- Python 3.8+
 - httpx
 - Pydantic
 
 ## Example
 
-A very simple example of how simnet would be used:
+A very simple example of how SIMNet would be used:
 
 ```python3
 import asyncio
@@ -25,9 +25,6 @@ async def main():
 
 asyncio.run(main())
 ```
-
-> Note that Hoyolab has not implemented Battle Chronicle for Honkai Star Rail yet (as of 05/16/2023).
-> HSR related features will be unavailable for global players. For more details, check issue #24
 
 ## Credits
 - [genshin.py](https://github.com/thesadru/genshin.py/): fork source 
