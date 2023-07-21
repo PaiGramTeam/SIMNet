@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "SIMNet"
-version = "0.1.4"
+version = "0.1.5"
 description = "Modern API wrapper for Genshin Impact & Honkai: Star Rail built on asyncio and pydantic."
 authors = ["PaiGramTeam"]
 license = "MIT license"
