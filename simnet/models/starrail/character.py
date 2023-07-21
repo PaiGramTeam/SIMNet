@@ -31,7 +31,7 @@ class RogueCharacter(StarRailBaseCharacter):
     level: int
 
 
-class StarFightCharacter(StarRailBaseCharacter):
+class ActivityCharacter(StarRailBaseCharacter):
     """Combat character model."""
 
     level: int
