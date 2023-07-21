@@ -24,7 +24,7 @@ class BaseCharacter(APIModel):
     id: int
     name: Optional[str] = None
     element: Optional[str] = None
-    rarity: Optional[str] = None
+    rarity: Optional[int] = None
     icon: Optional[str] = None
 
     collab: bool = False
