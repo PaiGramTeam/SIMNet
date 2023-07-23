@@ -9,7 +9,6 @@ from simnet.client.components.wish.starrail import StarRailWishClient
 from simnet.utils.enum_ import Region
 from simnet.utils.types import CookieTypes, HeaderTypes, TimeoutTypes
 
-
 class StarRailClient(
     StarRailBattleChronicleClient, StarRailWishClient, StarrailDiaryClient, DailyRewardClient, AuthClient, LabClient
 ):

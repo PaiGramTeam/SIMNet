@@ -24,6 +24,7 @@ class BaseChronicleClient(BaseClient):
     async def request_game_record(
         self,
         endpoint: str,
+        endpoint_type: str = "api",
         data: Optional[Any] = None,
         params: Optional[QueryParamTypes] = None,
         lang: Optional[str] = None,
@@ -34,6 +35,7 @@ class BaseChronicleClient(BaseClient):
 
         Args:
             endpoint (str): The endpoint to send the request to.
+            endpoint_type (str, optional): The type of endpoint to send the request to.
             data (Optional[Any], optional): The request payload.
             params (Optional[QueryParamTypes], optional): The query parameters for the request.
             lang (Optional[str], optional): The language for the response.
@@ -51,7 +53,7 @@ class BaseChronicleClient(BaseClient):
         base_url = RECORD_URL.get_url(region or self.region)
 
         if game:
-            base_url = base_url / game.value / "api"
+            base_url = base_url / game.value / endpoint_type
 
         url = base_url / endpoint
         new_ds = self.region == Region.CHINESE
