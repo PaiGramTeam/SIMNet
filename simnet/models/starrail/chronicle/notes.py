@@ -72,3 +72,41 @@ class StarRailNote(APIModel):
     """Remaining echo of war rewards"""
     max_weekly_discounts: int = Field(alias="weekly_cocoon_limit")
     """Echo of war attempt limit"""
+
+
+class StarRailNoteWidget(APIModel):
+    """Represents a StarRail Note.
+
+    Attributes:
+        current_stamina (int): The current stamina of the user.
+        max_stamina (int): The maximum stamina of the user.
+        stamina_recover_time (timedelta): The time it takes for one stamina to recover.
+        accepted_expedition_num (int): The number of expeditions the user has accepted.
+        total_expedition_num (int): The total number of expeditions the user has participated in.
+        expeditions (Sequence[StarRailExpedition]): A list of expeditions the user has participated in.
+        current_train_score (int): The current daily training activity.
+        max_train_score (int): The max daily training activity.
+        current_rogue_score (int): The current simulated universe weekly points.
+        max_rogue_score (int): The max simulated universe weekly points.
+        has_signed (bool): Whether the user has signed in today.
+    """
+
+    current_stamina: int
+    max_stamina: int
+    stamina_recover_time: timedelta
+    accepted_expedition_num: int
+    total_expedition_num: int
+    expeditions: Sequence[StarRailExpedition]
+
+    current_train_score: int
+    """Current daily training activity"""
+    max_train_score: int
+    """Max daily training activity"""
+
+    current_rogue_score: int
+    """Current simulated universe weekly points"""
+    max_rogue_score: int
+    """Max simulated universe weekly points"""
+
+    has_signed: bool
+    """Whether the user has signed in today"""

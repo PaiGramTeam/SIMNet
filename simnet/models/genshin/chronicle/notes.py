@@ -5,7 +5,7 @@ from pydantic import Field, root_validator
 
 from simnet.models.base import APIModel
 
-__all__ = ("Expedition", "Notes")
+__all__ = ("Expedition", "Notes", "ExpeditionWidget", "NotesWidget")
 
 
 def _process_timedelta(time: Union[int, timedelta, datetime]) -> datetime:
@@ -184,3 +184,55 @@ class Notes(APIModel):
             raise ValueError("Transformer recovery time cannot exceed 7 days.")
 
         return values
+
+
+class ExpeditionWidget(APIModel):
+    """The model for a real-time expedition.
+
+    Attributes:
+        character (str): The expedition character icon url.
+        status (Literal["Ongoing", "Finished"]): The status of the expedition.
+    """
+
+    character: str = Field(alias="avatar_side_icon")
+    status: Literal["Ongoing", "Finished"]
+
+
+class NotesWidget(APIModel):
+    """The model for real-time notes.
+
+    Attributes:
+        current_resin (int): The current amount of resin.
+        max_resin (int): The maximum amount of resin.
+        remaining_resin_recovery_time (timedelta): The remaining time until resin recovery.
+        current_realm_currency (int): The current amount of realm currency.
+        max_realm_currency (int): The maximum amount of realm currency.
+        completed_commissions (int): The number of completed commissions.
+        max_commissions (int): The maximum number of commissions.
+        claimed_commission_reward (bool): Whether the commission reward has been claimed.
+        expeditions (List[Expedition]): The list of expeditions.
+        max_expeditions (int): The maximum number of expeditions.
+
+    Raises:
+        ValueError: If the remaining resin recovery time is less than 0 or greater than 8 hours,
+            or if the remaining realm currency recovery time is less than 0 or greater than 24 hours.
+    """
+
+    current_resin: int
+    max_resin: int
+    remaining_resin_recovery_time: timedelta = Field(alias="resin_recovery_time")
+
+    current_realm_currency: int = Field(alias="current_home_coin")
+    max_realm_currency: int = Field(alias="max_home_coin")
+
+    completed_commissions: int = Field(alias="finished_task_num")
+    max_commissions: int = Field(alias="total_task_num")
+    claimed_commission_reward: bool = Field(alias="is_extra_task_reward_received")
+
+    expeditions: List[ExpeditionWidget]
+    max_expeditions: int = Field(alias="max_expedition_num")
+
+    @property
+    def resin_recovery_time(self) -> datetime:
+        """A property that returns the time when resin will be fully recovered."""
+        return datetime.now().astimezone() + self.remaining_resin_recovery_time

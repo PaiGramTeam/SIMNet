@@ -2,16 +2,16 @@ import asyncio
 from typing import Optional, Mapping, Dict, Any
 
 from simnet.client.components.chronicle.base import BaseChronicleClient
-from simnet.errors import BadRequest, DataNotPublic
+from simnet.errors import BadRequest, DataNotPublic, RegionNotSupported
 from simnet.models.lab.record import RecordCard
 from simnet.models.starrail.chronicle.activity import StarRailActivity
 from simnet.models.starrail.chronicle.challenge import StarRailChallenge
 from simnet.models.starrail.chronicle.characters import StarRailDetailCharacters
 from simnet.models.starrail.chronicle.museum import StarRailMuseumBasic, StarRailMuseumDetail
-from simnet.models.starrail.chronicle.notes import StarRailNote
+from simnet.models.starrail.chronicle.notes import StarRailNote, StarRailNoteWidget
 from simnet.models.starrail.chronicle.rogue import StarRailRogue
 from simnet.models.starrail.chronicle.stats import StarRailUserStats, StarRailUserInfo
-from simnet.utils.enum_ import Game
+from simnet.utils.enum_ import Game, Region
 from simnet.utils.player import recognize_starrail_server, recognize_region
 
 __all__ = ("StarRailBattleChronicleClient",)
@@ -28,6 +28,7 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         self,
         endpoint: str,
         player_id: Optional[int] = None,
+        endpoint_type: str = "api",
         method: str = "GET",
         lang: Optional[str] = None,
         payload: Optional[Dict[str, Any]] = None,
@@ -61,6 +62,7 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
 
         return await self.request_game_record(
             endpoint,
+            endpoint_type=endpoint_type,
             lang=lang,
             game=Game.STARRAIL,
             region=recognize_region(player_id, game=Game.STARRAIL),
@@ -287,3 +289,32 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         """
         data = await self._request_starrail_record("activity", uid, lang=lang)
         return StarRailActivity(**data)
+
+    async def get_starrail_notes_by_stoken(
+        self,
+        lang: Optional[str] = None,
+    ) -> StarRailNoteWidget:
+        """Get StarRail's real-time notes.
+
+        Args:
+            lang (Optional[str], optional): The language of the data. Defaults to None.
+
+        Returns:
+            StarRailNoteWidget: The requested real-time notes.
+
+        Raises:
+            RegionNotSupported: If the region is not supported.
+            BadRequest: If the request is invalid.
+        """
+        if self.region == Region.OVERSEAS:
+            raise RegionNotSupported("Notes widget is not supported in overseas region.")
+        stoken = self.cookies.get("stoken")
+        if stoken is None:
+            raise ValueError("stoken not found in cookies.")
+        stuid = self.cookies.get("stuid")
+        if stuid is None and self.account_id is None:
+            raise ValueError("account_id or stuid not found")
+        if self.account_id is not None and stuid is None:
+            self.cookies.set("stuid", str(self.account_id))
+        data = await self._request_starrail_record("widget", endpoint_type="aapi", lang=lang)
+        return StarRailNoteWidget(**data)

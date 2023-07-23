@@ -2,17 +2,17 @@ import asyncio
 from typing import Optional, Any, List, Dict
 
 from simnet.client.components.chronicle.base import BaseChronicleClient
-from simnet.errors import DataNotPublic, BadRequest
+from simnet.errors import DataNotPublic, BadRequest, RegionNotSupported
 from simnet.models.genshin.chronicle.abyss import SpiralAbyss, SpiralAbyssPair
 from simnet.models.genshin.chronicle.characters import Character
-from simnet.models.genshin.chronicle.notes import Notes
+from simnet.models.genshin.chronicle.notes import Notes, NotesWidget
 from simnet.models.genshin.chronicle.stats import (
     PartialGenshinUserStats,
     GenshinUserStats,
     FullGenshinUserStats,
 )
 from simnet.models.lab.record import RecordCard
-from simnet.utils.enum_ import Game
+from simnet.utils.enum_ import Game, Region
 from simnet.utils.player import recognize_genshin_server, recognize_region
 
 __all__ = ("GenshinBattleChronicleClient",)
@@ -30,6 +30,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         endpoint: str,
         player_id: Optional[int] = None,
         method: str = "GET",
+        endpoint_type: str = "api",
         lang: Optional[str] = None,
         payload: Optional[Dict[str, Any]] = None,
     ):
@@ -37,6 +38,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
 
         Args:
             endpoint (str): The endpoint of the object to retrieve.
+            endpoint_type (str, optional): The type of endpoint to send the request to.
             player_id (Optional[int], optional): The player ID. Defaults to None.
             method (str, optional): The HTTP method to use. Defaults to "GET".
             lang (Optional[str], optional): The language of the data. Defaults to None.
@@ -68,6 +70,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
 
         return await self.request_game_record(
             endpoint,
+            endpoint_type=endpoint_type,
             lang=lang,
             game=Game.GENSHIN,
             region=recognize_region(player_id, game=Game.GENSHIN),
@@ -172,7 +175,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
             autoauth (bool, optional): Whether to automatically authenticate the user. Defaults to True.
 
         Returns:
-            StarRailNote: The requested real-time notes.
+            Notes: The requested real-time notes.
 
         Raises:
             BadRequest: If the request is invalid.
@@ -258,3 +261,32 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
                 return record_card
 
         return None
+
+    async def get_genshin_notes_by_stoken(
+        self,
+        lang: Optional[str] = None,
+    ) -> NotesWidget:
+        """Get Genshin's real-time notes.
+
+        Args:
+            lang (Optional[str], optional): The language of the data. Defaults to None.
+
+        Returns:
+            NotesWidget: The requested real-time notes.
+
+        Raises:
+            RegionNotSupported: If the region is not supported.
+            BadRequest: If the request is invalid.
+        """
+        if self.region == Region.OVERSEAS:
+            raise RegionNotSupported("Notes widget is not supported in overseas region.")
+        stoken = self.cookies.get("stoken")
+        if stoken is None:
+            raise ValueError("stoken not found in cookies.")
+        stuid = self.cookies.get("stuid")
+        if stuid is None and self.account_id is None:
+            raise ValueError("account_id or stuid not found")
+        if self.account_id is not None and stuid is None:
+            self.cookies.set("stuid", str(self.account_id))
+        data = await self._request_genshin_record("widget/v2", endpoint_type="aapi", lang=lang)
+        return NotesWidget(**data)
