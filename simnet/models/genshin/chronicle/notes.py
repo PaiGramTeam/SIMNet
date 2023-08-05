@@ -5,7 +5,15 @@ from pydantic import Field, root_validator
 
 from simnet.models.base import APIModel
 
-__all__ = ("Expedition", "Notes", "ExpeditionWidget", "NotesWidget")
+__all__ = [
+    "Expedition",
+    "Notes",
+    "ExpeditionWidget",
+    "NotesWidget",
+    "NotesOverseaWidget",
+    "NotesOverseaWidgetResin",
+    "NotesOverseaWidgetRealm",
+]
 
 
 def _process_timedelta(time: Union[int, timedelta, datetime]) -> datetime:
@@ -236,3 +244,57 @@ class NotesWidget(APIModel):
     def resin_recovery_time(self) -> datetime:
         """A property that returns the time when resin will be fully recovered."""
         return datetime.now().astimezone() + self.remaining_resin_recovery_time
+
+
+class NotesOverseaWidgetResin(APIModel):
+    """The model for real-time notes resin.
+
+    Attributes:
+        current_val (int): The current amount of resin.
+        max_val (int): The maximum amount of resin.
+        remaining_resin_recovery_time (timedelta): The remaining time until resin recovery.
+    """
+
+    current_val: int
+    max_val: int
+    remaining_resin_recovery_time: timedelta = Field(alias="recovery_time")
+
+    @property
+    def resin_recovery_time(self) -> datetime:
+        """A property that returns the time when resin will be fully recovered."""
+        return datetime.now().astimezone() + self.remaining_resin_recovery_time
+
+
+class NotesOverseaWidgetRealm(APIModel):
+    """The model for real-time notes realm currency.
+
+    Attributes:
+        current_val (int): The current amount of realm currency.
+        max_val (int): The maximum amount of realm currency.
+        remaining_realm_currency_recovery_time (timedelta): The remaining time until realm currency recovery.
+    """
+
+    current_val: int
+    max_val: int
+    remaining_realm_currency_recovery_time: timedelta = Field(alias="recovery_time")
+
+    @property
+    def realm_currency_recovery_time(self) -> datetime:
+        """A property that returns the time when realm currency will be fully recovered."""
+        return datetime.now().astimezone() + self.remaining_realm_currency_recovery_time
+
+
+class NotesOverseaWidget(APIModel):
+    """The model for real-time notes.
+
+    Attributes:
+        resin (NotesOverseaWidgetResin): The resin information.
+        home_coin (NotesOverseaWidgetRealm): The realm currency information.
+
+    Raises:
+        ValueError: If the remaining resin recovery time is less than 0 or greater than 8 hours,
+            or if the remaining realm currency recovery time is less than 0 or greater than 24 hours.
+    """
+
+    resin: NotesOverseaWidgetResin
+    home_coin: NotesOverseaWidgetRealm
