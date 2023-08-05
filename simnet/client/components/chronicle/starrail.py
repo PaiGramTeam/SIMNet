@@ -301,10 +301,9 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
             lang (Optional[str], optional): The language of the data. Defaults to None.
 
         Returns:
-            StarRailNoteWidget: The requested real-time notes.
+            StarRailNoteWidget (Union[StarRailNoteWidget, StarRailNoteOverseaWidget]): The requested real-time notes.
 
         Raises:
-            RegionNotSupported: If the region is not supported.
             BadRequest: If the request is invalid.
         """
         stoken = self.cookies.get("stoken")

@@ -1,5 +1,5 @@
 import asyncio
-from typing import Optional, Any, List, Dict
+from typing import Optional, Any, List, Dict, Union
 
 from simnet.client.components.chronicle.base import BaseChronicleClient
 from simnet.client.routes import RECORD_URL
@@ -266,17 +266,16 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
     async def get_genshin_notes_by_stoken(
         self,
         lang: Optional[str] = None,
-    ) -> NotesWidget:
+    ) -> Union[NotesWidget, NotesOverseaWidget]:
         """Get Genshin's real-time notes.
 
         Args:
             lang (Optional[str], optional): The language of the data. Defaults to None.
 
         Returns:
-            NotesWidget: The requested real-time notes.
+            NotesWidget (Union[NotesWidget, NotesOverseaWidget]): The requested real-time notes.
 
         Raises:
-            RegionNotSupported: If the region is not supported.
             BadRequest: If the request is invalid.
         """
         stoken = self.cookies.get("stoken")
