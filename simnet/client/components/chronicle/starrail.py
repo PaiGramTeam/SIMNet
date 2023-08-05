@@ -1,14 +1,15 @@
 import asyncio
-from typing import Optional, Mapping, Dict, Any
+from typing import Optional, Mapping, Dict, Any, Union
 
 from simnet.client.components.chronicle.base import BaseChronicleClient
-from simnet.errors import BadRequest, DataNotPublic, RegionNotSupported
+from simnet.client.routes import RECORD_URL
+from simnet.errors import BadRequest, DataNotPublic
 from simnet.models.lab.record import RecordCard
 from simnet.models.starrail.chronicle.activity import StarRailActivity
 from simnet.models.starrail.chronicle.challenge import StarRailChallenge
 from simnet.models.starrail.chronicle.characters import StarRailDetailCharacters
 from simnet.models.starrail.chronicle.museum import StarRailMuseumBasic, StarRailMuseumDetail
-from simnet.models.starrail.chronicle.notes import StarRailNote, StarRailNoteWidget
+from simnet.models.starrail.chronicle.notes import StarRailNote, StarRailNoteWidget, StarRailNoteOverseaWidget
 from simnet.models.starrail.chronicle.rogue import StarRailRogue
 from simnet.models.starrail.chronicle.stats import StarRailUserStats, StarRailUserInfo
 from simnet.utils.enum_ import Game, Region
@@ -293,7 +294,7 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
     async def get_starrail_notes_by_stoken(
         self,
         lang: Optional[str] = None,
-    ) -> StarRailNoteWidget:
+    ) -> Union[StarRailNoteWidget, StarRailNoteOverseaWidget]:
         """Get StarRail's real-time notes.
 
         Args:
@@ -306,8 +307,6 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
             RegionNotSupported: If the region is not supported.
             BadRequest: If the request is invalid.
         """
-        if self.region == Region.OVERSEAS:
-            raise RegionNotSupported("Notes widget is not supported in overseas region.")
         stoken = self.cookies.get("stoken")
         if stoken is None:
             raise ValueError("stoken not found in cookies.")
@@ -316,5 +315,11 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
             raise ValueError("account_id or stuid not found")
         if self.account_id is not None and stuid is None:
             self.cookies.set("stuid", str(self.account_id))
-        data = await self._request_starrail_record("widget", endpoint_type="aapi", lang=lang)
-        return StarRailNoteWidget(**data)
+        if self.region == Region.OVERSEAS:
+            route = RECORD_URL.get_url(self.region) / "../community/apihub/api/hsr_widget"
+            data = await self.request_lab(route, lang=lang)
+            model = StarRailNoteOverseaWidget
+        else:
+            data = await self._request_starrail_record("widget", endpoint_type="aapi", lang=lang)
+            model = StarRailNoteWidget
+        return model(**data)

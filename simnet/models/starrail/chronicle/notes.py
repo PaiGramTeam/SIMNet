@@ -110,3 +110,80 @@ class StarRailNoteWidget(APIModel):
 
     has_signed: bool
     """Whether the user has signed in today"""
+
+
+class StarRailNoteOverseaWidgetChallenge(APIModel):
+    """Represents a StarRail Note.
+
+    Attributes:
+        begin_time (datetime): The time at which the challenge begins.
+        current_floor (int): The current floor of the challenge.
+        end_time (datetime): The time at which the challenge ends.
+        max_floor (int): The max floor of the challenge.
+        schedule_id (int): The ID of the challenge.
+    """
+
+    begin_time: datetime
+    """The time at which the challenge begins."""
+    current_floor: int
+    """The current floor of the challenge."""
+    end_time: datetime
+    """The time at which the challenge ends."""
+    max_floor: int
+    """The max floor of the challenge."""
+    schedule_id: int
+    """The ID of the challenge."""
+
+
+class StarRailNoteOverseaWidgetRogue(APIModel):
+    """Represents a StarRail Note.
+
+    Attributes:
+        current_rogue_score (int): The current simulated universe weekly points.
+        max_rogue_score (int): The max simulated universe weekly points.
+        schedule_end (datetime): The time at which the challenge ends.
+        schedule_start (datetime): The time at which the challenge begins.
+    """
+
+    current_rogue_score: int
+    """Current simulated universe weekly points"""
+    max_rogue_score: int
+    """Max simulated universe weekly points"""
+    schedule_end: datetime
+    """The time at which the challenge ends."""
+    schedule_start: datetime
+    """The time at which the challenge begins."""
+
+
+class StarRailNoteOverseaWidget(APIModel):
+    """Represents a StarRail Note.
+
+    Attributes:
+        current_stamina (int): The current stamina of the user.
+        max_stamina (int): The maximum stamina of the user.
+        stamina_recover_time (timedelta): The time it takes for one stamina to recover.
+        accepted_expedition_num (int): The number of expeditions the user has accepted.
+        total_expedition_num (int): The total number of expeditions the user has participated in.
+        expeditions (Sequence[StarRailExpedition]): A list of expeditions the user has participated in.
+        current_train_score (int): The current daily training activity.
+        max_train_score (int): The max daily training activity.
+        challenge (StarRailNoteOverseaWidgetChallenge): The challenge widget.
+        rogue (StarRailNoteOverseaWidgetRogue): The rogue widget.
+    """
+
+    current_stamina: int
+    max_stamina: int
+    stamina_recover_time: timedelta
+    accepted_expedition_num: int
+    total_expedition_num: int
+    expeditions: Sequence[StarRailExpedition]
+
+    current_train_score: int
+    """Current daily training activity"""
+    max_train_score: int
+    """Max daily training activity"""
+
+    challenge: StarRailNoteOverseaWidgetChallenge
+    """The challenge widget."""
+    rogue: StarRailNoteOverseaWidgetRogue
+    """The rogue widget."""

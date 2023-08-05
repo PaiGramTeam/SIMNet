@@ -2,10 +2,11 @@ import asyncio
 from typing import Optional, Any, List, Dict
 
 from simnet.client.components.chronicle.base import BaseChronicleClient
+from simnet.client.routes import RECORD_URL
 from simnet.errors import DataNotPublic, BadRequest, RegionNotSupported
 from simnet.models.genshin.chronicle.abyss import SpiralAbyss, SpiralAbyssPair
 from simnet.models.genshin.chronicle.characters import Character
-from simnet.models.genshin.chronicle.notes import Notes, NotesWidget
+from simnet.models.genshin.chronicle.notes import Notes, NotesWidget, NotesOverseaWidget
 from simnet.models.genshin.chronicle.stats import (
     PartialGenshinUserStats,
     GenshinUserStats,
@@ -278,8 +279,6 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
             RegionNotSupported: If the region is not supported.
             BadRequest: If the request is invalid.
         """
-        if self.region == Region.OVERSEAS:
-            raise RegionNotSupported("Notes widget is not supported in overseas region.")
         stoken = self.cookies.get("stoken")
         if stoken is None:
             raise ValueError("stoken not found in cookies.")
@@ -288,5 +287,12 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
             raise ValueError("account_id or stuid not found")
         if self.account_id is not None and stuid is None:
             self.cookies.set("stuid", str(self.account_id))
-        data = await self._request_genshin_record("widget/v2", endpoint_type="aapi", lang=lang)
-        return NotesWidget(**data)
+        if self.region == Region.OVERSEAS:
+            route = RECORD_URL.get_url(self.region) / "../community/apihub/api/widget/data"
+            params = {"game_id": "2"}
+            data = await self.request_lab(route, params=params, lang=lang)
+            model = NotesOverseaWidget
+        else:
+            data = await self._request_genshin_record("widget/v2", endpoint_type="aapi", lang=lang)
+            model = NotesWidget
+        return model(**data)
