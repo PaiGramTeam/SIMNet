@@ -83,7 +83,7 @@ class CalculatorCharacter(BaseCharacter):
 
     @validator("weapon_type", pre=True)
     def parse_weapon_type(cls, v: Any) -> str:
-        """Parse the weapon type of a character.
+        """Parse the weapon type of character.
 
         Args:
             v (Any): The value of the weapon type.
@@ -121,7 +121,7 @@ class CalculatorWeapon(APIModel):
     @validator("type", pre=True)
     def parse_weapon_type(cls, v: Any) -> str:
         """
-        Parse the type of a weapon.
+        Parse the type of weapon.
 
         Args:
             v (Any): The value of the weapon type.
@@ -249,12 +249,12 @@ class CalculatorCharacterDetails(APIModel):
     """Details of a synced calculator
 
     Attributes:
-        weapon (CalculatorWeapon): The calculator weapon.
+        weapon (CalculatorWeapon, optional): The calculator weapon.
         talents (List[CalculatorTalent]): A list of calculator talents.
         artifacts (List[CalculatorArtifact]): A list of calculator artifacts.
     """
 
-    weapon: CalculatorWeapon = Field(alias="weapon")
+    weapon: Optional[CalculatorWeapon] = Field(alias="weapon")
     talents: List[CalculatorTalent] = Field(alias="skill_list")
     artifacts: List[CalculatorArtifact] = Field(alias="reliquary_list")
 
