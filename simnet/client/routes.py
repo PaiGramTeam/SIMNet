@@ -29,6 +29,7 @@ __all__ = (
     "HK4E_URL",
     "CODE_URL",
     "YSULOG_URL",
+    "QRCODE_URL",
 )
 
 
@@ -276,3 +277,5 @@ YSULOG_URL = InternationalRoute(
 HK4E_URL = Route("https://sg-hk4e-api.hoyoverse.com/common/hk4e_global/")
 
 CODE_URL = Route("https://sg-hk4e-api.hoyoverse.com/common/apicdkey/api/webExchangeCdkey")
+
+QRCODE_URL = Route("https://hk4e-sdk.mihoyo.com/hk4e_cn/combo/panda/qrcode")
