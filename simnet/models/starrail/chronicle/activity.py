@@ -77,6 +77,39 @@ class StarRailFantasticStory(StarRailActivityBase):
     records: List[StarRailFantasticStoryRecord]
 
 
+class StarRailTreasureDungeonRecord(APIModel):
+    """Treasure Dungeon Record"""
+
+    stage_id: int
+    name: str
+    difficulty_id: int
+    avatars: List[ActivityCharacter]
+    icon: str
+    atk_buff: int
+    def_buff: int
+    used_stamina: int
+    ancient_weapon: int
+    ancient_armor: int
+    ancient_bomb: int
+    enemy_killed: int
+    finish_time: Optional[PartialTime]
+    special_buff: int
+
+    @property
+    def time_str(self) -> str:
+        """Get the time as a string."""
+        if self.finish_time is None:
+            return "N/A"
+
+        return self.finish_time.datetime.strftime("%Y.%m.%d %H:%M")
+
+
+class StarRailTreasureDungeon(StarRailActivityBase):
+    """Treasure Dungeon"""
+
+    records: List[StarRailTreasureDungeonRecord]
+
+
 class StarRailActivity(APIModel):
     """Starrail chronicle activity."""
 
@@ -105,3 +138,11 @@ class StarRailActivity(APIModel):
             return StarRailFantasticStory(**data["fantastic_story"])
 
         raise ValueError("No fantastic story activity found.")
+
+    @property
+    def treasure_dungeon(self) -> StarRailTreasureDungeon:
+        """Get the treasure dungeon activity."""
+        if data := self.find_activity("treasure_dungeon"):
+            return StarRailTreasureDungeon(**data["treasure_dungeon"])
+
+        raise ValueError("No treasure dungeon activity found.")
