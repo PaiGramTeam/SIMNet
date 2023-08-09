@@ -105,6 +105,26 @@ class AuthClient(BaseClient):
         account_id: Optional[int] = None,
         mid: Optional[str] = None,
     ) -> None:
+        """
+        Checks and sets the stoken, account_id, and mid for a user.
+
+        This function retrieves the stoken, account_id, and mid from the provided arguments
+        or falls back to using existing properties/cookies. It then validates the presence of
+        'stoken' and 'account_id'. If the stoken starts with 'v2_', the presence of 'mid' is
+        also validated. Finally, the stoken, account_id, and potentially the mid are set to
+        the cookies.
+
+        Args:
+            stoken (str, optional): The stoken to check and set. Defaults to the stoken cookie.
+            account_id (int, optional): The account ID to check and set. Defaults to self.account_id.
+            mid (str, optional): The mid to check and set. Defaults to the mid cookie.
+
+        Raises:
+            ValueError: If the stoken, account_id, or mid (when stoken starts with 'v2_') is not provided.
+
+        Returns:
+            None: This function modifies instance properties and does not return a value.
+        """
         stoken = stoken or self.cookies.get("stoken")
         account_id = account_id or self.account_id
         mid = mid or self.cookies.get("mid")
@@ -248,7 +268,8 @@ class AuthClient(BaseClient):
         Generate login qrcode and return url and ticket
 
         Args:
-            app_id (str): The app id to use to generate the qrcode. If not provided, the `app_id` attribute value will be used.
+            app_id (str): The app id to use to generate the qrcode.
+                If not provided, the `app_id` attribute value will be used.
 
         Returns:
             Tuple[str, str]: The url and ticket of the qrcode.
@@ -269,7 +290,8 @@ class AuthClient(BaseClient):
 
         Args:
             ticket (str): The ticket of the qrcode.
-            app_id (str): The app id to use to generate the qrcode. If not provided, the `app_id` attribute value will be used.
+            app_id (str): The app id to use to generate the qrcode. If not provided,
+                the `app_id` attribute value will be used.
 
         Returns:
             Union[bool, str]: The token of the qrcode if success, else False.
@@ -348,8 +370,10 @@ class AuthClient(BaseClient):
         Get stoken_v2 and mid by stoken_v1
 
         Args:
-            stoken (Optional[str]): The stoken_v1 to use to retrieve the stoken_v2 and mid. If not provided, the `stoken` attribute value will be used.
-            account_id (Optional[int]): The account ID to use to retrieve the stoken_v2 and mid. If not provided, the `account_id` attribute value will be used.
+            stoken (Optional[str]): The stoken_v1 to use to retrieve the stoken_v2 and mid.
+                If not provided, the `stoken` attribute value will be used.
+            account_id (Optional[int]): The account ID to use to retrieve the stoken_v2 and mid.
+                If not provided, the `account_id` attribute value will be used.
 
         Returns:
             Tuple[str, str]: The stoken_v2 and mid.
@@ -376,9 +400,12 @@ class AuthClient(BaseClient):
         Get game token by stoken
 
         Args:
-            stoken (Optional[str]): The stoken_v1 to use to retrieve the game token. If not provided, the `stoken` attribute value will be used.
-            account_id (Optional[int]): The account ID to use to retrieve the game token. If not provided, the `account_id` attribute value will be used.
-            mid (Optional[str]): The mid to use to retrieve the game token. If not provided, the `mid` attribute value will be used.
+            stoken (Optional[str]): The stoken_v1 to use to retrieve the game token.
+                If not provided, the `stoken` attribute value will be used.
+            account_id (Optional[int]): The account ID to use to retrieve the game token.
+                If not provided, the `account_id` attribute value will be used.
+            mid (Optional[str]): The mid to use to retrieve the game token.
+                If not provided, the `mid` attribute value will be used.
 
         Returns:
             str: The game token.
