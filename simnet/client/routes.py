@@ -71,6 +71,20 @@ class URL(_URL):
         """
         return str(self) != ""
 
+    def replace(self, old: str, new: str) -> "URL":
+        """
+        Replace a substring in the URL.
+
+        Args:
+            old (str): The substring to replace.
+            new (str): The new substring to replace with.
+
+        Returns:
+            URL: A new URL instance with the substring replaced.
+
+        """
+        return URL(str(self).replace(old, new))
+
 
 class BaseRoute:
     """A base class for defining routes with useful metadata."""

@@ -293,7 +293,7 @@ class AuthClient(BaseClient):
             url (str): The url of the qrcode.
 
         Returns:
-            bool: True if success, else False.
+            None
         """
         if self.region != Region.CHINESE:
             raise RegionNotSupported()
@@ -304,7 +304,7 @@ class AuthClient(BaseClient):
         ticket = u.params.get("ticket")
         app_id = u.params.get("app_id")
         biz_key = u.params.get("biz_key")
-        scan_url = str(QRCODE_URL / "scan").replace("hk4e_cn", biz_key)
+        scan_url = (QRCODE_URL / "scan").replace("hk4e_cn", biz_key)
         data = {"ticket": ticket, "app_id": app_id, "device": self.get_device_id()}
         await self.request_lab(url=scan_url, data=data)
         game_token = await self.get_game_token_by_stoken()
@@ -312,7 +312,7 @@ class AuthClient(BaseClient):
             "proto": "Account",
             "raw": json.dumps({"uid": str(self.account_id), "token": game_token}, indent=4, ensure_ascii=False),
         }
-        confirm_url = str(QRCODE_URL / "confirm").replace("hk4e_cn", biz_key)
+        confirm_url = (QRCODE_URL / "confirm").replace("hk4e_cn", biz_key)
         await self.request_lab(url=confirm_url, data=data)
 
     async def get_stoken_v2_and_mid_by_game_token(self, game_token: str) -> Tuple[str, str]:
