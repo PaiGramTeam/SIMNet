@@ -115,8 +115,7 @@ class AuthClient(BaseClient):
         if stoken.startswith("v2_"):
             if mid is None:
                 raise ValueError("The 'mid' argument cannot be None.")
-            else:
-                self.cookies.set("mid", mid)
+            self.cookies.set("mid", mid)
         self.cookies.set("stuid", str(account_id))
         self.cookies.set("stoken", stoken)
 
