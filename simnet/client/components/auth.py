@@ -9,6 +9,7 @@ from simnet.client.routes import (
     PASSPORT_URL,
     WEB_ACCOUNT_URL,
     QRCODE_URL,
+    URL,
 )
 from simnet.errors import RegionNotSupported
 from simnet.utils.enum_ import Region
@@ -256,7 +257,7 @@ class AuthClient(BaseClient):
         if self.region != Region.CHINESE:
             raise RegionNotSupported()
         data = {"app_id": app_id, "device": self.get_device_id()}
-        res_json = await self.request_api("POST", url=QRCODE_URL.get_url() / "fetch", json=data)
+        res_json = await self.request_api("POST", url=QRCODE_URL / "fetch", json=data)
         url = res_json.get("url", "")
         if not url:
             return "", ""
@@ -277,12 +278,42 @@ class AuthClient(BaseClient):
         if self.region != Region.CHINESE:
             raise RegionNotSupported()
         data = {"app_id": app_id, "ticket": ticket, "device": self.get_device_id()}
-        res_data = await self.request_api("POST", url=QRCODE_URL.get_url() / "query", json=data)
+        res_data = await self.request_api("POST", url=QRCODE_URL / "query", json=data)
         if res_data.get("stat", "") != "Confirmed":
             return False
         info = json.loads(res_data.get("payload", {}).get("raw", "{}"))
         self.account_id = int(info.get("uid", 0))
         return info.get("token", "")
+
+    async def accept_login_qrcode(self, url: str) -> None:
+        """
+        Accept login qrcode
+
+        Args:
+            url (str): The url of the qrcode.
+
+        Returns:
+            bool: True if success, else False.
+        """
+        if self.region != Region.CHINESE:
+            raise RegionNotSupported()
+        self.check_stoken()
+        if not url.startswith("https://user.mihoyo.com/qr_code_in_game.html"):
+            raise ValueError("Invalid url")
+        u = URL(url)
+        ticket = u.params.get("ticket")
+        app_id = u.params.get("app_id")
+        biz_key = u.params.get("biz_key")
+        scan_url = str(QRCODE_URL / "scan").replace("hk4e_cn", biz_key)
+        data = {"ticket": ticket, "app_id": app_id, "device": self.get_device_id()}
+        await self.request_lab(url=scan_url, data=data)
+        game_token = await self.get_game_token_by_stoken()
+        data["payload"] = {
+            "proto": "Account",
+            "raw": json.dumps({"uid": str(self.account_id), "token": game_token}, indent=4, ensure_ascii=False),
+        }
+        confirm_url = str(QRCODE_URL / "confirm").replace("hk4e_cn", biz_key)
+        await self.request_lab(url=confirm_url, data=data)
 
     async def get_stoken_v2_and_mid_by_game_token(self, game_token: str) -> Tuple[str, str]:
         """
@@ -335,3 +366,27 @@ class AuthClient(BaseClient):
         self.cookies.set("mid", mid)
         self.cookies.set("stoken", stoken_v2)
         return stoken_v2, mid
+
+    async def get_game_token_by_stoken(
+        self,
+        stoken: Optional[str] = None,
+        account_id: Optional[int] = None,
+        mid: Optional[str] = None,
+    ) -> str:
+        """
+        Get game token by stoken
+
+        Args:
+            stoken (Optional[str]): The stoken_v1 to use to retrieve the game token. If not provided, the `stoken` attribute value will be used.
+            account_id (Optional[int]): The account ID to use to retrieve the game token. If not provided, the `account_id` attribute value will be used.
+            mid (Optional[str]): The mid to use to retrieve the game token. If not provided, the `mid` attribute value will be used.
+
+        Returns:
+            str: The game token.
+        """
+        if self.region != Region.CHINESE:
+            raise RegionNotSupported()
+        self.check_stoken(stoken, account_id, mid)
+        url = AUTH_URL.get_url(self.region) / "getGameToken"
+        data = await self.request_lab(url, method="GET")
+        return data.get("game_token", "")

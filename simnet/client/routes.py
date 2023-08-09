@@ -101,6 +101,19 @@ class Route(BaseRoute):
         """
         return self.url
 
+    def __truediv__(self, other: str) -> URL:
+        """
+        Append the given URL to this route using the '/' operator.
+
+        Args:
+            other (Union[URL, str]): The URL to append.
+
+        Returns:
+            URL: A new URL instance representing the joined URL.
+
+        """
+        return self.url / other
+
 
 class InternationalRoute(BaseRoute):
     """A route with URLs for both the overseas and Chinese regions."""
