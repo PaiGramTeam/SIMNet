@@ -161,12 +161,12 @@ class LabClient(BaseClient):
 
         info, details = await asyncio.gather(
             self.request_bbs(
-                HK4E_URL.get_url() / "announcement/api/getAnnList",
+                HK4E_URL / "announcement/api/getAnnList",
                 lang=lang,
                 params=params,
             ),
             self.request_bbs(
-                HK4E_URL.get_url() / "announcement/api/getAnnContent",
+                HK4E_URL / "announcement/api/getAnnContent",
                 lang=lang,
                 params=params,
             ),

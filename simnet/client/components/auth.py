@@ -1,4 +1,5 @@
-from typing import Optional, NoReturn
+import json
+from typing import Optional, NoReturn, Tuple, Union
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import (
@@ -7,7 +8,10 @@ from simnet.client.routes import (
     HK4E_LOGIN_URL,
     PASSPORT_URL,
     WEB_ACCOUNT_URL,
+    QRCODE_URL,
+    URL,
 )
+from simnet.errors import RegionNotSupported
 from simnet.utils.enum_ import Region
 
 __all__ = ("AuthClient",)
@@ -95,8 +99,51 @@ class AuthClient(BaseClient):
             self.cookies["cookie_token"] = cookie_token
         return cookie_token
 
+    def check_stoken(
+        self,
+        stoken: Optional[str] = None,
+        account_id: Optional[int] = None,
+        mid: Optional[str] = None,
+    ) -> None:
+        """
+        Checks and sets the stoken, account_id, and mid for a user.
+
+        This function retrieves the stoken, account_id, and mid from the provided arguments
+        or falls back to using existing properties/cookies. It then validates the presence of
+        'stoken' and 'account_id'. If the stoken starts with 'v2_', the presence of 'mid' is
+        also validated. Finally, the stoken, account_id, and potentially the mid are set to
+        the cookies.
+
+        Args:
+            stoken (str, optional): The stoken to check and set. Defaults to the stoken cookie.
+            account_id (int, optional): The account ID to check and set. Defaults to self.account_id.
+            mid (str, optional): The mid to check and set. Defaults to the mid cookie.
+
+        Raises:
+            ValueError: If the stoken, account_id, or mid (when stoken starts with 'v2_') is not provided.
+
+        Returns:
+            None: This function modifies instance properties and does not return a value.
+        """
+        stoken = stoken or self.cookies.get("stoken")
+        account_id = account_id or self.account_id
+        mid = mid or self.cookies.get("mid")
+        if stoken is None:
+            raise ValueError("The 'stoken' argument cannot be None.")
+        if account_id is None:
+            raise ValueError("The 'account_id' argument cannot be None.")
+        if stoken.startswith("v2_"):
+            if mid is None:
+                raise ValueError("The 'mid' argument cannot be None.")
+            self.cookies.set("mid", mid)
+        self.cookies.set("stuid", str(account_id))
+        self.cookies.set("stoken", stoken)
+
     async def get_cookie_token_by_stoken(
-        self, stoken: Optional[str] = None, account_id: Optional[int] = None
+        self,
+        stoken: Optional[str] = None,
+        account_id: Optional[int] = None,
+        mid: Optional[str] = None,
     ) -> Optional[str]:
         """
         Retrieves a cookie token (`cookie_token`) using a super ticket (`stoken`).
@@ -106,6 +153,8 @@ class AuthClient(BaseClient):
                 `stoken` cookie value will be used.
             account_id (Optional[int]): The account ID to use to retrieve the cookie token. If not provided, the
                 `account_id` attribute value will be used.
+            mid (Optional[str]): The machine ID to use to retrieve the cookie token. If not provided, the `mid`
+                attribute value will be used.
 
         Returns:
             Optional[str]: The retrieved cookie token (`cookie_token`).
@@ -113,19 +162,10 @@ class AuthClient(BaseClient):
         Raises:
             ValueError: If the `login_ticket` argument is `None`, or if the `account_id` argument is `None`.
         """
-        stoken = stoken or self.cookies.get("stoken")
-        account_id = account_id or self.account_id
-        if stoken is None:
-            raise ValueError("The 'stoken' argument cannot be None.")
-        if account_id is None:
-            raise ValueError("The 'account_id' argument cannot be None.")
+        self.check_stoken(stoken, account_id, mid)
         url = PASSPORT_URL.get_url(self.region) / "getCookieAccountInfoBySToken"
         method = "GET" if self.region == Region.CHINESE else "POST"
-        params = {
-            "stoken": stoken,
-            "uid": account_id,
-        }
-        data = await self.request_lab(url, method=method, params=params)
+        data = await self.request_lab(url, method=method)
         cookie_token = data.get("cookie_token")
         if cookie_token:
             self.cookies["cookie_token"] = cookie_token
@@ -133,7 +173,10 @@ class AuthClient(BaseClient):
         return cookie_token
 
     async def get_ltoken_by_stoken(
-        self, stoken: Optional[str] = None, account_id: Optional[int] = None
+        self,
+        stoken: Optional[str] = None,
+        account_id: Optional[int] = None,
+        mid: Optional[str] = None,
     ) -> Optional[str]:
         """
         Retrieves a login token (`ltoken`) using a super ticket (`stoken`).
@@ -143,6 +186,8 @@ class AuthClient(BaseClient):
                 `stoken` cookie value will be used.
             account_id (Optional[int]): The account ID to use to retrieve the cookie token. If not provided, the
                 `account_id` attribute value will be used.
+            mid (Optional[str]): The machine ID to use to retrieve the cookie token. If not provided, the `mid`
+                attribute value will be used.
 
         Returns:
             Optional[str]: The retrieved cookie token (`cookie_token`).
@@ -150,19 +195,10 @@ class AuthClient(BaseClient):
         Raises:
             ValueError: If the `login_ticket` argument is `None`, or if the `account_id` argument is `None`.
         """
-        stoken = stoken or self.cookies.get("stoken")
-        account_id = account_id or self.account_id
-        if stoken is None:
-            raise ValueError("The 'stoken' argument cannot be None.")
-        if account_id is None:
-            raise ValueError("The 'account_id' argument cannot be None.")
+        self.check_stoken(stoken, account_id, mid)
         url = PASSPORT_URL.get_url(self.region) / "getLTokenBySToken"
         method = "GET" if self.region == Region.CHINESE else "POST"
-        params = {
-            "stoken": stoken,
-            "uid": account_id,
-        }
-        data = await self.request_lab(url, method=method, params=params)
+        data = await self.request_lab(url, method=method)
         ltoken = data.get("ltoken", "")
         if ltoken:
             self.cookies["ltoken"] = ltoken
@@ -185,22 +221,15 @@ class AuthClient(BaseClient):
         Raises:
             ValueError: If `stoken` is not found in the cookies or `player_id` not found.
         """
-        stoken = self.cookies.get("stoken")
-        if stoken is None:
-            raise ValueError("stoken not found in cookies.")
-        stuid = self.cookies.get("stuid")
-        if stuid is None and self.account_id is None:
-            raise ValueError("account_id or stuid not found")
-        if self.account_id is not None and stuid is None:
-            self.cookies.set("stuid", str(self.account_id))
+        self.check_stoken()
         url = AUTH_KEY_URL.get_url(self.region)
-        json = {
+        json_ = {
             "auth_appid": auth_appid,
             "game_biz": game_biz,
             "game_uid": self.player_id,
             "region": region,
         }
-        data = await self.request_lab(url, data=json)
+        data = await self.request_lab(url, data=json_)
         return data.get("authkey")
 
     async def get_hk4e_token_by_cookie_token(
@@ -223,10 +252,167 @@ class AuthClient(BaseClient):
         if stoken is None:
             raise ValueError("cookie_token not found in cookies.")
         url = HK4E_LOGIN_URL.get_url(self.region)
-        json = {
+        json_ = {
             "game_biz": game_biz,
             "uid": self.player_id or player_id,
             "region": region,
             "lang": self.lang,
         }
-        await self.request_api("POST", url=url, json=json)
+        await self.request_api("POST", url=url, json=json_)
+
+    async def gen_login_qrcode(
+        self,
+        app_id: str = "8",
+    ) -> Tuple[str, str]:
+        """
+        Generate login qrcode and return url and ticket
+
+        Args:
+            app_id (str): The app id to use to generate the qrcode.
+                If not provided, the `app_id` attribute value will be used.
+
+        Returns:
+            Tuple[str, str]: The url and ticket of the qrcode.
+        """
+        if self.region != Region.CHINESE:
+            raise RegionNotSupported()
+        data = {"app_id": app_id, "device": self.get_device_id()}
+        res_json = await self.request_api("POST", url=QRCODE_URL / "fetch", json=data)
+        url = res_json.get("url", "")
+        if not url:
+            return "", ""
+        ticket = url.split("ticket=")[1]
+        return url, ticket
+
+    async def check_login_qrcode(self, ticket: str, app_id: str = "8") -> Union[bool, str]:
+        """
+        Check login qrcode and return token if success
+
+        Args:
+            ticket (str): The ticket of the qrcode.
+            app_id (str): The app id to use to generate the qrcode. If not provided,
+                the `app_id` attribute value will be used.
+
+        Returns:
+            Union[bool, str]: The token of the qrcode if success, else False.
+        """
+        if self.region != Region.CHINESE:
+            raise RegionNotSupported()
+        data = {"app_id": app_id, "ticket": ticket, "device": self.get_device_id()}
+        res_data = await self.request_api("POST", url=QRCODE_URL / "query", json=data)
+        if res_data.get("stat", "") != "Confirmed":
+            return False
+        info = json.loads(res_data.get("payload", {}).get("raw", "{}"))
+        self.account_id = int(info.get("uid", 0))
+        return info.get("token", "")
+
+    async def accept_login_qrcode(self, url: str) -> None:
+        """
+        Accept login qrcode
+
+        Args:
+            url (str): The url of the qrcode.
+
+        Returns:
+            None
+        """
+        if self.region != Region.CHINESE:
+            raise RegionNotSupported()
+        self.check_stoken()
+        if not url.startswith("https://user.mihoyo.com/qr_code_in_game.html"):
+            raise ValueError("Invalid url")
+        u = URL(url)
+        ticket = u.params.get("ticket")
+        app_id = u.params.get("app_id")
+        biz_key = u.params.get("biz_key")
+        scan_url = (QRCODE_URL / "scan").replace("hk4e_cn", biz_key)
+        data = {"ticket": ticket, "app_id": app_id, "device": self.get_device_id()}
+        await self.request_lab(url=scan_url, data=data)
+        game_token = await self.get_game_token_by_stoken()
+        data["payload"] = {
+            "proto": "Account",
+            "raw": json.dumps({"uid": str(self.account_id), "token": game_token}, indent=4, ensure_ascii=False),
+        }
+        confirm_url = (QRCODE_URL / "confirm").replace("hk4e_cn", biz_key)
+        await self.request_lab(url=confirm_url, data=data)
+
+    async def get_stoken_v2_and_mid_by_game_token(self, game_token: str) -> Tuple[str, str]:
+        """
+        Get stoken_v2 and mid by game token
+
+        Args:
+            game_token (str): The game token to use to retrieve the stoken_v2 and mid.
+
+        Returns:
+            Tuple[str, str]: The stoken_v2 and mid.
+        """
+        if self.region != Region.CHINESE:
+            raise RegionNotSupported()
+        url = PASSPORT_URL.get_url(self.region) / "../../ma-cn-session/app/getTokenByGameToken"
+        data = {
+            "account_id": self.account_id,
+            "game_token": game_token,
+        }
+        headers = {"x-rpc-app_id": "bll8iq97cem8" if self.region == Region.CHINESE else "c9oqaq3s3gu8"}
+        data = await self.request_lab(url, data=data, headers=headers)
+        mid = data.get("user_info", {}).get("mid", "")
+        stoken_v2 = data.get("token", {}).get("token", "")
+        self.cookies.set("mid", mid)
+        self.cookies.set("stoken", stoken_v2)
+        return stoken_v2, mid
+
+    async def get_stoken_v2_and_mid_by_by_stoken(
+        self,
+        stoken: Optional[str] = None,
+        account_id: Optional[int] = None,
+    ) -> Tuple[str, str]:
+        """
+        Get stoken_v2 and mid by stoken_v1
+
+        Args:
+            stoken (Optional[str]): The stoken_v1 to use to retrieve the stoken_v2 and mid.
+                If not provided, the `stoken` attribute value will be used.
+            account_id (Optional[int]): The account ID to use to retrieve the stoken_v2 and mid.
+                If not provided, the `account_id` attribute value will be used.
+
+        Returns:
+            Tuple[str, str]: The stoken_v2 and mid.
+        """
+        if self.region != Region.CHINESE:
+            raise RegionNotSupported()
+        self.check_stoken(stoken, account_id)
+        url = PASSPORT_URL.get_url(self.region) / "../../ma-cn-session/app/getTokenBySToken"
+        headers = {"x-rpc-app_id": "bll8iq97cem8"}
+        data = await self.request_lab(url, method="POST", headers=headers)
+        mid = data.get("user_info", {}).get("mid", "")
+        stoken_v2 = data.get("token", {}).get("token", "")
+        self.cookies.set("mid", mid)
+        self.cookies.set("stoken", stoken_v2)
+        return stoken_v2, mid
+
+    async def get_game_token_by_stoken(
+        self,
+        stoken: Optional[str] = None,
+        account_id: Optional[int] = None,
+        mid: Optional[str] = None,
+    ) -> str:
+        """
+        Get game token by stoken
+
+        Args:
+            stoken (Optional[str]): The stoken_v1 to use to retrieve the game token.
+                If not provided, the `stoken` attribute value will be used.
+            account_id (Optional[int]): The account ID to use to retrieve the game token.
+                If not provided, the `account_id` attribute value will be used.
+            mid (Optional[str]): The mid to use to retrieve the game token.
+                If not provided, the `mid` attribute value will be used.
+
+        Returns:
+            str: The game token.
+        """
+        if self.region != Region.CHINESE:
+            raise RegionNotSupported()
+        self.check_stoken(stoken, account_id, mid)
+        url = AUTH_URL.get_url(self.region) / "getGameToken"
+        data = await self.request_lab(url, method="GET")
+        return data.get("game_token", "")

@@ -29,6 +29,7 @@ __all__ = (
     "HK4E_URL",
     "CODE_URL",
     "YSULOG_URL",
+    "QRCODE_URL",
 )
 
 
@@ -70,6 +71,20 @@ class URL(_URL):
         """
         return str(self) != ""
 
+    def replace(self, old: str, new: str) -> "URL":
+        """
+        Replace a substring in the URL.
+
+        Args:
+            old (str): The substring to replace.
+            new (str): The new substring to replace with.
+
+        Returns:
+            URL: A new URL instance with the substring replaced.
+
+        """
+        return URL(str(self).replace(old, new))
+
 
 class BaseRoute:
     """A base class for defining routes with useful metadata."""
@@ -99,6 +114,19 @@ class Route(BaseRoute):
 
         """
         return self.url
+
+    def __truediv__(self, other: str) -> URL:
+        """
+        Append the given URL to this route using the '/' operator.
+
+        Args:
+            other (Union[URL, str]): The URL to append.
+
+        Returns:
+            URL: A new URL instance representing the joined URL.
+
+        """
+        return self.url / other
 
 
 class InternationalRoute(BaseRoute):
@@ -276,3 +304,5 @@ YSULOG_URL = InternationalRoute(
 HK4E_URL = Route("https://sg-hk4e-api.hoyoverse.com/common/hk4e_global/")
 
 CODE_URL = Route("https://sg-hk4e-api.hoyoverse.com/common/apicdkey/api/webExchangeCdkey")
+
+QRCODE_URL = Route("https://hk4e-sdk.mihoyo.com/hk4e_cn/combo/panda/qrcode")
