@@ -21,6 +21,7 @@ class Stats(APIModel):
         geoculi (int): Number of Geoculus collected by the user.
         dendroculi (int): Number of Dendroculus collected by the user.
         electroculi (int): Number of Electroculus collected by the user.
+        hydroculi (int): Number of Hydroculus opened by the user.
         common_chests (int): Number of Common Chests opened by the user.
         exquisite_chests (int): Number of Exquisite Chests opened by the user.
         precious_chests (int): Number of Precious Chests opened by the user.
@@ -38,6 +39,7 @@ class Stats(APIModel):
     geoculi: int = Field(aliases="geoculus_number")
     dendroculi: int = Field(aliases="dendroculus_number")
     electroculi: int = Field(aliases="electroculus_number")
+    hydroculi: int = Field(aliases="hydroculus_number")
     common_chests: int = Field(aliases="common_chest_number")
     exquisite_chests: int = Field(aliases="exquisite_chest_number")
     precious_chests: int = Field(aliases="precious_chest_number")
