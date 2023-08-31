@@ -49,6 +49,8 @@ class StarRailNote(APIModel):
         max_rogue_score (int): The max simulated universe weekly points.
         remaining_weekly_discounts (int): The remaining echo of war rewards.
         max_weekly_discounts (int): The echo of war attempt limit.
+        current_reserve_stamina (int): The current reserve stamina.
+        is_reserve_stamina_full (bool): Whether the reserve stamina is full.
     """
 
     current_stamina: int
@@ -72,6 +74,11 @@ class StarRailNote(APIModel):
     """Remaining echo of war rewards"""
     max_weekly_discounts: int = Field(alias="weekly_cocoon_limit")
     """Echo of war attempt limit"""
+
+    current_reserve_stamina: int
+    """Current reserve stamina"""
+    is_reserve_stamina_full: bool
+    """Whether the reserve stamina is full"""
 
 
 class StarRailNoteWidget(APIModel):
