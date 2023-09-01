@@ -6,40 +6,13 @@ from simnet.models.starrail.character import ActivityCharacter
 
 from .base import PartialTime
 
-__all__ = ["StarRailActivityBase", "StarRailStarFightRecord", "StarRailStarFight", "StarRailActivity"]
-
 
 class StarRailActivityBase(APIModel):
     """StarRailActivity Base Model"""
 
-    exists_data: bool
+    exists_data: bool = True
     is_hot: bool
     strategy_link: str = ""
-
-
-class StarRailStarFightRecord(APIModel):
-    """Stellar Flare Record"""
-
-    name: str
-    difficulty_id: int
-    round: int
-    stage_id: int
-    time: Optional[PartialTime]
-    lineup: List[ActivityCharacter]
-
-    @property
-    def time_str(self) -> str:
-        """Get the time as a string."""
-        if self.time is None:
-            return "N/A"
-
-        return self.time.datetime.strftime("%Y.%m.%d %H:%M")
-
-
-class StarRailStarFight(StarRailActivityBase):
-    """Stellar Flare"""
-
-    records: List[StarRailStarFightRecord]
 
 
 class StarRailFantasticStoryBuff(APIModel):
@@ -110,6 +83,57 @@ class StarRailTreasureDungeon(StarRailActivityBase):
     records: List[StarRailTreasureDungeonRecord]
 
 
+class StarRailCopperManInfoBasic(APIModel):
+    """Copper Man Info Basic"""
+
+    level: int
+    accumulate: int
+    cur_common_order: int
+    max_common_order: int
+    cur_customer_order: int
+    max_customer_order: int
+    cur_alley_event: int
+    max_alley_event: int
+
+    @property
+    def common_order_process(self) -> float:
+        """Get the common order process."""
+        return 100.0 * self.cur_common_order / self.max_common_order
+
+    @property
+    def customer_order_process(self) -> float:
+        """Get the customer order process."""
+        return 100.0 * self.cur_customer_order / self.max_customer_order
+
+    @property
+    def alley_event_process(self) -> float:
+        """Get the alley event process."""
+        return 100.0 * self.cur_alley_event / self.max_alley_event
+
+
+class StarRailCopperManInfoShop(APIModel):
+    """Copper Man Info Shop"""
+
+    id: int
+    icon: str
+    name: str
+    is_unlock: bool
+
+
+class StarRailCopperManInfo(APIModel):
+    """Copper Man Info"""
+
+    basic: StarRailCopperManInfoBasic
+    shops: List[StarRailCopperManInfoShop]
+    exists_data: bool
+
+
+class StarRailCopperMan(StarRailActivityBase):
+    """Copper Man"""
+
+    info: StarRailCopperManInfo
+
+
 class StarRailActivity(APIModel):
     """Starrail chronicle activity."""
 
@@ -119,30 +143,20 @@ class StarRailActivity(APIModel):
         """Find an activity by key."""
         for activity in self.activities:
             if list(activity.keys())[0] == key:
-                return activity
-
-        return None
-
-    @property
-    def star_fight(self) -> StarRailStarFight:
-        """Get the star fight activity."""
-        if data := self.find_activity("star_fight"):
-            return StarRailStarFight(**data["star_fight"])
-
+                return activity[key]
         raise ValueError("No star fight activity found.")
 
     @property
     def fantastic_story(self) -> StarRailFantasticStory:
         """Get the fantastic story activity."""
-        if data := self.find_activity("fantastic_story"):
-            return StarRailFantasticStory(**data["fantastic_story"])
-
-        raise ValueError("No fantastic story activity found.")
+        return StarRailFantasticStory(**self.find_activity("fantastic_story"))
 
     @property
     def treasure_dungeon(self) -> StarRailTreasureDungeon:
         """Get the treasure dungeon activity."""
-        if data := self.find_activity("treasure_dungeon"):
-            return StarRailTreasureDungeon(**data["treasure_dungeon"])
+        return StarRailTreasureDungeon(**self.find_activity("treasure_dungeon"))
 
-        raise ValueError("No treasure dungeon activity found.")
+    @property
+    def copper_man(self) -> StarRailCopperMan:
+        """Get the copper man activity."""
+        return StarRailCopperMan(**self.find_activity("copper_man"))
