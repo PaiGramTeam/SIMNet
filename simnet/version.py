@@ -29,5 +29,5 @@ class Version(NamedTuple):
         return version
 
 
-__version_info__ = Version(major=0, minor=1, micro=9, release_level="beta", serial=0)
+__version_info__ = Version(major=0, minor=1, micro=10, release_level="beta", serial=0)
 __version__ = str(__version_info__)

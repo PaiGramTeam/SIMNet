@@ -45,3 +45,5 @@ class StarRailUserStats(PartialStarRailUserStats):
     """User stats."""
 
     info: StarRailUserInfo
+    cur_head_icon_url: str
+    phone_background_image_url: str
