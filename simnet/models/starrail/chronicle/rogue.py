@@ -149,6 +149,14 @@ class RogueLocustRecordDetail(APIModel):
     worm_weak: List[str]
     fury: RogueLocustRecordDetailFury
 
+    @property
+    def time_str(self) -> str:
+        """Get the time as a string."""
+        if self.finish_time is None:
+            return "N/A"
+
+        return self.finish_time.datetime.strftime("%Y.%m.%d %H:%M")
+
 
 class RogueLocustRecords(APIModel):
     """Rogue Locust records"""
