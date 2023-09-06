@@ -144,7 +144,7 @@ class StarRailActivity(APIModel):
         for activity in self.activities:
             if list(activity.keys())[0] == key:
                 return activity[key]
-        raise ValueError("No star fight activity found.")
+        raise ValueError("No starrail activity found.")
 
     @property
     def fantastic_story(self) -> StarRailFantasticStory:
