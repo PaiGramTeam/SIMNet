@@ -10,6 +10,7 @@ from simnet.models.starrail.chronicle.challenge import StarRailChallenge
 from simnet.models.starrail.chronicle.characters import StarRailDetailCharacters
 from simnet.models.starrail.chronicle.museum import StarRailMuseumBasic, StarRailMuseumDetail
 from simnet.models.starrail.chronicle.notes import StarRailNote, StarRailNoteWidget, StarRailNoteOverseaWidget
+from simnet.models.starrail.chronicle.resident import StarRailResident
 from simnet.models.starrail.chronicle.rogue import StarRailRogue
 from simnet.models.starrail.chronicle.stats import StarRailUserStats, StarRailUserInfo
 from simnet.utils.enum_ import Game, Region
@@ -290,6 +291,27 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         """
         data = await self._request_starrail_record("activity", uid, lang=lang)
         return StarRailActivity(**data)
+
+    async def get_starrail_resident(
+        self,
+        uid: Optional[int] = None,
+        lang: Optional[str] = None,
+    ) -> StarRailResident:
+        """Get starrail resident info.
+
+        Args:
+            uid (Optional[int], optional): The player ID. Defaults to None.
+            lang (Optional[str], optional): The language of the data. Defaults to None.
+
+        Returns:
+            StarRailResident: The requested activity info.
+
+        Raises:
+            BadRequest: If the request is invalid.
+            DataNotPublic: If the requested data is not public.
+        """
+        data = await self._request_starrail_record("resident", uid, lang=lang)
+        return StarRailResident(**data)
 
     async def get_starrail_notes_by_stoken(
         self,
