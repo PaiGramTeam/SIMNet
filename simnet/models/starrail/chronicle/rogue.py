@@ -94,3 +94,71 @@ class StarRailRogue(APIModel):
     basic_info: RogueBasicInfo
     current_record: RogueRecord
     last_record: RogueRecord
+
+
+class RogueLocustBasicCnt(APIModel):
+    """Rogue Locust Basic Cnt"""
+
+    narrow: int
+    miracle: int
+    event: int
+
+
+class RogueLocustBasicDestiny(APIModel):
+    """Rogue Locust Basic Destiny"""
+
+    id: int
+    desc: str
+    level: int
+
+
+class RogueLocustBasic(APIModel):
+    """Rogue Locust Basic"""
+
+    cnt: RogueLocustBasicCnt
+    destiny: List[RogueLocustBasicDestiny]
+
+
+class RogueLocustRecordDetailBlock(APIModel):
+    """Rogue Locust Block"""
+
+    block_id: int
+    name: str
+    num: int
+
+
+class RogueLocustRecordDetailFury(APIModel):
+    """Rogue Locust Fury"""
+
+    type: int
+    point: str
+
+
+class RogueLocustRecordDetail(APIModel):
+    """Detailed Rogue Locust record info."""
+
+    name: str
+    finish_time: PartialTime
+    final_lineup: List[RogueCharacter]
+    base_type_list: List[RogueBuffType]
+    cached_avatars: List[RogueCharacter]
+    buffs: List[RogueBuff]
+    miracles: List[RogueMiracle]
+    blocks: List[RogueLocustRecordDetailBlock]
+    difficulty: int
+    worm_weak: List[str]
+    fury: RogueLocustRecordDetailFury
+
+
+class RogueLocustRecords(APIModel):
+    """Rogue Locust records"""
+
+    records: List[RogueLocustRecordDetail]
+
+
+class StarRailRogueLocust(APIModel):
+    """StarRail Rogue Locust"""
+
+    basic: RogueLocustBasic
+    detail: RogueLocustRecords
+    role: RogueUserRole
