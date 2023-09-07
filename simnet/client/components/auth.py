@@ -1,5 +1,5 @@
-import json
-from typing import Optional, NoReturn, Tuple, Union
+import json as jsonlib
+from typing import Optional, Tuple, Union
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import (
@@ -223,18 +223,16 @@ class AuthClient(BaseClient):
         """
         self.check_stoken()
         url = AUTH_KEY_URL.get_url(self.region)
-        json_ = {
+        json = {
             "auth_appid": auth_appid,
             "game_biz": game_biz,
             "game_uid": self.player_id,
             "region": region,
         }
-        data = await self.request_lab(url, data=json_)
+        data = await self.request_lab(url, data=json)
         return data.get("authkey")
 
-    async def get_hk4e_token_by_cookie_token(
-        self, game_biz: str, region: str, player_id: Optional[int] = None
-    ) -> NoReturn:
+    async def get_hk4e_token_by_cookie_token(self, game_biz: str, region: str, player_id: Optional[int] = None) -> None:
         """
         Get HK4E token (`hk4e_token`) using cookie token (`cookie_token`).
         The resulting HK4E token will be automatically saved in self.cookies.
@@ -248,17 +246,17 @@ class AuthClient(BaseClient):
         Raises:
             ValueError: If `cookie_token` is not found in the cookies.
         """
-        stoken = self.cookies.get("cookie_token")
-        if stoken is None:
+        cookie_token = self.cookies.get("cookie_token")
+        if cookie_token is None:
             raise ValueError("cookie_token not found in cookies.")
         url = HK4E_LOGIN_URL.get_url(self.region)
-        json_ = {
+        json = {
             "game_biz": game_biz,
             "uid": self.player_id or player_id,
             "region": region,
             "lang": self.lang,
         }
-        await self.request_api("POST", url=url, json=json_)
+        await self.request_api("POST", url=url, json=json)
 
     async def gen_login_qrcode(
         self,
@@ -302,7 +300,7 @@ class AuthClient(BaseClient):
         res_data = await self.request_api("POST", url=QRCODE_URL / "query", json=data)
         if res_data.get("stat", "") != "Confirmed":
             return False
-        info = json.loads(res_data.get("payload", {}).get("raw", "{}"))
+        info = jsonlib.loads(res_data.get("payload", {}).get("raw", "{}"))
         self.account_id = int(info.get("uid", 0))
         return info.get("token", "")
 
@@ -329,9 +327,10 @@ class AuthClient(BaseClient):
         data = {"ticket": ticket, "app_id": app_id, "device": self.get_device_id()}
         await self.request_lab(url=scan_url, data=data)
         game_token = await self.get_game_token_by_stoken()
+        raw = jsonlib.dumps({"uid": str(self.account_id), "token": game_token}, indent=4, ensure_ascii=False)
         data["payload"] = {
             "proto": "Account",
-            "raw": json.dumps({"uid": str(self.account_id), "token": game_token}, indent=4, ensure_ascii=False),
+            "raw": raw,
         }
         confirm_url = (QRCODE_URL / "confirm").replace("hk4e_cn", biz_key)
         await self.request_lab(url=confirm_url, data=data)
