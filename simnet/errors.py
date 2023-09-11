@@ -219,6 +219,7 @@ class RedemptionClaimed(RedemptionException):
 _TBR = Type[BadRequest]
 _errors: Dict[int, Union[_TBR, str, Tuple[_TBR, Optional[str]]]] = {
     # misc hoyolab
+    -3: InvalidCookies,
     -100: InvalidCookies,
     -108: "Invalid language.",
     -110: VisitsTooFrequently,
