@@ -13,6 +13,7 @@ from simnet.client.routes import (
 )
 from simnet.errors import RegionNotSupported
 from simnet.utils.enum_ import Region
+from simnet.utils.player import recognize_game_biz, recognize_server
 
 __all__ = ("AuthClient",)
 
@@ -205,15 +206,20 @@ class AuthClient(BaseClient):
             self.cookies["ltuid"] = str(self.account_id)
         return ltoken
 
-    async def get_authkey_by_stoken(self, game_biz: str, region: str, auth_appid: str) -> Optional[str]:
+    async def get_authkey_by_stoken(
+        self,
+        auth_appid: str,
+        game_biz: Optional[str] = None,
+        region: Optional[str] = None,
+    ) -> Optional[str]:
         """
         Get the auth key (`authkey`) for a game and region using a super ticket (`stoken`).
 
         Args:
-            game_biz (str): The name of the game.
-            region (str): The region in which the game is registered.
             auth_appid (str): The type of application for which the authkey is being requested.
                 For example, to request wish records, use `webview_gacha`.
+            game_biz (Optional[str]): The name of the game.
+            region (Optional[str]): The region in which the game is registered.
 
         Returns:
             Optional[str]: The authentication key, or None if not found.
@@ -222,6 +228,10 @@ class AuthClient(BaseClient):
             ValueError: If `stoken` is not found in the cookies or `player_id` not found.
         """
         self.check_stoken()
+        if not self.player_id:
+            raise ValueError("player_id not found.")
+        game_biz = game_biz or recognize_game_biz(self.player_id, self.game)
+        region = region or recognize_server(self.player_id, self.game)
         url = AUTH_KEY_URL.get_url(self.region)
         json = {
             "auth_appid": auth_appid,
@@ -232,14 +242,19 @@ class AuthClient(BaseClient):
         data = await self.request_lab(url, data=json)
         return data.get("authkey")
 
-    async def get_hk4e_token_by_cookie_token(self, game_biz: str, region: str, player_id: Optional[int] = None) -> None:
+    async def get_hk4e_token_by_cookie_token(
+        self,
+        game_biz: Optional[str] = None,
+        region: Optional[str] = None,
+        player_id: Optional[int] = None,
+    ) -> None:
         """
         Get HK4E token (`hk4e_token`) using cookie token (`cookie_token`).
         The resulting HK4E token will be automatically saved in self.cookies.
 
         Args:
-            game_biz (str): The name of the game.
-            region (str): The region in which the game is registered.
+            game_biz (Optional[str]): The name of the game.
+            region (Optional[str]): The region in which the game is registered.
             player_id (Optional[int]): The player ID to use to retrieve the HK4E token. If not provided, the `player_id`
                 attribute value will be used.
 
@@ -249,10 +264,15 @@ class AuthClient(BaseClient):
         cookie_token = self.cookies.get("cookie_token")
         if cookie_token is None:
             raise ValueError("cookie_token not found in cookies.")
+        uid = self.player_id or player_id
+        if not uid:
+            raise ValueError("player_id not found.")
+        game_biz = game_biz or recognize_game_biz(uid, self.game)
+        region = region or recognize_server(uid, self.game)
         url = HK4E_LOGIN_URL.get_url(self.region)
         json = {
             "game_biz": game_biz,
-            "uid": self.player_id or player_id,
+            "uid": uid,
             "region": region,
             "lang": self.lang,
         }

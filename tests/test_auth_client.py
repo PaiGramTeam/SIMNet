@@ -83,7 +83,5 @@ class TestAuthClient:
             account_id=account_id,
             region=region,
         ) as client_instance:
-            authkey = await client_instance.get_authkey_by_stoken(
-                "hk4e_cn", recognize_genshin_server(genshin_player_id), "webview_gacha"
-            )
+            authkey = await client_instance.get_authkey_by_stoken("webview_gacha")
         assert authkey is not None
