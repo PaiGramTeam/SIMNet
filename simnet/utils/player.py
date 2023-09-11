@@ -118,9 +118,39 @@ def recognize_server(player_id: int, game: Game) -> str:
 
 
 def recognize_genshin_game_biz(game_uid: int) -> str:
-    """Recognizes the region of a player ID for a game biz.
+    """Recognizes the game biz of a player ID for a game biz.
 
     Returns:
         str: The game biz the player ID belongs to.
     """
     return "hk4e_cn" if game_uid < 600000000 else "hk4e_global"
+
+
+def recognize_starrail_game_biz(game_uid: int) -> str:
+    """Recognizes the game biz of a player ID for a game biz.
+
+    Returns:
+        str: The game biz the player ID belongs to.
+    """
+    return "hkrpg_cn" if game_uid < 600000000 else "hkrpg_global"
+
+
+def recognize_game_biz(player_id: int, game: Game) -> str:
+    """
+    Recognizes the game biz of a player ID for a given game.
+
+    Args:
+        player_id (int): The player ID to recognize the server for.
+        game (Game): The game the player ID belongs to.
+
+    Returns:
+        str: The game biz the player ID belongs to.
+
+    Raises:
+        ValueError: If the specified game is not supported.
+    """
+    if game == Game.GENSHIN:
+        return recognize_genshin_game_biz(player_id)
+    if game == Game.STARRAIL:
+        return recognize_starrail_game_biz(player_id)
+    raise ValueError(f"{game} is not a valid game")
