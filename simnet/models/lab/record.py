@@ -1,6 +1,6 @@
 import enum
 import re
-from typing import Optional, Any, Dict, List, Union
+from typing import Optional, Any, Dict, List, Union, Type
 
 from pydantic import Field, validator
 
@@ -253,6 +253,12 @@ class RecordCard(BaseRecordCard):
         url (str): The URL of the record card.
     """
 
+    GAME_ID_MAP: Dict[int, Type["RecordCard"]] = {
+        1: "HonkaiRecordCard",
+        2: "GenshinRecordCard",
+        6: "StarRailRecodeCard",
+    }
+
     def __new__(cls, **kwargs: Any) -> "RecordCard":
         """Creates an appropriate record card instance based on the provided game ID.
 
@@ -263,14 +269,8 @@ class RecordCard(BaseRecordCard):
             RecordCard: An instance of a subclass of `BaseRecordCard` based on the provided game ID.
         """
         game_id = kwargs.get("game_id", 0)
-        if game_id == 1:
-            cls = HonkaiRecordCard  # skipcq: PYL-W0642
-        if game_id == 2:
-            cls = GenshinRecordCard  # skipcq: PYL-W0642
-        if game_id == 6:
-            cls = StarRailRecodeCard  # skipcq: PYL-W0642
-
-        return super().__new__(cls)  # skipcq: PYL-E1120
+        cls = cls.GAME_ID_MAP.get(game_id, cls)
+        return super().__new__(cls)
 
 
 class GenshinRecordCard(RecordCard):
