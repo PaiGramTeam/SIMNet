@@ -22,7 +22,7 @@ __all__ = (
 )
 
 
-GAME_ID_MAP: Dict[int, Type["RecordCard"]] = {}
+RECORD_CARD_MAP: Dict[int, Type["RecordCard"]] = {}
 
 
 class Account(APIModel):
@@ -256,18 +256,11 @@ class RecordCard(BaseRecordCard):
         url (str): The URL of the record card.
     """
 
-    def __new__(cls, **kwargs: Any) -> "RecordCard":
-        """Creates an appropriate record card instance based on the provided game ID.
-
-        Args:
-            **kwargs: The arguments passed in to create the record card.
-
-        Returns:
-            RecordCard: An instance of a subclass of `BaseRecordCard` based on the provided game ID.
-        """
+    @classmethod
+    def creat(cls, **kwargs: Any):
         game_id = kwargs.get("game_id", 0)
-        new_cls = GAME_ID_MAP.get(game_id, cls)
-        return super().__new__(new_cls)
+        new_cls = RECORD_CARD_MAP.get(game_id, cls)
+        return new_cls(**kwargs)
 
 
 class GenshinRecordCard(RecordCard):
@@ -417,6 +410,6 @@ class StarRailRecodeCard(RecordCard):
         return int(self.data[3].value)
 
 
-GAME_ID_MAP.setdefault(1, HonkaiRecordCard)
-GAME_ID_MAP.setdefault(2, GenshinRecordCard)
-GAME_ID_MAP.setdefault(6, StarRailRecodeCard)
+RECORD_CARD_MAP.setdefault(1, HonkaiRecordCard)
+RECORD_CARD_MAP.setdefault(2, GenshinRecordCard)
+RECORD_CARD_MAP.setdefault(6, StarRailRecodeCard)

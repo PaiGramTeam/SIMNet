@@ -124,4 +124,4 @@ class BaseChronicleClient(BaseClient):
         if not data["list"]:
             raise DataNotPublic({"retcode": 10102})
 
-        return [RecordCard(**card) for card in data["list"]]
+        return [RecordCard.creat(**card) for card in data["list"]]
