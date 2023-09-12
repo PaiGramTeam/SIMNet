@@ -258,6 +258,14 @@ class RecordCard(BaseRecordCard):
 
     @classmethod
     def creat(cls, **kwargs: Any):
+        """Creates a record card.
+
+        Args:
+            **kwargs: Keyword arguments.
+
+        Returns:
+            RecordCard: The record card.
+        """
         game_id = kwargs.get("game_id", 0)
         new_cls = RECORD_CARD_MAP.get(game_id, cls)
         return new_cls(**kwargs)
