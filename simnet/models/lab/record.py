@@ -22,6 +22,9 @@ __all__ = (
 )
 
 
+GAME_ID_MAP: Dict[int, Type["RecordCard"]] = {}
+
+
 class Account(APIModel):
     """A representation of an account.
 
@@ -253,12 +256,6 @@ class RecordCard(BaseRecordCard):
         url (str): The URL of the record card.
     """
 
-    GAME_ID_MAP: Dict[int, Type["RecordCard"]] = {
-        1: "HonkaiRecordCard",
-        2: "GenshinRecordCard",
-        6: "StarRailRecodeCard",
-    }
-
     def __new__(cls, **kwargs: Any) -> "RecordCard":
         """Creates an appropriate record card instance based on the provided game ID.
 
@@ -269,7 +266,7 @@ class RecordCard(BaseRecordCard):
             RecordCard: An instance of a subclass of `BaseRecordCard` based on the provided game ID.
         """
         game_id = kwargs.get("game_id", 0)
-        new_cls = cls.GAME_ID_MAP.get(game_id, cls)
+        new_cls = GAME_ID_MAP.get(game_id, cls)
         return super().__new__(new_cls)
 
 
@@ -418,3 +415,8 @@ class StarRailRecodeCard(RecordCard):
             int: The number of chests the user has found.
         """
         return int(self.data[3].value)
+
+
+GAME_ID_MAP.setdefault(1, HonkaiRecordCard)
+GAME_ID_MAP.setdefault(2, GenshinRecordCard)
+GAME_ID_MAP.setdefault(6, StarRailRecodeCard)
