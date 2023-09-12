@@ -1,6 +1,4 @@
 """Genshin calculator models."""
-
-
 import collections
 from typing import Dict, Any, Literal, Optional, List
 
@@ -347,7 +345,7 @@ class CalculatorResult(APIModel):
             List[CalculatorConsumable]: A list of CalculatorConsumable objects representing the total
             consumables used across all categories.
         """
-        artifacts = [i for a in self.artifacts for i in a.consumable_list]
+        artifacts = [i for a in self.artifacts for i in a.consumable_list]  # skipcq: PYL-E1133
         combined = self.character + self.weapon + self.talents + artifacts
 
         grouped: Dict[int, List[CalculatorConsumable]] = collections.defaultdict(list)

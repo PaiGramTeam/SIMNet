@@ -1,6 +1,6 @@
 import enum
 import re
-from typing import Optional, Any, Dict, List, Union
+from typing import Optional, Any, Dict, List, Union, Type
 
 from pydantic import Field, validator
 
@@ -20,6 +20,9 @@ __all__ = (
     "RecordCardSettingType",
     "UserInfo",
 )
+
+
+RECORD_CARD_MAP: Dict[int, Type["RecordCard"]] = {}
 
 
 class Account(APIModel):
@@ -253,24 +256,19 @@ class RecordCard(BaseRecordCard):
         url (str): The URL of the record card.
     """
 
-    def __new__(cls, **kwargs: Any) -> "RecordCard":
-        """Creates an appropriate record card instance based on the provided game ID.
+    @classmethod
+    def creat(cls, **kwargs: Any):
+        """Creates a record card.
 
         Args:
-            **kwargs: The arguments passed in to create the record card.
+            **kwargs: Keyword arguments.
 
         Returns:
-            RecordCard: An instance of a subclass of `BaseRecordCard` based on the provided game ID.
+            RecordCard: The record card.
         """
         game_id = kwargs.get("game_id", 0)
-        if game_id == 1:
-            cls = HonkaiRecordCard  # skipcq: PYL-W0642
-        if game_id == 2:
-            cls = GenshinRecordCard  # skipcq: PYL-W0642
-        if game_id == 6:
-            cls = StarRailRecodeCard  # skipcq: PYL-W0642
-
-        return super().__new__(cls)  # skipcq: PYL-E1120
+        new_cls = RECORD_CARD_MAP.get(game_id, cls)
+        return new_cls(**kwargs)
 
 
 class GenshinRecordCard(RecordCard):
@@ -418,3 +416,8 @@ class StarRailRecodeCard(RecordCard):
             int: The number of chests the user has found.
         """
         return int(self.data[3].value)
+
+
+RECORD_CARD_MAP.setdefault(1, HonkaiRecordCard)
+RECORD_CARD_MAP.setdefault(2, GenshinRecordCard)
+RECORD_CARD_MAP.setdefault(6, StarRailRecodeCard)
