@@ -269,8 +269,8 @@ class RecordCard(BaseRecordCard):
             RecordCard: An instance of a subclass of `BaseRecordCard` based on the provided game ID.
         """
         game_id = kwargs.get("game_id", 0)
-        cls = cls.GAME_ID_MAP.get(game_id, cls)
-        return super().__new__(cls)
+        new_cls = cls.GAME_ID_MAP.get(game_id, cls)
+        return super().__new__(new_cls)
 
 
 class GenshinRecordCard(RecordCard):

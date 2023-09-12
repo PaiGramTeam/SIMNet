@@ -1,6 +1,4 @@
 """Genshin calculator models."""
-
-
 import collections
 from typing import Dict, Any, Literal, Optional, List
 
