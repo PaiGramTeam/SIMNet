@@ -313,7 +313,7 @@ CODE_HOYOLAB_URL = GameRoute(
         genshin="https://sg-hk4e-api.hoyolab.com/common/apicdkey/api/webExchangeCdkeyHyl",
         hkrpg="https://sg-hkrpg-api.hoyolab.com/common/apicdkey/api/webExchangeCdkeyHyl",
     ),
-    chinese=dict(),
+    chinese={},
 )
 
 QRCODE_URL = Route("https://hk4e-sdk.mihoyo.com/hk4e_cn/combo/panda/qrcode")
