@@ -3,7 +3,7 @@ from typing import Optional, List, Dict, Any
 
 from simnet.client.base import BaseClient
 from simnet.client.headers import Headers
-from simnet.client.routes import TAKUMI_URL, HK4E_URL, CODE_URL
+from simnet.client.routes import TAKUMI_URL, HK4E_URL, CODE_URL, CODE_HOYOLAB_URL
 from simnet.models.lab.announcement import Announcement
 from simnet.models.lab.record import PartialUser, FullUser, Account
 from simnet.utils.enum_ import Region, Game
@@ -198,6 +198,33 @@ class LabClient(BaseClient):
 
         await self.request_bbs(
             CODE_URL.get_url(),
+            params=dict(
+                uid=player_id,
+                region=recognize_genshin_server(player_id),
+                cdkey=code,
+                game_biz="hk4e_global",
+                lang=create_short_lang_code(lang or self.lang),
+            ),
+        )
+
+    async def redeem_code_by_hoyolab(
+        self,
+        code: str,
+        player_id: Optional[int] = None,
+        *,
+        lang: Optional[str] = None,
+    ) -> None:
+        """Redeems a gift code for the current or specified user.
+
+        Args:
+            code (str): The gift code to redeem.
+            player_id (int, optional): The player ID to redeem the code for. Defaults to None.
+            lang (str, optional): The language code used for the request. Defaults to None.
+        """
+        player_id = self.player_id or player_id
+
+        await self.request_bbs(
+            CODE_HOYOLAB_URL.get_url(),
             params=dict(
                 uid=player_id,
                 region=recognize_genshin_server(player_id),
