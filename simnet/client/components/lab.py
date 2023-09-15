@@ -3,12 +3,12 @@ from typing import Optional, List, Dict, Any
 
 from simnet.client.base import BaseClient
 from simnet.client.headers import Headers
-from simnet.client.routes import TAKUMI_URL, HK4E_URL, CODE_URL
+from simnet.client.routes import TAKUMI_URL, HK4E_URL, CODE_URL, CODE_HOYOLAB_URL
 from simnet.models.lab.announcement import Announcement
 from simnet.models.lab.record import PartialUser, FullUser, Account
 from simnet.utils.enum_ import Region, Game
 from simnet.utils.lang import create_short_lang_code
-from simnet.utils.player import recognize_genshin_server
+from simnet.utils.player import recognize_genshin_server, recognize_server, recognize_game_biz
 from simnet.utils.types import HeaderTypes
 
 __all__ = ("LabClient",)
@@ -206,6 +206,31 @@ class LabClient(BaseClient):
                 lang=create_short_lang_code(lang or self.lang),
             ),
         )
+
+    async def redeem_code_by_hoyolab(
+        self,
+        code: str,
+        player_id: Optional[int] = None,
+        *,
+        lang: Optional[str] = None,
+    ) -> None:
+        """Redeems a gift code for the current or specified user.
+
+        Args:
+            code (str): The gift code to redeem.
+            player_id (int, optional): The player ID to redeem the code for. Defaults to None.
+            lang (str, optional): The language code used for the request. Defaults to None.
+        """
+        player_id = self.player_id or player_id
+        url = CODE_HOYOLAB_URL.get_url(self.region, self.game)
+        params = dict(
+            uid=player_id,
+            region=recognize_server(player_id, self.game),
+            cdkey=code,
+            game_biz=recognize_game_biz(player_id, self.game),
+            lang=create_short_lang_code(lang or self.lang),
+        )
+        await self.request_bbs(url, params=params)
 
     async def get_game_accounts(self, *, lang: Optional[str] = None) -> List[Account]:
         """Get the game accounts of the currently logged-in user.

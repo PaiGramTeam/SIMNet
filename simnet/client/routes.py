@@ -28,6 +28,7 @@ __all__ = (
     "INFO_LEDGER_URL",
     "HK4E_URL",
     "CODE_URL",
+    "CODE_HOYOLAB_URL",
     "YSULOG_URL",
     "QRCODE_URL",
 )
@@ -307,5 +308,12 @@ YSULOG_URL = InternationalRoute(
 HK4E_URL = Route("https://sg-hk4e-api.hoyoverse.com/common/hk4e_global/")
 
 CODE_URL = Route("https://sg-hk4e-api.hoyoverse.com/common/apicdkey/api/webExchangeCdkey")
+CODE_HOYOLAB_URL = GameRoute(
+    overseas=dict(
+        genshin="https://sg-hk4e-api.hoyolab.com/common/apicdkey/api/webExchangeCdkeyHyl",
+        hkrpg="https://sg-hkrpg-api.hoyolab.com/common/apicdkey/api/webExchangeCdkeyHyl",
+    ),
+    chinese=dict(),
+)
 
 QRCODE_URL = Route("https://hk4e-sdk.mihoyo.com/hk4e_cn/combo/panda/qrcode")
