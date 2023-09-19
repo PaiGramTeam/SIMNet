@@ -79,7 +79,7 @@ def generate_dynamic_secret(
         c = hex_digest(f"salt={salt}&t={t}&r={r}")
         return f"{t},{r},{c}"
 
-    app_version = "2.58.2"
+    app_version = "2.59.1"
     client_type = "5"
     if region == Region.OVERSEAS:
         salt = "6s25p5ox5y14umn1p61aqyyvbvvl3lrt"
@@ -90,12 +90,12 @@ def generate_dynamic_secret(
                 salt = "xV8v4Qu54lUKrEYFZkJhB8cuOh9Asafs"
             elif ds_type == DSType.ANDROID:
                 client_type = "2"
-                salt = "kzTvKGDHumYf6h1Ia5txMjxAJuTtD0ol"
+                salt = "awFeNNTsLYcK20LSO60Es8CRVZOjCB1b"
             else:
                 raise ValueError(f"Unknown ds_type: {ds_type}")
         else:
             if ds_type is None:
-                salt = "KTJQGN2a2Trqk0tcQZS6JV3rU7CnV8Q6"
+                salt = "6pNd5NnDnbwKxewrPwEoWlSYwhualS2H"
             elif ds_type == DSType.ANDROID:
                 salt = "t0qEgfub6cvueAPgR5m9aQWWVciEer7v"
                 client_type = "2"
