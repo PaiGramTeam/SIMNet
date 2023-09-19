@@ -88,6 +88,8 @@ class StarRailNoteWidget(APIModel):
         current_stamina (int): The current stamina of the user.
         max_stamina (int): The maximum stamina of the user.
         stamina_recover_time (timedelta): The time it takes for one stamina to recover.
+        current_reserve_stamina (int): The current reserve stamina.
+        is_reserve_stamina_full (bool): Whether the reserve stamina is full.
         accepted_expedition_num (int): The number of expeditions the user has accepted.
         total_expedition_num (int): The total number of expeditions the user has participated in.
         expeditions (Sequence[StarRailExpedition]): A list of expeditions the user has participated in.
@@ -101,6 +103,8 @@ class StarRailNoteWidget(APIModel):
     current_stamina: int
     max_stamina: int
     stamina_recover_time: timedelta
+    current_reserve_stamina: int
+    is_reserve_stamina_full: bool
     accepted_expedition_num: int
     total_expedition_num: int
     expeditions: Sequence[StarRailExpedition]
