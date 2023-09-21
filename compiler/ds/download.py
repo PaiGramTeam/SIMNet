@@ -25,7 +25,9 @@ def get_version():
     return get(
         "https://bbs-api.miyoushe.com/misc/wapi/getLatestPkgVer?channel=miyousheluodi",
         verify=False,
-    ).json()["data"]["version"]
+    ).json()[
+        "data"
+    ]["version"]
 
 
 version = get_version()
