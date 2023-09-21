@@ -9,6 +9,7 @@ url = sys.argv[1] if len(sys.argv) > 1 else "https://download-bbs.miyoushe.com"
 
 def retry(func):
     """retry 10 times"""
+
     def wrapper(*args, **kwargs) -> str:
         """retry 10 times"""
         for _ in range(10):
