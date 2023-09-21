@@ -35,11 +35,15 @@ jobs:
           cd compiler/ds
           ./gradlew build
           ./gradlew run
-      - name: Commit changes
-        uses: EndBug/add-and-commit@v9
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v6
         with:
-          author_name: github-actions[bot]
-          author_email: github-actions[bot]@users.noreply.github.com
-          message: ':bento: Update ds salt'
-          add: |
-            'simnet/utils/ds.py'
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+      - name: Commit changes
+        run: |
+          git add simnet/utils/ds.py
+          git commit -S -m ":bento: Update ds salt"
+          git push
