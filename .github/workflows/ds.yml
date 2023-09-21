@@ -1,0 +1,45 @@
+name: Update DS
+
+on:
+  workflow_dispatch: ~
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+          fetch-depth: 0
+      - name: Write key
+        run: |
+          echo '${{ secrets.MAIN }}' > compiler/ds/src/main/java/org/example/Main.java
+      - name: Setup Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.9
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+      - name: Download apk
+        run: |
+          pip install httpx
+          cd compiler/ds
+          python download.py ${{ secrets.DOWNLOAD }}
+      - name: Parse apk
+        run: |
+          cd compiler/ds
+          ./gradlew build
+          ./gradlew run
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          author_name: github-actions[bot]
+          author_email: github-actions[bot]@users.noreply.github.com
+          message: ':bento: Update ds salt'
+          add: |
+            'simnet/utils/ds.py'
