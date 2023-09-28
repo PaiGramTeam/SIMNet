@@ -117,6 +117,7 @@ class TaskReward(APIModel):
     Attributes:
         status (TaskRewardStatus): The status of the task reward.
     """
+
     status: TaskRewardStatus
 
 
