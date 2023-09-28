@@ -1,4 +1,5 @@
 from datetime import timedelta, datetime
+from enum import Enum
 from typing import Union, Literal, Tuple, List, Optional, Dict, Any
 
 from pydantic import Field, root_validator
@@ -6,6 +7,11 @@ from pydantic import Field, root_validator
 from simnet.models.base import APIModel
 
 __all__ = [
+    "TaskRewardStatus",
+    "TaskReward",
+    "AttendanceRewardStatus",
+    "AttendanceReward",
+    "DailyTask",
     "Expedition",
     "Notes",
     "ExpeditionWidget",
@@ -96,6 +102,67 @@ class TransformerTimedelta(timedelta):
         return self.timedata[3]
 
 
+class TaskRewardStatus(str, Enum):
+    """The enum for task reward statuses."""
+
+    Invalid = "TaskRewardStatusInvalid"
+    TakenAward = "TaskRewardStatusTakenAward"
+    Finished = "TaskRewardStatusFinished"
+    Unfinished = "TaskRewardStatusUnfinished"
+
+
+class TaskReward(APIModel):
+    """The model for a task reward.
+
+    Attributes:
+        status (TaskRewardStatus): The status of the task reward.
+    """
+    status: TaskRewardStatus
+
+
+class AttendanceRewardStatus(str, Enum):
+    """The enum for attendance reward statuses."""
+
+    Invalid = "AttendanceRewardStatusInvalid"
+    TakenAward = "AttendanceRewardStatusTakenAward"
+    WaitTaken = "AttendanceRewardStatusWaitTaken"
+    Unfinished = "AttendanceRewardStatusUnfinished"
+    FinishedNonReward = "AttendanceRewardStatusFinishedNonReward"
+    Forbid = "AttendanceRewardStatusForbid"
+
+
+class AttendanceReward(APIModel):
+    """The model for an attendance reward.
+
+    Attributes:
+        status (AttendanceRewardStatus): The status of the attendance reward.
+        progress (int): The progress of the attendance reward.
+    """
+
+    status: AttendanceRewardStatus
+    progress: int
+
+
+class DailyTask(APIModel):
+    """The model for a daily task.
+
+    Attributes:
+        total_num (int): The total number of daily tasks.
+        finished_num (int): The number of finished daily tasks.
+        is_extra_task_reward_received (bool): Whether the extra task reward has been received.
+        task_rewards (List[TaskReward]): The list of task rewards.
+        attendance_rewards (List[AttendanceReward]): The list of attendance rewards.
+        attendance_visible (bool): Whether the attendance rewards are visible.
+    """
+
+    total_num: int
+    finished_num: int
+    is_extra_task_reward_received: bool
+    task_rewards: List[TaskReward]
+    attendance_rewards: List[AttendanceReward]
+    attendance_visible: bool
+
+
 class Notes(APIModel):
     """The model for real-time notes.
 
@@ -140,6 +207,8 @@ class Notes(APIModel):
 
     expeditions: List[Expedition]
     max_expeditions: int = Field(alias="max_expedition_num")
+
+    daily_task: DailyTask
 
     @property
     def resin_recovery_time(self) -> datetime:
