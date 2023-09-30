@@ -198,7 +198,7 @@ class PartialGenshinUserStats(APIModel):
         if not v:
             return None
         if isinstance(v, dict):
-            return cast("dict[str, Any]", v)
+            return cast("Dict[str, Any]", v)
         return {**v[0], "realms": v}
 
 

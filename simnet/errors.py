@@ -60,7 +60,7 @@ class BadRequest(SIMNetException):
         return f"{type(self).__name__}({repr(response)})"
 
     @property
-    def response(self) -> dict[str, Union[str, Any, None]]:
+    def response(self) -> Dict[str, Union[str, Any, None]]:
         return {"retcode": self.ret_code, "message": self.original}
 
     @property

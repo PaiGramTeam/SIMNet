@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Dict
 
 from simnet.models.base import APIModel
 
@@ -50,7 +50,7 @@ class StarRailResident(APIModel):
 
     residents: List
 
-    def find_resident(self, key: str) -> Optional[dict]:
+    def find_resident(self, key: str) -> Optional[Dict]:
         """Find a resident by key."""
         for resident in self.residents:
             if list(resident.keys())[0] == key:

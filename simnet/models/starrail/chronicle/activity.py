@@ -1,5 +1,5 @@
 """Starrail chronicle activity."""
-from typing import List, Optional
+from typing import List, Optional, Dict
 
 from simnet.models.base import APIModel
 from simnet.models.starrail.character import ActivityCharacter
@@ -139,7 +139,7 @@ class StarRailActivity(APIModel):
 
     activities: List
 
-    def find_activity(self, key: str) -> Optional[dict]:
+    def find_activity(self, key: str) -> Optional[Dict]:
         """Find an activity by key."""
         for activity in self.activities:
             if list(activity.keys())[0] == key:
