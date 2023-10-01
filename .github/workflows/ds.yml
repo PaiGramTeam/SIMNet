@@ -25,11 +25,12 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
           cache: 'gradle'
+      - name: Install jq
+        run: sudo apt-get install -y jq
       - name: Download apk
         run: |
-          pip install httpx
           cd compiler/ds
-          python download.py ${{ secrets.DOWNLOAD }}
+          curl -H 'x-rpc-client_type: 2' -H 'x-rpc-app_version: 2.37.1' -H 'x-rpc-channel: miyousheluodi' https://api-takumi.mihoyo.com/ptolemaios/api/getLatestRelease | jq --raw-output '.data.package_url' | xargs curl -o mihoyobbs.apk
       - name: Parse apk
         run: |
           cd compiler/ds
