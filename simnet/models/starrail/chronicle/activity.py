@@ -83,6 +83,60 @@ class StarRailTreasureDungeon(StarRailActivityBase):
     records: List[StarRailTreasureDungeonRecord]
 
 
+class StarRailYitaiBattleInfoBasic(APIModel):
+    """Yitai Battle Info Basic"""
+
+    gender: int
+    rating_cur: int
+    rating_id: int
+    rating_max: int
+    collect_cur: int
+    collect_max: int
+    rating_name: str
+
+
+class StarRailYitaiBattleInfoFairyLandCity(APIModel):
+    """Yitai Battle Info Fairy Land City"""
+
+    id: int
+    name: str
+    has_challenge: bool
+    stars_cur: int
+    stars_max: int
+
+
+class StarRailYitaiBattleInfoFairyLand(APIModel):
+    """Yitai Battle Info Fairy Land"""
+
+    is_open: bool
+    kills: List[int]
+    cities: List[StarRailYitaiBattleInfoFairyLandCity]
+
+
+class StarRailYitaiBattleInfoLinkBattle(APIModel):
+    """Yitai Battle Info Link Battle"""
+
+    rank: int
+    rank_name: str
+    challenge_cur: int
+    challenge_max: int
+
+
+class StarRailYitaiBattleInfo(APIModel):
+    """Yitai Battle Info"""
+
+    basic: StarRailYitaiBattleInfoBasic
+    fairy_land: StarRailYitaiBattleInfoFairyLand
+    link_battle: List[StarRailYitaiBattleInfoLinkBattle]
+    exists_data: bool = True
+
+
+class StarRailYitaiBattleRecord(StarRailActivityBase):
+    """Yitai Battle"""
+
+    info: StarRailYitaiBattleInfo
+
+
 class StarRailActivity(APIModel):
     """Starrail chronicle activity."""
 
@@ -104,3 +158,8 @@ class StarRailActivity(APIModel):
     def treasure_dungeon(self) -> StarRailTreasureDungeon:
         """Get the treasure dungeon activity."""
         return StarRailTreasureDungeon(**self.find_activity("treasure_dungeon"))
+
+    @property
+    def yitai_battle(self) -> StarRailYitaiBattleRecord:
+        """Get the yitai battle activity."""
+        return StarRailYitaiBattleRecord(**self.find_activity("yitai_battle"))
