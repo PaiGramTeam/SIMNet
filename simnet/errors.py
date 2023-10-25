@@ -264,6 +264,7 @@ _errors: Dict[int, Union[_TBR, str, Tuple[_TBR, Optional[str]]]] = {
     1008: AccountNotFound,
     -1104: "This action must be done in the app.",
     1034: NeedChallenge,
+    5003: NeedChallenge,
 }
 
 ERRORS: Dict[int, Tuple[_TBR, Optional[str]]] = {
