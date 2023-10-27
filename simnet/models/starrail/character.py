@@ -36,4 +36,4 @@ class ActivityCharacter(StarRailBaseCharacter):
     """Combat character model."""
 
     level: int
-    is_trial: bool
+    is_trial: bool = False

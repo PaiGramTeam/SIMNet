@@ -137,6 +137,41 @@ class StarRailYitaiBattleRecord(StarRailActivityBase):
     info: StarRailYitaiBattleInfo
 
 
+class StarRailEndlessSideRecord(APIModel):
+    """Endless Side Record"""
+
+    name: str
+    status: str
+    level: int
+    point: int
+    avatars: List[ActivityCharacter]
+    buff_cnt: int
+    miracle_cnt: int
+    base_buff_id: int
+    base_buff_name: str
+    rank: int
+    cached_avatars: List[ActivityCharacter]
+
+    @property
+    def finished(self) -> bool:
+        """Check if the record is finished."""
+        return self.status == "PassHard"
+
+
+class StarRailEndlessSideInfo(APIModel):
+    """Endless Side Info"""
+
+    total_score: str
+    records: List[StarRailEndlessSideRecord]
+    exists_data: bool = True
+
+
+class StarRailEndlessSide(StarRailActivityBase):
+    """Endless Side Activity"""
+
+    info: StarRailEndlessSideInfo
+
+
 class StarRailActivity(APIModel):
     """Starrail chronicle activity."""
 
@@ -163,3 +198,8 @@ class StarRailActivity(APIModel):
     def yitai_battle(self) -> StarRailYitaiBattleRecord:
         """Get the yitai battle activity."""
         return StarRailYitaiBattleRecord(**self.find_activity("yitai_battle"))
+
+    @property
+    def endless_side(self) -> StarRailEndlessSide:
+        """Get the endless side activity."""
+        return StarRailEndlessSide(**self.find_activity("endless_side"))
