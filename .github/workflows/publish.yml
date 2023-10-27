@@ -1,0 +1,35 @@
+name: Publish
+
+on:
+  push:
+    tags:
+        - '**'
+  workflow_dispatch: ~
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.11
+
+      - name: Install Poetry and Twine
+        run: |
+          pip install poetry twine
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Build wheel
+        run: poetry build
+
+      - name: upload to pypi
+        run: twine upload dist/*
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
