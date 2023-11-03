@@ -131,6 +131,7 @@ class PartialUser(APIModel):
         nickname (str): The user's nickname.
         introduction (str): The user's introduction.
         avatar_id (int): The user's avatar ID.
+        avatar_url (str): The user's avatar URL.
         gender (Gender): The user's gender.
         icon (str): The user's avatar URL.
     """
@@ -138,7 +139,8 @@ class PartialUser(APIModel):
     accident_id: int = Field(alias="uid")
     nickname: str
     introduction: str = Field(alias="introduce")
-    avatar_id: int = Field(alias="avatar")
+    avatar_id: Optional[str] = Field(alias="avatar")
+    avatar_url: Optional[str] = ""
     gender: Gender
     icon: str = Field(alias="avatar_url")
 
