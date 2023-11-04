@@ -2,6 +2,7 @@ import json as jsonlib
 from typing import Optional, Tuple, Union
 
 from simnet.client.base import BaseClient
+from simnet.client.cookies import CookiesModel
 from simnet.client.routes import (
     AUTH_URL,
     AUTH_KEY_URL,
@@ -372,7 +373,7 @@ class AuthClient(BaseClient):
             "account_id": self.account_id,
             "game_token": game_token,
         }
-        headers = {"x-rpc-app_id": "bll8iq97cem8" if self.region == Region.CHINESE else "c9oqaq3s3gu8"}
+        headers = {"x-rpc-app_id": "bll8iq97cem8"}
         data = await self.request_lab(url, data=data, headers=headers)
         mid = data.get("user_info", {}).get("mid", "")
         stoken_v2 = data.get("token", {}).get("token", "")
@@ -408,6 +409,45 @@ class AuthClient(BaseClient):
         self.cookies.set("mid", mid)
         self.cookies.set("stoken", stoken_v2)
         return stoken_v2, mid
+
+    async def get_all_token_by_stoken(
+        self,
+        stoken: Optional[str] = None,
+        account_id: Optional[int] = None,
+        mid: Optional[str] = None,
+    ) -> CookiesModel:
+        """
+        Get stoken_v2, mid, ltoken and cookie_token by stoken v1 or v2
+
+        Args:
+            stoken (Optional[str]): The stoken_v1 to use to retrieve the stoken_v2 and mid.
+                If not provided, the `stoken` attribute value will be used.
+            account_id (Optional[int]): The account ID to use to retrieve the stoken_v2 and mid.
+                If not provided, the `account_id` attribute value will be used.
+            mid (Optional[str]): The mid to use to retrieve the stoken_v2 and mid.
+
+        Returns:
+            CookiesModel: The stoken_v2, mid, ltoken and cookie_token.
+        """
+        if self.region != Region.OVERSEAS:
+            raise RegionNotSupported()
+        self.check_stoken(stoken, account_id, mid)
+        url = AUTH_KEY_URL.get_url(self.region) / "../../../account/ma-passport/token/getBySToken"
+        headers = {"x-rpc-app_id": "c9oqaq3s3gu8"}
+        data_ = {"dst_token_types": [1, 2, 4]}
+        data = await self.request_lab(url, method="POST", headers=headers, data=data_)
+        tokens = data.get("tokens", [])
+        token_map = {1: "", 2: "", 4: ""}
+        for token in tokens:
+            token_type = token.get("token_type", 0)
+            token_map[token_type] = token.get("token", "")
+        mid = data.get("user_info", {}).get("mid", "")
+        model = CookiesModel(mid=mid, stoken=token_map[1], ltoken=token_map[2], cookie_token=token_map[4])
+        self.cookies.set("mid", model.mid)
+        self.cookies.set("stoken", model.stoken)
+        self.cookies.set("ltoken", model.ltoken)
+        self.cookies.set("cookie_token", model.cookie_token)
+        return model
 
     async def get_game_token_by_stoken(
         self,
