@@ -89,6 +89,8 @@ class Cookies(_Cookies):
 
 
 class CookiesModel(BaseModel, frozen=False):
+    """A model that represents the cookies used by the client."""
+
     login_uid: Optional[IntStr] = None
     login_ticket: Optional[str] = None
 
@@ -123,15 +125,18 @@ class CookiesModel(BaseModel, frozen=False):
         return False
 
     def remove_v2(self):
+        """Remove the v2 cookies."""
         self.account_mid_v2 = None
         self.cookie_token_v2 = None
         self.ltoken_v2 = None
         self.ltmid_v2 = None
 
     def to_dict(self):
+        """Return the cookies as a dictionary."""
         return self.dict(exclude_defaults=True)
 
     def to_json(self):
+        """Return the cookies as a JSON string."""
         return self.json(exclude_defaults=True)
 
     @property
@@ -151,12 +156,14 @@ class CookiesModel(BaseModel, frozen=False):
         return None
 
     def set_v2_uid(self, user_id: int):
+        """Set the user ID for the v2 cookies."""
         if self.ltuid_v2 is None and self.ltoken_v2:
             self.ltuid_v2 = user_id
         if self.account_id_v2 is None and self.account_mid_v2:
             self.account_id_v2 = user_id
 
     def set_uid(self, user_id: int):
+        """Set the user ID for the v1 cookies."""
         if self.account_id is None and self.cookie_token:
             self.account_id = user_id
         if self.ltuid is None and self.ltoken:
