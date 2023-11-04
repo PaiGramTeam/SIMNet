@@ -475,3 +475,118 @@ class AuthClient(BaseClient):
         url = AUTH_URL.get_url(self.region) / "getGameToken"
         data = await self.request_lab(url, method="GET")
         return data.get("game_token", "")
+
+    async def verify_stoken(
+        self,
+        stoken: Optional[str] = None,
+        account_id: Optional[int] = None,
+        mid: Optional[str] = None,
+    ) -> None:
+        """
+        Verify stoken
+
+        Args:
+            stoken (Optional[str]): The stoken_v1 to use to retrieve the stoken_v2 and mid.
+                If not provided, the `stoken` attribute value will be used.
+            account_id (Optional[int]): The account ID to use to retrieve the stoken_v2 and mid.
+                If not provided, the `account_id` attribute value will be used.
+            mid (Optional[str]): The mid to use to retrieve the stoken_v2 and mid.
+
+        Returns:
+            None
+
+        Raises:
+            ValueError: If the `stoken` argument is `None`, or if the `account_id` argument is `None`.
+            InvalidCookies: If the stoken is invalid.
+        """
+        self.check_stoken(stoken, account_id, mid)
+        if self.region == Region.OVERSEAS:
+            url = AUTH_KEY_URL.get_url(self.region) / "../../../account/ma-passport/token/verifySToken"
+            headers = {"x-rpc-app_id": "c9oqaq3s3gu8"}
+            await self.request_lab(url, method="POST", headers=headers)
+        else:
+            await self.get_cookie_token_by_stoken(stoken, account_id, mid)
+
+    async def verify_ltoken(
+        self,
+        ltoken: Optional[str] = None,
+        ltuid: Optional[int] = None,
+    ) -> None:
+        """
+        Verify ltoken
+
+        Args:
+            ltoken (Optional[str]): The ltoken to use to verify.
+                If not provided, the `ltoken` cookie value will be used.
+            ltuid (Optional[int]): The account ID to use to verify.
+                If not provided, the `ltuid` cookie value will be used.
+
+        Returns:
+            None
+
+        Raises:
+            ValueError: If the `ltoken` argument is `None`, or if the `account_id` argument is `None`.
+            InvalidCookies: If the ltoken is invalid.
+        """
+        ltoken = ltoken or self.cookies.get("ltoken")
+        ltuid = ltuid or self.account_id
+        if ltoken is None:
+            raise ValueError("The 'ltoken' argument cannot be None.")
+        if ltuid is None:
+            raise ValueError("The 'account_id' argument cannot be None.")
+        self.cookies.set("ltoken", ltoken)
+        self.cookies.set("ltuid", str(ltuid))
+        if self.region == Region.OVERSEAS:
+            url = AUTH_KEY_URL.get_url(self.region) / "../../../account/ma-passport/token/verifyLToken"
+            headers = {"x-rpc-app_id": "c9oqaq3s3gu8"}
+            data = None
+        else:
+            url = PASSPORT_URL.get_url(self.region) / "getUserAccountInfoByLToken"
+            headers = {"x-rpc-app_id": "bll8iq97cem8"}
+            data = {
+                "ltoken": ltoken,
+                "uid": ltuid,
+            }
+        await self.request_lab(url, method="POST", headers=headers, data=data)
+
+    async def verify_cookie_token(
+        self,
+        cookie_token: Optional[str] = None,
+        account_id: Optional[int] = None,
+    ) -> None:
+        """
+        Verify cookie token
+
+        Args:
+            cookie_token (Optional[str]): The cookie token to use to verify.
+                If not provided, the `cookie_token` cookie value will be used.
+            account_id (Optional[int]): The account ID to use to verify.
+                If not provided, the `account_id` cookie value will be used.
+
+        Returns:
+            None
+
+        Raises:
+            ValueError: If the `cookie_token` argument is `None`, or if the `account_id` argument is `None`.
+            InvalidCookies: If the cookie_token is invalid.
+        """
+        cookie_token = cookie_token or self.cookies.get("cookie_token")
+        account_id = account_id or self.account_id
+        if cookie_token is None:
+            raise ValueError("The 'cookie_token' argument cannot be None.")
+        if account_id is None:
+            raise ValueError("The 'account_id' argument cannot be None.")
+        self.cookies.set("cookie_token", cookie_token)
+        self.cookies.set("account_id", str(account_id))
+        if self.region == Region.OVERSEAS:
+            url = AUTH_KEY_URL.get_url(self.region) / "../../../account/ma-passport/token/verifyCookieToken"
+            headers = {"x-rpc-app_id": "c9oqaq3s3gu8"}
+            data = None
+        else:
+            url = PASSPORT_URL.get_url(self.region) / "getUserAccountInfoByCookieToken"
+            headers = {"x-rpc-app_id": "bll8iq97cem8"}
+            data = {
+                "cookie_token": cookie_token,
+                "uid": account_id,
+            }
+        await self.request_lab(url, method="POST", headers=headers, data=data)
