@@ -409,6 +409,43 @@ class AuthClient(BaseClient):
         self.cookies.set("stoken", stoken_v2)
         return stoken_v2, mid
 
+    async def get_all_token_by_stoken(
+        self,
+        stoken: Optional[str] = None,
+        account_id: Optional[int] = None,
+        mid: Optional[str] = None,
+    ) -> Tuple[str, str, str, str]:
+        """
+        Get stoken_v2, mid, ltoken and cookie_token by stoken v1 or v2
+
+        Args:
+            stoken (Optional[str]): The stoken_v1 to use to retrieve the stoken_v2 and mid.
+                If not provided, the `stoken` attribute value will be used.
+            account_id (Optional[int]): The account ID to use to retrieve the stoken_v2 and mid.
+                If not provided, the `account_id` attribute value will be used.
+
+        Returns:
+            Tuple[str, str, str, str]: The stoken_v2, mid, ltoken and cookie_token.
+        """
+        if self.region != Region.OVERSEAS:
+            raise RegionNotSupported()
+        self.check_stoken(stoken, account_id, mid)
+        url = AUTH_KEY_URL.get_url(self.region) / "../../../account/ma-passport/token/getBySToken"
+        headers = {"x-rpc-app_id": "c9oqaq3s3gu8"}
+        data_ = {"dst_token_types": [1, 2, 4]}
+        data = await self.request_lab(url, method="POST", headers=headers, data=data_)
+        tokens = data.get("tokens", [])
+        token_map = {1: "", 2: "", 4: ""}
+        for token in tokens:
+            token_type = token.get("token_type", 0)
+            token_map[token_type] = token.get("token", "")
+        mid = data.get("user_info", {}).get("mid", "")
+        self.cookies.set("mid", mid)
+        self.cookies.set("stoken", token_map[1])
+        self.cookies.set("ltoken", token_map[2])
+        self.cookies.set("cookie_token", token_map[4])
+        return token_map[1], mid, token_map[2], token_map[4]
+
     async def get_game_token_by_stoken(
         self,
         stoken: Optional[str] = None,
