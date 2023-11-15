@@ -172,6 +172,84 @@ class StarRailEndlessSide(StarRailActivityBase):
     info: StarRailEndlessSideInfo
 
 
+class StarRailFoxStoryTeam(APIModel):
+    """Fox Story Team"""
+
+    level: int
+    fans: int
+    fans_range: List[int]
+    phase: int
+
+    @property
+    def real_index_arrived(self) -> int:
+        """Get the real index of the arrived fans."""
+        for idx, num in enumerate(self.fans_range):
+            if num >= self.fans:
+                return idx
+        return len(self.fans_range)
+
+    @property
+    def index_arrived(self) -> int:
+        """Get the index of the arrived fans."""
+        max_idx = len(self.fans_range) - 1
+        return min(self.real_index_arrived, max_idx)
+
+    @property
+    def fans_str(self) -> str:
+        """Get the fans as a string."""
+        if self.fans < 10000:
+            return str(self.fans)
+        w = round(self.fans / 10000, 2)
+        return f"{w}万"
+
+
+class StarRailFoxStorySubdueDifficulty(APIModel):
+    """Fox Story Subdue Difficulty"""
+
+    has_challenge: bool
+    star_cnt: int
+
+    @property
+    def stars(self) -> List[bool]:
+        """Get the stars."""
+        e = int(self.star_cnt)
+        i = 0
+        while e:
+            e &= e - 1
+            i += 1
+        return [True] * i + [False] * (3 - i)
+
+    @property
+    def stars_sp(self) -> List[bool]:
+        """Get the stars."""
+        return [True] * self.star_cnt + [False] * (3 - self.star_cnt)
+
+
+class StarRailFoxStorySubdue(APIModel):
+    """Fox Story Subdue"""
+
+    has_challenge: bool
+    name_mi18n: str
+    fire_cnt: int
+    difficulties: List[StarRailFoxStorySubdueDifficulty]
+
+
+class StarRailFoxStoryInfo(APIModel):
+    """Fox Story Info"""
+
+    team: StarRailFoxStoryTeam
+    subdues: List[StarRailFoxStorySubdue]
+    subdue_collect_cur: int
+    subdue_collect_max: int
+    exists_data: bool = True
+
+
+class StarRailFoxStory(StarRailActivityBase):
+    """Fox Story Activity"""
+
+    info: StarRailFoxStoryInfo
+
+
 class StarRailActivity(APIModel):
     """Starrail chronicle activity."""
 
@@ -203,3 +281,8 @@ class StarRailActivity(APIModel):
     def endless_side(self) -> StarRailEndlessSide:
         """Get the endless side activity."""
         return StarRailEndlessSide(**self.find_activity("endless_side"))
+
+    @property
+    def fox_story(self) -> StarRailFoxStory:
+        """Get the fox story activity."""
+        return StarRailFoxStory(**self.find_activity("fox_story"))
