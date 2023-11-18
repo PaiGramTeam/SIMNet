@@ -216,6 +216,13 @@ class RedemptionClaimed(RedemptionException):
     message = "Redemption code has been claimed already."
 
 
+class InvalidDevice(BadRequest):
+    """Device is invalid."""
+
+    ret_code = 5003
+    message = "Device id and fp are invalid."
+
+
 _TBR = Type[BadRequest]
 _errors: Dict[int, Union[_TBR, str, Tuple[_TBR, Optional[str]]]] = {
     # misc hoyolab
@@ -264,7 +271,7 @@ _errors: Dict[int, Union[_TBR, str, Tuple[_TBR, Optional[str]]]] = {
     1008: AccountNotFound,
     -1104: "This action must be done in the app.",
     1034: NeedChallenge,
-    5003: NeedChallenge,
+    5003: InvalidDevice,
 }
 
 ERRORS: Dict[int, Tuple[_TBR, Optional[str]]] = {
