@@ -23,7 +23,7 @@ class GenshinClient(
     DailyRewardClient,
     LabClient,
     TransactionClient,
-    VerifyClient
+    VerifyClient,
 ):
     """A simple http client for Genshin endpoints."""
 
