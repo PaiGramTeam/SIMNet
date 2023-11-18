@@ -5,10 +5,10 @@ from typing import Optional
 
 from httpx import Headers
 
-from simnet import Region
 from simnet.client.base import BaseClient
 from simnet.client.routes import URL
 from simnet.errors import RegionNotSupported
+from simnet.utils.enum_ import Region
 
 
 class VerifyClient(BaseClient):
