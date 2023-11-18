@@ -19,7 +19,7 @@ class VerifyClient(BaseClient):
     AJAX_URL = VERIFICATION_HOST / "/ajax.php"
 
     async def create(self, is_high: bool = False):
-        """ Create a verification challenge.
+        """Create a verification challenge.
 
         Args:
             is_high (bool): Ifs the challenge for a high risk device.
