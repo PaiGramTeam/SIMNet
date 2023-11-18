@@ -18,7 +18,7 @@ class VerifyClient(BaseClient):
     VERIFY_VERIFICATION_URL = HOST / "/game_record/app/card/wapi/verifyVerification"
     AJAX_URL = VERIFICATION_HOST / "/ajax.php"
 
-    async def create(self, is_high: bool = False):
+    async def create_verification(self, is_high: bool = False):
         """Create a verification challenge.
 
         Args:
@@ -30,7 +30,7 @@ class VerifyClient(BaseClient):
         params = {"is_high": "true" if is_high else "false"}
         return await self.request_lab(self.CREATE_VERIFICATION_URL, params=params)
 
-    async def verify(self, challenge: str, validate: str):
+    async def verify_verification(self, challenge: str, validate: str):
         """Verify a verification challenge.
 
         Args:
@@ -43,7 +43,7 @@ class VerifyClient(BaseClient):
         data = {"geetest_challenge": challenge, "geetest_validate": validate, "geetest_seccode": f"{validate}|jordan"}
         return await self.request_lab(self.VERIFY_VERIFICATION_URL, data=data)
 
-    async def ajax(self, referer: str, gt: str, challenge: str) -> Optional[str]:
+    async def request_verify_ajax(self, referer: str, gt: str, challenge: str) -> Optional[str]:
         """Get the ajax validate code.
 
         Args:

@@ -5,6 +5,7 @@ from simnet.client.components.chronicle.starrail import StarRailBattleChronicleC
 from simnet.client.components.daily import DailyRewardClient
 from simnet.client.components.diary.starrail import StarrailDiaryClient
 from simnet.client.components.lab import LabClient
+from simnet.client.components.verify import VerifyClient
 from simnet.client.components.wish.starrail import StarRailWishClient
 from simnet.utils.enum_ import Game
 
@@ -18,6 +19,7 @@ class StarRailClient(
     DailyRewardClient,
     AuthClient,
     LabClient,
+    VerifyClient,
 ):
     """A simple http client for StarRail endpoints."""
 
