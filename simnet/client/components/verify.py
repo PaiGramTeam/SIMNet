@@ -5,8 +5,10 @@ from typing import Optional
 
 from httpx import Headers
 
+from simnet import Region
 from simnet.client.base import BaseClient
 from simnet.client.routes import URL
+from simnet.errors import RegionNotSupported
 
 
 class VerifyClient(BaseClient):
@@ -27,6 +29,8 @@ class VerifyClient(BaseClient):
         Returns:
             str: The challenge.
         """
+        if self.region != Region.CHINESE:
+            raise RegionNotSupported("This method is only available for the Chinese region.")
         params = {"is_high": "true" if is_high else "false"}
         return await self.request_lab(self.CREATE_VERIFICATION_URL, params=params)
 
@@ -40,6 +44,8 @@ class VerifyClient(BaseClient):
         Returns:
             str: The verification result.
         """
+        if self.region != Region.CHINESE:
+            raise RegionNotSupported("This method is only available for the Chinese region.")
         data = {"geetest_challenge": challenge, "geetest_validate": validate, "geetest_seccode": f"{validate}|jordan"}
         return await self.request_lab(self.VERIFY_VERIFICATION_URL, data=data)
 
@@ -54,6 +60,8 @@ class VerifyClient(BaseClient):
         Returns:
             Optional[str]: The ajax validate code.
         """
+        if self.region != Region.CHINESE:
+            raise RegionNotSupported("This method is only available for the Chinese region.")
         params = {
             "gt": gt,
             "challenge": challenge,
