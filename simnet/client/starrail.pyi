@@ -5,12 +5,20 @@ from simnet.client.components.chronicle.starrail import StarRailBattleChronicleC
 from simnet.client.components.daily import DailyRewardClient
 from simnet.client.components.diary.starrail import StarrailDiaryClient
 from simnet.client.components.lab import LabClient
+from simnet.client.components.verify import VerifyClient
 from simnet.client.components.wish.starrail import StarRailWishClient
 from simnet.utils.enum_ import Region
 from simnet.utils.types import CookieTypes, HeaderTypes, TimeoutTypes
 
+
 class StarRailClient(
-    StarRailBattleChronicleClient, StarRailWishClient, StarrailDiaryClient, DailyRewardClient, AuthClient, LabClient
+    StarRailBattleChronicleClient,
+    StarRailWishClient,
+    StarrailDiaryClient,
+    DailyRewardClient,
+    AuthClient,
+    LabClient,
+    VerifyClient,
 ):
     def __init__(
         self,

@@ -7,9 +7,11 @@ from simnet.client.components.daily import DailyRewardClient
 from simnet.client.components.diary.genshin import GenshinDiaryClient
 from simnet.client.components.lab import LabClient
 from simnet.client.components.transaction import TransactionClient
+from simnet.client.components.verify import VerifyClient
 from simnet.client.components.wish.genshin import GenshinWishClient
 from simnet.utils.enum_ import Region
 from simnet.utils.types import CookieTypes, HeaderTypes, TimeoutTypes
+
 
 class GenshinClient(
     CalculatorClient,
@@ -20,6 +22,7 @@ class GenshinClient(
     DailyRewardClient,
     LabClient,
     TransactionClient,
+    VerifyClient,
 ):
     def __init__(
         self,
