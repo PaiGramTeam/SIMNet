@@ -63,9 +63,12 @@ class DailyRewardClient(BaseClient):
             headers["x-rpc-sys_version"] = "13"
             headers["x-rpc-platform"] = "android"
             if self.game == Game.GENSHIN:
+                headers["x-rpc-signgame"] = "hk4e"
                 headers["referer"] = (
-                    "https://webstatic.mihoyo.com/bbs/event/signin-ys/index.html?"
-                    "bbs_auth_required=true&act_id=e202009291139501&utm_source=bbs&utm_medium=mys&utm_campaign=icon"
+                    "https://act.mihoyo.com/bbs/event/signin/hk4e/index.html?"
+                    "bbs_auth_required=true&act_id=e202311201442471&"
+                    "bbs_auth_required=true&bbs_presentation_style=fullscreen&"
+                    "utm_source=bbs&utm_medium=mys&utm_campaign=icon"
                 )
                 params = params.set("uid", self.player_id)
                 params = params.set("region", recognize_genshin_server(self.player_id))
