@@ -2,7 +2,7 @@
 from typing import List, Optional, Dict
 
 from simnet.models.base import APIModel
-from simnet.models.starrail.character import ActivityCharacter
+from simnet.models.starrail.character import ActivityCharacter, RogueCharacter
 
 from .base import PartialTime
 
@@ -250,6 +250,44 @@ class StarRailFoxStory(StarRailActivityBase):
     info: StarRailFoxStoryInfo
 
 
+class StarRailBoxingShowBuffsUsedActivity(APIModel):
+    """Boxing Show Buffs Used Activity"""
+
+    id: int
+    name_mi18n: str
+    desc_mi18n: str
+
+
+class StarRailBoxingShowInfoItem(APIModel):
+    """Boxing Show Info Item"""
+
+    name_mi18n: str
+    round: int
+    is_perfect: bool
+    has_challenge: bool
+    challenge_id: int
+    avatars_used_activity: List[RogueCharacter]
+    buffs_used_activity: List[StarRailBoxingShowBuffsUsedActivity]
+
+    @property
+    def buffs(self) -> str:
+        """Get the buffs as a string."""
+        return "、".join([i.name_mi18n for i in self.buffs_used_activity])
+
+
+class StarRailBoxingShowInfo(APIModel):
+    """Boxing Show Info"""
+
+    list: List[StarRailBoxingShowInfoItem]
+    exists_data: bool = False
+
+
+class StarRailBoxingShow(StarRailActivityBase):
+    """Boxing Show Activity"""
+
+    info: StarRailBoxingShowInfo
+
+
 class StarRailActivity(APIModel):
     """Starrail chronicle activity."""
 
@@ -286,3 +324,8 @@ class StarRailActivity(APIModel):
     def fox_story(self) -> StarRailFoxStory:
         """Get the fox story activity."""
         return StarRailFoxStory(**self.find_activity("fox_story"))
+
+    @property
+    def boxing_show(self) -> StarRailBoxingShow:
+        """Get the boxing show activity."""
+        return StarRailBoxingShow(**self.find_activity("boxing_show"))

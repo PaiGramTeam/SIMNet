@@ -30,6 +30,7 @@ class RogueCharacter(StarRailBaseCharacter):
 
     level: int
     rank: int
+    is_trial: bool = False
 
 
 class ActivityCharacter(StarRailBaseCharacter):
