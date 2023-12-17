@@ -97,6 +97,13 @@ class InvalidCookies(CookieException):
     message = "Cookies are not valid."
 
 
+class LabAccountNotFound(InvalidCookies):
+    """Lab account not found."""
+
+    ret_code = 10103
+    message = "Cookies are valid but do not have a hoyolab account bound to them."
+
+
 class TooManyRequests(CookieException):
     """Made too many requests and got ratelimited."""
 
@@ -237,10 +244,7 @@ _errors: Dict[int, Union[_TBR, str, Tuple[_TBR, Optional[str]]]] = {
     # database game record
     10101: TooManyRequests,
     10102: DataNotPublic,
-    10103: (
-        InvalidCookies,
-        "Cookies are valid but do not have a hoyolab account bound to them.",
-    ),
+    10103: LabAccountNotFound,
     10104: "Cannot view real-time notes of other users.",
     # calculator
     -500001: "Invalid fields in calculation.",
