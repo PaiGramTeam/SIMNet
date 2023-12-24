@@ -164,6 +164,52 @@ class DailyTask(APIModel):
     attendance_visible: bool
 
 
+class ArchonStatusEnum(str, Enum):
+    """The enum for archon statuses."""
+
+    StatusFinished = "StatusFinished"
+    StatusOngoing = "StatusOngoing"
+    StatusNotOpen = "StatusNotOpen"
+
+
+class ArchonStatus(APIModel):
+    """The model for archon status.
+
+    Attributes:
+        status (ArchonStatusEnum): The status of the archon.
+        chapter_num (str): The chapter number.
+        chapter_title (str): The chapter title.
+        id (int): The archon id.
+    """
+
+    status: ArchonStatusEnum
+    chapter_num: str
+    chapter_title: str
+    id: int
+
+
+class ArchonQuestProgress(APIModel):
+    """The model for archon quest progress.
+
+    Attributes:
+        list (List[ArchonStatus]): The list of archon status.
+        is_open_archon_quest (bool): Whether the archon quest is open. (魔神任务)
+        is_finish_all_mainline (bool): Whether all mainline quests are finished. (主线)
+        is_finish_all_interchapter (bool): Whether all interchapter quests are finished. (间章)
+        wiki_url (str): The wiki url.
+    """
+
+    list: List[ArchonStatus]
+    is_open_archon_quest: bool
+    is_finish_all_mainline: bool
+    is_finish_all_interchapter: bool
+    wiki_url: str
+
+    @property
+    def all_completed(self) -> bool:
+        return self.is_finish_all_mainline and self.is_finish_all_interchapter
+
+
 class Notes(APIModel):
     """The model for real-time notes.
 
@@ -210,6 +256,7 @@ class Notes(APIModel):
     max_expeditions: int = Field(alias="max_expedition_num")
 
     daily_task: DailyTask
+    archon_quest_progress: ArchonQuestProgress
 
     @property
     def resin_recovery_time(self) -> datetime:
