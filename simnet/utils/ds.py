@@ -6,7 +6,7 @@ import time
 from enum import Enum
 from typing import Any, Optional
 
-from simnet.utils.enum_ import Region
+from simnet.utils.enums import Region
 from simnet.utils.types import QueryParamTypes
 
 MIYOUSHE_VERSION = "2.66.1"

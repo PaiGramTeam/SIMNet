@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 from simnet.client.cookies import Cookies
 from simnet.utils.cookies import parse_cookie
-from simnet.utils.enum_ import Region
+from simnet.utils.enums import Region
 
 env_path = Path(".env")
 if env_path.exists():

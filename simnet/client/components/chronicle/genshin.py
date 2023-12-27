@@ -13,7 +13,7 @@ from simnet.models.genshin.chronicle.stats import (
     FullGenshinUserStats,
 )
 from simnet.models.lab.record import RecordCard
-from simnet.utils.enum_ import Game, Region
+from simnet.utils.enums import Game, Region
 from simnet.utils.player import recognize_genshin_server, recognize_region
 
 __all__ = ("GenshinBattleChronicleClient",)

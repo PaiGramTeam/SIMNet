@@ -2,7 +2,7 @@
 
 from typing import Optional, Mapping, Sequence
 
-from simnet.utils.enum_ import Game, Region
+from simnet.utils.enums import Game, Region
 
 UID_RANGE: Mapping[Game, Mapping[Region, Sequence[int]]] = {
     Game.GENSHIN: {

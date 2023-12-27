@@ -4,7 +4,7 @@ from simnet.client.base import BaseClient
 from simnet.client.routes import RECORD_URL
 from simnet.errors import DataNotPublic
 from simnet.models.lab.record import RecordCard
-from simnet.utils.enum_ import Region, Game
+from simnet.utils.enums import Region, Game
 from simnet.utils.types import QueryParamTypes
 
 __all__ = ("BaseChronicleClient",)

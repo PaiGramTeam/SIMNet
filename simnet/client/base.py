@@ -9,7 +9,7 @@ from simnet.client.cookies import Cookies
 from simnet.client.headers import Headers
 from simnet.errors import TimedOut, NetworkError, BadRequest, raise_for_ret_code, NotSupported
 from simnet.utils.ds import generate_dynamic_secret, DSType, hex_digest
-from simnet.utils.enum_ import Region, Game
+from simnet.utils.enums import Region, Game
 from simnet.utils.types import (
     RT,
     HeaderTypes,

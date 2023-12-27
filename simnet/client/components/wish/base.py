@@ -3,7 +3,7 @@ from urllib.parse import unquote
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import GACHA_INFO_URL
-from simnet.utils.enum_ import Game
+from simnet.utils.enums import Game
 from simnet.utils.lang import create_short_lang_code
 
 __all__ = ("BaseWishClient",)

@@ -7,7 +7,7 @@ from simnet.client.components.diary.starrail import StarrailDiaryClient
 from simnet.client.components.lab import LabClient
 from simnet.client.components.verify import VerifyClient
 from simnet.client.components.wish.starrail import StarRailWishClient
-from simnet.utils.enum_ import Game
+from simnet.utils.enums import Game
 
 __all__ = ("StarRailClient",)
 

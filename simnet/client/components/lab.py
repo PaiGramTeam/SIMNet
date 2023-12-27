@@ -6,7 +6,7 @@ from simnet.client.headers import Headers
 from simnet.client.routes import TAKUMI_URL, HK4E_URL, CODE_URL, CODE_HOYOLAB_URL
 from simnet.models.lab.announcement import Announcement
 from simnet.models.lab.record import PartialUser, FullUser, Account
-from simnet.utils.enum_ import Region, Game
+from simnet.utils.enums import Region, Game
 from simnet.utils.lang import create_short_lang_code
 from simnet.utils.player import recognize_genshin_server, recognize_server, recognize_game_biz
 from simnet.utils.types import HeaderTypes

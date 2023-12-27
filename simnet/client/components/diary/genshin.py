@@ -2,7 +2,7 @@ from typing import Optional
 
 from simnet.client.components.diary.base import BaseDiaryClient
 from simnet.models.genshin.diary import Diary
-from simnet.utils.enum_ import Game
+from simnet.utils.enums import Game
 
 
 class GenshinDiaryClient(BaseDiaryClient):

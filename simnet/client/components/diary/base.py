@@ -5,7 +5,7 @@ from simnet.client.base import BaseClient
 from simnet.client.routes import DETAIL_LEDGER_URL, INFO_LEDGER_URL
 from simnet.models.diary import DiaryType
 from simnet.models.genshin.diary import DiaryPage
-from simnet.utils.enum_ import Region, Game
+from simnet.utils.enums import Region, Game
 from simnet.utils.player import recognize_server
 
 __all__ = ("BaseDiaryClient",)

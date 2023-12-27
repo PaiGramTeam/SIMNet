@@ -4,7 +4,7 @@ from urllib.parse import urljoin
 from httpx import URL as _URL
 
 from simnet.errors import RegionNotSupported, NotSupported
-from simnet.utils.enum_ import Region, Game
+from simnet.utils.enums import Region, Game
 
 URLTypes = Union["URL", str]
 

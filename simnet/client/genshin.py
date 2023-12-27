@@ -9,7 +9,7 @@ from simnet.client.components.lab import LabClient
 from simnet.client.components.transaction import TransactionClient
 from simnet.client.components.verify import VerifyClient
 from simnet.client.components.wish.genshin import GenshinWishClient
-from simnet.utils.enum_ import Game
+from simnet.utils.enums import Game
 
 __all__ = ("GenshinClient",)
 

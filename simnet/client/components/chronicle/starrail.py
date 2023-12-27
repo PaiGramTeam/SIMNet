@@ -13,7 +13,7 @@ from simnet.models.starrail.chronicle.notes import StarRailNote, StarRailNoteWid
 from simnet.models.starrail.chronicle.resident import StarRailResident
 from simnet.models.starrail.chronicle.rogue import StarRailRogue, StarRailRogueLocust
 from simnet.models.starrail.chronicle.stats import StarRailUserStats, StarRailUserInfo
-from simnet.utils.enum_ import Game, Region
+from simnet.utils.enums import Game, Region
 from simnet.utils.player import recognize_starrail_server, recognize_region
 
 __all__ = ("StarRailBattleChronicleClient",)

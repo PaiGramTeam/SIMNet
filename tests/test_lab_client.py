@@ -4,11 +4,11 @@ import pytest
 import pytest_asyncio
 
 from simnet.client.components.lab import LabClient
-from simnet.utils.enum_ import Game
+from simnet.utils.enums import Game
 
 if TYPE_CHECKING:
     from simnet.client.cookies import Cookies
-    from simnet.utils.enum_ import Region
+    from simnet.utils.enums import Region
 
 
 @pytest_asyncio.fixture

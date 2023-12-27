@@ -8,7 +8,7 @@ from simnet.models.genshin.chronicle.stats import FullGenshinUserStats, Stats
 
 if TYPE_CHECKING:
     from simnet.client.cookies import Cookies
-    from simnet.utils.enum_ import Region
+    from simnet.utils.enums import Region
 
 
 @pytest_asyncio.fixture

@@ -8,7 +8,7 @@ from simnet.client.base import BaseClient
 from simnet.client.routes import REWARD_URL
 from simnet.errors import GeetestTriggered
 from simnet.models.lab.daily import DailyRewardInfo, DailyReward, ClaimedDailyReward
-from simnet.utils.enum_ import Game, Region
+from simnet.utils.enums import Game, Region
 from simnet.utils.player import recognize_genshin_server, recognize_starrail_server
 
 __all__ = ("DailyRewardClient",)

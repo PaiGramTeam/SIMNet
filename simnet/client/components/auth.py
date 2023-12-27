@@ -13,7 +13,7 @@ from simnet.client.routes import (
     URL,
 )
 from simnet.errors import RegionNotSupported
-from simnet.utils.enum_ import Region
+from simnet.utils.enums import Region
 from simnet.utils.player import recognize_game_biz, recognize_server
 
 __all__ = ("AuthClient",)

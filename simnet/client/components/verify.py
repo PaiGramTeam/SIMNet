@@ -8,7 +8,7 @@ from httpx import Headers
 from simnet.client.base import BaseClient
 from simnet.client.routes import URL
 from simnet.errors import RegionNotSupported
-from simnet.utils.enum_ import Region
+from simnet.utils.enums import Region
 
 
 class VerifyClient(BaseClient):

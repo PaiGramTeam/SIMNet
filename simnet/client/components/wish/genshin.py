@@ -3,7 +3,7 @@ from typing import Optional, List
 
 from simnet.client.components.wish.base import BaseWishClient
 from simnet.models.genshin.wish import Wish
-from simnet.utils.enum_ import Game
+from simnet.utils.enums import Game
 from simnet.utils.paginator import WishPaginator
 
 __all__ = ("GenshinWishClient",)

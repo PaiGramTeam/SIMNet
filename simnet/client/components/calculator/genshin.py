@@ -12,7 +12,7 @@ from simnet.models.genshin.calculator import (
     CalculatorCharacterDetails,
     CalculatorTalent,
 )
-from simnet.utils.enum_ import Region
+from simnet.utils.enums import Region
 from simnet.utils.player import recognize_genshin_server
 
 

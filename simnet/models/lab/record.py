@@ -5,7 +5,7 @@ from typing import Optional, Any, Dict, List, Union, Type
 from pydantic import Field, validator
 
 from simnet.models.base import APIModel
-from simnet.utils.enum_ import Game
+from simnet.utils.enums import Game
 
 __all__ = (
     "FullUser",
