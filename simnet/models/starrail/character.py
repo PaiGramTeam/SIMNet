@@ -19,12 +19,6 @@ class StarRailPartialCharacter(StarRailBaseCharacter):
     rank: int
 
 
-class FloorCharacter(StarRailBaseCharacter):
-    """Character in a floor."""
-
-    level: int
-
-
 class RogueCharacter(StarRailBaseCharacter):
     """Rogue character model."""
 

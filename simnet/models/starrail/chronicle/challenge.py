@@ -4,7 +4,7 @@ from typing import List
 from pydantic import Field
 
 from simnet.models.base import APIModel
-from simnet.models.starrail.character import FloorCharacter
+from simnet.models.starrail.character import RogueCharacter
 
 from .base import PartialTime
 
@@ -15,7 +15,7 @@ class FloorNode(APIModel):
     """Node for a floor."""
 
     challenge_time: PartialTime
-    avatars: List[FloorCharacter]
+    avatars: List[RogueCharacter]
 
 
 class StarRailFloor(APIModel):
@@ -27,6 +27,8 @@ class StarRailFloor(APIModel):
     node_1: FloorNode
     node_2: FloorNode
     is_chaos: bool
+    is_fast: bool
+    maze_id: int
 
 
 class StarRailChallenge(APIModel):

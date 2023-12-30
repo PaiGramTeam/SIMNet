@@ -78,8 +78,8 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         self.client = AsyncClient(cookies=cookies, timeout=timeout)
         self.region = region
         self.lang = lang
-        self.device_id = device_id
-        self.device_fp = device_fp
+        self.device_id = device_id or cookies.get("x-rpc-device_id", None)
+        self.device_fp = device_fp or cookies.get("x-rpc-device_fp", None)
 
     @property
     def cookies(self) -> Cookies:
