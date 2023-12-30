@@ -170,3 +170,78 @@ class StarRailRogueLocust(APIModel):
     basic: RogueLocustBasic
     detail: RogueLocustRecords
     role: RogueUserRole
+
+
+class StarRailRogueNousBasic(APIModel):
+    """StarRail Rogue Nous Basic"""
+
+    cur_progress: int
+    max_progress: int
+    cur_rolling: int
+    max_rolling: int
+    unlock_miracle: int
+    active_nerve: int
+    unlock_event: int
+    exist_data: bool
+
+
+class StarRailRogueNousSide(APIModel):
+    """StarRail Rogue Nous Side"""
+
+    icon: str
+    rarity: int
+
+
+class StarRailRogueNousRolling(APIModel):
+    """StarRail Rogue Nous Rolling"""
+
+    id: int
+    name_mi18n: str
+    icon: str
+    sides: List[StarRailRogueNousSide]
+    main_buff_mi18n: str
+    aeon_id: int
+
+
+class StarRailRogueNousRecordDetail(APIModel):
+    """Detailed Rogue nous record info."""
+
+    name_mi18n: str
+    finish_time: PartialTime
+    final_lineup: List[RogueCharacter]
+    base_type_list: List[RogueBuffType]
+    cached_avatars: List[RogueCharacter]
+    buffs: List[RogueBuff]
+    miracles: List[RogueMiracle]
+    blocks: List[RogueLocustRecordDetailBlock]
+    boss_effect: List[str]
+    rolling: StarRailRogueNousRolling
+
+    difficulty: int
+    difficulty_type1_value: int
+    difficulty_type2_value: int
+    has_difficulty_type: bool
+
+    fury: RogueLocustRecordDetailFury
+
+    @property
+    def time_str(self) -> str:
+        """Get the time as a string."""
+        if self.finish_time is None:
+            return "N/A"
+
+        return self.finish_time.datetime.strftime("%Y.%m.%d %H:%M")
+
+
+class StarRailRogueNousRecords(APIModel):
+    """Rogue Nous records"""
+
+    records: List[StarRailRogueNousRecordDetail]
+
+
+class StarRailRogueNous(APIModel):
+    """StarRail Rogue Nous"""
+
+    basic: StarRailRogueNousBasic
+    detail: StarRailRogueNousRecords
+    role: RogueUserRole

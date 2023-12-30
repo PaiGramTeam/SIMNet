@@ -11,7 +11,7 @@ from simnet.models.starrail.chronicle.characters import StarRailDetailCharacters
 from simnet.models.starrail.chronicle.museum import StarRailMuseumBasic, StarRailMuseumDetail
 from simnet.models.starrail.chronicle.notes import StarRailNote, StarRailNoteWidget, StarRailNoteOverseaWidget
 from simnet.models.starrail.chronicle.resident import StarRailResident
-from simnet.models.starrail.chronicle.rogue import StarRailRogue, StarRailRogueLocust
+from simnet.models.starrail.chronicle.rogue import StarRailRogue, StarRailRogueLocust, StarRailRogueNous
 from simnet.models.starrail.chronicle.stats import StarRailUserStats, StarRailUserInfo
 from simnet.utils.enums import Game, Region
 from simnet.utils.player import recognize_starrail_server, recognize_region
@@ -250,6 +250,28 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         payload = dict(need_detail="true")
         data = await self._request_starrail_record("rogue_locust", player_id, lang=lang, payload=payload)
         return StarRailRogueLocust(**data)
+
+    async def get_starrail_rogue_nous(
+        self,
+        player_id: Optional[int] = None,
+        lang: Optional[str] = None,
+    ) -> StarRailRogueNous:
+        """Get starrail rogue nous runs.
+
+        Args:
+            player_id (Optional[int], optional): The player ID. Defaults to None.
+            lang (Optional[str], optional): The language of the data. Defaults to None.
+
+        Returns:
+            StarRailRogueNous: The requested rogue nous runs.
+
+        Raises:
+            BadRequest: If the request is invalid.
+            DataNotPublic: If the requested data is not public.
+        """
+        payload = dict(need_detail="true")
+        data = await self._request_starrail_record("rogue_nous", player_id, lang=lang, payload=payload)
+        return StarRailRogueNous(**data)
 
     async def get_starrail_museum_info(
         self,
