@@ -288,6 +288,30 @@ class StarRailBoxingShow(StarRailActivityBase):
     info: StarRailBoxingShowInfo
 
 
+class StarRailSpaceZooFeature(APIModel):
+    """Space Zoo Feature"""
+
+    cur: int
+    max: int
+    channel: str
+    name_mi18n: str
+
+
+class StarRailSpaceZooInfo(APIModel):
+    """Space Zoo Info"""
+
+    cur_xyzw: int
+    max_xyzw: int
+    features: List[StarRailSpaceZooFeature]
+    level: int
+
+
+class StarRailSpaceZoo(StarRailActivityBase):
+    """Space Zoo Activity"""
+
+    info: StarRailSpaceZooInfo
+
+
 class StarRailActivity(APIModel):
     """Starrail chronicle activity."""
 
@@ -329,3 +353,8 @@ class StarRailActivity(APIModel):
     def boxing_show(self) -> StarRailBoxingShow:
         """Get the boxing show activity."""
         return StarRailBoxingShow(**self.find_activity("boxing_show"))
+
+    @property
+    def space_zoo(self) -> StarRailSpaceZoo:
+        """Get the space zoo activity."""
+        return StarRailSpaceZoo(**self.find_activity("space_zoo"))
