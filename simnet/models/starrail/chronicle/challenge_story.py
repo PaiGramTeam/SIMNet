@@ -58,6 +58,11 @@ class StarRailChallengeStoryFloor(APIModel):
     is_fast: bool
     maze_id: int
 
+    @property
+    def score(self) -> int:
+        """Get the score."""
+        return self.node_1.score + self.node_2.score
+
 
 class StarRailChallengeStory(APIModel):
     """Challenge story in a season."""
