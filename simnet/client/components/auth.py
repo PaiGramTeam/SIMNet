@@ -608,7 +608,8 @@ class AuthClient(BaseClient):
         Args:
             device_id (Optional[str]): Device ID, if not provided, use `get_device_id()`.
             device_fp (Optional[int]): Device fingerprint, if not provided, use `get_device_fp()`.
-            extend_properties (Optional[dict]): Device extension information, defaults to auto-generated if not provided.
+            extend_properties (Optional[dict]): Device extension information,
+                defaults to auto-generated if not provided.
             app_name (str): APP name, defaults to "bbs_cn" if not provided.
             platform (int): Device platform code, same as client_type in the DS algorithm.
 
