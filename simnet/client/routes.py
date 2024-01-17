@@ -317,3 +317,5 @@ CODE_HOYOLAB_URL = GameRoute(
 )
 
 QRCODE_URL = Route("https://hk4e-sdk.mihoyo.com/hk4e_cn/combo/panda/qrcode")
+
+GET_FP_URL = Route("https://public-data-api.mihoyo.com/device-fp/api/getFp")
