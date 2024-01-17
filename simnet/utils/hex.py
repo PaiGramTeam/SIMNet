@@ -5,9 +5,7 @@ def get_random_hex_string_of_length(length: int):
     """
     Generate a random hexadecimal string of a specified length.
 
-    This function creates a string consisting of randomly selected
-    hexadecimal characters (0-9, a-f). It's useful for generating
-    unique identifiers or random data for testing purposes.
+    This function creates a string consisting of randomly selected hexadecimal characters (0-9, a-f).
 
     Args:
         length (int): The length of the hexadecimal string to be generated.
