@@ -1,4 +1,3 @@
-import json
 import json as jsonlib
 import time
 from typing import Optional, Tuple, Union
@@ -602,6 +601,18 @@ class AuthClient(BaseClient):
         extend_properties: Optional[dict] = None,
         platform: int = 2,
     ) -> str:
+        """
+        Get Device Fingerprint
+
+        Args:
+            device_id (Optional[str]): Device ID, if not provided, use `get_device_id()`.
+            device_fp (Optional[int]): Device fingerprint, if not provided, use `get_device_fp()`.
+            extend_properties (Optional[dict]): Device extended information.
+            platform (int): Device platform code, same as client_type in the DS algorithm.
+
+        Returns:
+            str: The game token.
+        """
         seed_time = int(time.time() * 1000)
         seed_id = get_random_hex_string_of_length(13)
         if extend_properties is None:
@@ -639,7 +650,7 @@ class AuthClient(BaseClient):
                 "sdkVersion": "33",
                 "board": "taro",
             }
-        ext_fields = json.dumps(extend_properties)
+        ext_fields = jsonlib.dumps(extend_properties)
         data = {
             "app_name": "account_cn",
             "device_fp": device_fp or self.get_device_fp(),

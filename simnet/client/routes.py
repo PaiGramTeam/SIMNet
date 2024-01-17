@@ -31,6 +31,7 @@ __all__ = (
     "CODE_HOYOLAB_URL",
     "YSULOG_URL",
     "QRCODE_URL",
+    "GET_FP_URL",
 )
 
 
