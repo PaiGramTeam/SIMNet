@@ -642,8 +642,8 @@ class AuthClient(BaseClient):
         ext_fields = json.dumps(extend_properties)
         data = {
             "app_name": "account_cn",
-            "device_fp": device_fp or self.device_fp,
-            "device_id": device_id or self.device_id,
+            "device_fp": device_fp or self.get_device_fp(),
+            "device_id": device_id or self.get_device_fp(),
             "ext_fields": ext_fields,
             "platform": platform,
             "seed_id": seed_id,
