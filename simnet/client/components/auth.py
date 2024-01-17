@@ -614,7 +614,7 @@ class AuthClient(BaseClient):
             platform (int): Device platform code, same as client_type in the DS algorithm.
 
         Returns:
-            str: The game token.
+            str: The device fingerprint.
         """
         seed_time = int(time.time() * 1000)
         seed_id = get_random_hex_string_of_length(13)
