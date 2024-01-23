@@ -1,6 +1,7 @@
 from typing import Optional
 
 from simnet.client.components.auth import AuthClient
+from simnet.client.components.calculator.starrail import StarrailCalculatorClient
 from simnet.client.components.chronicle.starrail import StarRailBattleChronicleClient
 from simnet.client.components.daily import DailyRewardClient
 from simnet.client.components.diary.starrail import StarrailDiaryClient
@@ -13,6 +14,7 @@ __all__ = ("StarRailClient",)
 
 
 class StarRailClient(
+    StarrailCalculatorClient,
     StarRailBattleChronicleClient,
     StarRailWishClient,
     StarrailDiaryClient,

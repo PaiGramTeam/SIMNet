@@ -42,7 +42,7 @@ class CalculatorClient(BaseClient):
         """
         params = dict(params or {})
 
-        base_url = CALCULATOR_URL.get_url(self.region)
+        base_url = CALCULATOR_URL.get_url(self.region, self.game)
         url = base_url / endpoint
 
         if method == "GET":
