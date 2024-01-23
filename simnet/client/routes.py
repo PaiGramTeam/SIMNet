@@ -274,9 +274,15 @@ TAKUMI_URL = InternationalRoute(
     chinese="https://api-takumi.mihoyo.com/",
 )
 
-CALCULATOR_URL = InternationalRoute(
-    overseas="https://sg-public-api.hoyoverse.com/event/calculateos/",
-    chinese="https://api-takumi.mihoyo.com/event/e20200928calculate/v1/",
+CALCULATOR_URL = GameRoute(
+    overseas=dict(
+        genshin="https://sg-public-api.hoyoverse.com/event/calculateos/",
+        hkrpg="https://sg-public-api.hoyolab.com/event/rpgcalc/",
+    ),
+    chinese=dict(
+        genshin="https://api-takumi.mihoyo.com/event/e20200928calculate/v1/",
+        hkrpg="https://api-takumi.mihoyo.com/event/rpgcalc/",
+    ),
 )
 
 DETAIL_LEDGER_URL = GameRoute(
