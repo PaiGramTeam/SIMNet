@@ -114,7 +114,6 @@ def recognize_region(player_id: int, game: Game) -> Optional[Region]:
     Returns:
         Optional[Region]: The region the player ID belongs to if it can be recognized, None otherwise.
     """
-
     for region, digits in UID_RANGE[game].items():
         first = recognize_game_uid_first_digit(player_id, game)
         if first in digits:
