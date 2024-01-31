@@ -40,7 +40,7 @@ def recognize_game_uid_first_digit(player_id: int, game: Game) -> int:
         ValueError: If the specified uid is not right.
     """
     length = UID_LENGTH[game] - 1
-    first = int(player_id / (10 ** length))
+    first = int(player_id / (10**length))
     if not first:
         raise ValueError(f"player id {player_id} is not right")
     return first
