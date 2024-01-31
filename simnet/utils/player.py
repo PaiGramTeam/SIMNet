@@ -4,9 +4,14 @@ from typing import Optional, Mapping, Sequence
 
 from simnet.utils.enums import Game, Region
 
+UID_LENGTH: Mapping[Game, int] = {
+    Game.GENSHIN: 9,
+    Game.STARRAIL: 9,
+    Game.HONKAI: 8,
+}
 UID_RANGE: Mapping[Game, Mapping[Region, Sequence[int]]] = {
     Game.GENSHIN: {
-        Region.OVERSEAS: (6, 7, 8, 9),
+        Region.OVERSEAS: (6, 7, 8, 18, 9),
         Region.CHINESE: (1, 2, 5),
     },
     Game.STARRAIL: {
@@ -18,6 +23,27 @@ UID_RANGE: Mapping[Game, Mapping[Region, Sequence[int]]] = {
         Region.CHINESE: (3, 4),
     },
 }
+
+
+def recognize_game_uid_first_digit(player_id: int, game: Game) -> int:
+    """
+    Recognizes the first digit of a game UID for a given game.
+
+    Args:
+        player_id (int): The player ID to recognize the first digit for.
+        game (Game): The game the player ID belongs to.
+
+    Returns:
+        int: The first digit of the player ID.
+
+    Raises:
+        ValueError: If the specified uid is not right.
+    """
+    length = UID_LENGTH[game] - 1
+    first = int(player_id / (10**length))
+    if not first:
+        raise ValueError(f"player id {player_id} is not right")
+    return first
 
 
 def recognize_genshin_server(player_id: int) -> str:
@@ -33,14 +59,15 @@ def recognize_genshin_server(player_id: int) -> str:
         ValueError: If the player ID is not associated with any server.
     """
     server = {
-        "1": "cn_gf01",
-        "2": "cn_gf01",
-        "5": "cn_qd01",
-        "6": "os_usa",
-        "7": "os_euro",
-        "8": "os_asia",
-        "9": "os_cht",
-    }.get(str(player_id)[0])
+        1: "cn_gf01",
+        2: "cn_gf01",
+        5: "cn_qd01",
+        6: "os_usa",
+        7: "os_euro",
+        8: "os_asia",
+        18: "os_asia",
+        9: "os_cht",
+    }.get(recognize_game_uid_first_digit(player_id, Game.GENSHIN))
 
     if server:
         return server
@@ -61,14 +88,14 @@ def recognize_starrail_server(player_id: int) -> str:
         ValueError: If the player ID is not associated with any server.
     """
     server = {
-        "1": "prod_gf_cn",
-        "2": "prod_gf_cn",
-        "5": "prod_qd_cn",
-        "6": "prod_official_usa",
-        "7": "prod_official_eur",
-        "8": "prod_official_asia",
-        "9": "prod_official_cht",
-    }.get(str(player_id)[0])
+        1: "prod_gf_cn",
+        2: "prod_gf_cn",
+        5: "prod_qd_cn",
+        6: "prod_official_usa",
+        7: "prod_official_eur",
+        8: "prod_official_asia",
+        9: "prod_official_cht",
+    }.get(recognize_game_uid_first_digit(player_id, Game.STARRAIL))
 
     if server:
         return server
@@ -87,9 +114,8 @@ def recognize_region(player_id: int, game: Game) -> Optional[Region]:
     Returns:
         Optional[Region]: The region the player ID belongs to if it can be recognized, None otherwise.
     """
-    first = int(str(player_id)[0])
-
     for region, digits in UID_RANGE[game].items():
+        first = recognize_game_uid_first_digit(player_id, game)
         if first in digits:
             return region
 
