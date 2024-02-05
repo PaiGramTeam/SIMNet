@@ -1,5 +1,5 @@
 """Starrail chronicle challenge story."""
-from typing import List
+from typing import List, Optional
 
 from pydantic import Field
 
@@ -40,10 +40,7 @@ class StarRailChallengeStoryFloorNode(APIModel):
 
     challenge_time: PartialTime
     avatars: List[RogueCharacter]
-
-    challenge_time: PartialTime
-    avatars: List[RogueCharacter]
-    buff: StarRailChallengeStoryBuff
+    buff: Optional[StarRailChallengeStoryBuff] = None
     score: int
 
 
