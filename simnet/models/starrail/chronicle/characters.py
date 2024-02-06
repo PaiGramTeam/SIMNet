@@ -170,11 +170,11 @@ class StarRailDetailCharacters(APIModel):
         return cls._parse(v, "id", "url")
 
     @validator("property_info", pre=True)
-    def parse_property_info(cls, v: Dict[str, str]) -> List[Dict[str, str]]:
+    def parse_property_info(cls, v: Dict[str, Any]) -> List[Dict[str, Any]]:
         """Parse property info."""
         return cls._parse(v)
 
     @validator("recommend_property", pre=True)
-    def parse_recommend_property(cls, v: Dict[str, str]) -> List[Dict[str, str]]:
+    def parse_recommend_property(cls, v: Dict[str, Any]) -> List[Dict[str, Any]]:
         """Parse recommend property."""
         return cls._parse(v, "id")
