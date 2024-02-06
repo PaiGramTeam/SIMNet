@@ -207,6 +207,8 @@ class StarRailDetailCharacters(APIModel):
     @staticmethod
     def _parse(v: Dict[str, Any], key: str = None, value_key: str = None) -> List[Dict[str, Any]]:
         """Parse dict to list."""
+        if isinstance(v, list):
+            return v
         new_list = []
         for k, value in v.items():
             if isinstance(value, str):
