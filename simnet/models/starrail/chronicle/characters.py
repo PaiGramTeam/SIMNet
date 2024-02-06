@@ -210,10 +210,12 @@ class StarRailDetailCharacters(APIModel):
         new_list = []
         for k, v in v.items():
             if isinstance(v, str):
-                v = {value_key: v}
+                v_ = {value_key: v}
+            else:
+                v_ = v
             if key:
-                v[key] = k
-            new_list.append(v)
+                v_[key] = k
+            new_list.append(v_)
         return new_list
 
     @validator("equip_wiki", pre=True)
