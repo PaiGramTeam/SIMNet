@@ -109,6 +109,31 @@ class StarRailDetailCharacter(character.StarRailPartialCharacter):
     base_type: int
     figure_path: str
 
+    @property
+    def skills_map(self) -> List[List[Skill]]:
+        data = []
+        skills = self.skills.copy()
+        for skill in skills.copy():
+            if skill.pre_point == 0:
+                data.append([skill])
+                skills.remove(skill)
+        while True:
+            for skill in skills.copy():
+                for item in data:
+                    item_ids = [i.point_id for i in item]
+                    if skill.pre_point in item_ids and skill.point_id not in item_ids:
+                        item.append(skill)
+                        skills.remove(skill)
+                        break
+            if not skills:
+                break
+        new_data = []
+        for item in data:
+            if len(item) < 2:
+                continue
+            new_data.append(sorted(item, key=lambda x: x.point_id))
+        return new_data
+
 
 class EquipWiki(APIModel):
     """Equipment wiki."""
