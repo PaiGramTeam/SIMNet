@@ -111,6 +111,7 @@ class StarRailDetailCharacter(character.StarRailPartialCharacter):
 
     @property
     def skills_map(self) -> List[List[Skill]]:
+        """Map skills."""
         data = []
         skills = self.skills.copy()
         for skill in skills.copy():
@@ -133,6 +134,14 @@ class StarRailDetailCharacter(character.StarRailPartialCharacter):
                 continue
             new_data.append(sorted(item, key=lambda x: x.point_id))
         return new_data
+
+    @property
+    def skills_single(self) -> List[Skill]:
+        """Single skills."""
+        map_ids = []
+        for item in self.skills_map:
+            map_ids.extend([i.point_id for i in item])
+        return [i for i in self.skills if i.point_id not in map_ids]
 
 
 class EquipWiki(APIModel):
