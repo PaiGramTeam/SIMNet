@@ -208,11 +208,11 @@ class StarRailDetailCharacters(APIModel):
     def _parse(v: Dict[str, Any], key: str = None, value_key: str = None) -> List[Dict[str, Any]]:
         """Parse dict to list."""
         new_list = []
-        for k, v in v.items():
-            if isinstance(v, str):
-                v_ = {value_key: v}
+        for k, value in v.items():
+            if isinstance(value, str):
+                v_ = {value_key: value}
             else:
-                v_ = v
+                v_ = value
             if key:
                 v_[key] = k
             new_list.append(v_)
