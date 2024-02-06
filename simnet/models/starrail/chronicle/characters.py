@@ -141,7 +141,12 @@ class StarRailDetailCharacter(character.StarRailPartialCharacter):
         map_ids = []
         for item in self.skills_map:
             map_ids.extend([i.point_id for i in item])
-        return [i for i in self.skills if i.point_id not in map_ids]
+        return [i for i in self.skills if i.point_id not in map_ids][5:]
+
+    @property
+    def skills_main(self) -> List[Skill]:
+        """Main skills."""
+        return self.skills[:4]
 
 
 class EquipWiki(APIModel):
