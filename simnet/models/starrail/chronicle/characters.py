@@ -68,6 +68,11 @@ class CharacterProp(APIModel):
     add: str
     final: str
 
+    @property
+    def show_add(self) -> bool:
+        """Show add."""
+        return self.add not in ["0.0", "0.0%", "0"]
+
 
 class SkillStage(APIModel):
     """Character skill stage."""
