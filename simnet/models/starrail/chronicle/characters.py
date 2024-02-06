@@ -222,3 +222,10 @@ class StarRailDetailCharacters(APIModel):
     def parse_recommend_property(cls, v: Dict[str, Any]) -> List[Dict[str, Any]]:
         """Parse recommend property."""
         return cls._parse(v, "id")
+
+    def get_recommend_property_by_cid(self, character_id: int) -> Optional[RecommendProperty]:
+        """Get recommend property by character id."""
+        for i in self.recommend_property:
+            if i.id == character_id:
+                return i
+        return None
