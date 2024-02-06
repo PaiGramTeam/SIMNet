@@ -9,9 +9,17 @@ from .. import character
 
 __all__ = [
     "StarRailEquipment",
-    "Rank",
+    "RelicProp",
     "Relic",
+    "Rank",
+    "CharacterProp",
+    "SkillStage",
+    "Skill",
     "StarRailDetailCharacter",
+    "EquipWiki",
+    "PropertyInfo",
+    "RecommendProperty",
+    "RelicProperty",
     "StarRailDetailCharacters",
 ]
 
