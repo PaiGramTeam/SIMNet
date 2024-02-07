@@ -126,11 +126,9 @@ class StarRailDetailCharacter(character.StarRailPartialCharacter):
     def skills_map(self) -> List[List[Skill]]:
         """Map skills."""
         data = []
-        skills = self.skills.copy()
-        for skill in skills.copy():
-            if skill.pre_point == 0:
-                data.append([skill])
-                skills.remove(skill)
+        for skill in filter(lambda x: x.point_type == 3, self.skills):
+            data.append([skill])
+        skills = list(filter(lambda x: x.point_type == 1 and x.pre_point, self.skills))
         while True:
             for skill in skills.copy():
                 for item in data:
@@ -143,18 +141,17 @@ class StarRailDetailCharacter(character.StarRailPartialCharacter):
                 break
         new_data = []
         for item in data:
-            if len(item) < 2:
-                continue
             new_data.append(sorted(item, key=lambda x: x.point_id))
         return new_data
 
     @property
     def skills_single(self) -> List[Skill]:
         """Single skills."""
+        skills = list(filter(lambda x: x.point_type == 1, self.skills))
         map_ids = []
         for item in self.skills_map:
             map_ids.extend([i.point_id for i in item])
-        return [i for i in self.skills if i.point_id not in map_ids][5:]
+        return [i for i in skills if i.point_id not in map_ids]
 
     @property
     def skills_main(self) -> List[Skill]:
