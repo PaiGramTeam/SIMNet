@@ -1,5 +1,5 @@
 import asyncio
-from typing import Optional, Mapping, Dict, Any, Union
+from typing import Optional, Mapping, Dict, Any, Union, List
 
 from simnet.client.components.chronicle.base import BaseChronicleClient
 from simnet.client.routes import RECORD_URL
@@ -413,3 +413,23 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
             data = await self._request_starrail_record("widget", endpoint_type="aapi", lang=lang)
             model = StarRailNoteWidget
         return model(**data)
+
+    async def set_starrail_avatar_recommend_property(
+        self,
+        avatar_id: int,
+        recommend_relic_properties: List[int] = None,
+    ) -> None:
+        """Set StarRail avatar recommend properties.
+
+        Args:
+            avatar_id (int): The avatar ID.
+            recommend_relic_properties (List[int], optional): The recommend relic properties. Defaults to None.
+
+        Raises:
+            InternalDatabaseError: If the request is invalid.
+        """
+        payload = dict(
+            avatar_id=avatar_id,
+            recommend_relic_properties=recommend_relic_properties or [],
+        )
+        await self._request_starrail_record("setAvatarRecommendRelicProperty", method="POST", payload=payload)
