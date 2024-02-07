@@ -129,7 +129,7 @@ class StarRailDetailCharacter(character.StarRailPartialCharacter):
         for skill in filter(lambda x: x.point_type == 3, self.skills):
             data.append([skill])
         skills = list(filter(lambda x: x.point_type == 1 and x.pre_point, self.skills))
-        while True:
+        for _ in range(10):
             for skill in skills.copy():
                 for item in data:
                     item_ids = [i.point_id for i in item]
