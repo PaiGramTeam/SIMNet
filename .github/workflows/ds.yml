@@ -30,7 +30,8 @@ jobs:
       - name: Download apk
         run: |
           cd compiler/ds
-          curl -H 'x-rpc-client_type: 2' -H 'x-rpc-app_version: 2.37.1' -H 'x-rpc-channel: miyousheluodi' https://api-takumi.mihoyo.com/ptolemaios/api/getLatestRelease | jq --raw-output '.data.package_url' | xargs curl -o mihoyobbs.apk
+          chmod +x download.sh
+          ./download.sh
       - name: Parse apk
         run: |
           cd compiler/ds
