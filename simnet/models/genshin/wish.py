@@ -19,6 +19,7 @@ class BannerType(IntEnum):
         WEAPON (302): Rotating weapon banner.
         CHARACTER1 (301): Special case, first character banner.
         CHARACTER2 (400): Special case, second character banner.
+        CHRONICLED (500): Chronicled wish.
     """
 
     NOVICE = 100
@@ -41,6 +42,9 @@ class BannerType(IntEnum):
 
     CHARACTER2 = 400
     """Character banner #2."""
+
+    CHRONICLED = 500
+    """Chronicled wish."""
 
 
 class Wish(APIModel):
