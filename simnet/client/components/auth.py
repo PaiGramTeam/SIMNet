@@ -1,5 +1,6 @@
 import json as jsonlib
 import time
+import uuid
 from typing import Optional, Tuple, Union
 
 from simnet.client.base import BaseClient
@@ -617,40 +618,63 @@ class AuthClient(BaseClient):
             str: The device fingerprint.
         """
         seed_time = int(time.time() * 1000)
-        seed_id = get_random_hex_string_of_length(13)
+        seed_id = str(uuid.uuid4())
         if extend_properties is None:
-            model = get_random_hex_string_of_length(6)
+            device = get_random_hex_string_of_length(12)
+            product = get_random_hex_string_of_length(6)
             extend_properties = {
-                "cpuType": "arm64-v8a",
+                "proxyStatus": 0,
+                "isRoot": 0,
                 "romCapacity": "512",
-                "productName": model,
-                "romRemain": "256",
-                "manufacturer": "XiaoMi",
-                "appMemory": "512",
+                "deviceName": device,
+                "productName": product,
+                "romRemain": "512",
                 "hostname": "dg02-pool03-kvm87",
-                "screenSize": "1080x1920",
-                "osVersion": "13",
-                "vendor": "中国移动",
-                "accelerometer": "1.4883357x7.1712894x6.2847486",
-                "buildTags": "release-keys",
-                "model": model,
+                "screenSize": "1440x2905",
+                "isTablet": 0,
+                "aaid": "",
+                "model": device,
                 "brand": "XiaoMi",
-                "oaid": "",
                 "hardware": "qcom",
                 "deviceType": "OP5913L1",
                 "devId": "REL",
                 "serialNumber": "unknown",
-                "buildTime": "1687848011000",
-                "buildUser": "root",
-                "ramCapacity": "469679",
-                "magnetometer": "20.081251x-27.487501x2.1937501",
-                "display": f"{model}_13.1.0.181(CN01)",
-                "ramRemain": "215344",
-                "deviceInfo": f"XiaoMi/{model}/OP5913L1:13/SKQ1.221119.001/T.118e6c7-5aa23-73911:user/release-keys",
-                "gyroscope": "0.030226856x0.014647375x0.010652636",
+                "sdCapacity": 512215,
+                "buildTime": "1693626947000",
+                "buildUser": "android-build",
+                "simState": 5,
+                "ramRemain": "239814",
+                "appUpdateTimeDiff": 1702604034482,
+                "deviceInfo": f"XiaoMi/{product}/OP5913L1:13/SKQ1.221119.001/T.118e6c7-5aa23-73911:user/release-keys",
                 "vaid": "",
                 "buildType": "user",
-                "sdkVersion": "33",
+                "sdkVersion": "34",
+                "ui_mode": "UI_MODE_TYPE_NORMAL",
+                "isMockLocation": 0,
+                "cpuType": "arm64-v8a",
+                "isAirMode": 0,
+                "ringMode": 2,
+                "chargeStatus": 1,
+                "manufacturer": "XiaoMi",
+                "emulatorStatus": 0,
+                "appMemory": "512",
+                "osVersion": "14",
+                "vendor": "unknown",
+                "accelerometer": "1.4883357x7.1712894x6.2847486",
+                "sdRemain": 239600,
+                "buildTags": "release-keys",
+                "packageName": "com.mihoyo.hyperion",
+                "networkType": "WiFi",
+                "oaid": "",
+                "debugStatus": 1,
+                "ramCapacity": "469679",
+                "magnetometer": "20.081251x-27.487501x2.1937501",
+                "display": f"{product}_13.1.0.181(CN01)",  # assuming 'product' is defined elsewhere
+                "appInstallTimeDiff": 1688455751496,
+                "packageVersion": "2.20.1",
+                "gyroscope": "0.030226856x0.014647375x0.010652636",
+                "batteryStatus": 100,
+                "hasKeyboard": 0,
                 "board": "taro",
             }
         ext_fields = jsonlib.dumps(extend_properties)
@@ -663,6 +687,6 @@ class AuthClient(BaseClient):
             "seed_id": seed_id,
             "seed_time": seed_time,
         }
-        new_device_fp = await self.request_lab(GET_FP_URL, method="POST", data=data)
+        new_device_fp = await self.request_lab(GET_FP_URL.get_url(), method="POST", data=data)
         self.device_fp = new_device_fp
         return new_device_fp
