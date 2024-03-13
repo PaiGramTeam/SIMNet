@@ -19,6 +19,7 @@ class GenshinWishClient(BaseWishClient):
         lang: Optional[str] = None,
         authkey: Optional[str] = None,
         end_id: int = 0,
+        banner_default_name: Optional[str] = "",
     ) -> List[Wish]:
         """Get the wish history for a list of banner types.
 
@@ -30,11 +31,12 @@ class GenshinWishClient(BaseWishClient):
                 If not provided, the class default will be used.
             authkey (Optional[str], optional): The authorization key for making the request.
             end_id  (int, optional): The ending ID of the last wish to retrieve.
+            banner_default_name (Optional[str], optional): The default name of the banner to use.
 
         Returns:
             List[Wish]: A list of GenshinWish objects representing the retrieved wishes.
         """
-        banner_types = banner_types or [100, 200, 301, 302]
+        banner_types = banner_types or [100, 200, 301, 302, 500]
         if isinstance(banner_types, int):
             banner_types = [banner_types]
         banner_names = await self.get_banner_names(game=Game.GENSHIN, lang=lang, authkey=authkey)
@@ -50,6 +52,6 @@ class GenshinWishClient(BaseWishClient):
                 ),
             )
             items = await paginator.get(limit)
-            banner_name = banner_names[banner_type] if banner_type != 400 else banner_names[301]
+            banner_name = banner_names.get(banner_type, banner_default_name) if banner_type != 400 else banner_names[301]
             wishes.extend([Wish(**i, banner_name=banner_name) for i in items])
         return sorted(wishes, key=lambda wish: wish.time.timestamp())
