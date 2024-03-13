@@ -52,6 +52,8 @@ class GenshinWishClient(BaseWishClient):
                 ),
             )
             items = await paginator.get(limit)
-            banner_name = banner_names.get(banner_type, banner_default_name) if banner_type != 400 else banner_names[301]
+            banner_name = (
+                banner_names.get(banner_type, banner_default_name) if banner_type != 400 else banner_names[301]
+            )
             wishes.extend([Wish(**i, banner_name=banner_name) for i in items])
         return sorted(wishes, key=lambda wish: wish.time.timestamp())
