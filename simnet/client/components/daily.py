@@ -1,4 +1,5 @@
 """Daily reward component."""
+
 import asyncio
 from typing import Optional, Dict, Any, List
 

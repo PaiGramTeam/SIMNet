@@ -1,4 +1,5 @@
 """Starrail chronicle character."""
+
 from typing import List, Optional, Any, Dict
 
 from pydantic import validator

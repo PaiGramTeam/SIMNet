@@ -1,4 +1,5 @@
 """Starrail chronicle activity."""
+
 from typing import List, Optional, Dict
 
 from simnet.models.base import APIModel

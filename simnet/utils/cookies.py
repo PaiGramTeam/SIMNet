@@ -1,4 +1,5 @@
 """A module for parsing cookies."""
+
 from http.cookies import SimpleCookie
 from typing import Dict
 

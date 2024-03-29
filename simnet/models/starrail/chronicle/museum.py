@@ -1,4 +1,5 @@
 """Starrail Museum models."""
+
 from typing import List
 
 from simnet.models.base import APIModel

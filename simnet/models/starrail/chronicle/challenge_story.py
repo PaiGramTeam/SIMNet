@@ -1,4 +1,5 @@
 """Starrail chronicle challenge story."""
+
 from typing import List, Optional
 
 from pydantic import Field

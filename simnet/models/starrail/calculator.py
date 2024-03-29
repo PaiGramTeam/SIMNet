@@ -1,4 +1,5 @@
 """Starrail calculator models."""
+
 from typing import Dict, Any, Optional, List
 
 from pydantic import Field, validator

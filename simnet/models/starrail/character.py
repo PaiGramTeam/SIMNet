@@ -1,4 +1,5 @@
 """Starrail base character model."""
+
 from enum import Enum
 
 from simnet.models.base import APIModel

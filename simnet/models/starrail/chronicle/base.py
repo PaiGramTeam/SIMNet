@@ -1,4 +1,5 @@
 """Starrail Chronicle Base Model."""
+
 import datetime
 from typing import Optional
 
