@@ -1,4 +1,5 @@
 """Starrail chronicle stats."""
+
 import typing
 
 from pydantic import Field
