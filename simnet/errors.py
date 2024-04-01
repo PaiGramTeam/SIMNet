@@ -277,6 +277,7 @@ _errors: Dict[int, Union[_TBR, str, Tuple[_TBR, Optional[str]]]] = {
     1034: NeedChallenge,
     10035: NeedChallenge,
     5003: InvalidDevice,
+    10041: InvalidDevice,
 }
 
 ERRORS: Dict[int, Tuple[_TBR, Optional[str]]] = {
