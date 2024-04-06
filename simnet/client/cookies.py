@@ -168,3 +168,12 @@ class CookiesModel(BaseModel, frozen=False):
             self.account_id = user_id
         if self.ltuid is None and self.ltoken:
             self.ltuid = user_id
+
+    def set_mid(self, mid: str):
+        """Set the mid for the v1 cookies."""
+        if self.mid is None:
+            self.mid = mid
+        if self.account_mid_v2 is None:
+            self.account_mid_v2 = mid
+        if self.ltmid_v2 is None and self.ltoken_v2:
+            self.ltmid_v2 = mid

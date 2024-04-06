@@ -435,6 +435,7 @@ class AuthClient(BaseClient):
         if self.region != Region.OVERSEAS:
             raise RegionNotSupported()
         self.check_stoken(stoken, account_id, mid)
+        account_id = account_id or self.account_id
         url = AUTH_KEY_URL.get_url(self.region) / "../../../account/ma-passport/token/getBySToken"
         headers = {"x-rpc-app_id": "c9oqaq3s3gu8"}
         data_ = {"dst_token_types": [1, 2, 4]}
@@ -445,11 +446,30 @@ class AuthClient(BaseClient):
             token_type = token.get("token_type", 0)
             token_map[token_type] = token.get("token", "")
         mid = data.get("user_info", {}).get("mid", "")
-        model = CookiesModel(mid=mid, stoken=token_map[1], ltoken=token_map[2], cookie_token=token_map[4])
+        model = CookiesModel(stoken=token_map[1])
+        ltoken, cookie_token = token_map[2], token_map[4]
+        if ltoken.startswith("v2_"):
+            model.ltoken_v2 = ltoken
+        else:
+            model.ltoken = ltoken
+        if cookie_token.startswith("v2_"):
+            model.cookie_token_v2 = cookie_token
+        else:
+            model.cookie_token = cookie_token
+        model.set_mid(mid)
+        model.set_uid(account_id)
+        model.set_v2_uid(account_id)
+
         self.cookies.set("mid", model.mid)
         self.cookies.set("stoken", model.stoken)
-        self.cookies.set("ltoken", model.ltoken)
-        self.cookies.set("cookie_token", model.cookie_token)
+        if model.ltoken:
+            self.cookies.set("ltoken", model.ltoken)
+        if model.ltoken_v2:
+            self.cookies.set("ltoken_v2", model.ltoken_v2)
+        if model.cookie_token:
+            self.cookies.set("cookie_token", model.cookie_token)
+        if model.cookie_token_v2:
+            self.cookies.set("cookie_token_v2", model.cookie_token_v2)
         return model
 
     async def get_game_token_by_stoken(
