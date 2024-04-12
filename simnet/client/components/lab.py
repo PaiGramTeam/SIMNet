@@ -3,7 +3,7 @@ from typing import Optional, List, Dict, Any
 
 from simnet.client.base import BaseClient
 from simnet.client.headers import Headers
-from simnet.client.routes import TAKUMI_URL, HK4E_URL, CODE_URL, CODE_HOYOLAB_URL
+from simnet.client.routes import TAKUMI_URL, HK4E_URL, CODE_URL, CODE_HOYOLAB_URL, BBS_URL
 from simnet.models.lab.announcement import Announcement
 from simnet.models.lab.record import PartialUser, FullUser, Account
 from simnet.utils.enums import Region, Game
@@ -47,7 +47,7 @@ class LabClient(BaseClient):
         lang = lang or self.lang
         region = region or self.region
 
-        url = TAKUMI_URL.get_url(region) / endpoint
+        url = BBS_URL.get_url(region) / endpoint
 
         if self.region == Region.CHINESE:
             headers["Referer"] = "https://www.miyoushe.com/"
@@ -239,7 +239,7 @@ class LabClient(BaseClient):
             List[Account]: A list of account info objects.
         """
         data = await self.request_bbs(
-            "binding/api/getUserGameRolesByCookie",
+            TAKUMI_URL.get_url(self.region) / "binding/api/getUserGameRolesByCookie",
             lang=lang,
         )
         return [Account(**i) for i in data["list"]]

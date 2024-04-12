@@ -32,6 +32,7 @@ __all__ = (
     "YSULOG_URL",
     "QRCODE_URL",
     "GET_FP_URL",
+    "BBS_URL",
 )
 
 
@@ -326,3 +327,8 @@ CODE_HOYOLAB_URL = GameRoute(
 QRCODE_URL = Route("https://hk4e-sdk.mihoyo.com/hk4e_cn/combo/panda/qrcode")
 
 GET_FP_URL = Route("https://public-data-api.mihoyo.com/device-fp/api/getFp")
+
+BBS_URL = InternationalRoute(
+    overseas="https://bbs-api-os.hoyolab.com",
+    chinese="https://bbs-api.miyoushe.com",
+)
