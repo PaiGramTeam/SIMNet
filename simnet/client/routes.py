@@ -226,11 +226,11 @@ RECORD_URL = InternationalRoute(
 
 GACHA_INFO_URL = GameRoute(
     overseas=dict(
-        genshin="https://hk4e-api-os.hoyoverse.com/event/gacha_info/api",
+        genshin="https://hk4e-api-os.hoyoverse.com/gacha_info/api",
         hkrpg="https://api-os-takumi.mihoyo.com/common/gacha_record/api/",
     ),
     chinese=dict(
-        genshin="https://hk4e-api.mihoyo.com/event/gacha_info/api",
+        genshin="https://public-operation-hk4e.mihoyo.com/gacha_info/api",
         hkrpg="https://api-takumi.mihoyo.com/common/gacha_record/api",
     ),
 )
