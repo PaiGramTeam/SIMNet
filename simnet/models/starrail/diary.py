@@ -4,12 +4,15 @@ from pydantic import Field
 
 from simnet.models.base import APIModel
 from simnet.models.diary import BaseDiary
+from simnet.models.starrail.chronicle.base import PartialTime
 
 __all__ = (
     "DiaryActionCategory",
+    "StarRailMonthDiaryDataBase",
     "MonthDiaryData",
     "DayDiaryData",
     "StarRailDiary",
+    "StarRailLedgerMonthInfo",
 )
 
 
@@ -29,7 +32,27 @@ class DiaryActionCategory(APIModel):
     percentage: int = Field(alias="percent")
 
 
-class MonthDiaryData(APIModel):
+class StarRailMonthDiaryDataBase(APIModel):
+    """Diary base data for a month.
+
+    Attributes:
+        current_hcoin: Current amount of hcoin.
+        current_rails_pass: Current amount of rails_pass.
+        last_hcoin: Last amount of hcoin.
+        last_rails_pass: Last amount of rails_pass.
+        hcoin_rate: hcoin rate.
+        rails_rate: rails_pass rate.
+    """
+
+    current_hcoin: int
+    current_rails_pass: int
+    last_hcoin: int
+    last_rails_pass: int
+    hcoin_rate: int
+    rails_rate: int
+
+
+class MonthDiaryData(StarRailMonthDiaryDataBase):
     """Diary data for a month.
 
     Attributes:
@@ -42,12 +65,6 @@ class MonthDiaryData(APIModel):
         categories: List of diary categories.
     """
 
-    current_hcoin: int
-    current_rails_pass: int
-    last_hcoin: int
-    last_rails_pass: int
-    hcoin_rate: int
-    rails_rate: int
     categories: List[DiaryActionCategory] = Field(alias="group_by")
 
 
@@ -77,8 +94,28 @@ class StarRailDiary(BaseDiary):
 
     data: MonthDiaryData = Field(alias="month_data")
     day_data: DayDiaryData
+    version: str
+    optional_month: List[str]
+    current_month: str = Field(alias="month")
+    start_month: str
 
     @property
     def month_data(self) -> MonthDiaryData:
         """Diary data for a month."""
         return self.data
+
+
+class StarRailLedgerMonthInfo(StarRailMonthDiaryDataBase):
+    """Ledger month info.
+
+    Attributes:
+        current_hcoin: Current amount of hcoin.
+        current_rails_pass: Current amount of rails_pass.
+        last_hcoin: Last amount of hcoin.
+        last_rails_pass: Last amount of rails_pass.
+        hcoin_rate: hcoin rate.
+        rails_rate: rails_pass rate.
+        time: PartialTime
+    """
+
+    time: PartialTime

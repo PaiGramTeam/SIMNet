@@ -14,6 +14,7 @@ from simnet.models.starrail.chronicle.notes import StarRailNote, StarRailNoteWid
 from simnet.models.starrail.chronicle.resident import StarRailResident
 from simnet.models.starrail.chronicle.rogue import StarRailRogue, StarRailRogueLocust, StarRailRogueNous
 from simnet.models.starrail.chronicle.stats import StarRailUserStats, StarRailUserInfo
+from simnet.models.starrail.diary import StarRailLedgerMonthInfo
 from simnet.utils.enums import Game, Region
 from simnet.utils.player import recognize_starrail_server, recognize_region
 
@@ -433,3 +434,24 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
             recommend_relic_properties=recommend_relic_properties or [],
         )
         await self._request_starrail_record("setAvatarRecommendRelicProperty", method="POST", payload=payload)
+
+    async def get_starrail_ledger_month_info(
+        self,
+        uid: Optional[int] = None,
+        lang: Optional[str] = None,
+    ) -> StarRailLedgerMonthInfo:
+        """Get StarRail ledger month info.
+
+        Args:
+            uid (Optional[int], optional): The player ID. Defaults to None.
+            lang (Optional[str], optional): The language of the data. Defaults to None.
+
+        Returns:
+            StarRailLedgerMonthInfo: The requested activity info.
+
+        Raises:
+            BadRequest: If the request is invalid.
+            DataNotPublic: If the requested data is not public.
+        """
+        data = await self._request_starrail_record("get_ledger_month_info", uid, lang=lang)
+        return StarRailLedgerMonthInfo(**data)
