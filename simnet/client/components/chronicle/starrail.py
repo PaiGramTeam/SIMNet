@@ -436,9 +436,9 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         await self._request_starrail_record("setAvatarRecommendRelicProperty", method="POST", payload=payload)
 
     async def get_starrail_ledger_month_info(
-         self,
-         uid: Optional[int] = None,
-         lang: Optional[str] = None,
+        self,
+        uid: Optional[int] = None,
+        lang: Optional[str] = None,
     ) -> StarRailLedgerMonthInfo:
         """Get StarRail ledger month info.
 

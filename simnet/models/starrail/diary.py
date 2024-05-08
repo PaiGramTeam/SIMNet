@@ -43,6 +43,7 @@ class StarRailMonthDiaryDataBase(APIModel):
         hcoin_rate: hcoin rate.
         rails_rate: rails_pass rate.
     """
+
     current_hcoin: int
     current_rails_pass: int
     last_hcoin: int
@@ -116,4 +117,5 @@ class StarRailLedgerMonthInfo(StarRailMonthDiaryDataBase):
         rails_rate: rails_pass rate.
         time: PartialTime
     """
+
     time: PartialTime
