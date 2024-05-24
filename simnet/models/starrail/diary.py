@@ -100,6 +100,11 @@ class StarRailDiary(BaseDiary):
     start_month: str
 
     @property
+    def data_id(self) -> int:
+        """Get the data ID."""
+        return self.month
+
+    @property
     def month_data(self) -> MonthDiaryData:
         """Diary data for a month."""
         return self.data

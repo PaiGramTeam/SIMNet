@@ -72,10 +72,21 @@ class Diary(BaseDiary):
     Attributes:
         data: Diary data for a month.
         day_data: Diary data for a day.
+        date: Request date.
     """
 
     data: MonthDiaryData = Field(alias="month_data")
     day_data: DayDiaryData
+    date: str
+
+    @property
+    def data_id(self) -> int:
+        """Get the data ID."""
+        date = self.date.split("-")
+        year, month = int(date[0]), int(date[1])
+        if month < self.month:
+            year -= 1
+        return year * 100 + self.month
 
     @property
     def month_data(self) -> MonthDiaryData:
