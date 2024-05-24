@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 from pydantic import Field
 
@@ -77,12 +77,12 @@ class Diary(BaseDiary):
 
     data: MonthDiaryData = Field(alias="month_data")
     day_data: DayDiaryData
-    date: str
+    date: Optional[str] = ""
 
     @property
     def data_id(self) -> int:
         """Get the data ID."""
-        date = self.date.split("-")
+        date = (self.date or datetime.now().strftime("%Y-%m-%d")).split("-")
         year, month = int(date[0]), int(date[1])
         if month < self.month:
             year -= 1
