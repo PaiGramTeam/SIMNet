@@ -12,7 +12,7 @@ UID_LENGTH: Mapping[Game, int] = {
 UID_RANGE: Mapping[Game, Mapping[Region, Sequence[int]]] = {
     Game.GENSHIN: {
         Region.OVERSEAS: (6, 7, 8, 18, 9),
-        Region.CHINESE: (1, 2, 5),
+        Region.CHINESE: (1, 2, 3, 5),
     },
     Game.STARRAIL: {
         Region.OVERSEAS: (6, 7, 8, 9),
@@ -61,6 +61,7 @@ def recognize_genshin_server(player_id: int) -> str:
     server = {
         1: "cn_gf01",
         2: "cn_gf01",
+        3: "cn_gf01",
         5: "cn_qd01",
         6: "os_usa",
         7: "os_euro",
