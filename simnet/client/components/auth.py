@@ -466,10 +466,12 @@ class AuthClient(BaseClient):
             self.cookies.set("ltoken", model.ltoken)
         if model.ltoken_v2:
             self.cookies.set("ltoken_v2", model.ltoken_v2)
+            self.cookies.set("ltmid_v2", model.ltmid_v2)
         if model.cookie_token:
             self.cookies.set("cookie_token", model.cookie_token)
         if model.cookie_token_v2:
             self.cookies.set("cookie_token_v2", model.cookie_token_v2)
+            self.cookies.set("account_mid_v2", model.account_mid_v2)
         return model
 
     async def get_game_token_by_stoken(
