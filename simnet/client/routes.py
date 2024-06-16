@@ -33,6 +33,7 @@ __all__ = (
     "QRCODE_URL",
     "GET_FP_URL",
     "BBS_URL",
+    "SELF_HELP_URL",
 )
 
 
@@ -331,4 +332,12 @@ GET_FP_URL = Route("https://public-data-api.mihoyo.com/device-fp/api/getFp")
 BBS_URL = InternationalRoute(
     overseas="https://bbs-api-os.hoyolab.com",
     chinese="https://bbs-api.miyoushe.com",
+)
+
+SELF_HELP_URL = GameRoute(
+    overseas=dict(),
+    chinese=dict(
+        genshin="https://hk4e-api.mihoyo.com/common/hk4e_self_help_query",
+        hkrpg="https://api-takumi.mihoyo.com/common/hkrpg_self_help_inquiry",
+    ),
 )
