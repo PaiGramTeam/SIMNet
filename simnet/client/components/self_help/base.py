@@ -17,6 +17,7 @@ class BaseSelfHelpClient(BaseClient):
         game: Optional[Game] = None,
         lang: Optional[str] = None,
         params: Optional[Dict[str, Any]] = None,
+        end_id: Optional[int] = None,
     ) -> Dict[str, Any]:
         """Make a request towards the ys ledger endpoint.
 
@@ -25,6 +26,7 @@ class BaseSelfHelpClient(BaseClient):
             game (Optional[Game], optional): The game to get the ledger for.
             lang (Optional[str], optional): The language code to use for the request.
             params (Optional[Dict[str, Any]], optional): The query parameters to use for the request.
+            end_id (Optional[int], optional): The ending ID of the last ledger to retrieve.
 
         Returns:
             Dict[str, Any]: The response data.
@@ -40,5 +42,8 @@ class BaseSelfHelpClient(BaseClient):
         params["authkey_ver"] = "1"
 
         params["lang"] = lang or self.lang
+
+        if end_id is not None:
+            params["end_id"] = end_id
 
         return await self.request_lab(url, params=params)
