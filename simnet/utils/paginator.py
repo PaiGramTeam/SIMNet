@@ -46,6 +46,10 @@ class WishPaginator:
                 break
 
             all_items.extend(filtered_items)
+
+            if limit and len(all_items) >= limit:
+                break
+
             await asyncio.sleep(0.5)
 
         # Return up to the specified limit.
