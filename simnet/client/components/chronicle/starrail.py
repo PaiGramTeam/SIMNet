@@ -7,6 +7,7 @@ from simnet.errors import BadRequest, DataNotPublic
 from simnet.models.lab.record import RecordCard
 from simnet.models.starrail.chronicle.activity import StarRailActivity
 from simnet.models.starrail.chronicle.challenge import StarRailChallenge
+from simnet.models.starrail.chronicle.challenge_boss import StarRailChallengeBoss
 from simnet.models.starrail.chronicle.challenge_story import StarRailChallengeStory
 from simnet.models.starrail.chronicle.characters import StarRailDetailCharacters
 from simnet.models.starrail.chronicle.museum import StarRailMuseumBasic, StarRailMuseumDetail
@@ -213,7 +214,7 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         previous: bool = False,
         lang: Optional[str] = None,
     ) -> StarRailChallengeStory:
-        """Get starrail challenge runs.
+        """Get starrail challenge story runs.
 
         Args:
             player_id (Optional[int], optional): The player ID. Defaults to None.
@@ -221,7 +222,7 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
             lang (Optional[str], optional): The language of the data. Defaults to None.
 
         Returns:
-            StarRailChallengeStory: The requested challenge runs.
+            StarRailChallengeStory: The requested challenge story runs.
 
         Raises:
             BadRequest: If the request is invalid.
@@ -230,6 +231,30 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         payload = dict(schedule_type=2 if previous else 1, need_all="true", type="story")
         data = await self._request_starrail_record("challenge_story", player_id, lang=lang, payload=payload)
         return StarRailChallengeStory(**data)
+
+    async def get_starrail_challenge_boss(
+        self,
+        player_id: Optional[int] = None,
+        previous: bool = False,
+        lang: Optional[str] = None,
+    ) -> StarRailChallengeBoss:
+        """Get starrail challenge boss runs.
+
+        Args:
+            player_id (Optional[int], optional): The player ID. Defaults to None.
+            previous (bool, optional): Whether to get previous runs. Defaults to False.
+            lang (Optional[str], optional): The language of the data. Defaults to None.
+
+        Returns:
+            StarRailChallengeBoss: The requested challenge boss runs.
+
+        Raises:
+            BadRequest: If the request is invalid.
+            DataNotPublic: If the requested data is not public.
+        """
+        payload = dict(schedule_type=2 if previous else 1, need_all="true", type="boss")
+        data = await self._request_starrail_record("challenge_boss", player_id, lang=lang, payload=payload)
+        return StarRailChallengeBoss(**data)
 
     async def get_starrail_rogue(
         self,
