@@ -80,6 +80,13 @@ class StarRailNote(APIModel):
     is_reserve_stamina_full: bool
     """Whether the reserve stamina is full"""
 
+    rogue_tourn_weekly_unlocked: bool
+    """Whether the rogue tournament is unlocked"""
+    rogue_tourn_weekly_max: int
+    """The max number of rogue tournament attempts"""
+    rogue_tourn_weekly_cur: int
+    """The current number of rogue tournament attempts"""
+
 
 class StarRailNoteWidget(APIModel):
     """Represents a StarRail Note.
@@ -121,6 +128,13 @@ class StarRailNoteWidget(APIModel):
 
     has_signed: bool
     """Whether the user has signed in today"""
+
+    rogue_tourn_weekly_unlocked: bool
+    """Whether the rogue tournament is unlocked"""
+    rogue_tourn_weekly_max: int
+    """The max number of rogue tournament attempts"""
+    rogue_tourn_weekly_cur: int
+    """The current number of rogue tournament attempts"""
 
 
 class StarRailNoteOverseaWidgetChallenge(APIModel):
