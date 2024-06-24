@@ -51,11 +51,16 @@ class StarRailChallengeBossBuff(APIModel):
 class StarRailChallengeBossFloorNode(APIModel):
     """Node for a floor."""
 
-    challenge_time: PartialTime
+    challenge_time: Optional[PartialTime] = None
     avatars: List[RogueCharacter]
     buff: Optional[StarRailChallengeBossBuff] = None
     score: int
     boss_defeated: bool
+
+    @property
+    def has_data(self) -> bool:
+        """Check if the node has data."""
+        return bool(self.avatars)
 
 
 class StarRailChallengeBossFloor(APIModel):
