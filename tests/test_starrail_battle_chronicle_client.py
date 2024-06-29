@@ -71,13 +71,3 @@ class TestStarrailBattleChronicleClient:
     async def test_get_starrail_rogue(starrail_client: "StarRailBattleChronicleClient"):
         rogue = await starrail_client.get_starrail_rogue()
         assert rogue.role is not None
-
-    @staticmethod
-    async def test_get_starrail_museum_info(starrail_client: "StarRailBattleChronicleClient"):
-        info = await starrail_client.get_starrail_museum_info()
-        assert info is not None
-
-    @staticmethod
-    async def test_get_starrail_museum(starrail_client: "StarRailBattleChronicleClient"):
-        museum = await starrail_client.get_starrail_museum_detail()
-        assert museum is not None

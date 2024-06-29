@@ -10,10 +10,10 @@ from simnet.models.starrail.chronicle.challenge import StarRailChallenge
 from simnet.models.starrail.chronicle.challenge_boss import StarRailChallengeBoss
 from simnet.models.starrail.chronicle.challenge_story import StarRailChallengeStory
 from simnet.models.starrail.chronicle.characters import StarRailDetailCharacters
-from simnet.models.starrail.chronicle.museum import StarRailMuseumBasic, StarRailMuseumDetail
 from simnet.models.starrail.chronicle.notes import StarRailNote, StarRailNoteWidget, StarRailNoteOverseaWidget
 from simnet.models.starrail.chronicle.resident import StarRailResident
 from simnet.models.starrail.chronicle.rogue import StarRailRogue, StarRailRogueLocust, StarRailRogueNous
+from simnet.models.starrail.chronicle.rogue_tourn import StarRailRogueTourn
 from simnet.models.starrail.chronicle.stats import StarRailUserStats, StarRailUserInfo
 from simnet.models.starrail.diary import StarRailLedgerMonthInfo
 from simnet.utils.enums import Game, Region
@@ -324,47 +324,27 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         data = await self._request_starrail_record("rogue_nous", player_id, lang=lang, payload=payload)
         return StarRailRogueNous(**data)
 
-    async def get_starrail_museum_info(
+    async def get_starrail_rogue_tourn(
         self,
-        uid: Optional[int] = None,
+        player_id: Optional[int] = None,
         lang: Optional[str] = None,
-    ) -> StarRailMuseumBasic:
-        """Get starrail museum basic info.
+    ) -> StarRailRogueTourn:
+        """Get starrail rogue tourn runs.
 
         Args:
-            uid (Optional[int], optional): The player ID. Defaults to None.
+            player_id (Optional[int], optional): The player ID. Defaults to None.
             lang (Optional[str], optional): The language of the data. Defaults to None.
 
         Returns:
-            StarRailMuseumBasic: The requested museum basic info.
+            StarRailRogueTourn: The requested rogue tourn runs.
 
         Raises:
             BadRequest: If the request is invalid.
             DataNotPublic: If the requested data is not public.
         """
-        data = await self._request_starrail_record("museum/basic", uid, lang=lang)
-        return StarRailMuseumBasic(**data)
-
-    async def get_starrail_museum_detail(
-        self,
-        uid: Optional[int] = None,
-        lang: Optional[str] = None,
-    ) -> StarRailMuseumDetail:
-        """Get starrail museum detail info.
-
-        Args:
-            uid (Optional[int], optional): The player ID. Defaults to None.
-            lang (Optional[str], optional): The language of the data. Defaults to None.
-
-        Returns:
-            StarRailMuseumDetail: The requested museum detail info.
-
-        Raises:
-            BadRequest: If the request is invalid.
-            DataNotPublic: If the requested data is not public.
-        """
-        data = await self._request_starrail_record("museum/detail", uid, lang=lang)
-        return StarRailMuseumDetail(**data)
+        payload = dict(need_detail="true")
+        data = await self._request_starrail_record("rogue_tourn", player_id, lang=lang, payload=payload)
+        return StarRailRogueTourn(**data)
 
     async def get_starrail_activity(
         self,
