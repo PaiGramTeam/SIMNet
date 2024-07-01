@@ -6,6 +6,7 @@ from simnet.client.routes import RECORD_URL
 from simnet.errors import DataNotPublic, BadRequest
 from simnet.models.genshin.chronicle.abyss import SpiralAbyss, SpiralAbyssPair
 from simnet.models.genshin.chronicle.characters import Character
+from simnet.models.genshin.chronicle.img_theater import ImgTheater
 from simnet.models.genshin.chronicle.notes import Notes, NotesWidget, NotesOverseaWidget
 from simnet.models.genshin.chronicle.stats import (
     PartialGenshinUserStats,
@@ -160,6 +161,30 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         data = await self._request_genshin_record("spiralAbyss", player_id, lang=lang, payload=payload)
 
         return SpiralAbyss(**data)
+
+    async def get_genshin_imaginarium_theater(
+        self,
+        player_id: Optional[int] = None,
+        need_detail: Optional[bool] = True,
+        *,
+        lang: Optional[str] = None,
+    ) -> ImgTheater:
+        """Get genshin imaginarium theater runs.
+
+        Args:
+            player_id (Optional[int], optional): The player ID. Defaults to None.
+            need_detail (Optional[bool], optional): Whether to retrieve detailed data. Defaults to True.
+            lang (Optional[str], optional): The language of the data. Defaults to None.
+
+        Returns:
+            ImgTheater: genshin imaginarium theater runs.
+        """
+        payload = {
+            "need_detail": need_detail,
+        }
+        data = await self._request_genshin_record("role_combat", player_id, lang=lang, payload=payload)
+
+        return ImgTheater(**data)
 
     async def get_genshin_notes(
         self,

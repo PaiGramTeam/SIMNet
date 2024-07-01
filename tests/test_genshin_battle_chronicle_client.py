@@ -49,3 +49,8 @@ class TestGenshinBattleChronicleClient:
         for character in characters:
             assert character.id
             assert character.level
+
+    @staticmethod
+    async def test_get_genshin_imaginarium_theater(genshin_client: GenshinBattleChronicleClient):
+        data = await genshin_client.get_genshin_imaginarium_theater()
+        assert len(data.data) > 0
