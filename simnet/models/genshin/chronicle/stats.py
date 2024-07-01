@@ -9,6 +9,15 @@ from simnet.models.genshin.chronicle.characters import PartialCharacter, Charact
 from simnet.models.lab.record import UserInfo
 
 
+class StatsRoleCombat(APIModel):
+    """Role-based combat stats."""
+
+    is_unlock: bool
+    max_round_id: int
+    has_data: bool
+    has_detail_data: bool
+
+
 class Stats(APIModel):
     """Overall user stats.
 
@@ -47,6 +56,7 @@ class Stats(APIModel):
     remarkable_chests: int = Field(aliases="magic_chest_number")
     unlocked_waypoints: int = Field(aliases="way_point_number")
     unlocked_domains: int = Field(aliases="domain_number")
+    role_combat: StatsRoleCombat
 
 
 class Offering(APIModel):
