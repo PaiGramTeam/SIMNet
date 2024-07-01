@@ -20,6 +20,7 @@ class TheaterCharaType(enum.IntEnum):
 class TheaterDifficulty(enum.IntEnum):
     """The difficulty of the imaginarium theater data."""
 
+    NULL = 0
     EASY = 1
     NORMAL = 2
     HARD = 3
