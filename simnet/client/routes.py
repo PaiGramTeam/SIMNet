@@ -220,9 +220,16 @@ class GameRoute(BaseRoute):
         return self.urls[region][game]
 
 
-RECORD_URL = InternationalRoute(
-    overseas="https://bbs-api-os.hoyolab.com/game_record",
-    chinese="https://api-takumi-record.mihoyo.com/game_record/app",
+RECORD_URL = GameRoute(
+    overseas=dict(
+        genshin="https://bbs-api-os.hoyolab.com/game_record",
+        hkrpg="https://bbs-api-os.hoyolab.com/game_record",
+    ),
+    chinese=dict(
+        genshin="https://api-takumi-record.mihoyo.com/game_record/app",
+        hkrpg="https://api-takumi-record.mihoyo.com/game_record/app",
+        nap="https://api-takumi-record.mihoyo.com/event/game_record_zzz",
+    ),
 )
 
 GACHA_INFO_URL = GameRoute(

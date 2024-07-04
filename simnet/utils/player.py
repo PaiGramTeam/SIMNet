@@ -146,12 +146,15 @@ def recognize_region(player_id: int, game: Game) -> Optional[Region]:
     Returns:
         Optional[Region]: The region the player ID belongs to if it can be recognized, None otherwise.
     """
+    if game == Game.ZZZ and len(str(player_id)) == 8:
+        return Region.CHINESE
+
     for region, digits in UID_RANGE[game].items():
         first = recognize_game_uid_first_digit(player_id, game)
         if first in digits:
             return region
 
-    return Region.CHINESE if game == Game.ZZZ and len(str(player_id)) == 8 else None
+    return None
 
 
 def recognize_server(player_id: int, game: Game) -> str:

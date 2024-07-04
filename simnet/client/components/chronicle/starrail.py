@@ -412,7 +412,7 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         if self.account_id is not None and stuid is None:
             self.cookies.set("stuid", str(self.account_id))
         if self.region == Region.OVERSEAS:
-            route = RECORD_URL.get_url(self.region) / "../community/apihub/api/hsr_widget"
+            route = RECORD_URL.get_url(self.region, self.game) / "../community/apihub/api/hsr_widget"
             data = await self.request_lab(route, lang=lang)
             model = StarRailNoteOverseaWidget
         else:

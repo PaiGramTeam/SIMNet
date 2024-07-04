@@ -50,10 +50,13 @@ class BaseChronicleClient(BaseClient):
             TimedOut: If the request times out.
             BadRequest: If the response contains an error.
         """
-        base_url = RECORD_URL.get_url(region or self.region)
+        base_url = RECORD_URL.get_url(region or self.region, game or Game.GENSHIN)
 
         if game:
-            base_url = base_url / game.value / endpoint_type
+            if game == Game.ZZZ:
+                base_url = base_url / endpoint_type / "zzz"
+            else:
+                base_url = base_url / game.value / endpoint_type
 
         url = base_url / endpoint
         new_ds = self.region == Region.CHINESE

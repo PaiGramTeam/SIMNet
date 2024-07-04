@@ -312,7 +312,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         if self.account_id is not None and stuid is None:
             self.cookies.set("stuid", str(self.account_id))
         if self.region == Region.OVERSEAS:
-            route = RECORD_URL.get_url(self.region) / "../community/apihub/api/widget/data"
+            route = RECORD_URL.get_url(self.region, self.game) / "../community/apihub/api/widget/data"
             params = {"game_id": "2"}
             data = await self.request_lab(route, params=params, lang=lang)
             model = NotesOverseaWidget
