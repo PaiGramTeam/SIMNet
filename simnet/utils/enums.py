@@ -24,8 +24,10 @@ class Game(str, _enum.Enum):
         GENSHIN (Game): Represents the game "Genshin Impact".
         HONKAI (Game): Represents the game "Honkai Impact 3rd".
         STARRAIL (Game): Represents the game "Honkai Impact 3rd RPG".
+        ZZZ (Game): Represents the game "Zenless Zone Zero".
     """
 
     GENSHIN = "genshin"
     HONKAI = "honkai3rd"
     STARRAIL = "hkrpg"
+    ZZZ = "nap"

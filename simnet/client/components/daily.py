@@ -10,7 +10,7 @@ from simnet.client.routes import REWARD_URL
 from simnet.errors import GeetestTriggered
 from simnet.models.lab.daily import DailyRewardInfo, DailyReward, ClaimedDailyReward
 from simnet.utils.enums import Game, Region
-from simnet.utils.player import recognize_genshin_server, recognize_starrail_server
+from simnet.utils.player import recognize_genshin_server, recognize_starrail_server, recognize_zzz_server
 
 __all__ = ("DailyRewardClient",)
 
@@ -82,6 +82,14 @@ class DailyRewardClient(BaseClient):
                 )
                 params = params.set("uid", self.player_id)
                 params = params.set("region", recognize_starrail_server(self.player_id))
+            if self.game == Game.ZZZ:
+                headers["referer"] = (
+                    "https://act.mihoyo.com/bbs/event/signin/zzz/e202406242138391.html?"
+                    "act_id=e202406242138391&mhy_auth_required=true&mhy_presentation_style=fullscreen&"
+                    "utm_source=bbs&utm_medium=zzz&utm_campaign=icon"
+                )
+                params = params.set("uid", self.player_id)
+                params = params.set("region", recognize_zzz_server(self.player_id))
 
         url = base_url / endpoint
 
