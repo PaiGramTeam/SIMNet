@@ -332,6 +332,7 @@ CODE_HOYOLAB_URL = GameRoute(
     overseas=dict(
         genshin="https://sg-hk4e-api.hoyolab.com/common/apicdkey/api/webExchangeCdkeyHyl",
         hkrpg="https://sg-hkrpg-api.hoyolab.com/common/apicdkey/api/webExchangeCdkeyHyl",
+        nap="https://public-operation-nap.hoyoverse.com/common/apicdkey/api/webExchangeCdkey",
     ),
     chinese={},
 )

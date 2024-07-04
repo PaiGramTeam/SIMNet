@@ -86,8 +86,9 @@ class ZZZNote(APIModel):
         return self.energy.progress.max
 
     @property
-    def stamina_recover_time(self) -> datetime.timedelta:
-        return self.energy.restore
+    def stamina_recover_time(self) -> datetime:
+        """A property that returns the time when resin will be fully recovered."""
+        return datetime.datetime.now().astimezone() + self.energy.restore
 
     @property
     def current_train_score(self) -> int:
