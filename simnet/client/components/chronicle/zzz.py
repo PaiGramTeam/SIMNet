@@ -5,7 +5,7 @@ from simnet.errors import BadRequest, DataNotPublic
 from simnet.models.lab.record import RecordCard
 from simnet.models.zzz.calculator import ZZZCalculatorCharacterDetails
 from simnet.models.zzz.chronicle.notes import ZZZNote
-from simnet.models.zzz.chronicle.stats import ZZZUserStats, ZZZAvatarBasic
+from simnet.models.zzz.chronicle.stats import ZZZUserStats, ZZZAvatarBasic, ZZZBuddyBasic
 from simnet.utils.enums import Game
 from simnet.utils.player import recognize_region, recognize_zzz_server
 
@@ -167,6 +167,27 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
         payload = {"need_wiki": "true", "id_list[]": ch}
         data = await self._request_zzz_record("avatar/info", player_id, lang=lang, payload=payload)
         return ZZZCalculatorCharacterDetails(**data)
+
+    async def get_zzz_buddy_list(
+        self,
+        player_id: Optional[int] = None,
+        lang: Optional[str] = None,
+    ) -> "ZZZBuddyBasic":
+        """Get ZZZ buddy basic information.
+
+        Args:
+            player_id (Optional[int], optional): The player ID. Defaults to None.
+            lang (Optional[str], optional): The language of the data. Defaults to None.
+
+        Returns:
+            ZZZBuddyBasic: The requested buddy information.
+
+        Raises:
+            BadRequest: If the request is invalid.
+            DataNotPublic: If the requested data is not public.
+        """
+        data = await self._request_zzz_record("buddy/info", player_id, lang=lang)
+        return ZZZBuddyBasic(**data)
 
     async def get_record_card(
         self,

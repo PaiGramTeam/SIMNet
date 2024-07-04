@@ -24,8 +24,15 @@ class ZZZAvatarBasic(APIModel):
     characters: typing.Sequence[character.ZZZPartialCharacter] = Field(alias="avatar_list")
 
 
+class ZZZBuddyBasic(APIModel):
+    """Basic buddy"""
+
+    buddy_list: typing.Sequence[character.ZZZBaseBuddy] = Field(alias="list")
+
+
 class ZZZUserStats(ZZZAvatarBasic):
     """User stats with characters without equipment."""
 
     stats: ZZZStats
     cur_head_icon_url: str
+    buddy_list: typing.Sequence[character.ZZZBaseBuddy]

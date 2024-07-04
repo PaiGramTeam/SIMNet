@@ -24,3 +24,13 @@ class ZZZPartialCharacter(ZZZBaseCharacter):
     avatar_profession: int
     level: int
     rank: int
+
+
+class ZZZBaseBuddy(APIModel):
+    """Base Buddy model."""
+
+    id: int
+    name: str
+    rarity: str
+    level: int
+    star: int
