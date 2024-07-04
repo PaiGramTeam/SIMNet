@@ -5,7 +5,7 @@ from pydantic import Field
 from simnet.models.base import APIModel
 
 
-class StarRailBaseCharacter(APIModel):
+class ZZZBaseCharacter(APIModel):
     """Base character model."""
 
     id: int
@@ -15,7 +15,7 @@ class StarRailBaseCharacter(APIModel):
     hollow_icon_path: str
 
 
-class StarRailPartialCharacter(StarRailBaseCharacter):
+class ZZZPartialCharacter(ZZZBaseCharacter):
     """Character without any equipment."""
 
     name: str = Field(alias="name_mi18n")

@@ -21,7 +21,7 @@ class ZZZStats(APIModel):
 class ZZZAvatarBasic(APIModel):
     """Basic avatar"""
 
-    characters: typing.Sequence[character.StarRailPartialCharacter] = Field(alias="avatar_list")
+    characters: typing.Sequence[character.ZZZPartialCharacter] = Field(alias="avatar_list")
 
 
 class ZZZUserStats(ZZZAvatarBasic):

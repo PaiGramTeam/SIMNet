@@ -1,8 +1,9 @@
-from typing import Optional, Mapping, Dict, Any
+from typing import Optional, Mapping, Dict, Any, List
 
 from simnet.client.components.chronicle.base import BaseChronicleClient
 from simnet.errors import BadRequest, DataNotPublic
 from simnet.models.lab.record import RecordCard
+from simnet.models.zzz.calculator import ZZZCalculatorCharacterDetails
 from simnet.models.zzz.chronicle.notes import ZZZNote
 from simnet.models.zzz.chronicle.stats import ZZZUserStats, ZZZAvatarBasic
 from simnet.utils.enums import Game
@@ -140,6 +141,33 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
         data = await self._request_zzz_record("avatar/basic", player_id, lang=lang)
         return ZZZAvatarBasic(**data)
 
+    async def get_zzz_character_info(
+        self,
+        characters: List[int],
+        player_id: Optional[int] = None,
+        lang: Optional[str] = None,
+    ) -> "ZZZCalculatorCharacterDetails":
+        """Get ZZZ character detail information.
+
+        Args:
+            characters (List[int]): A list of character IDs.
+            player_id (Optional[int], optional): The player ID. Defaults to None.
+            lang (Optional[str], optional): The language of the data. Defaults to None.
+
+        Returns:
+            ZZZCalculatorCharacterDetails: The requested character information.
+
+        Raises:
+            BadRequest: If the request is invalid.
+            DataNotPublic: If the requested data is not public.
+        """
+        ch = characters
+        if isinstance(characters, int):
+            ch = [characters]
+        payload = {"need_wiki": "true", "id_list[]": ch}
+        data = await self._request_zzz_record("avatar/info", player_id, lang=lang, payload=payload)
+        return ZZZCalculatorCharacterDetails(**data)
+
     async def get_record_card(
         self,
         account_id: Optional[int] = None,
@@ -167,27 +195,3 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
                 return record_card
 
         return None
-
-    async def get_zzz_challenge(
-        self,
-        player_id: Optional[int] = None,
-        previous: bool = False,
-        lang: Optional[str] = None,
-    ) -> "StarRailChallenge":
-        """Get starrail challenge runs.
-
-        Args:
-            player_id (Optional[int], optional): The player ID. Defaults to None.
-            previous (bool, optional): Whether to get previous runs. Defaults to False.
-            lang (Optional[str], optional): The language of the data. Defaults to None.
-
-        Returns:
-            StarRailChallenge: The requested challenge runs.
-
-        Raises:
-            BadRequest: If the request is invalid.
-            DataNotPublic: If the requested data is not public.
-        """
-        payload = dict(schedule_type=2 if previous else 1, need_all="true")
-        data = await self._request_zzz_record("challenge", player_id, lang=lang, payload=payload)
-        return data
