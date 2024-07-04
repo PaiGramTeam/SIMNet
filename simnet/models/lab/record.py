@@ -58,6 +58,8 @@ class Account(APIModel):
             return Game.HONKAI
         if "hkrpg" in self.game_biz:
             return Game.STARRAIL
+        if "nap" in self.game_biz:
+            return Game.ZZZ
         try:
             return Game(self.game_biz)
         except ValueError:

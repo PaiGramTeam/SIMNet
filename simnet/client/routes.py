@@ -233,6 +233,7 @@ GACHA_INFO_URL = GameRoute(
     chinese=dict(
         genshin="https://public-operation-hk4e.mihoyo.com/gacha_info/api",
         hkrpg="https://api-takumi.mihoyo.com/common/gacha_record/api",
+        nap="https://public-operation-nap.mihoyo.com/common/gacha_record/api",
     ),
 )
 
