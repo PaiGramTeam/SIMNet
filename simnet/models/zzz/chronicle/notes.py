@@ -64,6 +64,15 @@ class ZZZNoteVhsSale(APIModel):
     sale_state: ZZZNoteVhsSaleState
 
 
+class ZZZNoteCardSignState(str, enum.Enum):
+    """
+    Represents the state of the card sign of the user.
+    """
+
+    FREE = "CardSignNo"
+    DONE = "CardSignDone"
+
+
 class ZZZNote(APIModel):
     """Represents a ZZZ Note.
 
@@ -71,11 +80,13 @@ class ZZZNote(APIModel):
         energy (ZZZNoteEnergy): The energy of the user.
         vitality (ZZZNoteVitality): The vitality of the user.
         vhs_sale (ZZZNoteVhsSale): The vhs sale of the user.
+        card_sign (ZZZNoteCardSignState): The card sign of the user.
     """
 
     energy: ZZZNoteEnergy
     vitality: ZZZNoteVitality
     vhs_sale: ZZZNoteVhsSale
+    card_sign: ZZZNoteCardSignState
 
     @property
     def current_stamina(self) -> int:
