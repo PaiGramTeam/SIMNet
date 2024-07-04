@@ -123,10 +123,10 @@ def recognize_zzz_server(player_id: int) -> str:
     if len(str(player_id)) == 8:
         return "prod_gf_cn"
     server = {
-        11: "prod_official_usa",
-        12: "prod_official_eur",
-        13: "prod_official_asia",
-        14: "prod_official_cht",
+        10: "prod_gf_us",
+        15: "prod_gf_eu",
+        13: "prod_gf_jp",
+        17: "prod_gf_sg",
     }.get(recognize_game_uid_first_digit(player_id, Game.ZZZ))
 
     if server:

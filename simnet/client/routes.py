@@ -224,6 +224,7 @@ RECORD_URL = GameRoute(
     overseas=dict(
         genshin="https://bbs-api-os.hoyolab.com/game_record",
         hkrpg="https://bbs-api-os.hoyolab.com/game_record",
+        nap="https://sg-act-nap-api.hoyolab.com/event/game_record_zzz",
     ),
     chinese=dict(
         genshin="https://api-takumi-record.mihoyo.com/game_record/app",
