@@ -50,7 +50,7 @@ class WishPaginator:
             if limit and len(all_items) >= limit:
                 break
 
-            await asyncio.sleep(0.5)
+            await asyncio.sleep(1)
 
         # Return up to the specified limit.
         return all_items[: min(len(all_items), limit)] if limit else all_items
