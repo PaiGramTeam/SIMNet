@@ -57,3 +57,8 @@ class ZZZWish(APIModel):
     def cast_banner_type(cls, v: Any) -> int:
         """Converts the banner type from any type to int."""
         return int(v)
+
+    @validator("rarity")
+    def add_rarity(cls, v: int) -> int:
+        """Add rarity 1."""
+        return v + 1
