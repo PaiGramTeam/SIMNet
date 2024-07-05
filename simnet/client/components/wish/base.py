@@ -47,6 +47,9 @@ class BaseWishClient(BaseClient):
         params["authkey"] = unquote(authkey)
         params["lang"] = create_short_lang_code(lang or self.lang)
 
+        if game == Game.ZZZ:
+            params["real_gacha_type"] = params.get("gacha_type", "")
+
         return await self.request_api("GET", url, params=params)
 
     async def wish_history(

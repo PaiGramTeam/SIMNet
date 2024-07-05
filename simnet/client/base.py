@@ -217,6 +217,8 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         headers["x-rpc-device_id"] = self.get_device_id()
         headers["x-rpc-device_fp"] = self.get_device_fp()
         if self.region == Region.OVERSEAS:
+            if self.game == Game.ZZZ:
+                headers["x-rpc-lang"] = self.lang or lang
             headers["x-rpc-language"] = self.lang or lang
         if ds is None:
             app_version, client_type, ds = generate_dynamic_secret(self.region, ds_type, new_ds, data, params)

@@ -58,6 +58,8 @@ class Account(APIModel):
             return Game.HONKAI
         if "hkrpg" in self.game_biz:
             return Game.STARRAIL
+        if "nap" in self.game_biz:
+            return Game.ZZZ
         try:
             return Game(self.game_biz)
         except ValueError:
@@ -420,6 +422,57 @@ class StarRailRecodeCard(RecordCard):
         return int(self.data[3].value)
 
 
+class ZZZRecodeCard(RecordCard):
+    """ZZZ record card."""
+
+    @property
+    def game(self) -> Game:
+        """Returns the game associated with the record card.
+
+        Returns:
+            Game: The game associated with the record card.
+        """
+        return Game.ZZZ
+
+    @property
+    def days_active(self) -> int:
+        """Returns the number of days the user has been active.
+
+        Returns:
+            int: The number of days the user has been active.
+        """
+        return int(self.data[0].value)
+
+    @property
+    def world_level_name(self) -> str:
+        """
+        Returns the user's world level name.
+
+        Returns:
+            str: The user's world level name.
+        """
+        return self.data[1].value
+
+    @property
+    def characters(self) -> int:
+        """Returns the number of characters the user has.
+
+        Returns:
+            int: The number of characters the user has.
+        """
+        return int(self.data[2].value)
+
+    @property
+    def buddies(self) -> int:
+        """Returns the number of buddies the user has found.
+
+        Returns:
+            int: The number of buddies the user has found.
+        """
+        return int(self.data[3].value)
+
+
 RECORD_CARD_MAP.setdefault(1, HonkaiRecordCard)
 RECORD_CARD_MAP.setdefault(2, GenshinRecordCard)
 RECORD_CARD_MAP.setdefault(6, StarRailRecodeCard)
+RECORD_CARD_MAP.setdefault(8, ZZZRecodeCard)
