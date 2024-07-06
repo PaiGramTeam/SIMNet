@@ -352,5 +352,6 @@ SELF_HELP_URL = GameRoute(
     chinese=dict(
         genshin="https://hk4e-api.mihoyo.com/common/hk4e_self_help_query",
         hkrpg="https://api-takumi.mihoyo.com/common/hkrpg_self_help_inquiry",
+        nap="https://public-operation-nap.mihoyo.com/common/nap_self_help_query",
     ),
 )
