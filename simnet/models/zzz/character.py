@@ -11,8 +11,6 @@ class ZZZBaseCharacter(APIModel):
     id: int
     element_type: int
     rarity: str
-    group_icon_path: str
-    hollow_icon_path: str
 
 
 class ZZZPartialCharacter(ZZZBaseCharacter):
@@ -24,13 +22,20 @@ class ZZZPartialCharacter(ZZZBaseCharacter):
     avatar_profession: int
     level: int
     rank: int
+    group_icon_path: str
+    hollow_icon_path: str
 
 
 class ZZZBaseBuddy(APIModel):
     """Base Buddy model."""
 
     id: int
-    name: str
     rarity: str
     level: int
+
+
+class ZZZPartialBuddy(ZZZBaseBuddy):
+    """Buddy"""
+
+    name: str
     star: int
