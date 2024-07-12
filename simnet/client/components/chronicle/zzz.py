@@ -99,6 +99,32 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
 
         return ZZZNote(**data)
 
+    async def get_zzz_notes_by_stoken(
+        self,
+        lang: Optional[str] = None,
+    ) -> ZZZNote:
+        """Get zzz's real-time notes.
+
+        Args:
+            lang (Optional[str], optional): The language of the data. Defaults to None.
+
+        Returns:
+            ZZZNote (ZZZNote): The requested real-time notes.
+
+        Raises:
+            BadRequest: If the request is invalid.
+        """
+        stoken = self.cookies.get("stoken")
+        if stoken is None:
+            raise ValueError("stoken not found in cookies.")
+        stuid = self.cookies.get("stuid")
+        if stuid is None and self.account_id is None:
+            raise ValueError("account_id or stuid not found")
+        if self.account_id is not None and stuid is None:
+            self.cookies.set("stuid", str(self.account_id))
+        data = await self._request_zzz_record("widget", lang=lang)
+        return ZZZNote(**data)
+
     async def get_zzz_user(
         self,
         player_id: Optional[int] = None,
