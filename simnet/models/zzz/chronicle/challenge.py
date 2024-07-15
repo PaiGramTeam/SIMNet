@@ -78,3 +78,8 @@ class ZZZChallenge(APIModel):
 
     rating_list: List[ZZZChallengeRate]
     floors: List[ZZZFloor] = Field(alias="all_floor_detail")
+
+    @property
+    def total_stars(self) -> int:
+        star_map = {"S": 3, "A": 2, "B": 1}
+        return sum(star_map.get(i.rating, 0) * i.times for i in self.rating_list)
