@@ -39,7 +39,7 @@ class ZZZFloorNode(APIModel):
     """A node"""
 
     avatars: List[ZZZChallengeCharacter]
-    buddy: ZZZBaseBuddy
+    buddy: Optional[ZZZBaseBuddy]
     element_type_list: List[int]
     monster_info: ZZZFloorMonster
 
