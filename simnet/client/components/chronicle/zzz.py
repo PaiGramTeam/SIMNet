@@ -4,6 +4,7 @@ from simnet.client.components.chronicle.base import BaseChronicleClient
 from simnet.errors import BadRequest, DataNotPublic
 from simnet.models.lab.record import RecordCard
 from simnet.models.zzz.calculator import ZZZCalculatorCharacterDetails
+from simnet.models.zzz.chronicle.challenge import ZZZChallenge
 from simnet.models.zzz.chronicle.notes import ZZZNote
 from simnet.models.zzz.chronicle.stats import ZZZUserStats, ZZZAvatarBasic, ZZZBuddyBasic
 from simnet.utils.enums import Game
@@ -98,6 +99,32 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
 
         return ZZZNote(**data)
 
+    async def get_zzz_notes_by_stoken(
+        self,
+        lang: Optional[str] = None,
+    ) -> ZZZNote:
+        """Get zzz's real-time notes.
+
+        Args:
+            lang (Optional[str], optional): The language of the data. Defaults to None.
+
+        Returns:
+            ZZZNote (ZZZNote): The requested real-time notes.
+
+        Raises:
+            BadRequest: If the request is invalid.
+        """
+        stoken = self.cookies.get("stoken")
+        if stoken is None:
+            raise ValueError("stoken not found in cookies.")
+        stuid = self.cookies.get("stuid")
+        if stuid is None and self.account_id is None:
+            raise ValueError("account_id or stuid not found")
+        if self.account_id is not None and stuid is None:
+            self.cookies.set("stuid", str(self.account_id))
+        data = await self._request_zzz_record("widget", lang=lang)
+        return ZZZNote(**data)
+
     async def get_zzz_user(
         self,
         player_id: Optional[int] = None,
@@ -188,6 +215,30 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
         """
         data = await self._request_zzz_record("buddy/info", player_id, lang=lang)
         return ZZZBuddyBasic(**data)
+
+    async def get_zzz_challenge(
+        self,
+        player_id: Optional[int] = None,
+        previous: bool = False,
+        lang: Optional[str] = None,
+    ) -> ZZZChallenge:
+        """Get zzz challenge runs.
+
+        Args:
+            player_id (Optional[int], optional): The player ID. Defaults to None.
+            previous (bool, optional): Whether to get previous runs. Defaults to False.
+            lang (Optional[str], optional): The language of the data. Defaults to None.
+
+        Returns:
+            ZZZChallenge: The requested challenge runs.
+
+        Raises:
+            BadRequest: If the request is invalid.
+            DataNotPublic: If the requested data is not public.
+        """
+        payload = dict(schedule_type=2 if previous else 1, need_all="true")
+        data = await self._request_zzz_record("challenge", player_id, lang=lang, payload=payload)
+        return ZZZChallenge(**data)
 
     async def get_record_card(
         self,

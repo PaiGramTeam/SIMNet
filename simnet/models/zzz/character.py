@@ -11,8 +11,13 @@ class ZZZBaseCharacter(APIModel):
     id: int
     element_type: int
     rarity: str
-    group_icon_path: str
-    hollow_icon_path: str
+
+    @property
+    def icon(self) -> str:
+        return (
+            f"https://act-webstatic.hoyoverse.com/game_record/zzz/"
+            f"role_square_avatar/role_square_avatar_{self.id}.png"
+        )
 
 
 class ZZZPartialCharacter(ZZZBaseCharacter):
@@ -24,13 +29,27 @@ class ZZZPartialCharacter(ZZZBaseCharacter):
     avatar_profession: int
     level: int
     rank: int
+    group_icon_path: str
+    hollow_icon_path: str
 
 
 class ZZZBaseBuddy(APIModel):
     """Base Buddy model."""
 
     id: int
-    name: str
     rarity: str
     level: int
+
+    @property
+    def icon(self) -> str:
+        return (
+            f"https://act-webstatic.hoyoverse.com/game_record/zzz/"
+            f"bangboo_square_avatar/bangboo_square_avatar_{self.id}.png"
+        )
+
+
+class ZZZPartialBuddy(ZZZBaseBuddy):
+    """Buddy"""
+
+    name: str
     star: int
