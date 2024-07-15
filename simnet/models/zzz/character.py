@@ -12,6 +12,12 @@ class ZZZBaseCharacter(APIModel):
     element_type: int
     rarity: str
 
+    @property
+    def icon(self) -> str:
+        return (
+            f"https://act-webstatic.hoyoverse.com/game_record/zzz/role_square_avatar/role_square_avatar_{self.id}.png"
+        )
+
 
 class ZZZPartialCharacter(ZZZBaseCharacter):
     """Character without any equipment."""
@@ -32,6 +38,10 @@ class ZZZBaseBuddy(APIModel):
     id: int
     rarity: str
     level: int
+
+    @property
+    def icon(self) -> str:
+        return f"https://act-webstatic.hoyoverse.com/game_record/zzz/bangboo_square_avatar/bangboo_square_avatar_{self.id}.png"
 
 
 class ZZZPartialBuddy(ZZZBaseBuddy):
