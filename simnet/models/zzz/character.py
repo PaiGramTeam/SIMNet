@@ -15,7 +15,8 @@ class ZZZBaseCharacter(APIModel):
     @property
     def icon(self) -> str:
         return (
-            f"https://act-webstatic.hoyoverse.com/game_record/zzz/role_square_avatar/role_square_avatar_{self.id}.png"
+            f"https://act-webstatic.hoyoverse.com/game_record/zzz/"
+            f"role_square_avatar/role_square_avatar_{self.id}.png"
         )
 
 
@@ -41,7 +42,10 @@ class ZZZBaseBuddy(APIModel):
 
     @property
     def icon(self) -> str:
-        return f"https://act-webstatic.hoyoverse.com/game_record/zzz/bangboo_square_avatar/bangboo_square_avatar_{self.id}.png"
+        return (
+            f"https://act-webstatic.hoyoverse.com/game_record/zzz/"
+            f"bangboo_square_avatar/bangboo_square_avatar_{self.id}.png"
+        )
 
 
 class ZZZPartialBuddy(ZZZBaseBuddy):
