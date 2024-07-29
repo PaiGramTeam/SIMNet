@@ -167,6 +167,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         player_id: Optional[int] = None,
         need_detail: Optional[bool] = True,
         *,
+        previous: bool = False,
         lang: Optional[str] = None,
     ) -> ImgTheater:
         """Get genshin imaginarium theater runs.
@@ -174,6 +175,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         Args:
             player_id (Optional[int], optional): The player ID. Defaults to None.
             need_detail (Optional[bool], optional): Whether to retrieve detailed data. Defaults to True.
+            previous (bool, optional): Whether to retrieve the data for the previous season of the Imaginarium Theater.
             lang (Optional[str], optional): The language of the data. Defaults to None.
 
         Returns:
@@ -181,6 +183,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         """
         payload = {
             "need_detail": need_detail,
+            "schedule_type": 2 if previous else 1,
         }
         data = await self._request_genshin_record("role_combat", player_id, lang=lang, payload=payload)
 

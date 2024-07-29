@@ -7,6 +7,7 @@ from pydantic import Field
 from simnet.models.base import APIModel
 from simnet.models.genshin.character import BaseCharacter
 from simnet.models.starrail.chronicle.base import PartialTime
+from simnet.models.zzz.calculator import desc_to_html
 
 
 class TheaterCharaType(enum.IntEnum):
@@ -43,6 +44,10 @@ class TheaterBuff(APIModel):
     desc: str
     is_enhanced: bool
     id: int
+
+    @property
+    def desc_html(self) -> str:
+        return desc_to_html(self.desc)
 
 
 class Act(APIModel):
