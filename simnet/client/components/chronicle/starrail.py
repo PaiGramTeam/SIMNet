@@ -5,6 +5,7 @@ from simnet.client.components.chronicle.base import BaseChronicleClient
 from simnet.client.routes import RECORD_URL
 from simnet.errors import BadRequest, DataNotPublic
 from simnet.models.lab.record import RecordCard
+from simnet.models.starrail.chronicle.act_calendar import StarRailActCalendar
 from simnet.models.starrail.chronicle.activity import StarRailActivity
 from simnet.models.starrail.chronicle.challenge import StarRailChallenge
 from simnet.models.starrail.chronicle.challenge_boss import StarRailChallengeBoss
@@ -366,6 +367,27 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         """
         data = await self._request_starrail_record("activity", uid, lang=lang)
         return StarRailActivity(**data)
+
+    async def get_starrail_act_calendar(
+        self,
+        uid: Optional[int] = None,
+        lang: Optional[str] = None,
+    ) -> StarRailActCalendar:
+        """Get starrail act calendar.
+
+        Args:
+            uid (Optional[int], optional): The player ID. Defaults to None.
+            lang (Optional[str], optional): The language of the data. Defaults to None.
+
+        Returns:
+            StarRailActCalendar: The requested act calendar info.
+
+        Raises:
+            BadRequest: If the request is invalid.
+            DataNotPublic: If the requested data is not public.
+        """
+        data = await self._request_starrail_record("get_act_calender", uid, lang=lang)
+        return StarRailActCalendar(**data)
 
     async def get_starrail_resident(
         self,
