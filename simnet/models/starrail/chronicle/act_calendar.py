@@ -6,6 +6,8 @@ from simnet.models.base import APIModel
 
 
 class EquipListItem(APIModel):
+    """A model representing an equipment item in the StarRail act calendar."""
+
     item_id: str
     item_name: str
     item_url: Optional[str] = ""
@@ -16,6 +18,8 @@ class EquipListItem(APIModel):
 
 
 class AvatarListItem(EquipListItem):
+    """A model representing an avatar item in the StarRail act calendar."""
+
     icon_url: str
     damage_type: int
     damage_type_name: str
@@ -23,6 +27,8 @@ class AvatarListItem(EquipListItem):
 
 
 class TimeInfo(APIModel):
+    """A model representing time information in the StarRail act calendar."""
+
     start_ts: datetime.datetime
     end_ts: datetime.datetime
     start_time: datetime.datetime
@@ -31,11 +37,15 @@ class TimeInfo(APIModel):
 
 
 class CardPoolTypeEnum(str, Enum):
+    """An enumeration class representing the type of card pool in the StarRail act calendar."""
+
     Role = "CardPoolRole"
     Equipment = "CardPoolEquipment"
 
 
 class CardPoolListItem(APIModel):
+    """A model representing an item in the card pool list in the StarRail act calendar."""
+
     id: str
     name: str
     type: CardPoolTypeEnum
@@ -47,6 +57,8 @@ class CardPoolListItem(APIModel):
 
 
 class RewardItem(APIModel):
+    """A model representing a reward item in the StarRail act calendar."""
+
     item_id: int
     name: str
     icon: str
@@ -56,6 +68,7 @@ class RewardItem(APIModel):
 
 
 class ActTypeEnum(str, Enum):
+    """An enumeration class representing the type of act in the StarRail act calendar."""
 
     Sign = "ActivityTypeSign"
     Double = "ActivityTypeDouble"
@@ -63,6 +76,7 @@ class ActTypeEnum(str, Enum):
 
 
 class ActStatusEnum(str, Enum):
+    """An enumeration class representing the status of an act in the StarRail act calendar."""
 
     SignStatusUnopened = "SignStatusUnopened"
     SignStatusUnSignedToday = "SignStatusUnSignedToday"
@@ -80,6 +94,8 @@ class ActStatusEnum(str, Enum):
 
 
 class ActListItem(APIModel):
+    """A model representing an item in the StarRail act calendar."""
+
     id: int
     version: str
     name: str
@@ -105,18 +121,24 @@ class ActListItem(APIModel):
 
 
 class ChallengeTypeEnum(str, Enum):
+    """An enumeration class representing the type of challenge in the StarRail act calendar."""
+
     Chasm = "ChallengeTypeChasm"
     Story = "ChallengeTypeStory"
     Boss = "ChallengeTypeBoss"
 
 
 class ChallengeStatusEnum(str, Enum):
+    """An enumeration class representing the status of a challenge in the StarRail act calendar."""
+
     Unopened = "challengeStatusUnopened"
     Progress = "challengeStatusInProgress"
     Finish = "challengeStatusFinish"
 
 
 class ChallengeListItem(APIModel):
+    """A model representing a challenge item in the StarRail act calendar."""
+
     group_id: int
     name_mi18n: str
     challenge_type: ChallengeTypeEnum
@@ -132,6 +154,8 @@ class ChallengeListItem(APIModel):
 
 
 class StarRailActCalendar(APIModel):
+    """A model representing the StarRail act calendar."""
+
     avatar_card_pool_list: List[CardPoolListItem]
     equip_card_pool_list: List[CardPoolListItem]
     act_list: List[ActListItem]
