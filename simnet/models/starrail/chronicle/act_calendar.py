@@ -1,4 +1,5 @@
 import datetime
+from enum import Enum
 from typing import List, Optional
 
 from simnet.models.base import APIModel
@@ -29,10 +30,15 @@ class TimeInfo(APIModel):
     now: datetime.datetime
 
 
+class CardPoolTypeEnum(str, Enum):
+    Role = "CardPoolRole"
+    Equipment = "CardPoolEquipment"
+
+
 class CardPoolListItem(APIModel):
     id: str
     name: str
-    type: str
+    type: CardPoolTypeEnum
     avatar_list: List[AvatarListItem]
     equip_list: List[EquipListItem]
     is_after_version: bool
@@ -49,12 +55,36 @@ class RewardItem(APIModel):
     rarity: str
 
 
+class ActTypeEnum(str, Enum):
+
+    Sign = "ActivityTypeSign"
+    Double = "ActivityTypeDouble"
+    Other = "ActivityTypeOther"
+
+
+class ActStatusEnum(str, Enum):
+
+    SignStatusUnopened = "SignStatusUnopened"
+    SignStatusUnSignedToday = "SignStatusUnSignedToday"
+    SignStatusSignedToday = "SignStatusSignedToday"
+    SignStatusUnclaimed = "SignStatusUnclaimed"
+    SignStatusFinish = "SignStatusFinish"
+
+    DoubleRewardActStatusUnopened = "DoubleRewardActStatusUnopened"
+    DoubleRewardActStatusProgress = "DoubleRewardActStatusProgress"
+    DoubleRewardActStatusFinish = "DoubleRewardActStatusFinish"
+
+    OtherActStatusUnopened = "OtherActStatusUnopened"
+    OtherActStatusUnFinish = "OtherActStatusUnFinish"
+    OtherActStatusFinish = "OtherActStatusFinish"
+
+
 class ActListItem(APIModel):
     id: int
     version: str
     name: str
-    act_type: str
-    act_status: str
+    act_type: ActTypeEnum
+    act_status: ActStatusEnum
     reward_list: List[RewardItem]
     total_progress: int
     current_progress: int
@@ -74,14 +104,26 @@ class ActListItem(APIModel):
     show_text: str
 
 
+class ChallengeTypeEnum(str, Enum):
+    Chasm = "ChallengeTypeChasm"
+    Story = "ChallengeTypeStory"
+    Boss = "ChallengeTypeBoss"
+
+
+class ChallengeStatusEnum(str, Enum):
+    Unopened = "challengeStatusUnopened"
+    Progress = "challengeStatusInProgress"
+    Finish = "challengeStatusFinish"
+
+
 class ChallengeListItem(APIModel):
     group_id: int
     name_mi18n: str
-    challenge_type: str
+    challenge_type: ChallengeTypeEnum
 
     total_progress: int
     current_progress: int
-    status: str
+    status: ChallengeStatusEnum
 
     time_info: TimeInfo
     reward_list: List[RewardItem]
