@@ -8,6 +8,14 @@ from simnet.models.base import APIModel
 from simnet.models.zzz import character
 
 
+class ZZZStatsCommemorativeCoin(APIModel):
+    """A data model representing commemorative coins for ZZZ stats."""
+
+    num: int
+    name: str
+    sort: int
+
+
 class ZZZStats(APIModel):
     """Overall user stats."""
 
@@ -16,6 +24,8 @@ class ZZZStats(APIModel):
     world_level_name: str
     cur_period_zone_layer_count: int
     buddy_num: int
+    commemorative_coins_list: typing.Sequence[ZZZStatsCommemorativeCoin]
+    achievement_count: int
 
 
 class ZZZAvatarBasic(APIModel):
