@@ -4,6 +4,7 @@ from simnet.client.components.chronicle.base import BaseChronicleClient
 from simnet.errors import BadRequest, DataNotPublic
 from simnet.models.lab.record import RecordCard
 from simnet.models.zzz.calculator import ZZZCalculatorCharacterDetails
+from simnet.models.zzz.chronicle.abyss_abstract import ZZZAbyssAbstract
 from simnet.models.zzz.chronicle.challenge import ZZZChallenge
 from simnet.models.zzz.chronicle.notes import ZZZNote
 from simnet.models.zzz.chronicle.stats import ZZZUserStats, ZZZAvatarBasic, ZZZBuddyBasic
@@ -146,6 +147,28 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
         """
         data = await self._request_zzz_record("index", player_id, lang=lang)
         return ZZZUserStats(**data)
+
+    async def get_zzz_abyss_abstract(
+        self,
+        player_id: Optional[int] = None,
+        *,
+        lang: Optional[str] = None,
+    ) -> "ZZZAbyssAbstract":
+        """Get ZZZ abyss abstract statistics.
+
+        Args:
+            player_id (Optional[int], optional): The player ID. Defaults to None.
+            lang (Optional[str], optional): The language of the data. Defaults to None.
+
+        Returns:
+            ZZZAbyssAbstract: The requested abyss abstract statistics.
+
+        Raises:
+            BadRequest: If the request is invalid.
+            DataNotPublic: If the requested data is not public.
+        """
+        data = await self._request_zzz_record("abyss_abstract", player_id, lang=lang)
+        return ZZZAbyssAbstract(**data)
 
     async def get_zzz_characters(
         self,
