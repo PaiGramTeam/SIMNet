@@ -73,6 +73,34 @@ class ZZZNoteCardSignState(str, enum.Enum):
     DONE = "CardSignDone"
 
 
+class ZZZNoteBountyCommission(APIModel):
+    """
+    A data model representing bounty commission for ZZZ notes.
+
+    Args:
+        num (int): The number of bounty commission.
+        total (int): The total bounty commission.
+    """
+
+    num: int
+    total: int
+
+
+class ZZZNoteSurveyPoints(APIModel):
+    """
+    A data model representing survey points for ZZZ notes.
+
+    Args:
+        num (int): The number of survey points.
+        total (int): The total number of survey points.
+        is_max_level (bool): A boolean indicating if the survey points are at the maximum level.
+    """
+
+    num: int
+    total: int
+    is_max_level: bool
+
+
 class ZZZNote(APIModel):
     """Represents a ZZZ Note.
 
@@ -81,12 +109,17 @@ class ZZZNote(APIModel):
         vitality (ZZZNoteVitality): The vitality of the user.
         vhs_sale (ZZZNoteVhsSale): The vhs sale of the user.
         card_sign (ZZZNoteCardSignState): The card sign of the user.
+        bounty_commission (ZZZNoteBountyCommission): The bounty commission of the user.
+        survey_points (ZZZNoteSurveyPoints): The survey points of the user.
     """
 
     energy: ZZZNoteEnergy
     vitality: ZZZNoteVitality
     vhs_sale: ZZZNoteVhsSale
     card_sign: ZZZNoteCardSignState
+    bounty_commission: ZZZNoteBountyCommission
+    survey_points: ZZZNoteSurveyPoints
+    abyss_refresh: datetime.timedelta
 
     @property
     def current_stamina(self) -> int:

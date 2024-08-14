@@ -30,9 +30,31 @@ class ZZZBuddyBasic(APIModel):
     buddy_list: typing.Sequence[character.ZZZPartialBuddy] = Field(alias="list")
 
 
+class ZZZCatNote(APIModel):
+    """
+    A data model representing a category of ZZZ notes.
+
+    Args:
+        id (int): The ID of the category.
+        name (str): The name of the category.
+        icon (str): The icon associated with the category.
+        num (int): The number of notes in the category.
+        total (int): The total number of notes in the category.
+        is_lock (bool): A boolean indicating if the category is locked.
+    """
+
+    id: int
+    name: str
+    icon: str
+    num: int
+    total: int
+    is_lock: bool
+
+
 class ZZZUserStats(ZZZAvatarBasic):
     """User stats with characters without equipment."""
 
     stats: ZZZStats
     cur_head_icon_url: str
     buddy_list: typing.Sequence[character.ZZZPartialBuddy]
+    cat_notes_list: typing.Sequence[ZZZCatNote]
