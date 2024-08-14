@@ -1,5 +1,5 @@
 import datetime
-from typing import List
+from typing import List, Optional
 
 from simnet.models.base import APIModel
 
@@ -112,12 +112,20 @@ class ZZZAbyssAbstract(APIModel):
         unlock (bool): A boolean indicating if the abyss is unlocked.
     """
 
-    abyss_level: ZZZAbyssLevel
-    abyss_point: ZZZAbyssPoint
-    abyss_duty: ZZZAbyssDuty
-    abyss_talent: ZZZAbyssTalent
+    abyss_level: Optional[ZZZAbyssLevel] = None
+    abyss_point: Optional[ZZZAbyssPoint] = None
+    abyss_duty: Optional[ZZZAbyssDuty] = None
+    abyss_talent: Optional[ZZZAbyssTalent] = None
     refresh_time: datetime.timedelta
     abyss_collect: List[ZZZAbyssCollectItem]
-    abyss_nest: ZZZAbyssNest
-    abyss_throne: ZZZAbyssThrone
+    abyss_nest: Optional[ZZZAbyssNest] = None
+    abyss_throne: Optional[ZZZAbyssThrone] = None
     unlock: bool
+
+    @property
+    def is_nest(self) -> bool:
+        return self.abyss_nest.is_nest if self.abyss_nest else False
+
+    @property
+    def is_throne(self) -> bool:
+        return self.abyss_throne.is_throne if self.abyss_throne else False

@@ -1,5 +1,6 @@
 import datetime
 import enum
+from typing import Optional
 
 from simnet.models.base import APIModel
 
@@ -117,8 +118,8 @@ class ZZZNote(APIModel):
     vitality: ZZZNoteVitality
     vhs_sale: ZZZNoteVhsSale
     card_sign: ZZZNoteCardSignState
-    bounty_commission: ZZZNoteBountyCommission
-    survey_points: ZZZNoteSurveyPoints
+    bounty_commission: Optional[ZZZNoteBountyCommission] = None
+    survey_points: Optional[ZZZNoteSurveyPoints] = None
     abyss_refresh: datetime.timedelta
 
     @property
