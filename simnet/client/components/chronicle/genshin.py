@@ -359,7 +359,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
             lang (Optional[str]): The language for the character information. Defaults to None.
 
         Returns:
-            GenshinDetailCharacters: An object containing detailed information about the specified Genshin Impact characters.
+            GenshinDetailCharacters: An object containing detailed information.
         """
 
         ids = [characters] if isinstance(characters, int) else characters
