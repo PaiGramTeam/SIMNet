@@ -5,6 +5,7 @@ from simnet.client.components.chronicle.base import BaseChronicleClient
 from simnet.client.routes import RECORD_URL
 from simnet.errors import DataNotPublic, BadRequest
 from simnet.models.genshin.chronicle.abyss import SpiralAbyss, SpiralAbyssPair
+from simnet.models.genshin.chronicle.character_detail import GenshinCharacterListInfo, GenshinDetailCharacters
 from simnet.models.genshin.chronicle.characters import Character
 from simnet.models.genshin.chronicle.img_theater import ImgTheater
 from simnet.models.genshin.chronicle.notes import Notes, NotesWidget, NotesOverseaWidget
@@ -323,3 +324,47 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
             data = await self._request_genshin_record("widget/v2", endpoint_type="aapi", lang=lang)
             model = NotesWidget
         return model(**data)
+
+    async def get_genshin_character_list(
+        self,
+        player_id: Optional[int] = None,
+        *,
+        lang: Optional[str] = None,
+    ) -> List[GenshinCharacterListInfo]:
+        """Retrieve a list of Genshin Impact character information for a player.
+
+        Args:
+            player_id (Optional[int]): The ID of the player. Defaults to None.
+            lang (Optional[str]): The language for the character information. Defaults to None.
+
+        Returns:
+            List[GenshinCharacterListInfo]: A list of GenshinCharacterListInfo objects containing character details.
+        """
+
+        data = await self._request_genshin_record("character/list", player_id, method="POST", lang=lang)
+        return [GenshinCharacterListInfo(**i) for i in data["list"]]
+
+    async def get_genshin_character_detail(
+        self,
+        characters: List[int],
+        player_id: Optional[int] = None,
+        *,
+        lang: Optional[str] = None,
+    ) -> GenshinDetailCharacters:
+        """Retrieve detailed information about Genshin Impact characters.
+
+        Args:
+            characters (List[int]): The IDs of the characters to retrieve details for.
+            player_id (Optional[int]): The ID of the player. Defaults to None.
+            lang (Optional[str]): The language for the character information. Defaults to None.
+
+        Returns:
+            GenshinDetailCharacters: An object containing detailed information about the specified Genshin Impact characters.
+        """
+
+        ids = [characters] if isinstance(characters, int) else characters
+        payload = {"character_ids": ids}
+        data = await self._request_genshin_record(
+            "character/detail", player_id, method="POST", lang=lang, payload=payload
+        )
+        return GenshinDetailCharacters(**data)
