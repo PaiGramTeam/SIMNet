@@ -162,6 +162,8 @@ class DailyTask(APIModel):
     task_rewards: List[TaskReward]
     attendance_rewards: List[AttendanceReward]
     attendance_visible: bool
+    stored_attendance: float
+    stored_attendance_refresh_countdown: timedelta
 
 
 class ArchonStatusEnum(str, Enum):
