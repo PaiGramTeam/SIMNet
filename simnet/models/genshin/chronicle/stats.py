@@ -25,12 +25,14 @@ class Stats(APIModel):
         achievements (int): Number of achievements completed by the user.
         days_active (int): Number of days the user has been active.
         characters (int): Number of characters owned by the user.
+        full_fetter_avatar_num (int): Number of characters with full fetters.
         spiral_abyss (str): The floor and level reached by the user in Spiral Abyss.
         anemoculi (int): Number of Anemoculus collected by the user.
         geoculi (int): Number of Geoculus collected by the user.
         dendroculi (int): Number of Dendroculus collected by the user.
         electroculi (int): Number of Electroculus collected by the user.
         hydroculi (int): Number of Hydroculus opened by the user.
+        pyroculi (int): Number of Pyroculus opened by the user.
         common_chests (int): Number of Common Chests opened by the user.
         exquisite_chests (int): Number of Exquisite Chests opened by the user.
         precious_chests (int): Number of Precious Chests opened by the user.
@@ -43,12 +45,16 @@ class Stats(APIModel):
     achievements: int = Field(aliases="achievement_number")
     days_active: int = Field(aliases="active_day_number")
     characters: int = Field(aliases="avatar_number")
+    full_fetter_avatar_num: int
     spiral_abyss: str = Field(aliases="spiral_abyss")
+
     anemoculi: int = Field(aliases="anemoculus_number")
     geoculi: int = Field(aliases="geoculus_number")
     dendroculi: int = Field(aliases="dendroculus_number")
     electroculi: int = Field(aliases="electroculus_number")
     hydroculi: int = Field(aliases="hydroculus_number")
+    pyroculi: int = Field(alias="pyroculus_number")
+
     common_chests: int = Field(aliases="common_chest_number")
     exquisite_chests: int = Field(aliases="exquisite_chest_number")
     precious_chests: int = Field(aliases="precious_chest_number")
