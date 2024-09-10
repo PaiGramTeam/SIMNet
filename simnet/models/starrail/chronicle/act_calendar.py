@@ -31,8 +31,8 @@ class TimeInfo(APIModel):
 
     start_ts: datetime.datetime
     end_ts: datetime.datetime
-    start_time: datetime.datetime
-    end_time: datetime.datetime
+    start_time: str
+    end_time: str
     now: datetime.datetime
 
 
@@ -72,6 +72,7 @@ class ActTypeEnum(str, Enum):
 
     Sign = "ActivityTypeSign"
     Double = "ActivityTypeDouble"
+    RogueTourn = "ActivityTypeRogueTourn"
     Other = "ActivityTypeOther"
 
 
@@ -88,9 +89,18 @@ class ActStatusEnum(str, Enum):
     DoubleRewardActStatusProgress = "DoubleRewardActStatusProgress"
     DoubleRewardActStatusFinish = "DoubleRewardActStatusFinish"
 
+    RogueTournActStatusProgress = "RogueTournActStatusProgress"
+
     OtherActStatusUnopened = "OtherActStatusUnopened"
     OtherActStatusUnFinish = "OtherActStatusUnFinish"
     OtherActStatusFinish = "OtherActStatusFinish"
+
+
+class ActTimeTypeEnum(str, Enum):
+    """An enumeration class representing the time type of an act in the StarRail act calendar."""
+
+    Default = "ActTimeTypeDefault"
+    Long = "ActTimeTypeLong"
 
 
 class ActListItem(APIModel):
@@ -118,6 +128,7 @@ class ActListItem(APIModel):
     special_reward: RewardItem
     all_finished: bool
     show_text: str
+    act_time_type: ActTimeTypeEnum
 
 
 class ChallengeTypeEnum(str, Enum):
