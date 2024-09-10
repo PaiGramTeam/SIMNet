@@ -186,7 +186,7 @@ class LabClient(BaseClient):
         player_id: Optional[int] = None,
         *,
         lang: Optional[str] = None,
-    ) -> None:
+    ) -> dict:
         """Redeems a gift code for the current or specified user.
 
         Args:
@@ -195,16 +195,23 @@ class LabClient(BaseClient):
             lang (str, optional): The language code used for the request. Defaults to None.
         """
         player_id = self.player_id or player_id
+        url = CODE_URL.get_url(self.region, self.game)
+        params = dict(
+            uid=player_id,
+            region=recognize_server(player_id, self.game),
+            cdkey=code,
+            game_biz=recognize_game_biz(player_id, self.game),
+            lang=create_short_lang_code(lang or self.lang),
+        )
 
-        await self.request_bbs(
-            CODE_URL.get_url(),
-            params=dict(
-                uid=player_id,
-                region=recognize_genshin_server(player_id),
-                cdkey=code,
-                game_biz="hk4e_global",
-                lang=create_short_lang_code(lang or self.lang),
-            ),
+        if self.game is Game.STARRAIL:
+            return await self.request_bbs(
+                url,
+                data=params,
+            )
+        return await self.request_bbs(
+            url,
+            params=params,
         )
 
     async def redeem_code_by_hoyolab(
@@ -213,7 +220,7 @@ class LabClient(BaseClient):
         player_id: Optional[int] = None,
         *,
         lang: Optional[str] = None,
-    ) -> None:
+    ) -> dict:
         """Redeems a gift code for the current or specified user.
 
         Args:
@@ -230,7 +237,7 @@ class LabClient(BaseClient):
             game_biz=recognize_game_biz(player_id, self.game),
             lang=create_short_lang_code(lang or self.lang),
         )
-        await self.request_bbs(url, params=params)
+        return await self.request_bbs(url, params=params)
 
     async def get_game_accounts(self, *, lang: Optional[str] = None) -> List[Account]:
         """Get the game accounts of the currently logged-in user.
