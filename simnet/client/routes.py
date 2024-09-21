@@ -34,6 +34,7 @@ __all__ = (
     "GET_FP_URL",
     "BBS_URL",
     "SELF_HELP_URL",
+    "MI_CREATOR_URL",
 )
 
 
@@ -362,3 +363,5 @@ SELF_HELP_URL = GameRoute(
         nap="https://public-operation-nap.mihoyo.com/common/nap_self_help_query",
     ),
 )
+
+MI_CREATOR_URL = Route("https://api-micreator.mihoyo.com/kolcms_hchcn/v1/hch")

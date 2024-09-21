@@ -6,6 +6,7 @@ from simnet.client.components.chronicle.genshin import GenshinBattleChronicleCli
 from simnet.client.components.daily import DailyRewardClient
 from simnet.client.components.diary.genshin import GenshinDiaryClient
 from simnet.client.components.lab import LabClient
+from simnet.client.components.micreator.base import BaseMiCreatorClient
 from simnet.client.components.transaction import TransactionClient
 from simnet.client.components.verify import VerifyClient
 from simnet.client.components.wish.genshin import GenshinWishClient
@@ -24,6 +25,7 @@ class GenshinClient(
     LabClient,
     TransactionClient,
     VerifyClient,
+    BaseMiCreatorClient,
 ):
     """A simple http client for Genshin endpoints."""
 

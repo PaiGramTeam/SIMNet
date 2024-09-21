@@ -1,6 +1,6 @@
 import enum as _enum
 
-__all__ = ("Region", "Game")
+__all__ = ("Region", "Game", "SocialPlatform")
 
 
 class Region(str, _enum.Enum):
@@ -31,3 +31,22 @@ class Game(str, _enum.Enum):
     HONKAI = "honkai3rd"
     STARRAIL = "hkrpg"
     ZZZ = "nap"
+
+
+class SocialPlatform(str, _enum.Enum):
+    """
+    Represents a social platform where a user can be registered.
+
+    Attributes:
+        BILIBILI (SocialPlatform): Represents the social platform "Bilibili".
+        XIAOHONGSHU (SocialPlatform): Represents the social platform "Xiaohongshu".
+        DOUYIN (SocialPlatform): Represents the social platform "Douyin".
+        WECHAT (SocialPlatform): Represents the social platform "WeChat".
+        QQ (SocialPlatform): Represents the social platform "QQ".
+    """
+
+    BILIBILI = "bilibili"
+    XIAOHONGSHU = "xiaohongshu"
+    DOUYIN = "douyin"
+    WECHAT = "wechat"
+    QQ = "qq"
