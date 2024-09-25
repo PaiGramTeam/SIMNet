@@ -303,10 +303,12 @@ DETAIL_LEDGER_URL = GameRoute(
     overseas=dict(
         genshin="https://sg-hk4e-api.hoyolab.com/event/ysledgeros/month_detail",
         hkrpg="https://sg-public-api.hoyolab.com/event/srledger/month_detail",
+        nap="https://sg-public-api.hoyolab.com/event/nap_ledger/month_detail",
     ),
     chinese=dict(
         genshin="https://hk4e-api.mihoyo.com/event/ys_ledger/monthDetail",
         hkrpg="https://api-takumi.mihoyo.com/event/srledger/month_detail",
+        nap="https://api-takumi.mihoyo.com/event/nap_ledger/month_detail",
     ),
 )
 
@@ -314,10 +316,12 @@ INFO_LEDGER_URL = GameRoute(
     overseas=dict(
         genshin="https://sg-hk4e-api.hoyolab.com/event/ysledgeros/month_info",
         hkrpg="https://sg-public-api.hoyolab.com/event/srledger/month_info",
+        nap="https://sg-public-api.hoyolab.com/event/nap_ledger/month_info",
     ),
     chinese=dict(
         genshin="https://hk4e-api.mihoyo.com/event/ys_ledger/monthInfo",
         hkrpg="https://api-takumi.mihoyo.com/event/srledger/month_info",
+        nap="https://api-takumi.mihoyo.com/event/nap_ledger/month_info",
     ),
 )
 

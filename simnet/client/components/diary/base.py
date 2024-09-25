@@ -46,7 +46,7 @@ class BaseDiaryClient(BaseClient):
         base_url = DETAIL_LEDGER_URL if detail else INFO_LEDGER_URL
         url = base_url.get_url(self.region, game)
 
-        if self.region == Region.OVERSEAS or game == Game.STARRAIL:
+        if self.region == Region.OVERSEAS or game == Game.STARRAIL or game == Game.ZZZ:
             params["uid"] = player_id
             params["region"] = recognize_server(player_id, game)
         elif self.region == Region.CHINESE:
@@ -54,7 +54,7 @@ class BaseDiaryClient(BaseClient):
             params["bind_region"] = recognize_server(player_id, game)
         else:
             raise TypeError(f"{self.region!r} is not a valid region.")
-        if game == Game.STARRAIL:
+        if game in [Game.STARRAIL, Game.ZZZ]:
             month = month or datetime.now(CN_TIMEZONE).strftime("%Y%m")
         elif game == Game.GENSHIN:
             month = month or str(datetime.now(CN_TIMEZONE).month)
