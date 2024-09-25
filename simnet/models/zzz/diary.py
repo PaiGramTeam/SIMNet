@@ -31,14 +31,26 @@ class ZZZDiaryActionCategory(APIModel):
     """Diary category for PolychromesData .
 
     Attributes:
-        name: Category name.
+        action: Category name.
         amount: Amount of rails_pass.
         percentage: Percentage of rails_pass.
     """
 
-    name: str = Field(alias="action")
+    action: str
     amount: int = Field(alias="num")
     percentage: int = Field(alias="percent")
+
+    @property
+    def name(self) -> str:
+        return {
+            "growth_rewards": "成长奖励",
+            "daily_activity_rewards": "日常活跃奖励",
+            "mail_rewards": "邮件奖励",
+            "event_rewards": "活动奖励",
+            "hollow_rewards": "零号空洞奖励",
+            "shiyu_rewards": "式舆防卫战奖励",
+            "other_rewards": "其他奖励",
+        }.get(self.action, "其他奖励")
 
 
 class ZZZMonthDiaryData(APIModel):
