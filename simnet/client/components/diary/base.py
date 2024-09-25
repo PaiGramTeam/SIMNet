@@ -54,7 +54,7 @@ class BaseDiaryClient(BaseClient):
             params["bind_region"] = recognize_server(player_id, game)
         else:
             raise TypeError(f"{self.region!r} is not a valid region.")
-        if game == Game.STARRAIL or game == Game.ZZZ:
+        if game in [Game.STARRAIL, Game.ZZZ]:
             month = month or datetime.now(CN_TIMEZONE).strftime("%Y%m")
         elif game == Game.GENSHIN:
             month = month or str(datetime.now(CN_TIMEZONE).month)
