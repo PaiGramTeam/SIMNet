@@ -46,8 +46,9 @@ class DailyRewardClient(BaseClient):
         """
         headers: Dict[str, str] = {}
         params = QueryParams(params)
+        game = game or self.game
 
-        base_url = REWARD_URL.get_url(self.region, self.game or game)
+        base_url = REWARD_URL.get_url(self.region, game)
         params = params.merge(base_url.params)
         params = params.set("lang", lang or self.lang)
 
@@ -57,14 +58,20 @@ class DailyRewardClient(BaseClient):
             headers["x-rpc-validate"] = validate
             headers["x-rpc-seccode"] = f"{validate}|jordan"
 
-        if self.region == Region.CHINESE:
+        if game is Game.GENSHIN:
+            headers["x-rpc-signgame"] = "hk4e"
+        elif game is Game.ZZZ:
+            headers["x-rpc-signgame"] = "zzz"
+
+        if self.region == Region.OVERSEAS:
+            headers["referer"] = "https://act.hoyolab.com/"
+        elif self.region == Region.CHINESE:
             headers["x-rpc-device_name"] = "Chrome 20 2023"
             headers["x-rpc-channel"] = "chrome"
             headers["x-rpc-device_model"] = "Chrome 2023"
             headers["x-rpc-sys_version"] = "13"
             headers["x-rpc-platform"] = "android"
-            if self.game == Game.GENSHIN:
-                headers["x-rpc-signgame"] = "hk4e"
+            if game == Game.GENSHIN:
                 headers["referer"] = (
                     "https://act.mihoyo.com/bbs/event/signin/hk4e/index.html?"
                     "bbs_auth_required=true&act_id=e202311201442471&"
@@ -73,7 +80,7 @@ class DailyRewardClient(BaseClient):
                 )
                 params = params.set("uid", self.player_id)
                 params = params.set("region", recognize_genshin_server(self.player_id))
-            if self.game == Game.STARRAIL:
+            if game == Game.STARRAIL:
                 headers["referer"] = (
                     "https://webstatic.mihoyo.com/bbs/event/signin/hkrpg/index.html?"
                     "bbs_auth_required=true&act_id=e202304121516551&"
@@ -82,8 +89,7 @@ class DailyRewardClient(BaseClient):
                 )
                 params = params.set("uid", self.player_id)
                 params = params.set("region", recognize_starrail_server(self.player_id))
-            if self.game == Game.ZZZ:
-                headers["x-rpc-signgame"] = "zzz"
+            if game == Game.ZZZ:
                 headers["referer"] = (
                     "https://act.mihoyo.com/bbs/event/signin/zzz/e202406242138391.html?"
                     "act_id=e202406242138391&mhy_auth_required=true&mhy_presentation_style=fullscreen&"
