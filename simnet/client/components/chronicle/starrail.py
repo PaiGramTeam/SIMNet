@@ -5,6 +5,7 @@ from simnet.client.components.chronicle.base import BaseChronicleClient
 from simnet.client.routes import RECORD_URL
 from simnet.errors import BadRequest, DataNotPublic
 from simnet.models.lab.record import RecordCard
+from simnet.models.starrail.chronicle.achievement import StarRailAchievementInfo
 from simnet.models.starrail.chronicle.act_calendar import StarRailActCalendar
 from simnet.models.starrail.chronicle.activity import StarRailActivity
 from simnet.models.starrail.chronicle.challenge import StarRailChallenge
@@ -482,3 +483,24 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         """
         data = await self._request_starrail_record("get_ledger_month_info", uid, lang=lang)
         return StarRailLedgerMonthInfo(**data)
+
+    async def get_starrail_achievement_info(
+        self,
+        uid: Optional[int] = None,
+        lang: Optional[str] = None,
+    ) -> StarRailAchievementInfo:
+        """Get StarRail achievement info.
+
+        Args:
+            uid (Optional[int], optional): The player ID. Defaults to None.
+            lang (Optional[str], optional): The language of the data. Defaults to None.
+
+        Returns:
+            StarRailAchievementInfo: The requested achievement info.
+
+        Raises:
+            BadRequest: If the request is invalid.
+            DataNotPublic: If the requested data is not public.
+        """
+        data = await self._request_starrail_record("achievement_info", uid, lang=lang)
+        return StarRailAchievementInfo(**data)
