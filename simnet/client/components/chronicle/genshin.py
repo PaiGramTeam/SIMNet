@@ -1,10 +1,13 @@
 import asyncio
 from typing import Optional, Any, List, Dict, Union
 
+from Tools.scripts.make_ctype import method
+
 from simnet.client.components.chronicle.base import BaseChronicleClient
 from simnet.client.routes import RECORD_URL
 from simnet.errors import DataNotPublic, BadRequest
 from simnet.models.genshin.chronicle.abyss import SpiralAbyss, SpiralAbyssPair
+from simnet.models.genshin.chronicle.achievement import GenshinAchievementInfo
 from simnet.models.genshin.chronicle.character_detail import GenshinCharacterListInfo, GenshinDetailCharacters
 from simnet.models.genshin.chronicle.characters import Character
 from simnet.models.genshin.chronicle.img_theater import ImgTheater
@@ -368,3 +371,18 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
             "character/detail", player_id, method="POST", lang=lang, payload=payload
         )
         return GenshinDetailCharacters(**data)
+
+    async def get_genshin_achievement_info(
+        self, player_id: Optional[int] = None, *, lang: Optional[str] = None
+    ) -> GenshinAchievementInfo:
+        """Get genshin achievement info.
+
+        Args:
+            player_id (Optional[int], optional): The player ID. Defaults to None.
+            lang (Optional[str], optional): The language of the data. Defaults to None.
+
+        Returns:
+            GenshinAchievementInfo: The requested achievement info.
+        """
+        data = await self._request_genshin_record("achievement", player_id, method="POST", lang=lang)
+        return GenshinAchievementInfo(**data)

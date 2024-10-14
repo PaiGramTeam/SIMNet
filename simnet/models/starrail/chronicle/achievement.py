@@ -22,7 +22,7 @@ class StarRailAchievementInfoList(APIModel):
     max: int
 
     @property
-    def percent(self) -> float:
+    def percentage(self) -> float:
         """
         Calculates the completion percentage of the achievement.
 
