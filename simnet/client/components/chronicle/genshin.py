@@ -1,8 +1,5 @@
 import asyncio
 from typing import Optional, Any, List, Dict, Union
-
-from Tools.scripts.make_ctype import method
-
 from simnet.client.components.chronicle.base import BaseChronicleClient
 from simnet.client.routes import RECORD_URL
 from simnet.errors import DataNotPublic, BadRequest
