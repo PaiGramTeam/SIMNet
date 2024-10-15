@@ -114,8 +114,12 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         Returns:
             Character: The requested genshin user characters.
         """
-        data = await self._request_genshin_record("character", player_id, lang=lang, method="POST")
-        return [Character(**i) for i in data["avatars"]]
+        characters = await self.get_genshin_character_list(player_id, lang=lang)
+        details = await self.get_genshin_character_detail([char.id for char in characters], player_id, lang=lang)
+        data = []
+        for d in details.characters:
+            data.append(Character.from_detail(d))
+        return data
 
     async def get_genshin_user(
         self,
@@ -132,12 +136,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         Returns:
             GenshinUserStats: The requested genshin user stats.
         """
-        data, character_data = await asyncio.gather(
-            self._request_genshin_record("index", player_id, lang=lang),
-            self._request_genshin_record("character", player_id, lang=lang, method="POST"),
-        )
-        data = {**data, **character_data}
-
+        data = await self._request_genshin_record("index", player_id, lang=lang)
         return GenshinUserStats(**data)
 
     async def get_genshin_spiral_abyss(
@@ -240,14 +239,12 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         Returns:
             Character: The requested genshin user with all their possible data.
         """
-        index, character, abyss1, abyss2, activities = await asyncio.gather(
+        user, abyss1, abyss2, activities = await asyncio.gather(
             self._request_genshin_record("index", player_id, lang=lang),
-            self._request_genshin_record("character", player_id, lang=lang, method="POST"),
             self.get_genshin_spiral_abyss(player_id, lang=lang, previous=False),
             self.get_genshin_spiral_abyss(player_id, lang=lang, previous=True),
             self.get_genshin_activities(player_id, lang=lang),
         )
-        user = {**index, **character}
         abyss = SpiralAbyssPair(current=abyss1, previous=abyss2)
 
         return FullGenshinUserStats(**user, abyss=abyss, activities=activities)

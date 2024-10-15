@@ -5,7 +5,7 @@ from pydantic import validator, Field
 
 from simnet.models.base import APIModel
 from simnet.models.genshin.chronicle.abyss import SpiralAbyssPair
-from simnet.models.genshin.chronicle.characters import PartialCharacter, Character
+from simnet.models.genshin.chronicle.characters import PartialCharacter
 from simnet.models.lab.record import UserInfo
 
 
@@ -219,13 +219,7 @@ class PartialGenshinUserStats(APIModel):
 
 
 class GenshinUserStats(PartialGenshinUserStats):
-    """User stats with characters with equipment.
-
-    Attributes:
-        characters (List[Character]): The list of the user's characters with equipment.
-    """
-
-    characters: List[Character] = Field(alias="avatars")
+    """User stats with characters with equipment."""
 
 
 class FullGenshinUserStats(GenshinUserStats):
