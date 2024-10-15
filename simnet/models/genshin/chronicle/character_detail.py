@@ -73,8 +73,7 @@ class PropertyValue(APIModel):
 class DetailCharacterWeapon(CharacterWeapon):
     """Detailed Genshin Weapon with main/sub stats."""
 
-    type: GenshinWeaponType
-    type_name: str
+    type_int: GenshinWeaponType = Field(alias="type")
 
     main_property: PropertyValue
     sub_property: typing.Optional[PropertyValue] = None

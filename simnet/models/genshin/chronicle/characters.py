@@ -1,9 +1,12 @@
-from typing import List, Dict
+from typing import List, Dict, TYPE_CHECKING
 
 from pydantic import Field, validator
 
 from simnet.models.base import APIModel
 from simnet.models.genshin.character import BaseCharacter
+
+if TYPE_CHECKING:
+    from simnet.models.genshin.chronicle.character_detail import GenshinDetailCharacter
 
 __all__ = (
     "Artifact",
@@ -195,3 +198,25 @@ class Character(PartialCharacter):
                     effect.enabled = True
 
         return artifacts
+
+    @staticmethod
+    def from_detail(data: "GenshinDetailCharacter") -> "Character":
+        """
+        Creates a Character instance from a GenshinDetailCharacter instance.
+
+        Args:
+            data (GenshinDetailCharacter): The detailed character data.
+
+        Returns:
+            Character: A Character instance with the provided detailed data.
+        """
+        base_data = data.base.dict(by_alias=True)
+        if "weapon" in base_data:
+            del base_data["weapon"]
+        return Character(
+            **base_data,
+            weapon=data.weapon,
+            reliquaries=data.artifacts,
+            constellations=data.constellations,
+            costumes=data.costumes,
+        )
