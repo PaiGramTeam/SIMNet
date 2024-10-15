@@ -201,6 +201,15 @@ class Character(PartialCharacter):
 
     @staticmethod
     def from_detail(data: "GenshinDetailCharacter") -> "Character":
+        """
+        Creates a Character instance from a GenshinDetailCharacter instance.
+
+        Args:
+            data (GenshinDetailCharacter): The detailed character data.
+
+        Returns:
+            Character: A Character instance with the provided detailed data.
+        """
         base_data = data.base.dict(by_alias=True)
         if "weapon" in base_data:
             del base_data["weapon"]
