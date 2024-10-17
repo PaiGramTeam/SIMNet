@@ -4,6 +4,7 @@ from typing import Optional, List, Dict, Any
 from simnet.client.base import BaseClient
 from simnet.client.headers import Headers
 from simnet.client.routes import TAKUMI_URL, HK4E_URL, CODE_URL, CODE_HOYOLAB_URL, BBS_URL
+from simnet.models.lab.accompany import AccompanyRole, AccompanyRoleInfo, AccompanyRoleBasic
 from simnet.models.lab.announcement import Announcement
 from simnet.models.lab.record import PartialUser, FullUser, Account
 from simnet.utils.enums import Region, Game
@@ -277,3 +278,61 @@ class LabClient(BaseClient):
         """
         accounts = await self.get_game_accounts(lang=lang)
         return [account for account in accounts if account.game == Game.ZZZ]
+
+    async def request_accompany_role(self, role_id: int, topic_id: int, *, lang: Optional[str] = None) -> AccompanyRole:
+        """Accompany a role to a topic.
+
+        Args:
+            role_id (int): The role ID to accompany.
+            topic_id (int): The topic ID to accompany the role to.
+            lang (str, optional): The language code used for the request. Defaults to None.
+
+        Returns:
+            AccompanyRole: An accompany role object.
+        """
+        params = dict(role_id=role_id, topic_id=topic_id)
+        data = await self.request_bbs(
+            "community/apihub/api/user/accompany/role",
+            lang=lang,
+            params=params,
+        )
+        return AccompanyRole(**data)
+
+    async def get_accompany_role(self, role_id: int, *, lang: Optional[str] = None) -> AccompanyRoleInfo:
+        """Get the information related to an accompany role.
+
+        Args:
+            role_id (int): The role ID to get information for.
+            lang (str, optional): The language code used for the request. Defaults to None.
+
+        Returns:
+            AccompanyRoleInfo: An accompany role info object.
+        """
+        params = dict(role_id=role_id)
+        data = await self.request_bbs(
+            "community/painter/api/role/user/accompany_info",
+            lang=lang,
+            params=params,
+        )
+        return AccompanyRoleInfo(**data)
+
+    async def get_accompany_roles(self, *, lang: Optional[str] = None) -> List[AccompanyRoleBasic]:
+        """Get a list of accompany roles.
+
+        Args:
+            lang (str, optional): The language code used for the request. Defaults to None.
+
+        Returns:
+            List[AccompanyRoleBasic]: A list of accompany role basic objects.
+        """
+        data = await self.request_bbs(
+            "community/painter/api/getChannelRoleList",
+            lang=lang,
+            method="POST",
+        )
+        game = data.get("game_roles_list", [])
+        roles = []
+        for g in game:
+            for r in g.get("role_list", []):
+                roles.append(AccompanyRoleBasic(**r["basic"]))
+        return roles
