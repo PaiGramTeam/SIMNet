@@ -102,6 +102,21 @@ class ZZZNoteSurveyPoints(APIModel):
     is_max_level: bool
 
 
+class ZZZNoteWeeklyTask(APIModel):
+    """
+    Represents a weekly task in the ZZZ Note.
+
+    Attributes:
+        max_point (int): The maximum points for the weekly task.
+        cur_point (int): The current points for the weekly task.
+        refresh_time (datetime.timedelta): The time until the weekly task refreshes.
+    """
+
+    max_point: int
+    cur_point: int
+    refresh_time: datetime.timedelta
+
+
 class ZZZNote(APIModel):
     """Represents a ZZZ Note.
 
@@ -120,6 +135,7 @@ class ZZZNote(APIModel):
     card_sign: ZZZNoteCardSignState
     bounty_commission: Optional[ZZZNoteBountyCommission] = None
     survey_points: Optional[ZZZNoteSurveyPoints] = None
+    weekly_task: Optional[ZZZNoteWeeklyTask] = None
     abyss_refresh: datetime.timedelta
 
     @property

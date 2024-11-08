@@ -26,6 +26,8 @@ class ZZZStats(APIModel):
     buddy_num: int
     commemorative_coins_list: typing.Sequence[ZZZStatsCommemorativeCoin]
     achievement_count: int
+    climbing_tower_layer: int
+    next_hundred_layer: str
 
 
 class ZZZAvatarBasic(APIModel):
@@ -61,6 +63,28 @@ class ZZZCatNote(APIModel):
     is_lock: bool
 
 
+class ZZZGameDataShow(APIModel):
+    """
+    Represents the game data display information.
+
+    Attributes:
+        personal_title (str): The personal title of the user.
+        title_main_color (str): The main color of the title.
+        title_bottom_color (str): The bottom color of the title.
+        title_bg_url (str): The background URL of the title.
+        medal_list (typing.Sequence[str]): A list of medals.
+        card_url (str): The URL of the card.
+    """
+
+    personal_title: str
+    title_main_color: str
+    title_bottom_color: str
+    title_bg_url: str
+
+    medal_list: typing.Sequence[str]
+    card_url: str
+
+
 class ZZZUserStats(ZZZAvatarBasic):
     """User stats with characters without equipment."""
 
@@ -68,3 +92,4 @@ class ZZZUserStats(ZZZAvatarBasic):
     cur_head_icon_url: str
     buddy_list: typing.Sequence[character.ZZZPartialBuddy]
     cat_notes_list: typing.Sequence[ZZZCatNote]
+    game_data_show: ZZZGameDataShow

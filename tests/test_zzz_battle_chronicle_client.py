@@ -25,7 +25,7 @@ async def zzz_client(zzz_player_id: int, region: "Region", cookies: "Cookies", z
 @pytest.mark.asyncio
 class TestZZZBattleChronicleClient:
     @staticmethod
-    async def test_get_starrail_notes(zzz_client: "ZZZBattleChronicleClient"):
+    async def test_get_zzz_notes(zzz_client: "ZZZBattleChronicleClient"):
         notes = await zzz_client.get_zzz_notes()
         assert notes is not None
 
