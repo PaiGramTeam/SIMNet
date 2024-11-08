@@ -41,6 +41,30 @@ def cookies() -> "Cookies":  # skipcq: PY-D0003
 
 
 @pytest.fixture(scope="session")
+def starrail_cookies() -> Optional["Cookies"]:  # skipcq: PY-D0003
+    cookies_str = os.environ.get("STARRAIL_COOKIES")
+    if not cookies_str:
+        return None
+    _cookies = Cookies(parse_cookie(cookies_str))
+    if _cookies.account_id is None:
+        warnings.warn("can not found account id in starrail cookies")
+
+    return _cookies
+
+
+@pytest.fixture(scope="session")
+def zzz_cookies() -> Optional["Cookies"]:
+    cookies_str = os.environ.get("ZZZ_COOKIES")
+    if not cookies_str:
+        return None
+    _cookies = Cookies(parse_cookie(cookies_str))
+    if _cookies.account_id is None:
+        warnings.warn("can not found account id in zzz cookies")
+
+    return _cookies
+
+
+@pytest.fixture(scope="session")
 def genshin_player_id() -> Optional[int]:  # skipcq: PY-D0003
     _player_id = os.environ.get("GENSHIN_PLAYER_ID")
     if not _player_id:
@@ -59,10 +83,18 @@ def starrail_player_id() -> Optional[int]:  # skipcq: PY-D0003
 
 
 @pytest.fixture(scope="session")
+def zzz_player_id() -> Optional[int]:
+    _player_id = os.environ.get("ZZZ_PLAYER_ID")
+    if not _player_id:
+        warnings.warn("No zzz player id set")
+        return None
+    return int(_player_id)
+
+
+@pytest.fixture(scope="session")
 def account_id() -> Optional[int]:  # skipcq: PY-D0003
     _account_id = os.environ.get("ACCOUNT_ID")
     if not _account_id:
-        warnings.warn("No account id id set")
         return None
     return int(_account_id)
 

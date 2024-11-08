@@ -12,10 +12,9 @@ if TYPE_CHECKING:
 
 
 @pytest_asyncio.fixture
-async def auth_client(account_id: int, region: "Region", cookies: "Cookies"):
+async def auth_client(region: "Region", cookies: "Cookies"):
     async with AuthClient(
         cookies=cookies,
-        account_id=account_id,
         region=region,
     ) as client_instance:
         yield client_instance

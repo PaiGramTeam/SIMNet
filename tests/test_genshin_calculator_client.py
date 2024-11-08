@@ -13,13 +13,12 @@ if TYPE_CHECKING:
 
 
 @pytest_asyncio.fixture
-async def calculator_client(genshin_player_id: int, account_id: int, region: "Region", cookies: "Cookies"):
+async def calculator_client(genshin_player_id: int, region: "Region", cookies: "Cookies"):
     if genshin_player_id is None:
         pytest.skip("Test case test_genshin_calculator_client skipped: No genshin player id set.")
     async with CalculatorClient(
         player_id=genshin_player_id,
         cookies=cookies,
-        account_id=account_id,
         region=region,
     ) as client_instance:
         client_instance.game = Game.GENSHIN
@@ -27,13 +26,10 @@ async def calculator_client(genshin_player_id: int, account_id: int, region: "Re
 
 
 @pytest_asyncio.fixture
-async def genshin_battle_chronicle_client(
-    genshin_player_id: int, account_id: int, region: "Region", cookies: "Cookies"
-):
+async def genshin_battle_chronicle_client(genshin_player_id: int, region: "Region", cookies: "Cookies"):
     async with GenshinBattleChronicleClient(
         player_id=genshin_player_id,
         cookies=cookies,
-        account_id=account_id,
         region=region,
     ) as client_instance:
         yield client_instance

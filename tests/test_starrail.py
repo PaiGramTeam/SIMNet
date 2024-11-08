@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 import pytest
 import pytest_asyncio
@@ -12,13 +12,14 @@ if TYPE_CHECKING:
 
 
 @pytest_asyncio.fixture
-async def starrail_client(starrail_player_id: int, account_id: int, region: "Region", cookies: "Cookies"):
+async def starrail_client(
+    starrail_player_id: int, region: "Region", cookies: "Cookies", starrail_cookies: Optional["Cookies"]
+):
     if starrail_player_id is None:
         pytest.skip("Test case test_starrail skipped: No starrail player id set.")
     async with StarRailClient(
         player_id=starrail_player_id,
-        cookies=cookies,
-        account_id=account_id,
+        cookies=starrail_cookies or cookies,
         region=region,
     ) as client_instance:
         yield client_instance

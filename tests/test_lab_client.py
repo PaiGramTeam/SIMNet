@@ -12,10 +12,9 @@ if TYPE_CHECKING:
 
 
 @pytest_asyncio.fixture
-async def client_instance(account_id: int, region: "Region", cookies: "Cookies"):
+async def client_instance(region: "Region", cookies: "Cookies"):
     async with LabClient(
         cookies=cookies,
-        account_id=account_id,
         region=region,
     ) as client_instance:
         yield client_instance
@@ -24,10 +23,9 @@ async def client_instance(account_id: int, region: "Region", cookies: "Cookies")
 @pytest.mark.asyncio
 class TestStarRailClient:
     @staticmethod
-    async def test_get_user_info(account_id: int, client_instance: "LabClient"):
+    async def test_get_user_info(client_instance: "LabClient"):
         user_info = await client_instance.get_user_info()
         assert user_info.nickname
-        assert user_info.accident_id == account_id
 
     @staticmethod
     async def test_get_genshin_accounts(client_instance: "LabClient"):

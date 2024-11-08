@@ -12,13 +12,12 @@ if TYPE_CHECKING:
 
 
 @pytest_asyncio.fixture
-async def genshin_client(genshin_player_id: int, account_id: int, region: "Region", cookies: "Cookies"):
+async def genshin_client(genshin_player_id: int, region: "Region", cookies: "Cookies"):
     if genshin_player_id is None:
         pytest.skip("Test case test_genshin skipped: No genshin player id set.")
     async with GenshinClient(
         player_id=genshin_player_id,
         cookies=cookies,
-        account_id=account_id,
         region=region,
     ) as client_instance:
         yield client_instance

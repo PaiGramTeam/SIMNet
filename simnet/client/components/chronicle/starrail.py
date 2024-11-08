@@ -7,13 +7,11 @@ from simnet.errors import BadRequest, DataNotPublic
 from simnet.models.lab.record import RecordCard
 from simnet.models.starrail.chronicle.achievement import StarRailAchievementInfo
 from simnet.models.starrail.chronicle.act_calendar import StarRailActCalendar
-from simnet.models.starrail.chronicle.activity import StarRailActivity
 from simnet.models.starrail.chronicle.challenge import StarRailChallenge
 from simnet.models.starrail.chronicle.challenge_boss import StarRailChallengeBoss
 from simnet.models.starrail.chronicle.challenge_story import StarRailChallengeStory
 from simnet.models.starrail.chronicle.characters import StarRailDetailCharacters
 from simnet.models.starrail.chronicle.notes import StarRailNote, StarRailNoteWidget, StarRailNoteOverseaWidget
-from simnet.models.starrail.chronicle.resident import StarRailResident
 from simnet.models.starrail.chronicle.rogue import StarRailRogue, StarRailRogueLocust, StarRailRogueNous
 from simnet.models.starrail.chronicle.rogue_tourn import StarRailRogueTourn
 from simnet.models.starrail.chronicle.stats import StarRailUserStats, StarRailUserInfo
@@ -348,27 +346,6 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         data = await self._request_starrail_record("rogue_tourn", player_id, lang=lang, payload=payload)
         return StarRailRogueTourn(**data)
 
-    async def get_starrail_activity(
-        self,
-        uid: Optional[int] = None,
-        lang: Optional[str] = None,
-    ) -> StarRailActivity:
-        """Get starrail activity info.
-
-        Args:
-            uid (Optional[int], optional): The player ID. Defaults to None.
-            lang (Optional[str], optional): The language of the data. Defaults to None.
-
-        Returns:
-            StarRailActivity: The requested activity info.
-
-        Raises:
-            BadRequest: If the request is invalid.
-            DataNotPublic: If the requested data is not public.
-        """
-        data = await self._request_starrail_record("activity", uid, lang=lang)
-        return StarRailActivity(**data)
-
     async def get_starrail_act_calendar(
         self,
         uid: Optional[int] = None,
@@ -389,27 +366,6 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         """
         data = await self._request_starrail_record("get_act_calender", uid, lang=lang)
         return StarRailActCalendar(**data)
-
-    async def get_starrail_resident(
-        self,
-        uid: Optional[int] = None,
-        lang: Optional[str] = None,
-    ) -> StarRailResident:
-        """Get starrail resident info.
-
-        Args:
-            uid (Optional[int], optional): The player ID. Defaults to None.
-            lang (Optional[str], optional): The language of the data. Defaults to None.
-
-        Returns:
-            StarRailResident: The requested activity info.
-
-        Raises:
-            BadRequest: If the request is invalid.
-            DataNotPublic: If the requested data is not public.
-        """
-        data = await self._request_starrail_record("resident", uid, lang=lang)
-        return StarRailResident(**data)
 
     async def get_starrail_notes_by_stoken(
         self,
