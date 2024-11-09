@@ -1,6 +1,7 @@
 import datetime
 import enum
 import typing
+from typing import Optional
 
 from pydantic import Field
 
@@ -40,15 +41,83 @@ class ActCharacter(BaseCharacter):
 class TheaterBuff(APIModel):
     """Represents either a 'mystery cache' or a 'wondrous boom'."""
 
-    icon: str
     name: str
+    icon: str
     desc: str
-    is_enhanced: bool
-    id: int
+    is_enhanced: Optional[bool] = False
+    id: Optional[int] = None
 
     @property
     def desc_html(self) -> str:
         return desc_to_html(self.desc)
+
+
+class TheaterEnemy(APIModel):
+    """
+    Represents an enemy in the imaginarium theater.
+
+    Attributes:
+        name (str): The name of the enemy.
+        icon (str): The icon representing the enemy.
+        level (int): The level of the enemy.
+    """
+
+    name: str
+    icon: str
+    level: int
+
+
+class TheaterSplendourBuffSummary(APIModel):
+    """
+    Represents a summary of the Theater Splendour Buff.
+
+    Attributes:
+        total_level (int): The total level of the buff.
+        desc (str): The description of the buff.
+    """
+
+    total_level: int
+    desc: str
+
+    @property
+    def desc_html(self) -> str:
+        """
+        Converts the description to HTML format.
+
+        Returns:
+            str: The HTML formatted description.
+        """
+        return desc_to_html(self.desc)
+
+
+class TheaterSplendourBuffModel(APIModel):
+    """
+    Represents a model for the Theater Splendour Buff.
+
+    Attributes:
+        name (str): The name of the buff.
+        icon (str): The icon representing the buff.
+        level (int): The level of the buff.
+        level_effect (typing.Sequence[TheaterBuff]): The effects of the buff at different levels.
+    """
+
+    name: str
+    icon: str
+    level: int
+    level_effect: typing.Sequence[TheaterBuff]
+
+
+class TheaterSplendourBuff(APIModel):
+    """
+    Represents the Theater Splendour Buff.
+
+    Attributes:
+        summary (TheaterSplendourBuffSummary): A summary of the Theater Splendour Buff.
+        buffs (typing.Sequence[TheaterSplendourBuffModel]): A sequence of Theater Splendour Buff models.
+    """
+
+    summary: TheaterSplendourBuffSummary
+    buffs: typing.Sequence[TheaterSplendourBuffModel]
 
 
 class Act(APIModel):
@@ -61,6 +130,8 @@ class Act(APIModel):
     round_id: int
     finish_time: datetime.datetime
     finish_date_time: PartialTime
+    enemies: typing.Sequence[TheaterEnemy]
+    splendour_buff: typing.Optional[TheaterSplendourBuff] = None
 
 
 class TheaterStats(APIModel):
@@ -94,12 +165,29 @@ class TheaterSchedule(APIModel):
     end_date_time: PartialTime
 
 
+class ImgTheaterFightStaticAvatar(BaseCharacter):
+    id: int = Field(alias="avatar_id")
+    icon: str = Field(alias="avatar_icon")
+    value: str
+
+
+class ImgTheaterFightStatic(APIModel):
+    max_defeat_avatar: ImgTheaterFightStaticAvatar
+    max_damage_avatar: ImgTheaterFightStaticAvatar
+    max_take_damage_avatar: ImgTheaterFightStaticAvatar
+    total_coin_consumed: ImgTheaterFightStaticAvatar
+    shortest_avatar_list: typing.Sequence[ImgTheaterFightStaticAvatar]
+    total_use_time: int
+    is_show_battle_stats: bool
+
+
 class ImgTheaterDetailData(APIModel):
     """Imaginarium theater detail data."""
 
     rounds_data: typing.Sequence[Act]
-    backup_avatars: typing.Sequence[ActCharacter]
     detail_stat: TheaterStats
+    backup_avatars: typing.Sequence[ActCharacter]
+    fight_statisic: ImgTheaterFightStatic
 
 
 class ImgTheaterData(APIModel):
