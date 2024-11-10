@@ -1,7 +1,6 @@
 import datetime
 import enum
 import typing
-from typing import Optional
 
 from pydantic import Field
 
@@ -44,8 +43,8 @@ class TheaterBuff(APIModel):
     name: str
     icon: str
     desc: str
-    is_enhanced: Optional[bool] = False
-    id: Optional[int] = None
+    is_enhanced: typing.Optional[bool] = False
+    id: typing.Optional[int] = None
 
     @property
     def desc_html(self) -> str:
@@ -130,7 +129,7 @@ class Act(APIModel):
     round_id: int
     finish_time: datetime.datetime
     finish_date_time: PartialTime
-    enemies: typing.Sequence[TheaterEnemy]
+    enemies: typing.Optional[typing.Sequence[TheaterEnemy]] = None
     splendour_buff: typing.Optional[TheaterSplendourBuff] = None
 
 
@@ -187,7 +186,7 @@ class ImgTheaterDetailData(APIModel):
     rounds_data: typing.Sequence[Act]
     detail_stat: TheaterStats
     backup_avatars: typing.Sequence[ActCharacter]
-    fight_statisic: ImgTheaterFightStatic
+    fight_statisic: typing.Optional[ImgTheaterFightStatic] = None
 
 
 class ImgTheaterData(APIModel):
