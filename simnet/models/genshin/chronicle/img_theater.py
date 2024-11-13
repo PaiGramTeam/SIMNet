@@ -1,6 +1,7 @@
 import datetime
 import enum
 import typing
+from typing import Optional
 
 from pydantic import Field
 
@@ -171,10 +172,10 @@ class ImgTheaterFightStaticAvatar(BaseCharacter):
 
 
 class ImgTheaterFightStatic(APIModel):
-    max_defeat_avatar: ImgTheaterFightStaticAvatar
-    max_damage_avatar: ImgTheaterFightStaticAvatar
-    max_take_damage_avatar: ImgTheaterFightStaticAvatar
-    total_coin_consumed: ImgTheaterFightStaticAvatar
+    max_defeat_avatar: Optional[ImgTheaterFightStaticAvatar]
+    max_damage_avatar: Optional[ImgTheaterFightStaticAvatar]
+    max_take_damage_avatar: Optional[ImgTheaterFightStaticAvatar]
+    total_coin_consumed: Optional[ImgTheaterFightStaticAvatar]
     shortest_avatar_list: typing.Sequence[ImgTheaterFightStaticAvatar]
     total_use_time: int
     is_show_battle_stats: bool

@@ -5,6 +5,7 @@ from simnet.client.routes import RECORD_URL
 from simnet.errors import DataNotPublic, BadRequest
 from simnet.models.genshin.chronicle.abyss import SpiralAbyss, SpiralAbyssPair
 from simnet.models.genshin.chronicle.achievement import GenshinAchievementInfo
+from simnet.models.genshin.chronicle.act_calendar import GenshinActCalendar
 from simnet.models.genshin.chronicle.character_detail import GenshinCharacterListInfo, GenshinDetailCharacters
 from simnet.models.genshin.chronicle.characters import Character
 from simnet.models.genshin.chronicle.img_theater import ImgTheater
@@ -380,3 +381,18 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         """
         data = await self._request_genshin_record("achievement", player_id, method="POST", lang=lang)
         return GenshinAchievementInfo(**data)
+
+    async def get_genshin_act_calendar(
+        self, player_id: Optional[int] = None, *, lang: Optional[str] = None
+    ) -> GenshinActCalendar:
+        """Get genshin act calendar.
+
+        Args:
+            player_id (Optional[int], optional): The player ID. Defaults to None.
+            lang (Optional[str], optional): The language of the data. Defaults to None.
+
+        Returns:
+            GenshinActCalendar: The requested act calendar info.
+        """
+        data = await self._request_genshin_record("act_calendar", player_id, method="POST", lang=lang)
+        return GenshinActCalendar(**data)

@@ -90,3 +90,8 @@ class TestGenshinBattleChronicleClient:
     async def test_get_genshin_achievement_info(genshin_client: GenshinBattleChronicleClient):
         data = await genshin_client.get_genshin_achievement_info()
         assert data
+
+    @staticmethod
+    async def test_get_genshin_act_calendar(genshin_client: GenshinBattleChronicleClient):
+        data = await genshin_client.get_genshin_act_calendar()
+        assert data
