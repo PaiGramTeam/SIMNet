@@ -3,9 +3,9 @@
 import collections
 from typing import Dict, Any, Literal, Optional, List
 
-from pydantic import Field, validator
+from pydantic import field_validator
 
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, Field
 from simnet.models.genshin.character import BaseCharacter
 
 __all__ = (
@@ -65,7 +65,8 @@ class CalculatorCharacter(BaseCharacter):
     level: int = Field(alias="level_current", default=0)
     max_level: int
 
-    @validator("element", pre=True)
+    @field_validator("element", mode="before")
+    @classmethod
     def parse_element(cls, v: Any) -> str:
         """Parse the element of a character.
 
@@ -80,7 +81,8 @@ class CalculatorCharacter(BaseCharacter):
 
         return CALCULATOR_ELEMENTS[int(v)]
 
-    @validator("weapon_type", pre=True)
+    @field_validator("weapon_type", mode="before")
+    @classmethod
     def parse_weapon_type(cls, v: Any) -> str:
         """Parse the weapon type of character.
 
@@ -117,7 +119,8 @@ class CalculatorWeapon(APIModel):
     level: int = Field(alias="level_current", default=0)
     max_level: int
 
-    @validator("type", pre=True)
+    @field_validator("type", mode="before")
+    @classmethod
     def parse_weapon_type(cls, v: Any) -> str:
         """
         Parse the type of weapon.
@@ -241,7 +244,7 @@ class CalculatorFurnishing(APIModel):
     icon: str = Field(alias="icon_url")
     rarity: int = Field(alias="level")
 
-    amount: Optional[int] = Field(alias="num")
+    amount: Optional[int] = Field(None, alias="num")
 
 
 class CalculatorCharacterDetails(APIModel):
@@ -253,11 +256,12 @@ class CalculatorCharacterDetails(APIModel):
         artifacts (List[CalculatorArtifact]): A list of calculator artifacts.
     """
 
-    weapon: Optional[CalculatorWeapon] = Field(alias="weapon")
+    weapon: Optional[CalculatorWeapon] = Field(None, alias="weapon")
     talents: List[CalculatorTalent] = Field(alias="skill_list")
     artifacts: List[CalculatorArtifact] = Field(alias="reliquary_list")
 
-    @validator("talents")
+    @field_validator("talents")
+    @classmethod
     def correct_talent_current_level(cls, v: List[CalculatorTalent]) -> List[CalculatorTalent]:
         """Validates the current level of each calculator talent in the talents list and sets it to 1 if it is 0.
 
@@ -273,7 +277,7 @@ class CalculatorCharacterDetails(APIModel):
 
         for talent in v:
             if talent.max_level == 1 and talent.level == 0:
-                raw = talent.dict()
+                raw = talent.model_dump()
                 raw["level"] = 1
                 talent = CalculatorTalent(**raw)
 

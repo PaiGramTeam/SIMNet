@@ -2,9 +2,9 @@ import enum
 import re
 from typing import Optional, Any, Dict, List, Union, Type
 
-from pydantic import Field, validator
+from pydantic import field_validator
 
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, Field
 from simnet.utils.enums import Game
 
 __all__ = (
@@ -141,12 +141,13 @@ class PartialUser(APIModel):
     accident_id: int = Field(alias="uid")
     nickname: str
     introduction: str = Field(alias="introduce")
-    avatar_id: Optional[str] = Field(alias="avatar")
+    avatar_id: Optional[str] = Field(None, alias="avatar")
     avatar_url: Optional[str] = ""
     gender: Gender
     icon: str = Field(alias="avatar_url")
 
-    @validator("nickname")
+    @field_validator("nickname")
+    @classmethod
     def remove_highlight(cls, v: str) -> str:
         """Removes the highlight tags from the user's nickname.
 

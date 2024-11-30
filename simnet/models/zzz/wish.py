@@ -2,9 +2,9 @@ from datetime import datetime
 from enum import IntEnum
 from typing import Any
 
-from pydantic import Field, validator
+from pydantic import field_validator
 
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, Field
 
 
 class ZZZBannerType(IntEnum):
@@ -53,12 +53,14 @@ class ZZZWish(APIModel):
     banner_type: ZZZBannerType = Field(alias="gacha_type")
     """Type of the banner the wish was made on."""
 
-    @validator("banner_type", pre=True)
+    @field_validator("banner_type", mode="before")
+    @classmethod
     def cast_banner_type(cls, v: Any) -> int:
         """Converts the banner type from any type to int."""
         return int(v)
 
-    @validator("rarity")
+    @field_validator("rarity")
+    @classmethod
     def add_rarity(cls, v: int) -> int:
         """Add rarity 1."""
         return v + 1

@@ -1,9 +1,7 @@
 import re
 from typing import List, Optional, Dict
 
-from pydantic import Field
-
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, Field
 from simnet.models.zzz.character import ZZZPartialCharacter
 
 
@@ -99,7 +97,7 @@ class ZZZCalculatorEquipment(APIModel):
 class ZZZCalculatorCharacter(ZZZPartialCharacter):
 
     equip: List[ZZZCalculatorEquipment]
-    weapon: Optional[ZZZCalculatorWeapon]
+    weapon: Optional[ZZZCalculatorWeapon] = None
     properties: List[ZZZCalculatorAvatarProperty]
     skills: List[ZZZCalculatorAvatarSkill]
     ranks: List[ZZZCalculatorAvatarRank]

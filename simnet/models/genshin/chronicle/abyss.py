@@ -1,9 +1,8 @@
-import datetime
 from typing import List, Dict, Any, Literal
 
-from pydantic import Field, root_validator
+from pydantic import model_validator
 
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, Field, DateTimeField
 from simnet.models.genshin.character import BaseCharacter
 
 __all__ = (
@@ -54,10 +53,7 @@ class CharacterRanks(APIModel):
         most_skills_used (List[AbyssRankCharacter]): The characters that have used their elemental skill the most.
     """
 
-    most_played: List[AbyssRankCharacter] = Field(
-        default=[],
-        alias="reveal_rank",
-    )
+    most_played: List[AbyssRankCharacter] = Field(default=[], alias="reveal_rank")
     most_kills: List[AbyssRankCharacter] = Field(
         default=[],
         alias="defeat_rank",
@@ -90,7 +86,7 @@ class Battle(APIModel):
     """
 
     half: int = Field(alias="index")
-    timestamp: datetime.datetime
+    timestamp: DateTimeField
     characters: List[AbyssCharacter] = Field(alias="avatars")
 
 
@@ -146,8 +142,8 @@ class SpiralAbyss(APIModel):
 
     unlocked: bool = Field(alias="is_unlock")
     season: int = Field(alias="schedule_id")
-    start_time: datetime.datetime
-    end_time: datetime.datetime
+    start_time: DateTimeField
+    end_time: DateTimeField
 
     total_battles: int = Field(alias="total_battle_times")
     total_wins: str = Field(alias="total_win_times")
@@ -158,7 +154,8 @@ class SpiralAbyss(APIModel):
 
     floors: List[Floor]
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
+    @classmethod
     def nest_ranks(cls, values: Dict[str, Any]) -> Dict[str, AbyssCharacter]:
         """By default, ranks are for some reason on the same level as the rest of the abyss."""
         values.setdefault("ranks", {}).update(values)

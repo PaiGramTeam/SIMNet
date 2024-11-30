@@ -3,9 +3,9 @@ from datetime import datetime
 from enum import IntEnum
 from typing import Any, Optional, List
 
-from pydantic import Field, validator
+from pydantic import field_validator
 
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, Field
 
 
 class BannerType(IntEnum):
@@ -73,7 +73,8 @@ class Wish(APIModel):
     banner_type: BannerType = Field(alias="gacha_type")
     banner_name: str
 
-    @validator("banner_type", pre=True)
+    @field_validator("banner_type", mode="before")
+    @classmethod
     def cast_banner_type(cls, v: Any) -> int:
         """Converts the banner type to an integer.
 
@@ -120,7 +121,8 @@ class BannerDetailsUpItem(APIModel):
     element: str = Field(alias="item_attr")
     icon: str = Field(alias="item_img")
 
-    @validator("element", pre=True)
+    @field_validator("element", mode="before")
+    @classmethod
     def parse_element(cls, v: str) -> str:
         """Converts the element string to a standardized format.
 
@@ -181,14 +183,14 @@ class BannerDetails(APIModel):
     content: str
     date_range: str
 
-    r5_up_prob: Optional[float]
-    r4_up_prob: Optional[float]
-    r5_prob: Optional[float]
-    r4_prob: Optional[float]
-    r3_prob: Optional[float]
-    r5_guarantee_prob: Optional[float] = Field(alias="r5_baodi_prob")
-    r4_guarantee_prob: Optional[float] = Field(alias="r4_baodi_prob")
-    r3_guarantee_prob: Optional[float] = Field(alias="r3_baodi_prob")
+    r5_up_prob: Optional[float] = None
+    r4_up_prob: Optional[float] = None
+    r5_prob: Optional[float] = None
+    r4_prob: Optional[float] = None
+    r3_prob: Optional[float] = None
+    r5_guarantee_prob: Optional[float] = Field(None, alias="r5_baodi_prob")
+    r4_guarantee_prob: Optional[float] = Field(None, alias="r4_baodi_prob")
+    r3_guarantee_prob: Optional[float] = Field(None, alias="r3_baodi_prob")
 
     r5_up_items: List[BannerDetailsUpItem]
     r4_up_items: List[BannerDetailsUpItem]
@@ -197,7 +199,8 @@ class BannerDetails(APIModel):
     r4_items: List[BannerDetailItem] = Field(alias="r4_prob_list")
     r3_items: List[BannerDetailItem] = Field(alias="r3_prob_list")
 
-    @validator("r5_up_items", "r4_up_items", pre=True)
+    @field_validator("r5_up_items", "r4_up_items", mode="before")
+    @classmethod
     def replace_none(cls, v: Optional[List[Any]]) -> List[Any]:
         """Replaces NoneType attributes with an empty list.
 
@@ -210,7 +213,7 @@ class BannerDetails(APIModel):
         """
         return v or []
 
-    @validator(
+    @field_validator(
         "r5_up_prob",
         "r4_up_prob",
         "r5_prob",
@@ -219,8 +222,9 @@ class BannerDetails(APIModel):
         "r5_guarantee_prob",
         "r4_guarantee_prob",
         "r3_guarantee_prob",
-        pre=True,
+        mode="before",
     )
+    @classmethod
     def parse_percentage(cls, v: Optional[str]) -> Optional[float]:
         """Parses percentage strings into float values.
 
@@ -290,7 +294,8 @@ class GachaItem(APIModel):
     rarity: int = Field(alias="rank_type")
     id: int = Field(alias="item_id")
 
-    @validator("id")
+    @field_validator("id")
+    @classmethod
     def format_id(cls, v: int) -> int:
         """Formats the `id` attribute to a standardized 8-digit format.
 

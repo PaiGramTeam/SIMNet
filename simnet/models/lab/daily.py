@@ -1,9 +1,7 @@
-from datetime import timezone, timedelta, datetime
+import datetime
 from typing import NamedTuple
 
-from pydantic import Field
-
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, Field, DateTimeField, CN_TIMEZONE
 
 __all__ = ("ClaimedDailyReward", "DailyReward", "DailyRewardInfo")
 
@@ -22,8 +20,7 @@ class DailyRewardInfo(NamedTuple):
     @property
     def missed_rewards(self) -> int:
         """The number of rewards that the user has missed since the start of the month."""
-        cn_timezone = timezone(timedelta(hours=8))
-        now = datetime.now(cn_timezone)
+        now = datetime.datetime.now(CN_TIMEZONE)
         return now.day - self.claimed_rewards
 
 
@@ -56,4 +53,4 @@ class ClaimedDailyReward(APIModel):
     name: str
     amount: int = Field(alias="cnt")
     icon: str = Field(alias="img")
-    time: datetime = Field(alias="created_at", tzinfo=timezone(timedelta(hours=8)))
+    time: DateTimeField = Field(alias="created_at")

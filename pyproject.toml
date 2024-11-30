@@ -1,15 +1,15 @@
 [tool.poetry]
 name = "SIMNet"
-version = "0.1.24"
+version = "0.2.0"
 description = "Modern API wrapper for Genshin Impact & Honkai: Star Rail built on asyncio and pydantic."
 authors = ["PaiGramTeam"]
 license = "MIT license"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 httpx = ">=0.25.0"
-pydantic = "<2.0.0,>=1.10.7"
+pydantic = "<3.0.0,>=2.0.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.0"
@@ -33,4 +33,4 @@ log_cli_date_format = "%Y-%m-%d %H:%M:%S"
 [tool.black]
 include = '\.pyi?$'
 line-length = 120
-target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
+target-version = ['py39', 'py310', 'py311', 'py312', 'py313']

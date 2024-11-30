@@ -1,8 +1,6 @@
 from typing import List, Optional
 
-from pydantic import Field
-
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, Field
 from simnet.models.starrail.chronicle.base import PartialTime
 from simnet.models.zzz.character import ZZZBaseBuddy, ZZZBaseCharacter
 
@@ -39,7 +37,7 @@ class ZZZFloorNode(APIModel):
     """A node"""
 
     avatars: List[ZZZChallengeCharacter]
-    buddy: Optional[ZZZBaseBuddy]
+    buddy: Optional[ZZZBaseBuddy] = None
     element_type_list: List[int]
     monster_info: ZZZFloorMonster
 
@@ -69,8 +67,8 @@ class ZZZChallenge(APIModel):
     """Challenge in a season."""
 
     season: int = Field(alias="schedule_id")
-    begin_time: Optional[PartialTime] = Field(alias="hadal_begin_time")
-    end_time: Optional[PartialTime] = Field(alias="hadal_end_time")
+    begin_time: Optional[PartialTime] = Field(None, alias="hadal_begin_time")
+    end_time: Optional[PartialTime] = Field(None, alias="hadal_end_time")
 
     fast_layer_time: int
     max_layer: int

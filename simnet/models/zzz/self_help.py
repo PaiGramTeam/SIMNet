@@ -1,10 +1,7 @@
-from datetime import datetime
 from enum import Enum
 from typing import Optional
 
-from pydantic import Field
-
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, Field, DateTimeField
 
 
 class ZZZSelfHelpActionLogReason(str, Enum):
@@ -34,7 +31,7 @@ class ZZZSelfHelpActionLog(APIModel):
 
     id: int
     uid: int
-    time: datetime = Field(alias="datetime")
+    time: DateTimeField = Field(alias="datetime")
     reason: ZZZSelfHelpActionLogReason = Field(alias="action_name")
     client_ip: Optional[str] = ""
 

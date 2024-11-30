@@ -1,9 +1,7 @@
-from datetime import timedelta, datetime
+from datetime import datetime, timedelta
 from typing import List, Literal, Sequence
 
-from pydantic import Field
-
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, Field, TimeDeltaField
 
 
 class StarRailExpedition(APIModel):
@@ -19,7 +17,7 @@ class StarRailExpedition(APIModel):
 
     avatars: List[str]
     status: Literal["Ongoing", "Finished"]
-    remaining_time: timedelta
+    remaining_time: TimeDeltaField
     name: str
 
     @property
@@ -55,7 +53,7 @@ class StarRailNote(APIModel):
 
     current_stamina: int
     max_stamina: int
-    stamina_recover_time: timedelta
+    stamina_recover_time: TimeDeltaField
     accepted_epedition_num: int
     total_expedition_num: int
     expeditions: Sequence[StarRailExpedition]
@@ -109,7 +107,7 @@ class StarRailNoteWidget(APIModel):
 
     current_stamina: int
     max_stamina: int
-    stamina_recover_time: timedelta
+    stamina_recover_time: TimeDeltaField
     current_reserve_stamina: int
     is_reserve_stamina_full: bool
     accepted_expedition_num: int
@@ -198,7 +196,7 @@ class StarRailNoteOverseaWidget(APIModel):
 
     current_stamina: int
     max_stamina: int
-    stamina_recover_time: timedelta
+    stamina_recover_time: TimeDeltaField
     accepted_expedition_num: int
     total_expedition_num: int
     expeditions: Sequence[StarRailExpedition]

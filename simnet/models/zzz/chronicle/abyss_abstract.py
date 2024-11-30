@@ -1,7 +1,6 @@
-import datetime
 from typing import List, Optional
 
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, TimeDeltaField
 
 
 class ZZZAbyssLevel(APIModel):
@@ -116,7 +115,7 @@ class ZZZAbyssAbstract(APIModel):
     abyss_point: Optional[ZZZAbyssPoint] = None
     abyss_duty: Optional[ZZZAbyssDuty] = None
     abyss_talent: Optional[ZZZAbyssTalent] = None
-    refresh_time: datetime.timedelta
+    refresh_time: TimeDeltaField
     abyss_collect: List[ZZZAbyssCollectItem]
     abyss_nest: Optional[ZZZAbyssNest] = None
     abyss_throne: Optional[ZZZAbyssThrone] = None
