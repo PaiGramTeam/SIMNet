@@ -22,14 +22,41 @@ def Field(
 
 
 def add_timezone(value: datetime.datetime) -> datetime.datetime:
+    """
+    Adds the CN_TIMEZONE to a datetime object.
+
+    Args:
+        value (datetime.datetime): The datetime object to which the timezone will be added.
+
+    Returns:
+        datetime.datetime: The datetime object with the CN_TIMEZONE applied.
+    """
     return value.astimezone(CN_TIMEZONE)
 
 
 def str_time_delta_parsing(v: str) -> datetime.timedelta:
+    """
+    Parses a string representing seconds into a timedelta object.
+
+    Args:
+        v (str): The string representing the number of seconds.
+
+    Returns:
+        datetime.timedelta: The resulting timedelta object.
+    """
     return datetime.timedelta(seconds=int(v))
 
 
 def str_time_delta_plain(value: datetime.timedelta) -> float:
+    """
+    Converts a timedelta object to its total seconds as a float.
+
+    Args:
+        value (datetime.timedelta): The timedelta object to convert.
+
+    Returns:
+        float: The total seconds represented by the timedelta object.
+    """
     return value.total_seconds()
 
 
