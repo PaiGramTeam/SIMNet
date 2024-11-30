@@ -123,8 +123,6 @@ class Exploration(APIModel):
         """
         return self.raw_explored / 10
 
-    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
-    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
     @field_validator("offerings", mode="before")
     @classmethod
     def add_base_offering(cls, offerings: List[Any], info: ValidationInfo) -> List[Any]:
