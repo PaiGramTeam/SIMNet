@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List, Optional
 
-from simnet.models.base import APIModel, Field
+from simnet.models.base import APIModel, Field, DateTimeField
 from simnet.models.diary import BaseDiary
 
 __all__ = (
@@ -103,7 +103,7 @@ class DiaryAction(APIModel):
 
     action_id: int
     action: str
-    time: datetime = Field(timezone=8)
+    time: DateTimeField
     amount: int = Field(alias="num")
 
 

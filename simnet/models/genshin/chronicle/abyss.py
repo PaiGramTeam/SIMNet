@@ -3,7 +3,7 @@ from typing import List, Dict, Any, Literal
 
 from pydantic import model_validator
 
-from simnet.models.base import APIModel, Field
+from simnet.models.base import APIModel, Field, DateTimeField
 from simnet.models.genshin.character import BaseCharacter
 
 __all__ = (
@@ -87,7 +87,7 @@ class Battle(APIModel):
     """
 
     half: int = Field(alias="index")
-    timestamp: datetime.datetime
+    timestamp: DateTimeField
     characters: List[AbyssCharacter] = Field(alias="avatars")
 
 
@@ -143,8 +143,8 @@ class SpiralAbyss(APIModel):
 
     unlocked: bool = Field(alias="is_unlock")
     season: int = Field(alias="schedule_id")
-    start_time: datetime.datetime
-    end_time: datetime.datetime
+    start_time: DateTimeField
+    end_time: DateTimeField
 
     total_battles: int = Field(alias="total_battle_times")
     total_wins: str = Field(alias="total_win_times")

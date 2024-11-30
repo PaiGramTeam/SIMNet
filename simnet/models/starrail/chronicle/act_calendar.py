@@ -1,8 +1,7 @@
-import datetime
 from enum import Enum
 from typing import List, Optional
 
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, DateTimeField
 
 
 class EquipListItem(APIModel):
@@ -29,11 +28,11 @@ class AvatarListItem(EquipListItem):
 class TimeInfo(APIModel):
     """A model representing time information in the StarRail act calendar."""
 
-    start_ts: datetime.datetime
-    end_ts: datetime.datetime
+    start_ts: DateTimeField
+    end_ts: DateTimeField
     start_time: str
     end_time: str
-    now: datetime.datetime
+    now: DateTimeField
 
 
 class CardPoolTypeEnum(str, Enum):
@@ -171,5 +170,5 @@ class StarRailActCalendar(APIModel):
     equip_card_pool_list: List[CardPoolListItem]
     act_list: List[ActListItem]
     challenge_list: List[ChallengeListItem]
-    now: datetime.datetime
+    now: DateTimeField
     cur_game_version: str

@@ -2,7 +2,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Literal
 
-from simnet.models.base import APIModel, Field
+from simnet.models.base import APIModel, Field, DateTimeField
 
 __all__ = ("BaseTransaction", "ItemTransaction", "Transaction", "TransactionKind")
 
@@ -31,7 +31,7 @@ class BaseTransaction(APIModel):
     kind: TransactionKind
 
     id: int
-    time: datetime = Field(alias="datetime")
+    time: DateTimeField = Field(alias="datetime")
     amount: int = Field(alias="add_num")
     reason: str
 

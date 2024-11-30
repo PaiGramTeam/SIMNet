@@ -3,7 +3,7 @@ import enum
 import typing
 from typing import Optional
 
-from simnet.models.base import APIModel, Field
+from simnet.models.base import APIModel, Field, DateTimeField
 from simnet.models.genshin.character import BaseCharacter
 from simnet.models.starrail.chronicle.base import PartialTime
 from simnet.models.zzz.calculator import desc_to_html
@@ -126,7 +126,7 @@ class Act(APIModel):
     buffs: typing.Sequence[TheaterBuff]
     is_get_medal: bool
     round_id: int
-    finish_time: datetime.datetime
+    finish_time: DateTimeField
     finish_date_time: PartialTime
     enemies: typing.Optional[typing.Sequence[TheaterEnemy]] = None
     splendour_buff: typing.Optional[TheaterSplendourBuff] = None
@@ -155,8 +155,8 @@ class TheaterStats(APIModel):
 class TheaterSchedule(APIModel):
     """Imaginarium theater schedule."""
 
-    start_time: datetime.datetime
-    end_time: datetime.datetime
+    start_time: DateTimeField
+    end_time: DateTimeField
     schedule_type: int  # Not sure what this is
     id: int = Field(alias="schedule_id")
     start_date_time: PartialTime
