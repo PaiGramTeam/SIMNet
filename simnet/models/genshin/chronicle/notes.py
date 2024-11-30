@@ -2,9 +2,9 @@ from datetime import timedelta, datetime
 from enum import Enum
 from typing import Union, Literal, Tuple, List, Optional, Dict, Any
 
-from pydantic import model_validator, Field
+from pydantic import model_validator
 
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, Field
 
 __all__ = [
     "TaskRewardStatus",

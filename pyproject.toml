@@ -33,4 +33,4 @@ log_cli_date_format = "%Y-%m-%d %H:%M:%S"
 [tool.black]
 include = '\.pyi?$'
 line-length = 120
-target-version = ['py38', 'py39', 'py310', 'py311', 'py312', 'py313']
+target-version = ['py39', 'py310', 'py311', 'py312', 'py313']

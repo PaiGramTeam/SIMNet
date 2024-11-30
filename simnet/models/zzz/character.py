@@ -1,8 +1,6 @@
 """Starrail base character model."""
 
-from pydantic import Field
-
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, Field
 
 
 class ZZZBaseCharacter(APIModel):

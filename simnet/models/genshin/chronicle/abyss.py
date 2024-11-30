@@ -1,9 +1,9 @@
 import datetime
 from typing import List, Dict, Any, Literal
 
-from pydantic import model_validator, Field
+from pydantic import model_validator
 
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, Field
 from simnet.models.genshin.character import BaseCharacter
 
 __all__ = (
@@ -54,10 +54,7 @@ class CharacterRanks(APIModel):
         most_skills_used (List[AbyssRankCharacter]): The characters that have used their elemental skill the most.
     """
 
-    most_played: List[AbyssRankCharacter] = Field(
-        default=[],
-        alias="reveal_rank",
-    )
+    most_played: List[AbyssRankCharacter] = Field(default=[], alias="reveal_rank")
     most_kills: List[AbyssRankCharacter] = Field(
         default=[],
         alias="defeat_rank",

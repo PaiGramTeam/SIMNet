@@ -2,9 +2,9 @@ import enum
 import re
 from typing import Optional, Any, Dict, List, Union, Type
 
-from pydantic import field_validator, Field
+from pydantic import field_validator
 
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, Field
 from simnet.utils.enums import Game
 
 __all__ = (

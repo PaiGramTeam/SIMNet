@@ -1,8 +1,8 @@
 from typing import List, Dict, TYPE_CHECKING
 
-from pydantic import field_validator, Field
+from pydantic import field_validator
 
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, Field
 from simnet.models.genshin.character import BaseCharacter
 
 if TYPE_CHECKING:

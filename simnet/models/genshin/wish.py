@@ -3,9 +3,9 @@ from datetime import datetime
 from enum import IntEnum
 from typing import Any, Optional, List
 
-from pydantic import field_validator, Field
+from pydantic import field_validator
 
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, Field
 
 
 class BannerType(IntEnum):
@@ -222,7 +222,8 @@ class BannerDetails(APIModel):
         "r5_guarantee_prob",
         "r4_guarantee_prob",
         "r3_guarantee_prob",
-        mode="before")
+        mode="before",
+    )
     @classmethod
     def parse_percentage(cls, v: Optional[str]) -> Optional[float]:
         """Parses percentage strings into float values.

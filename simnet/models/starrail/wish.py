@@ -2,9 +2,9 @@ from datetime import datetime
 from enum import IntEnum
 from typing import Any
 
-from pydantic import field_validator, Field
+from pydantic import field_validator
 
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, Field
 
 
 class StarRailBannerType(IntEnum):

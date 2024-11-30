@@ -1,9 +1,7 @@
 from datetime import timedelta, datetime
 from typing import List, Literal, Sequence
 
-from pydantic import Field
-
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, Field
 
 
 class StarRailExpedition(APIModel):

@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List
 
 from simnet.models.base import APIModel
 from simnet.models.starrail.character import RogueCharacter

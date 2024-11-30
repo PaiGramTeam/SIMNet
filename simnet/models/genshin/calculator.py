@@ -3,9 +3,9 @@
 import collections
 from typing import Dict, Any, Literal, Optional, List
 
-from pydantic import field_validator, Field
+from pydantic import field_validator
 
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, Field
 from simnet.models.genshin.character import BaseCharacter
 
 __all__ = (
@@ -277,7 +277,7 @@ class CalculatorCharacterDetails(APIModel):
 
         for talent in v:
             if talent.max_level == 1 and talent.level == 0:
-                raw = talent.dict()
+                raw = talent.model_dump()
                 raw["level"] = 1
                 talent = CalculatorTalent(**raw)
 

@@ -1,8 +1,6 @@
 from typing import List, Optional
 
-from pydantic import Field
-
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, Field
 from simnet.models.starrail.chronicle.base import PartialTime
 from simnet.models.zzz.character import ZZZBaseBuddy, ZZZBaseCharacter
 

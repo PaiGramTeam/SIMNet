@@ -1,22 +1,28 @@
-from typing import Any
+import datetime
+import typing
 
-from pydantic import ConfigDict, BaseModel
+from pydantic import ConfigDict, BaseModel, Field as PydanticField, AfterValidator
 
-try:
-    import ujson as jsonlib
-except ImportError:
-    import json as jsonlib
+CN_TIMEZONE = datetime.timezone(datetime.timedelta(hours=8))
 
 
 class APIModel(BaseModel):
     """A Pydantic BaseModel class used for modeling JSON data returned by an API."""
 
-    def __init__(self, **data: Any) -> None:
-        for field_name, field in self.__fields__.items():
-            aliases = field.field_info.extra.get("aliases")
-            if aliases and aliases in data:
-                data[field_name] = data.pop(aliases)
-        super().__init__(**data)
-    # TODO[pydantic]: The following keys were removed: `json_dumps`, `json_loads`.
-    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-config for more information.
-    model_config = ConfigDict(json_dumps=jsonlib.dumps, json_loads=jsonlib.loads)
+    model_config = ConfigDict(coerce_numbers_to_str=True)
+
+
+def Field(
+    alias: typing.Optional[str] = None,
+    default: typing.Any = None,
+    **kwargs: typing.Any,
+):
+    """Create an aliased field."""
+    return PydanticField(default, alias=alias, **kwargs)
+
+
+def add_timezone(value: datetime.datetime) -> datetime.datetime:
+    return value.astimezone(CN_TIMEZONE)
+
+
+DateTimeField = typing.Annotated[datetime.datetime, AfterValidator(add_timezone)]

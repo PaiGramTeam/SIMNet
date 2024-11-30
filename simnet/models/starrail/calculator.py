@@ -2,9 +2,9 @@
 
 from typing import Dict, Any, Optional, List
 
-from pydantic import field_validator, Field
+from pydantic import field_validator
 
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, Field
 from simnet.models.starrail.character import StarRailBaseCharacter, StarRailElement, StarRailDestiny
 
 __all__ = (

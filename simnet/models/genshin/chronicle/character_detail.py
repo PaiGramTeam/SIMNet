@@ -1,10 +1,9 @@
 import enum
 import typing
 
-import pydantic
-from pydantic import Field
+from pydantic import field_validator
 
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, Field
 from simnet.models.genshin.chronicle.characters import (
     PartialCharacter,
     CharacterWeapon,
@@ -54,7 +53,7 @@ class PropInfo(APIModel):
     icon: typing.Optional[str] = None
     filter_name: str
 
-    @pydantic.validator("name", "filter_name")
+    @field_validator("name", "filter_name")
     @classmethod
     def __fix_names(cls, value: str) -> str:  # skipcq: PTC-W0038
         r"""Fix "\xa0" in Crit Damage + Crit Rate names."""

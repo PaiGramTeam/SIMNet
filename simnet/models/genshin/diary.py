@@ -1,9 +1,7 @@
 from datetime import datetime
 from typing import List, Optional
 
-from pydantic import Field
-
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, Field
 from simnet.models.diary import BaseDiary
 
 __all__ = (
@@ -49,7 +47,7 @@ class MonthDiaryData(APIModel):
     current_mora: int
     last_primogems: int
     last_mora: int
-    primogems_rate: int = Field(aliases="primogem_rate")
+    primogems_rate: int = Field(alias="primogem_rate")
     mora_rate: int
     categories: List[DiaryActionCategory] = Field(alias="group_by")
 

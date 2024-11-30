@@ -2,9 +2,7 @@
 
 from typing import List
 
-from pydantic import Field
-
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, Field
 from simnet.models.starrail.character import RogueCharacter
 
 from .base import PartialTime

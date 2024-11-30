@@ -1,9 +1,9 @@
 import re
 from typing import Any, Optional, cast, List, Dict
 
-from pydantic import field_validator, validator, Field
+from pydantic import field_validator, ValidationInfo
 
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, Field
 from simnet.models.genshin.chronicle.abyss import SpiralAbyssPair
 from simnet.models.genshin.chronicle.characters import PartialCharacter
 from simnet.models.lab.record import UserInfo
@@ -42,26 +42,26 @@ class Stats(APIModel):
         unlocked_domains (int): Number of domains unlocked by the user.
     """
 
-    achievements: int = Field(aliases="achievement_number")
-    days_active: int = Field(aliases="active_day_number")
-    characters: int = Field(aliases="avatar_number")
+    achievements: int = Field(alias="achievement_number")
+    days_active: int = Field(alias="active_day_number")
+    characters: int = Field(alias="avatar_number")
     full_fetter_avatar_num: int
-    spiral_abyss: str = Field(aliases="spiral_abyss")
+    spiral_abyss: str = Field(alias="spiral_abyss")
 
-    anemoculi: int = Field(aliases="anemoculus_number")
-    geoculi: int = Field(aliases="geoculus_number")
-    dendroculi: int = Field(aliases="dendroculus_number")
-    electroculi: int = Field(aliases="electroculus_number")
-    hydroculi: int = Field(aliases="hydroculus_number")
+    anemoculi: int = Field(alias="anemoculus_number")
+    geoculi: int = Field(alias="geoculus_number")
+    dendroculi: int = Field(alias="dendroculus_number")
+    electroculi: int = Field(alias="electroculus_number")
+    hydroculi: int = Field(alias="hydroculus_number")
     pyroculi: int = Field(alias="pyroculus_number")
 
-    common_chests: int = Field(aliases="common_chest_number")
-    exquisite_chests: int = Field(aliases="exquisite_chest_number")
-    precious_chests: int = Field(aliases="precious_chest_number")
-    luxurious_chests: int = Field(aliases="luxurious_chest_number")
-    remarkable_chests: int = Field(aliases="magic_chest_number")
-    unlocked_waypoints: int = Field(aliases="way_point_number")
-    unlocked_domains: int = Field(aliases="domain_number")
+    common_chests: int = Field(alias="common_chest_number")
+    exquisite_chests: int = Field(alias="exquisite_chest_number")
+    precious_chests: int = Field(alias="precious_chest_number")
+    luxurious_chests: int = Field(alias="luxurious_chest_number")
+    remarkable_chests: int = Field(alias="magic_chest_number")
+    unlocked_waypoints: int = Field(alias="way_point_number")
+    unlocked_domains: int = Field(alias="domain_number")
     role_combat: StatsRoleCombat
 
 
@@ -125,19 +125,20 @@ class Exploration(APIModel):
 
     # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
     # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
-    @validator("offerings", pre=True)
-    def add_base_offering(cls, offerings: List[Any], values: Dict[str, Any]) -> List[Any]:
+    @field_validator("offerings", mode="before")
+    @classmethod
+    def add_base_offering(cls, offerings: List[Any], info: ValidationInfo) -> List[Any]:
         """Add a base offering if the exploration type is Reputation.
 
         Args:
             offerings (List[Any]): The list of offerings.
-            values (Dict[str, Any]): The dict of attribute values.
+            info (ValidationInfo): The validation info.
 
         Returns:
             The updated list of offerings.
         """
-        if values["type"] == "Reputation" and not any(values["type"] == o["name"] for o in offerings):
-            offerings = [*offerings, dict(name=values["type"], level=values["level"])]
+        if info.data["type"] == "Reputation" and not any(info.data["type"] == o["name"] for o in offerings):
+            offerings = [*offerings, dict(name=info.data["type"], level=info.data["level"])]
 
         return offerings
 
@@ -197,11 +198,11 @@ class PartialGenshinUserStats(APIModel):
         teapot (Optional[Teapot]): The user's Serenitea Teapot.
     """
 
-    info: UserInfo = Field(aliases="role")
+    info: UserInfo = Field(alias="role")
     stats: Stats
-    characters: List[PartialCharacter] = Field(aliases="avatars")
-    explorations: List[Exploration] = Field(aliases="world_explorations")
-    teapot: Optional[Teapot] = Field(None, aliases="homes")
+    characters: List[PartialCharacter] = Field(alias="avatars")
+    explorations: List[Exploration] = Field(alias="world_explorations")
+    teapot: Optional[Teapot] = Field(None, alias="homes")
 
     @field_validator("teapot", mode="before")
     @classmethod

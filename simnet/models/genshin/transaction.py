@@ -2,9 +2,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Literal
 
-from pydantic import Field
-
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, Field
 
 __all__ = ("BaseTransaction", "ItemTransaction", "Transaction", "TransactionKind")
 

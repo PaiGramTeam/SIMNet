@@ -3,9 +3,7 @@ import enum
 import typing
 from typing import Optional
 
-from pydantic import Field
-
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, Field
 from simnet.models.genshin.character import BaseCharacter
 from simnet.models.starrail.chronicle.base import PartialTime
 from simnet.models.zzz.calculator import desc_to_html

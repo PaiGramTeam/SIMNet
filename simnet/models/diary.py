@@ -1,8 +1,6 @@
 from enum import IntEnum
 
-from pydantic import Field
-
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, Field
 
 __all__ = (
     "DiaryType",
