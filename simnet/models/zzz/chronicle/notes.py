@@ -2,7 +2,7 @@ import datetime
 import enum
 from typing import Optional
 
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, TimeDeltaField
 
 
 class ZZZNoteProgress(APIModel):
@@ -28,7 +28,7 @@ class ZZZNoteEnergy(APIModel):
     """
 
     progress: ZZZNoteProgress
-    restore: datetime.timedelta
+    restore: TimeDeltaField
 
 
 class ZZZNoteVitality(APIModel):
@@ -114,7 +114,7 @@ class ZZZNoteWeeklyTask(APIModel):
 
     max_point: int
     cur_point: int
-    refresh_time: datetime.timedelta
+    refresh_time: TimeDeltaField
 
 
 class ZZZNote(APIModel):
@@ -136,7 +136,7 @@ class ZZZNote(APIModel):
     bounty_commission: Optional[ZZZNoteBountyCommission] = None
     survey_points: Optional[ZZZNoteSurveyPoints] = None
     weekly_task: Optional[ZZZNoteWeeklyTask] = None
-    abyss_refresh: datetime.timedelta
+    abyss_refresh: TimeDeltaField
 
     @property
     def current_stamina(self) -> int:

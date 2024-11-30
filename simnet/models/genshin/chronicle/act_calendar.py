@@ -1,7 +1,7 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import List
 
-from simnet.models.base import APIModel
+from simnet.models.base import APIModel, TimeDeltaField
 from simnet.models.genshin.character import BaseCharacter
 
 
@@ -30,7 +30,7 @@ class CardPoolListItem(APIModel):
     end_timestamp: datetime
     jump_url: str
     pool_status: int
-    countdown_seconds: timedelta
+    countdown_seconds: TimeDeltaField
 
 
 class RewardItem(APIModel):
@@ -55,7 +55,7 @@ class ActListItem(APIModel):
     end_timestamp: datetime
     desc: str
     strategy: str
-    countdown_seconds: timedelta
+    countdown_seconds: TimeDeltaField
     status: int
     reward_list: List[RewardItem]
     is_finished: bool

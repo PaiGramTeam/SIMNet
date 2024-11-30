@@ -1,10 +1,10 @@
-from datetime import timedelta, datetime
+from datetime import datetime, timedelta
 from enum import Enum
-from typing import Union, Literal, Tuple, List, Optional, Dict, Any
+from typing import Literal, Tuple, List, Optional, Dict, Any
 
 from pydantic import model_validator
 
-from simnet.models.base import APIModel, Field
+from simnet.models.base import APIModel, Field, TimeDeltaField
 
 __all__ = [
     "TaskRewardStatus",
@@ -22,33 +22,6 @@ __all__ = [
 ]
 
 
-def _process_timedelta(time: Union[int, timedelta, datetime]) -> datetime:
-    """A helper function that processes time inputs.
-
-    Args:
-        time (Union[int, timedelta, datetime]): The time input to process.
-
-    Returns:
-        datetime: The processed datetime.
-
-    Raises:
-        ValueError: If the input time is less than January 1, 2000.
-    """
-    if isinstance(time, int):
-        time = datetime.fromtimestamp(time).astimezone()
-
-    if isinstance(time, timedelta):
-        time = datetime.now().astimezone() + time
-
-    if time < datetime(2000, 1, 1).astimezone():
-        delta = timedelta(seconds=int(time.timestamp()))
-        time = datetime.now().astimezone() + delta
-
-    time = time.replace(second=0, microsecond=0)
-
-    return time
-
-
 class Expedition(APIModel):
     """The model for a real-time expedition.
 
@@ -60,7 +33,7 @@ class Expedition(APIModel):
 
     character: str = Field(alias="avatar_side_icon")
     status: Literal["Ongoing", "Finished"]
-    remaining_time: timedelta = Field(alias="remained_time")
+    remaining_time: TimeDeltaField = Field(alias="remained_time")
 
     @property
     def finished(self) -> bool:
@@ -73,7 +46,7 @@ class Expedition(APIModel):
         return datetime.now().astimezone() + self.remaining_time
 
 
-class TransformerTimedelta(timedelta):
+class TransformerTimedelta(TimeDeltaField):
     """The model for a transformer recovery time."""
 
     @property
@@ -163,7 +136,7 @@ class DailyTask(APIModel):
     attendance_rewards: List[AttendanceReward]
     attendance_visible: bool
     stored_attendance: float
-    stored_attendance_refresh_countdown: timedelta
+    stored_attendance_refresh_countdown: TimeDeltaField
 
 
 class ArchonStatusEnum(str, Enum):
@@ -239,11 +212,11 @@ class Notes(APIModel):
 
     current_resin: int
     max_resin: int
-    remaining_resin_recovery_time: timedelta = Field(alias="resin_recovery_time")
+    remaining_resin_recovery_time: TimeDeltaField = Field(alias="resin_recovery_time")
 
     current_realm_currency: int = Field(alias="current_home_coin")
     max_realm_currency: int = Field(alias="max_home_coin")
-    remaining_realm_currency_recovery_time: timedelta = Field(alias="home_coin_recovery_time")
+    remaining_realm_currency_recovery_time: TimeDeltaField = Field(alias="home_coin_recovery_time")
 
     completed_commissions: int = Field(alias="finished_task_num")
     max_commissions: int = Field(alias="total_task_num")
@@ -348,7 +321,7 @@ class NotesWidget(APIModel):
 
     current_resin: int
     max_resin: int
-    remaining_resin_recovery_time: timedelta = Field(alias="resin_recovery_time")
+    remaining_resin_recovery_time: TimeDeltaField = Field(alias="resin_recovery_time")
 
     current_realm_currency: int = Field(alias="current_home_coin")
     max_realm_currency: int = Field(alias="max_home_coin")
@@ -377,7 +350,7 @@ class NotesOverseaWidgetResin(APIModel):
 
     current_val: int
     max_val: int
-    remaining_resin_recovery_time: timedelta = Field(alias="recovery_time")
+    remaining_resin_recovery_time: TimeDeltaField = Field(alias="recovery_time")
 
     @property
     def resin_recovery_time(self) -> datetime:
@@ -396,7 +369,7 @@ class NotesOverseaWidgetRealm(APIModel):
 
     current_val: int
     max_val: int
-    remaining_realm_currency_recovery_time: timedelta = Field(alias="recovery_time")
+    remaining_realm_currency_recovery_time: TimeDeltaField = Field(alias="recovery_time")
 
     @property
     def realm_currency_recovery_time(self) -> datetime:
