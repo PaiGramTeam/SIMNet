@@ -1,7 +1,10 @@
 import datetime
 import typing
 
-from pydantic import ConfigDict, BaseModel, Field as PydanticField, AfterValidator, BeforeValidator, PlainSerializer
+from pydantic import ConfigDict, BaseModel, Field as PydanticField, AfterValidator, BeforeValidator, WrapSerializer
+
+if typing.TYPE_CHECKING:
+    from pydantic import SerializerFunctionWrapHandler, SerializationInfo
 
 CN_TIMEZONE = datetime.timezone(datetime.timedelta(hours=8))
 
@@ -34,6 +37,25 @@ def add_timezone(value: datetime.datetime) -> datetime.datetime:
     return value.astimezone(CN_TIMEZONE)
 
 
+def str_time_date_plain(
+    value: datetime.datetime, handler: "SerializerFunctionWrapHandler", info: "SerializationInfo"
+) -> typing.Union[str, datetime.datetime]:
+    """
+    Converts a datetime object to its ISO 8601 string representation if the mode is JSON, otherwise uses the handler.
+
+    Args:
+        value (datetime.datetime): The datetime object to convert.
+        handler (SerializerFunctionWrapHandler): The handler function to use if the mode is not JSON.
+        info (SerializationInfo): Information about the serialization context.
+
+    Returns:
+        typing.Union[str, datetime.datetime]: The ISO 8601 string representation if the mode is JSON, otherwise the result of the handler.
+    """
+    if info.mode_is_json():
+        return value.isoformat()
+    return handler(value)
+
+
 def str_time_delta_parsing(v: str) -> datetime.timedelta:
     """
     Parses a string representing seconds into a timedelta object.
@@ -47,20 +69,32 @@ def str_time_delta_parsing(v: str) -> datetime.timedelta:
     return datetime.timedelta(seconds=int(v))
 
 
-def str_time_delta_plain(value: datetime.timedelta) -> float:
+def str_time_delta_plain(
+    value: datetime.timedelta, handler: "SerializerFunctionWrapHandler", info: "SerializationInfo"
+) -> typing.Union[float, datetime.timedelta]:
     """
-    Converts a timedelta object to its total seconds as a float.
+    Converts a timedelta object to its total seconds as a float if the mode is JSON, otherwise uses the handler.
 
     Args:
         value (datetime.timedelta): The timedelta object to convert.
+        handler (SerializerFunctionWrapHandler): The handler function to use if the mode is not JSON.
+        info (SerializationInfo): Information about the serialization context.
 
     Returns:
-        float: The total seconds represented by the timedelta object.
+        typing.Union[float, datetime.timedelta]: The total seconds as a float if the mode is JSON, otherwise the result of the handler.
     """
-    return value.total_seconds()
+    if info.mode_is_json():
+        return value.total_seconds()
+    return handler(value)
 
 
-DateTimeField = typing.Annotated[datetime.datetime, AfterValidator(add_timezone)]
+DateTimeField = typing.Annotated[
+    datetime.datetime,
+    AfterValidator(add_timezone),
+    WrapSerializer(str_time_date_plain),
+]
 TimeDeltaField = typing.Annotated[
-    datetime.timedelta, BeforeValidator(str_time_delta_parsing), PlainSerializer(str_time_delta_plain)
+    datetime.timedelta,
+    BeforeValidator(str_time_delta_parsing),
+    WrapSerializer(str_time_delta_plain),
 ]
