@@ -1,7 +1,7 @@
 import re
 from typing import Any, Optional, cast, List, Dict
 
-from pydantic import validator, Field
+from pydantic import field_validator, validator, Field
 
 from simnet.models.base import APIModel
 from simnet.models.genshin.chronicle.abyss import SpiralAbyssPair
@@ -123,6 +123,8 @@ class Exploration(APIModel):
         """
         return self.raw_explored / 10
 
+    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
+    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
     @validator("offerings", pre=True)
     def add_base_offering(cls, offerings: List[Any], values: Dict[str, Any]) -> List[Any]:
         """Add a base offering if the exploration type is Reputation.
@@ -199,9 +201,10 @@ class PartialGenshinUserStats(APIModel):
     stats: Stats
     characters: List[PartialCharacter] = Field(aliases="avatars")
     explorations: List[Exploration] = Field(aliases="world_explorations")
-    teapot: Optional[Teapot] = Field(aliases="homes")
+    teapot: Optional[Teapot] = Field(None, aliases="homes")
 
-    @validator("teapot", pre=True)
+    @field_validator("teapot", mode="before")
+    @classmethod
     def format_teapot(cls, v: Any) -> Optional[Dict[str, Any]]:
         """Format the user's Serenitea Teapot.
 

@@ -2,7 +2,7 @@ from datetime import timedelta, datetime
 from enum import Enum
 from typing import Union, Literal, Tuple, List, Optional, Dict, Any
 
-from pydantic import Field, root_validator
+from pydantic import model_validator, Field
 
 from simnet.models.base import APIModel
 
@@ -252,7 +252,7 @@ class Notes(APIModel):
     remaining_resin_discounts: int = Field(alias="remain_resin_discount_num")
     max_resin_discounts: int = Field(alias="resin_discount_num_limit")
 
-    remaining_transformer_recovery_time: Optional[TransformerTimedelta]
+    remaining_transformer_recovery_time: Optional[TransformerTimedelta] = None
 
     expeditions: List[Expedition]
     max_expeditions: int = Field(alias="max_expedition_num")
@@ -279,7 +279,8 @@ class Notes(APIModel):
         remaining = datetime.now().astimezone() + self.remaining_transformer_recovery_time
         return remaining
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
+    @classmethod
     def flatten_transformer(cls, values: Dict[str, Any]) -> Dict[str, Any]:
         """A validator that flattens the transformer recovery time.
 

@@ -2,7 +2,7 @@
 
 from typing import List, Optional, Any, Dict
 
-from pydantic import validator
+from pydantic import field_validator
 
 from simnet.models.base import APIModel
 
@@ -114,7 +114,7 @@ class StarRailDetailCharacter(character.StarRailPartialCharacter):
     """StarRail character with equipment and relics."""
 
     image: str
-    equip: Optional[StarRailEquipment]
+    equip: Optional[StarRailEquipment] = None
     relics: List[Relic]
     ornaments: List[Relic]
     ranks: List[Rank]
@@ -218,17 +218,20 @@ class StarRailDetailCharacters(APIModel):
             new_list.append(v_)
         return new_list
 
-    @validator("equip_wiki", pre=True)
+    @field_validator("equip_wiki", mode="before")
+    @classmethod
     def parse_equip_wiki(cls, v: Dict[str, str]) -> List[Dict[str, str]]:
         """Parse equip wiki."""
         return cls._parse(v, "id", "url")
 
-    @validator("property_info", pre=True)
+    @field_validator("property_info", mode="before")
+    @classmethod
     def parse_property_info(cls, v: Dict[str, Any]) -> List[Dict[str, Any]]:
         """Parse property info."""
         return cls._parse(v)
 
-    @validator("recommend_property", pre=True)
+    @field_validator("recommend_property", mode="before")
+    @classmethod
     def parse_recommend_property(cls, v: Dict[str, Any]) -> List[Dict[str, Any]]:
         """Parse recommend property."""
         return cls._parse(v, "id")

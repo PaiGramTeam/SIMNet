@@ -1,7 +1,7 @@
 import datetime
 from typing import List, Dict, Any, Literal
 
-from pydantic import Field, root_validator
+from pydantic import model_validator, Field
 
 from simnet.models.base import APIModel
 from simnet.models.genshin.character import BaseCharacter
@@ -158,7 +158,8 @@ class SpiralAbyss(APIModel):
 
     floors: List[Floor]
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
+    @classmethod
     def nest_ranks(cls, values: Dict[str, Any]) -> Dict[str, AbyssCharacter]:
         """By default, ranks are for some reason on the same level as the rest of the abyss."""
         values.setdefault("ranks", {}).update(values)

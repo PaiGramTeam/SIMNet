@@ -172,10 +172,10 @@ class ImgTheaterFightStaticAvatar(BaseCharacter):
 
 
 class ImgTheaterFightStatic(APIModel):
-    max_defeat_avatar: Optional[ImgTheaterFightStaticAvatar]
-    max_damage_avatar: Optional[ImgTheaterFightStaticAvatar]
-    max_take_damage_avatar: Optional[ImgTheaterFightStaticAvatar]
-    total_coin_consumed: Optional[ImgTheaterFightStaticAvatar]
+    max_defeat_avatar: Optional[ImgTheaterFightStaticAvatar] = None
+    max_damage_avatar: Optional[ImgTheaterFightStaticAvatar] = None
+    max_take_damage_avatar: Optional[ImgTheaterFightStaticAvatar] = None
+    total_coin_consumed: Optional[ImgTheaterFightStaticAvatar] = None
     shortest_avatar_list: typing.Sequence[ImgTheaterFightStaticAvatar]
     total_use_time: int
     is_show_battle_stats: bool

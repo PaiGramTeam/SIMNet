@@ -99,7 +99,7 @@ class ZZZCalculatorEquipment(APIModel):
 class ZZZCalculatorCharacter(ZZZPartialCharacter):
 
     equip: List[ZZZCalculatorEquipment]
-    weapon: Optional[ZZZCalculatorWeapon]
+    weapon: Optional[ZZZCalculatorWeapon] = None
     properties: List[ZZZCalculatorAvatarProperty]
     skills: List[ZZZCalculatorAvatarSkill]
     ranks: List[ZZZCalculatorAvatarRank]

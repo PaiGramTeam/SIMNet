@@ -1,6 +1,6 @@
 from typing import List, Dict, TYPE_CHECKING
 
-from pydantic import Field, validator
+from pydantic import field_validator, Field
 
 from simnet.models.base import APIModel
 from simnet.models.genshin.character import BaseCharacter
@@ -176,7 +176,8 @@ class Character(PartialCharacter):
     constellations: List[Constellation]
     outfits: List[Outfit] = Field(alias="costumes")
 
-    @validator("artifacts")
+    @field_validator("artifacts")
+    @classmethod
     def add_artifact_effect_enabled(cls, artifacts: List[Artifact]) -> List[Artifact]:
         """
         Determines which artifact set effects are enabled for the character's equipped artifacts.

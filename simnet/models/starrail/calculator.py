@@ -2,7 +2,7 @@
 
 from typing import Dict, Any, Optional, List
 
-from pydantic import Field, validator
+from pydantic import field_validator, Field
 
 from simnet.models.base import APIModel
 from simnet.models.starrail.character import StarRailBaseCharacter, StarRailElement, StarRailDestiny
@@ -62,7 +62,8 @@ class StarrailCalculatorCharacter(StarRailBaseCharacter):
     target_level: int
     is_forward: bool
 
-    @validator("element", pre=True)
+    @field_validator("element", mode="before")
+    @classmethod
     def parse_element(cls, v: Any) -> str:
         """Parse the element of a character.
 
@@ -76,7 +77,8 @@ class StarrailCalculatorCharacter(StarRailBaseCharacter):
             return CALCULATOR_ELEMENTS[int(v)].value
         return v
 
-    @validator("path", pre=True)
+    @field_validator("path", mode="before")
+    @classmethod
     def parse_path(cls, v: Any) -> str:
         """Parse the path type of character.
 
@@ -117,7 +119,8 @@ class StarrailCalculatorWeapon(APIModel):
     target_level: int
     is_forward: bool
 
-    @validator("path", pre=True)
+    @field_validator("path", mode="before")
+    @classmethod
     def parse_path(cls, v: Any) -> str:
         """Parse the path type of weapon.
 

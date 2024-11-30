@@ -51,7 +51,7 @@ class PropInfo(APIModel):
 
     type: int = Field(alias="property_type")
     name: str
-    icon: typing.Optional[str]
+    icon: typing.Optional[str] = None
     filter_name: str
 
     @pydantic.validator("name", "filter_name")
