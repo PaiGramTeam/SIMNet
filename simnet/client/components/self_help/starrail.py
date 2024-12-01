@@ -15,6 +15,7 @@ class StarrailSelfHelpClient(BaseSelfHelpClient):
         authkey: str,
         limit: Optional[int] = None,
         end_id: int = 0,
+        min_id: int = 0,
         *,
         lang: Optional[str] = None,
     ) -> List[StarRailSelfHelpActionLog]:
@@ -25,6 +26,7 @@ class StarrailSelfHelpClient(BaseSelfHelpClient):
             authkey: The authkey for the user.
             limit: The number of logs to get.
             end_id: The end ID for the logs.
+            min_id: The minimum ID for the logs.
             lang: The language to get the logs in.
 
         Returns:
@@ -32,6 +34,7 @@ class StarrailSelfHelpClient(BaseSelfHelpClient):
         """
         paginator = WishPaginator(
             end_id,
+            min_id,
             partial(
                 self.request_self_help,
                 endpoint="UserInfo/GetActionLog",
