@@ -1,4 +1,5 @@
 import asyncio
+import contextlib
 from typing import List, Dict, Callable, Any, Awaitable
 
 
@@ -14,9 +15,11 @@ class WishPaginator:
     def __init__(
         self,
         end_id: int,
+        min_id: int,
         fetch_data: Callable[..., Awaitable[Dict[str, Any]]],
     ):
         self.end_id = end_id
+        self.min_id = min_id
         self.fetch_data = fetch_data
 
     async def get(self, limit: int) -> List[Dict]:
@@ -40,13 +43,21 @@ class WishPaginator:
 
             current_end_id = items[-1]["id"]
 
-            filtered_items = [item for item in items if item["id"] != self.end_id]
-            if len(filtered_items) < len(items):
-                all_items.extend(filtered_items)
-                break
-
+            filtered_items, need_break = [], False
+            for item in items:
+                if item["id"] == self.end_id:
+                    need_break = True
+                    continue
+                if self.min_id:
+                    with contextlib.suppress(ValueError):
+                        if int(item["id"]) <= self.min_id:
+                            need_break = True
+                            continue
+                filtered_items.append(item)
             all_items.extend(filtered_items)
 
+            if need_break:
+                break
             if limit and len(all_items) >= limit:
                 break
 

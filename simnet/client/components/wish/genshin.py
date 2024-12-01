@@ -19,6 +19,7 @@ class GenshinWishClient(BaseWishClient):
         lang: Optional[str] = None,
         authkey: Optional[str] = None,
         end_id: int = 0,
+        min_id: int = 0,
         banner_default_name: Optional[str] = "",
     ) -> List[Wish]:
         """Get the wish history for a list of banner types.
@@ -31,6 +32,7 @@ class GenshinWishClient(BaseWishClient):
                 If not provided, the class default will be used.
             authkey (Optional[str], optional): The authorization key for making the request.
             end_id  (int, optional): The ending ID of the last wish to retrieve.
+            min_id (int, optional): The minimum ID of the first wish to retrieve.
             banner_default_name (Optional[str], optional): The default name of the banner to use.
 
         Returns:
@@ -44,6 +46,7 @@ class GenshinWishClient(BaseWishClient):
         for banner_type in banner_types:
             paginator = WishPaginator(
                 end_id,
+                min_id,
                 partial(
                     self.get_wish_page,
                     banner_type=banner_type,
