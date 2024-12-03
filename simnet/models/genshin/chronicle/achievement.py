@@ -29,9 +29,7 @@ class GenshinAchievementInfoList(APIModel):
         Returns:
             int: The maximum completion value if `show_percent` is True, otherwise 0.
         """
-        return (
-            round(self.finish_num / (self.percentage / 100.0)) if self.percentage else 0
-        )
+        return round(self.finish_num / (self.percentage / 100.0)) if self.percentage else 0
 
 
 class GenshinAchievementInfo(APIModel):

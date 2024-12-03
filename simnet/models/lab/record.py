@@ -243,9 +243,7 @@ class BaseRecordCard(Account):
         Returns:
             Dict[str, Any]: The data as a dictionary.
         """
-        return {
-            d.name: (int(d.value) if d.value.isdigit() else d.value) for d in self.data
-        }
+        return {d.name: (int(d.value) if d.value.isdigit() else d.value) for d in self.data}
 
 
 class RecordCard(BaseRecordCard):

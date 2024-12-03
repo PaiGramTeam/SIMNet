@@ -189,9 +189,7 @@ class LabClient(BaseClient):
         announcements: list[dict[str, Any]] = []
         for sublist in info["list"]:
             for info in sublist["list"]:
-                detail = next(
-                    (i for i in details["list"] if i["ann_id"] == info["ann_id"]), None
-                )
+                detail = next((i for i in details["list"] if i["ann_id"] == info["ann_id"]), None)
                 announcements.append({**info, **(detail or {})})
 
         return [Announcement(**i) for i in announcements]
@@ -267,9 +265,7 @@ class LabClient(BaseClient):
         )
         return [Account(**i) for i in data["list"]]
 
-    async def get_genshin_accounts(
-        self, *, lang: Optional[str] = None
-    ) -> list[Account]:
+    async def get_genshin_accounts(self, *, lang: Optional[str] = None) -> list[Account]:
         """Get the genshin accounts of the currently logged-in user.
 
         Returns:
@@ -278,9 +274,7 @@ class LabClient(BaseClient):
         accounts = await self.get_game_accounts(lang=lang)
         return [account for account in accounts if account.game == Game.GENSHIN]
 
-    async def get_starrail_accounts(
-        self, *, lang: Optional[str] = None
-    ) -> list[Account]:
+    async def get_starrail_accounts(self, *, lang: Optional[str] = None) -> list[Account]:
         """Get the starrail accounts of the currently logged-in user.
 
         Returns:
@@ -298,9 +292,7 @@ class LabClient(BaseClient):
         accounts = await self.get_game_accounts(lang=lang)
         return [account for account in accounts if account.game == Game.ZZZ]
 
-    async def request_accompany_role(
-        self, role_id: int, topic_id: int, *, lang: Optional[str] = None
-    ) -> AccompanyRole:
+    async def request_accompany_role(self, role_id: int, topic_id: int, *, lang: Optional[str] = None) -> AccompanyRole:
         """Accompany a role to a topic.
 
         Args:
@@ -319,9 +311,7 @@ class LabClient(BaseClient):
         )
         return AccompanyRole(**data)
 
-    async def get_accompany_role(
-        self, role_id: int, *, lang: Optional[str] = None
-    ) -> AccompanyRoleInfo:
+    async def get_accompany_role(self, role_id: int, *, lang: Optional[str] = None) -> AccompanyRoleInfo:
         """Get the information related to an accompany role.
 
         Args:
@@ -339,9 +329,7 @@ class LabClient(BaseClient):
         )
         return AccompanyRoleInfo(**data)
 
-    async def get_accompany_roles(
-        self, *, lang: Optional[str] = None
-    ) -> list[AccompanyRoleBasic]:
+    async def get_accompany_roles(self, *, lang: Optional[str] = None) -> list[AccompanyRoleBasic]:
         """Get a list of accompany roles.
 
         Args:

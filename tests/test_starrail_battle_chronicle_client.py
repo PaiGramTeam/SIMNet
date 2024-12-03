@@ -19,9 +19,7 @@ async def starrail_client(
     starrail_cookies: Optional["Cookies"],
 ):
     if starrail_player_id is None:
-        pytest.skip(
-            "Test case test_genshin_calculator_client skipped: No starrail player id set."
-        )
+        pytest.skip("Test case test_genshin_calculator_client skipped: No starrail player id set.")
     async with StarRailBattleChronicleClient(
         player_id=starrail_player_id,
         cookies=starrail_cookies or cookies,
@@ -33,9 +31,7 @@ async def starrail_client(
 @pytest.mark.asyncio
 class TestStarrailBattleChronicleClient:
     @staticmethod
-    @pytest.mark.xfail(
-        raises=NeedChallenge, reason="Challenge is needed, but not implemented yet."
-    )
+    @pytest.mark.xfail(raises=NeedChallenge, reason="Challenge is needed, but not implemented yet.")
     async def test_get_starrail_notes(starrail_client: "StarRailBattleChronicleClient"):
         notes = await starrail_client.get_starrail_notes()
         assert notes is not None
@@ -50,9 +46,7 @@ class TestStarrailBattleChronicleClient:
         assert character.id > 0
 
     @staticmethod
-    @pytest.mark.xfail(
-        raises=NeedChallenge, reason="Challenge is needed, but not implemented yet."
-    )
+    @pytest.mark.xfail(raises=NeedChallenge, reason="Challenge is needed, but not implemented yet.")
     async def test_get_starrail_characters(
         starrail_client: "StarRailBattleChronicleClient",
     ):
@@ -62,9 +56,7 @@ class TestStarrailBattleChronicleClient:
         assert character.id > 0
 
     @staticmethod
-    @pytest.mark.xfail(
-        raises=NeedChallenge, reason="Challenge is needed, but not implemented yet."
-    )
+    @pytest.mark.xfail(raises=NeedChallenge, reason="Challenge is needed, but not implemented yet.")
     async def test_get_starrail_challenge(
         starrail_client: "StarRailBattleChronicleClient",
     ):
@@ -72,9 +64,7 @@ class TestStarrailBattleChronicleClient:
         assert challenge.season > 0
 
     @staticmethod
-    @pytest.mark.xfail(
-        raises=NeedChallenge, reason="Challenge is needed, but not implemented yet."
-    )
+    @pytest.mark.xfail(raises=NeedChallenge, reason="Challenge is needed, but not implemented yet.")
     async def test_get_starrail_challenge_story(
         starrail_client: "StarRailBattleChronicleClient",
     ):
@@ -82,9 +72,7 @@ class TestStarrailBattleChronicleClient:
         assert len(challenge.groups) > 0
 
     @staticmethod
-    @pytest.mark.xfail(
-        raises=NeedChallenge, reason="Challenge is needed, but not implemented yet."
-    )
+    @pytest.mark.xfail(raises=NeedChallenge, reason="Challenge is needed, but not implemented yet.")
     async def test_get_starrail_challenge_boss(
         starrail_client: "StarRailBattleChronicleClient",
     ):

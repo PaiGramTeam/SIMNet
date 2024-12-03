@@ -117,12 +117,7 @@ class CookiesModel(BaseModel, frozen=False):
 
     @property
     def is_v2(self) -> bool:
-        return bool(
-            self.account_mid_v2
-            or self.cookie_token_v2
-            or self.ltoken_v2
-            or self.ltmid_v2
-        )
+        return bool(self.account_mid_v2 or self.cookie_token_v2 or self.ltoken_v2 or self.ltmid_v2)
 
     def remove_v2(self):
         """Remove the v2 cookies."""

@@ -47,9 +47,7 @@ def starrail_cookies() -> Optional["Cookies"]:  # skipcq: PY-D0003
         return None
     _cookies = Cookies(parse_cookie(cookies_str))
     if _cookies.account_id is None:
-        warnings.warn(
-            UserWarning("can not found account id in starrail cookies"), stacklevel=2
-        )
+        warnings.warn(UserWarning("can not found account id in starrail cookies"), stacklevel=2)
 
     return _cookies
 
@@ -61,9 +59,7 @@ def zzz_cookies() -> Optional["Cookies"]:
         return None
     _cookies = Cookies(parse_cookie(cookies_str))
     if _cookies.account_id is None:
-        warnings.warn(
-            UserWarning("can not found account id in zzz cookies"), stacklevel=2
-        )
+        warnings.warn(UserWarning("can not found account id in zzz cookies"), stacklevel=2)
 
     return _cookies
 

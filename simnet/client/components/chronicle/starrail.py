@@ -66,9 +66,7 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         payload = dict(payload or {})
 
         player_id = player_id or self.player_id
-        payload = dict(
-            role_id=player_id, server=recognize_starrail_server(player_id), **payload
-        )
+        payload = dict(role_id=player_id, server=recognize_starrail_server(player_id), **payload)
 
         data, params = None, None
         if method == "POST":
@@ -111,9 +109,7 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         except DataNotPublic as e:
             # error raised only when real-time notes are not enabled
             if player_id and self.player_id != player_id:
-                raise BadRequest(
-                    e.response, "Cannot view real-time notes of other users."
-                ) from e
+                raise BadRequest(e.response, "Cannot view real-time notes of other users.") from e
             if not autoauth:
                 raise BadRequest(e.response, "Real-time notes are not enabled.") from e
             await self.update_settings(3, True, game=Game.STARRAIL)
@@ -166,9 +162,7 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
             DataNotPublic: If the requested data is not public.
         """
         payload = {"need_wiki": "true"}
-        data = await self._request_starrail_record(
-            "avatar/info", player_id, lang=lang, payload=payload
-        )
+        data = await self._request_starrail_record("avatar/info", player_id, lang=lang, payload=payload)
         return StarRailDetailCharacters(**data)
 
     async def get_record_card(
@@ -220,9 +214,7 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
             DataNotPublic: If the requested data is not public.
         """
         payload = {"schedule_type": 2 if previous else 1, "need_all": "true"}
-        data = await self._request_starrail_record(
-            "challenge", player_id, lang=lang, payload=payload
-        )
+        data = await self._request_starrail_record("challenge", player_id, lang=lang, payload=payload)
         return StarRailChallenge(**data)
 
     async def get_starrail_challenge_story(
@@ -250,9 +242,7 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
             "need_all": "true",
             "type": "story",
         }
-        data = await self._request_starrail_record(
-            "challenge_story", player_id, lang=lang, payload=payload
-        )
+        data = await self._request_starrail_record("challenge_story", player_id, lang=lang, payload=payload)
         return StarRailChallengeStory(**data)
 
     async def get_starrail_challenge_boss(
@@ -280,9 +270,7 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
             "need_all": "true",
             "type": "boss",
         }
-        data = await self._request_starrail_record(
-            "challenge_boss", player_id, lang=lang, payload=payload
-        )
+        data = await self._request_starrail_record("challenge_boss", player_id, lang=lang, payload=payload)
         return StarRailChallengeBoss(**data)
 
     async def get_starrail_rogue(
@@ -306,9 +294,7 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
             DataNotPublic: If the requested data is not public.
         """
         payload = {"schedule_type": schedule_type, "need_detail": "true"}
-        data = await self._request_starrail_record(
-            "rogue", player_id, lang=lang, payload=payload
-        )
+        data = await self._request_starrail_record("rogue", player_id, lang=lang, payload=payload)
         return StarRailRogue(**data)
 
     async def get_starrail_rogue_locust(
@@ -330,9 +316,7 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
             DataNotPublic: If the requested data is not public.
         """
         payload = {"need_detail": "true"}
-        data = await self._request_starrail_record(
-            "rogue_locust", player_id, lang=lang, payload=payload
-        )
+        data = await self._request_starrail_record("rogue_locust", player_id, lang=lang, payload=payload)
         return StarRailRogueLocust(**data)
 
     async def get_starrail_rogue_nous(
@@ -354,9 +338,7 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
             DataNotPublic: If the requested data is not public.
         """
         payload = {"need_detail": "true"}
-        data = await self._request_starrail_record(
-            "rogue_nous", player_id, lang=lang, payload=payload
-        )
+        data = await self._request_starrail_record("rogue_nous", player_id, lang=lang, payload=payload)
         return StarRailRogueNous(**data)
 
     async def get_starrail_rogue_tourn(
@@ -378,9 +360,7 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
             DataNotPublic: If the requested data is not public.
         """
         payload = {"need_detail": "true"}
-        data = await self._request_starrail_record(
-            "rogue_tourn", player_id, lang=lang, payload=payload
-        )
+        data = await self._request_starrail_record("rogue_tourn", player_id, lang=lang, payload=payload)
         return StarRailRogueTourn(**data)
 
     async def get_starrail_act_calendar(
@@ -428,16 +408,11 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         if self.account_id is not None and stuid is None:
             self.cookies.set("stuid", str(self.account_id))
         if self.region == Region.OVERSEAS:
-            route = (
-                RECORD_URL.get_url(self.region, self.game)
-                / "../community/apihub/api/hsr_widget"
-            )
+            route = RECORD_URL.get_url(self.region, self.game) / "../community/apihub/api/hsr_widget"
             data = await self.request_lab(route, lang=lang)
             model = StarRailNoteOverseaWidget
         else:
-            data = await self._request_starrail_record(
-                "widget", endpoint_type="aapi", lang=lang
-            )
+            data = await self._request_starrail_record("widget", endpoint_type="aapi", lang=lang)
             model = StarRailNoteWidget
         return model(**data)
 
@@ -459,9 +434,7 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
             "avatar_id": avatar_id,
             "recommend_relic_properties": recommend_relic_properties or [],
         }
-        await self._request_starrail_record(
-            "setAvatarRecommendRelicProperty", method="POST", payload=payload
-        )
+        await self._request_starrail_record("setAvatarRecommendRelicProperty", method="POST", payload=payload)
 
     async def get_starrail_ledger_month_info(
         self,
@@ -481,9 +454,7 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
             BadRequest: If the request is invalid.
             DataNotPublic: If the requested data is not public.
         """
-        data = await self._request_starrail_record(
-            "get_ledger_month_info", uid, lang=lang
-        )
+        data = await self._request_starrail_record("get_ledger_month_info", uid, lang=lang)
         return StarRailLedgerMonthInfo(**data)
 
     async def get_starrail_achievement_info(

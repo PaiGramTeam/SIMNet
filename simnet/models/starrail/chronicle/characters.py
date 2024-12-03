@@ -198,9 +198,7 @@ class StarRailDetailCharacters(APIModel):
     relic_properties: list[RelicProperty]
 
     @staticmethod
-    def _parse(
-        v: dict[str, Any], key: str = None, value_key: str = None
-    ) -> list[dict[str, Any]]:
+    def _parse(v: dict[str, Any], key: str = None, value_key: str = None) -> list[dict[str, Any]]:
         """Parse dict to list."""
         if isinstance(v, list):
             return v
@@ -230,9 +228,7 @@ class StarRailDetailCharacters(APIModel):
         """Parse recommend property."""
         return cls._parse(v, "id")
 
-    def get_recommend_property_by_cid(
-        self, character_id: int
-    ) -> Optional[RecommendProperty]:
+    def get_recommend_property_by_cid(self, character_id: int) -> Optional[RecommendProperty]:
         """Get recommend property by character id."""
         for i in self.recommend_property:
             if i.id == character_id:

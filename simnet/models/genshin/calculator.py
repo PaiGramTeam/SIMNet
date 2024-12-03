@@ -262,9 +262,7 @@ class CalculatorCharacterDetails(APIModel):
 
     @field_validator("talents")
     @classmethod
-    def correct_talent_current_level(
-        cls, v: list[CalculatorTalent]
-    ) -> list[CalculatorTalent]:
+    def correct_talent_current_level(cls, v: list[CalculatorTalent]) -> list[CalculatorTalent]:
         """Validates the current level of each calculator talent in the talents list and sets it to 1 if it is 0.
 
         Args:
@@ -350,9 +348,7 @@ class CalculatorResult(APIModel):
             List[CalculatorConsumable]: A list of CalculatorConsumable objects representing the total
             consumables used across all categories.
         """
-        artifacts = [
-            i for a in self.artifacts for i in a.consumable_list
-        ]  # skipcq: PYL-E1133
+        artifacts = [i for a in self.artifacts for i in a.consumable_list]  # skipcq: PYL-E1133
         combined = self.character + self.weapon + self.talents + artifacts
 
         grouped: dict[int, list[CalculatorConsumable]] = collections.defaultdict(list)

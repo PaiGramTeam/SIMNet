@@ -103,9 +103,7 @@ class TransactionClient(BaseClient):
 
         iterators: list[BaseTransaction] = []
         for value in kinds:
-            iterator = await self._get_transaction_page(
-                end_id, value, lang=lang, authkey=authkey
-            )
+            iterator = await self._get_transaction_page(end_id, value, lang=lang, authkey=authkey)
             iterators.extend(iterator)
 
         return iterators[: min(len(iterators), limit)] if limit else iterators

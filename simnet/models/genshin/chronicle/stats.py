@@ -135,9 +135,7 @@ class Exploration(APIModel):
         Returns:
             The updated list of offerings.
         """
-        if info.data["type"] == "Reputation" and not any(
-            info.data["type"] == o["name"] for o in offerings
-        ):
+        if info.data["type"] == "Reputation" and not any(info.data["type"] == o["name"] for o in offerings):
             offerings = [
                 *offerings,
                 {"name": info.data["type"], "level": info.data["level"]},

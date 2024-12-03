@@ -47,9 +47,7 @@ class BadRequest(SIMNetException):
             self.message = message or self.original
 
         display_code = self.ret_code or self.status_code
-        display_message = (
-            f"[{display_code}] {self.message}" if display_code else self.message
-        )
+        display_message = f"[{display_code}] {self.message}" if display_code else self.message
 
         super().__init__(display_message)
 
@@ -216,9 +214,7 @@ class RequestNotSupported(BadRequest):
     ret_code = -520
 
     def __init__(self, *args, **kwargs):
-        super().__init__(
-            *args, message="service not supported for this request.", **kwargs
-        )
+        super().__init__(*args, message="service not supported for this request.", **kwargs)
 
 
 class RedemptionClaimed(RedemptionException):
@@ -285,13 +281,7 @@ _errors: dict[int, Union[_TBR, str, tuple[_TBR, Optional[str]]]] = {
 }
 
 ERRORS: dict[int, tuple[_TBR, Optional[str]]] = {
-    ret_code: (
-        (exc, None)
-        if isinstance(exc, type)
-        else (BadRequest, exc)
-        if isinstance(exc, str)
-        else exc
-    )
+    ret_code: ((exc, None) if isinstance(exc, type) else (BadRequest, exc) if isinstance(exc, str) else exc)
     for ret_code, exc in _errors.items()
 }
 

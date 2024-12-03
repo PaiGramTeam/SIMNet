@@ -13,13 +13,9 @@ if TYPE_CHECKING:
 
 
 @pytest_asyncio.fixture
-async def calculator_client(
-    genshin_player_id: int, region: "Region", cookies: "Cookies"
-):
+async def calculator_client(genshin_player_id: int, region: "Region", cookies: "Cookies"):
     if genshin_player_id is None:
-        pytest.skip(
-            "Test case test_genshin_calculator_client skipped: No genshin player id set."
-        )
+        pytest.skip("Test case test_genshin_calculator_client skipped: No genshin player id set.")
     async with CalculatorClient(
         player_id=genshin_player_id,
         cookies=cookies,
@@ -30,9 +26,7 @@ async def calculator_client(
 
 
 @pytest_asyncio.fixture
-async def genshin_battle_chronicle_client(
-    genshin_player_id: int, region: "Region", cookies: "Cookies"
-):
+async def genshin_battle_chronicle_client(genshin_player_id: int, region: "Region", cookies: "Cookies"):
     async with GenshinBattleChronicleClient(
         player_id=genshin_player_id,
         cookies=cookies,
@@ -49,9 +43,7 @@ class TestCalculatorClient:
         genshin_battle_chronicle_client: "GenshinBattleChronicleClient",
     ):
         characters = await genshin_battle_chronicle_client.get_genshin_characters()
-        character_details = await calculator_client.get_character_details(
-            characters[-1].id
-        )
+        character_details = await calculator_client.get_character_details(characters[-1].id)
         assert len(character_details.talents) == 6
         for talent in character_details.talents:
             assert talent.level > -1

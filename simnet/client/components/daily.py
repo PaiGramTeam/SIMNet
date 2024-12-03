@@ -200,17 +200,13 @@ class DailyRewardClient(BaseClient):
             if page >= 10:
                 break
 
-            fetched_items = await self._get_claimed_rewards_page(
-                page, game=game or self.game, lang=lang
-            )
+            fetched_items = await self._get_claimed_rewards_page(page, game=game or self.game, lang=lang)
             if not fetched_items:
                 break
 
             # Calculate how many items should be added
             items_to_add = (
-                limit - index
-                if limit is not None and limit - index < len(fetched_items)
-                else len(fetched_items)
+                limit - index if limit is not None and limit - index < len(fetched_items) else len(fetched_items)
             )
 
             result.extend(fetched_items[:items_to_add])

@@ -25,7 +25,5 @@ class GenshinDiaryClient(BaseDiaryClient):
         Returns:
             Diary: The diary for the month.
         """
-        data = await self.request_ledger(
-            player_id, game=Game.GENSHIN, month=month, lang=lang
-        )
+        data = await self.request_ledger(player_id, game=Game.GENSHIN, month=month, lang=lang)
         return Diary(**data)

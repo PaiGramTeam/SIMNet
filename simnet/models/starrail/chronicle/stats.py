@@ -29,9 +29,7 @@ class PartialStarRailUserStats(APIModel):
     """User stats with characters without equipment."""
 
     stats: StarRailStats
-    characters: Sequence[character.StarRailPartialCharacter] = Field(
-        alias="avatar_list"
-    )
+    characters: Sequence[character.StarRailPartialCharacter] = Field(alias="avatar_list")
 
 
 class StarRailUserInfo(APIModel):

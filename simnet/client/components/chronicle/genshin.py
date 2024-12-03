@@ -71,9 +71,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
                 "server": recognize_genshin_server(player_id),
             }
         else:
-            payload = dict(
-                role_id=player_id, server=recognize_genshin_server(player_id), **payload
-            )
+            payload = dict(role_id=player_id, server=recognize_genshin_server(player_id), **payload)
 
         data, params = None, None
         if method == "POST":
@@ -125,9 +123,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
             Character: The requested genshin user characters.
         """
         characters = await self.get_genshin_character_list(player_id, lang=lang)
-        details = await self.get_genshin_character_detail(
-            [char.id for char in characters], player_id, lang=lang
-        )
+        details = await self.get_genshin_character_detail([char.id for char in characters], player_id, lang=lang)
         return [Character.from_detail(d) for d in details.characters]
 
     async def get_genshin_user(
@@ -167,9 +163,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
             SpiralAbyss: genshin spiral abyss runs.
         """
         payload = {"schedule_type": 2 if previous else 1}
-        data = await self._request_genshin_record(
-            "spiralAbyss", player_id, lang=lang, payload=payload
-        )
+        data = await self._request_genshin_record("spiralAbyss", player_id, lang=lang, payload=payload)
 
         return SpiralAbyss(**data)
 
@@ -196,9 +190,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
             "need_detail": need_detail,
             "schedule_type": 2 if previous else 1,
         }
-        data = await self._request_genshin_record(
-            "role_combat", player_id, lang=lang, payload=payload
-        )
+        data = await self._request_genshin_record("role_combat", player_id, lang=lang, payload=payload)
 
         return ImgTheater(**data)
 
@@ -228,9 +220,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         except DataNotPublic as e:
             # error raised only when real-time notes are not enabled
             if player_id and self.player_id != player_id:
-                raise BadRequest(
-                    e.response, "Cannot view real-time notes of other users."
-                ) from e
+                raise BadRequest(e.response, "Cannot view real-time notes of other users.") from e
             if not autoauth:
                 raise BadRequest(e.response, "Real-time notes are not enabled.") from e
 
@@ -264,9 +254,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
 
         return FullGenshinUserStats(**user, abyss=abyss, activities=activities)
 
-    async def get_genshin_activities(
-        self, player_id: Optional[int] = None, *, lang: Optional[str] = None
-    ) -> dict:
+    async def get_genshin_activities(self, player_id: Optional[int] = None, *, lang: Optional[str] = None) -> dict:
         """Get genshin activities.
 
         Args:
@@ -330,17 +318,12 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         if self.account_id is not None and stuid is None:
             self.cookies.set("stuid", str(self.account_id))
         if self.region == Region.OVERSEAS:
-            route = (
-                RECORD_URL.get_url(self.region, self.game)
-                / "../community/apihub/api/widget/data"
-            )
+            route = RECORD_URL.get_url(self.region, self.game) / "../community/apihub/api/widget/data"
             params = {"game_id": "2"}
             data = await self.request_lab(route, params=params, lang=lang)
             model = NotesOverseaWidget
         else:
-            data = await self._request_genshin_record(
-                "widget/v2", endpoint_type="aapi", lang=lang
-            )
+            data = await self._request_genshin_record("widget/v2", endpoint_type="aapi", lang=lang)
             model = NotesWidget
         return model(**data)
 
@@ -360,9 +343,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
             List[GenshinCharacterListInfo]: A list of GenshinCharacterListInfo objects containing character details.
         """
 
-        data = await self._request_genshin_record(
-            "character/list", player_id, method="POST", lang=lang
-        )
+        data = await self._request_genshin_record("character/list", player_id, method="POST", lang=lang)
         return [GenshinCharacterListInfo(**i) for i in data["list"]]
 
     async def get_genshin_character_detail(
@@ -402,9 +383,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         Returns:
             GenshinAchievementInfo: The requested achievement info.
         """
-        data = await self._request_genshin_record(
-            "achievement", player_id, method="POST", lang=lang
-        )
+        data = await self._request_genshin_record("achievement", player_id, method="POST", lang=lang)
         return GenshinAchievementInfo(**data)
 
     async def get_genshin_act_calendar(
@@ -419,7 +398,5 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         Returns:
             GenshinActCalendar: The requested act calendar info.
         """
-        data = await self._request_genshin_record(
-            "act_calendar", player_id, method="POST", lang=lang
-        )
+        data = await self._request_genshin_record("act_calendar", player_id, method="POST", lang=lang)
         return GenshinActCalendar(**data)

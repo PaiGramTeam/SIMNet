@@ -51,9 +51,7 @@ class StarrailCalculatorClient(BaseClient):
         if self.region == Region.CHINESE:
             headers["Referer"] = "https://webstatic.mihoyo.com/"
 
-        return await self.request_lab(
-            url, method=method, params=params, data=data, headers=headers
-        )
+        return await self.request_lab(url, method=method, params=params, data=data, headers=headers)
 
     async def get_calculator_characters(
         self,
@@ -83,9 +81,7 @@ class StarrailCalculatorClient(BaseClient):
             "uid": player_id,
             "region": recognize_starrail_server(player_id),
         }
-        data = await self.request_calculator(
-            "avatar/list", method="GET", params=params, lang=lang
-        )
+        data = await self.request_calculator("avatar/list", method="GET", params=params, lang=lang)
         return [StarrailCalculatorCharacter(**i) for i in data.get("list", [])]
 
     async def get_character_details(
