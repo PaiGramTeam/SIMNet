@@ -1,8 +1,8 @@
 import enum
-import typing
+from collections.abc import Sequence
 from typing import Optional
 
-from simnet.models.base import APIModel, Field, DateTimeField
+from simnet.models.base import APIModel, DateTimeField, Field
 from simnet.models.genshin.character import BaseCharacter
 from simnet.models.starrail.chronicle.base import PartialTime
 from simnet.models.zzz.calculator import desc_to_html
@@ -41,8 +41,8 @@ class TheaterBuff(APIModel):
     name: str
     icon: str
     desc: str
-    is_enhanced: typing.Optional[bool] = False
-    id: typing.Optional[int] = None
+    is_enhanced: Optional[bool] = False
+    id: Optional[int] = None
 
     @property
     def desc_html(self) -> str:
@@ -101,7 +101,7 @@ class TheaterSplendourBuffModel(APIModel):
     name: str
     icon: str
     level: int
-    level_effect: typing.Sequence[TheaterBuff]
+    level_effect: Sequence[TheaterBuff]
 
 
 class TheaterSplendourBuff(APIModel):
@@ -114,21 +114,21 @@ class TheaterSplendourBuff(APIModel):
     """
 
     summary: TheaterSplendourBuffSummary
-    buffs: typing.Sequence[TheaterSplendourBuffModel]
+    buffs: Sequence[TheaterSplendourBuffModel]
 
 
 class Act(APIModel):
     """One act in the theater."""
 
-    avatars: typing.Sequence[ActCharacter]
-    choice_cards: typing.Sequence[TheaterBuff]
-    buffs: typing.Sequence[TheaterBuff]
+    avatars: Sequence[ActCharacter]
+    choice_cards: Sequence[TheaterBuff]
+    buffs: Sequence[TheaterBuff]
     is_get_medal: bool
     round_id: int
     finish_time: DateTimeField
     finish_date_time: PartialTime
-    enemies: typing.Optional[typing.Sequence[TheaterEnemy]] = None
-    splendour_buff: typing.Optional[TheaterSplendourBuff] = None
+    enemies: Optional[Sequence[TheaterEnemy]] = None
+    splendour_buff: Optional[TheaterSplendourBuff] = None
 
 
 class TheaterStats(APIModel):
@@ -139,7 +139,7 @@ class TheaterStats(APIModel):
     max_round_id: int
     """The maximum act the player has reached."""
     heraldry: int  # Not sure what this is
-    star_challenge_stellas: typing.Sequence[bool] = Field(alias="get_medal_round_list")
+    star_challenge_stellas: Sequence[bool] = Field(alias="get_medal_round_list")
     """Whether the player has obtained the medal for each act."""
     medal_num: int
     """The number of medals the player has obtained."""
@@ -173,7 +173,7 @@ class ImgTheaterFightStatic(APIModel):
     max_damage_avatar: Optional[ImgTheaterFightStaticAvatar] = None
     max_take_damage_avatar: Optional[ImgTheaterFightStaticAvatar] = None
     total_coin_consumed: Optional[ImgTheaterFightStaticAvatar] = None
-    shortest_avatar_list: typing.Sequence[ImgTheaterFightStaticAvatar]
+    shortest_avatar_list: Sequence[ImgTheaterFightStaticAvatar]
     total_use_time: int
     is_show_battle_stats: bool
 
@@ -181,16 +181,16 @@ class ImgTheaterFightStatic(APIModel):
 class ImgTheaterDetailData(APIModel):
     """Imaginarium theater detail data."""
 
-    rounds_data: typing.Sequence[Act]
+    rounds_data: Sequence[Act]
     detail_stat: TheaterStats
-    backup_avatars: typing.Sequence[ActCharacter]
-    fight_statisic: typing.Optional[ImgTheaterFightStatic] = None
+    backup_avatars: Sequence[ActCharacter]
+    fight_statisic: Optional[ImgTheaterFightStatic] = None
 
 
 class ImgTheaterData(APIModel):
     """Imaginarium theater data."""
 
-    detail: typing.Optional[ImgTheaterDetailData] = None
+    detail: Optional[ImgTheaterDetailData] = None
     stat: TheaterStats
     schedule: TheaterSchedule
     has_data: bool
@@ -200,5 +200,5 @@ class ImgTheaterData(APIModel):
 class ImgTheater(APIModel):
     """Imaginarium theater."""
 
-    data: typing.List[ImgTheaterData]
+    data: list[ImgTheaterData]
     unlocked: bool = Field(alias="is_unlock")

@@ -1,6 +1,6 @@
 """Starrail chronicle challenge story."""
 
-from typing import List, Optional
+from typing import Optional
 
 from simnet.models.base import APIModel, Field
 from simnet.models.starrail.character import RogueCharacter
@@ -50,7 +50,7 @@ class StarRailChallengeBossFloorNode(APIModel):
     """Node for a floor."""
 
     challenge_time: Optional[PartialTime] = None
-    avatars: List[RogueCharacter]
+    avatars: list[RogueCharacter]
     buff: Optional[StarRailChallengeBossBuff] = None
     score: int
     boss_defeated: bool
@@ -81,11 +81,11 @@ class StarRailChallengeBossFloor(APIModel):
 class StarRailChallengeBoss(APIModel):
     """Challenge boss in a season."""
 
-    groups: List[StarRailChallengeBossGroup]
+    groups: list[StarRailChallengeBossGroup]
     total_stars: int = Field(alias="star_num")
     max_floor: str
     max_floor_id: int
     total_battles: int = Field(alias="battle_num")
     has_data: bool
 
-    floors: List[StarRailChallengeBossFloor] = Field(alias="all_floor_detail")
+    floors: list[StarRailChallengeBossFloor] = Field(alias="all_floor_detail")

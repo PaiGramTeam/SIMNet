@@ -1,4 +1,4 @@
-from typing import Optional, Any, Dict
+from typing import Any, Optional
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import SELF_HELP_URL
@@ -16,9 +16,9 @@ class BaseSelfHelpClient(BaseClient):
         *,
         game: Optional[Game] = None,
         lang: Optional[str] = None,
-        params: Optional[Dict[str, Any]] = None,
+        params: Optional[dict[str, Any]] = None,
         end_id: Optional[int] = None,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Make a request towards the ys ledger endpoint.
 
         Args:

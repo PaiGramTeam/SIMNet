@@ -1,6 +1,5 @@
 import random
 
-
 __all__ = ("get_random_hex_string_of_length",)
 
 
@@ -17,4 +16,4 @@ def get_random_hex_string_of_length(length: int):
         str: A string containing random hexadecimal characters of the given length.
     """
     random_range = "0123456789abcdef"
-    return "".join(random.choice(random_range) for _ in range(length))  # nosec
+    return "".join(random.choice(random_range) for _ in range(length))  # nosec  # noqa: S311

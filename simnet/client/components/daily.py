@@ -1,16 +1,20 @@
 """Daily reward component."""
 
 import asyncio
-from typing import Optional, Dict, Any, List
+from typing import Any, Optional
 
 from httpx import QueryParams
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import REWARD_URL
 from simnet.errors import GeetestTriggered
-from simnet.models.lab.daily import DailyRewardInfo, DailyReward, ClaimedDailyReward
+from simnet.models.lab.daily import ClaimedDailyReward, DailyReward, DailyRewardInfo
 from simnet.utils.enums import Game, Region
-from simnet.utils.player import recognize_genshin_server, recognize_starrail_server, recognize_zzz_server
+from simnet.utils.player import (
+    recognize_genshin_server,
+    recognize_starrail_server,
+    recognize_zzz_server,
+)
 
 __all__ = ("DailyRewardClient",)
 
@@ -27,8 +31,8 @@ class DailyRewardClient(BaseClient):
         validate: Optional[str] = None,
         game: Optional[Game] = None,
         lang: Optional[str] = None,
-        params: Optional[Dict[str, Any]] = None,
-    ) -> Dict[str, Any]:
+        params: Optional[dict[str, Any]] = None,
+    ) -> dict[str, Any]:
         """
         Makes a request to the daily reward endpoint.
 
@@ -44,7 +48,7 @@ class DailyRewardClient(BaseClient):
         Returns:
             A dictionary containing the response data.
         """
-        headers: Dict[str, str] = {}
+        headers: dict[str, str] = {}
         params = QueryParams(params)
         game = game or self.game
 
@@ -131,7 +135,7 @@ class DailyRewardClient(BaseClient):
         *,
         game: Optional[Game] = None,
         lang: Optional[str] = None,
-    ) -> List[DailyReward]:
+    ) -> list[DailyReward]:
         """Gets a list of all available rewards for the current month.
 
         Args:
@@ -154,7 +158,7 @@ class DailyRewardClient(BaseClient):
         *,
         game: Optional[Game] = None,
         lang: Optional[str] = None,
-    ) -> List[ClaimedDailyReward]:
+    ) -> list[ClaimedDailyReward]:
         """Gets a single page of claimed rewards for the current user.
 
         Args:
@@ -167,7 +171,7 @@ class DailyRewardClient(BaseClient):
                 page.
         """
         data = await self.request_daily_reward(
-            "award", params=dict(current_page=page), game=game or self.game, lang=lang
+            "award", params={"current_page": page}, game=game or self.game, lang=lang
         )
         return [ClaimedDailyReward(**i) for i in data["list"]]
 
@@ -177,7 +181,7 @@ class DailyRewardClient(BaseClient):
         limit: Optional[int] = None,
         game: Optional[Game] = None,
         lang: Optional[str] = None,
-    ) -> List[ClaimedDailyReward]:
+    ) -> list[ClaimedDailyReward]:
         """Gets all claimed rewards for the current user.
 
         Args:

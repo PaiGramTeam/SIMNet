@@ -1,10 +1,10 @@
-from typing import Dict, Union
+from typing import Union
 from urllib.parse import urljoin
 
 from httpx import URL as _URL
 
-from simnet.errors import RegionNotSupported, NotSupported
-from simnet.utils.enums import Region, Game
+from simnet.errors import NotSupported, RegionNotSupported
+from simnet.utils.enums import Game, Region
 
 URLTypes = Union["URL", str]
 
@@ -136,7 +136,7 @@ class Route(BaseRoute):
 class InternationalRoute(BaseRoute):
     """A route with URLs for both the overseas and Chinese regions."""
 
-    urls: Dict[Region, URL]
+    urls: dict[Region, URL]
 
     def __init__(self, overseas: str, chinese: str) -> None:
         """
@@ -175,12 +175,12 @@ class InternationalRoute(BaseRoute):
 class GameRoute(BaseRoute):
     """A route with URLs for different games and regions."""
 
-    urls: Dict[Region, Dict[Game, URL]]
+    urls: dict[Region, dict[Game, URL]]
 
     def __init__(
         self,
-        overseas: Dict[str, str],
-        chinese: Dict[str, str],
+        overseas: dict[str, str],
+        chinese: dict[str, str],
     ) -> None:
         """
         Initialize a GameRoute instance.
@@ -221,29 +221,29 @@ class GameRoute(BaseRoute):
 
 
 RECORD_URL = GameRoute(
-    overseas=dict(
-        genshin="https://bbs-api-os.hoyolab.com/game_record",
-        hkrpg="https://bbs-api-os.hoyolab.com/game_record",
-        nap="https://sg-act-nap-api.hoyolab.com/event/game_record_zzz",
-    ),
-    chinese=dict(
-        genshin="https://api-takumi-record.mihoyo.com/game_record/app",
-        hkrpg="https://api-takumi-record.mihoyo.com/game_record/app",
-        nap="https://api-takumi-record.mihoyo.com/event/game_record_zzz",
-    ),
+    overseas={
+        "genshin": "https://bbs-api-os.hoyolab.com/game_record",
+        "hkrpg": "https://bbs-api-os.hoyolab.com/game_record",
+        "nap": "https://sg-act-nap-api.hoyolab.com/event/game_record_zzz",
+    },
+    chinese={
+        "genshin": "https://api-takumi-record.mihoyo.com/game_record/app",
+        "hkrpg": "https://api-takumi-record.mihoyo.com/game_record/app",
+        "nap": "https://api-takumi-record.mihoyo.com/event/game_record_zzz",
+    },
 )
 
 GACHA_INFO_URL = GameRoute(
-    overseas=dict(
-        genshin="https://public-operation-hk4e-sg.hoyoverse.com/gacha_info/api",
-        hkrpg="https://public-operation-hkrpg-sg.hoyoverse.com/common/gacha_record/api/",
-        nap="https://public-operation-nap-sg.hoyoverse.com/common/gacha_record/api",
-    ),
-    chinese=dict(
-        genshin="https://public-operation-hk4e.mihoyo.com/gacha_info/api",
-        hkrpg="https://public-operation-hkrpg.mihoyo.com/common/gacha_record/api",
-        nap="https://public-operation-nap.mihoyo.com/common/gacha_record/api",
-    ),
+    overseas={
+        "genshin": "https://public-operation-hk4e-sg.hoyoverse.com/gacha_info/api",
+        "hkrpg": "https://public-operation-hkrpg-sg.hoyoverse.com/common/gacha_record/api/",
+        "nap": "https://public-operation-nap-sg.hoyoverse.com/common/gacha_record/api",
+    },
+    chinese={
+        "genshin": "https://public-operation-hk4e.mihoyo.com/gacha_info/api",
+        "hkrpg": "https://public-operation-hkrpg.mihoyo.com/common/gacha_record/api",
+        "nap": "https://public-operation-nap.mihoyo.com/common/gacha_record/api",
+    },
 )
 
 AUTH_URL = InternationalRoute(
@@ -270,18 +270,18 @@ HK4E_LOGIN_URL = InternationalRoute(
 )
 
 REWARD_URL = GameRoute(
-    overseas=dict(
-        genshin="https://sg-hk4e-api.hoyolab.com/event/sol/?act_id=e202102251931481",
-        honkai3rd="https://sg-public-api.hoyolab.com/event/mani/?act_id=e202110291205111",
-        hkrpg="https://sg-public-api.hoyolab.com/event/luna/os/?act_id=e202303301540311",
-        nap="https://sg-act-nap-api.hoyolab.com/event/luna/zzz/os/?act_id=e202406031448091",
-    ),
-    chinese=dict(
-        genshin="https://api-takumi.mihoyo.com/event/luna/?act_id=e202311201442471",
-        honkai3rd="https://api-takumi.mihoyo.com/event/luna/?act_id=e202207181446311",
-        hkrpg="https://api-takumi.mihoyo.com/event/luna/?act_id=e202304121516551",
-        nap="https://act-nap-api.mihoyo.com/event/luna/zzz/?act_id=e202406242138391",
-    ),
+    overseas={
+        "genshin": "https://sg-hk4e-api.hoyolab.com/event/sol/?act_id=e202102251931481",
+        "honkai3rd": "https://sg-public-api.hoyolab.com/event/mani/?act_id=e202110291205111",
+        "hkrpg": "https://sg-public-api.hoyolab.com/event/luna/os/?act_id=e202303301540311",
+        "nap": "https://sg-act-nap-api.hoyolab.com/event/luna/zzz/os/?act_id=e202406031448091",
+    },
+    chinese={
+        "genshin": "https://api-takumi.mihoyo.com/event/luna/?act_id=e202311201442471",
+        "honkai3rd": "https://api-takumi.mihoyo.com/event/luna/?act_id=e202207181446311",
+        "hkrpg": "https://api-takumi.mihoyo.com/event/luna/?act_id=e202304121516551",
+        "nap": "https://act-nap-api.mihoyo.com/event/luna/zzz/?act_id=e202406242138391",
+    },
 )
 TAKUMI_URL = InternationalRoute(
     overseas="https://api-os-takumi.mihoyo.com/",
@@ -289,40 +289,40 @@ TAKUMI_URL = InternationalRoute(
 )
 
 CALCULATOR_URL = GameRoute(
-    overseas=dict(
-        genshin="https://sg-public-api.hoyoverse.com/event/calculateos/",
-        hkrpg="https://sg-public-api.hoyolab.com/event/rpgcalc/",
-    ),
-    chinese=dict(
-        genshin="https://api-takumi.mihoyo.com/event/e20200928calculate/v1/",
-        hkrpg="https://api-takumi.mihoyo.com/event/rpgcalc/",
-    ),
+    overseas={
+        "genshin": "https://sg-public-api.hoyoverse.com/event/calculateos/",
+        "hkrpg": "https://sg-public-api.hoyolab.com/event/rpgcalc/",
+    },
+    chinese={
+        "genshin": "https://api-takumi.mihoyo.com/event/e20200928calculate/v1/",
+        "hkrpg": "https://api-takumi.mihoyo.com/event/rpgcalc/",
+    },
 )
 
 DETAIL_LEDGER_URL = GameRoute(
-    overseas=dict(
-        genshin="https://sg-hk4e-api.hoyolab.com/event/ysledgeros/month_detail",
-        hkrpg="https://sg-public-api.hoyolab.com/event/srledger/month_detail",
-        nap="https://sg-public-api.hoyolab.com/event/nap_ledger/month_detail",
-    ),
-    chinese=dict(
-        genshin="https://hk4e-api.mihoyo.com/event/ys_ledger/monthDetail",
-        hkrpg="https://api-takumi.mihoyo.com/event/srledger/month_detail",
-        nap="https://api-takumi.mihoyo.com/event/nap_ledger/month_detail",
-    ),
+    overseas={
+        "genshin": "https://sg-hk4e-api.hoyolab.com/event/ysledgeros/month_detail",
+        "hkrpg": "https://sg-public-api.hoyolab.com/event/srledger/month_detail",
+        "nap": "https://sg-public-api.hoyolab.com/event/nap_ledger/month_detail",
+    },
+    chinese={
+        "genshin": "https://hk4e-api.mihoyo.com/event/ys_ledger/monthDetail",
+        "hkrpg": "https://api-takumi.mihoyo.com/event/srledger/month_detail",
+        "nap": "https://api-takumi.mihoyo.com/event/nap_ledger/month_detail",
+    },
 )
 
 INFO_LEDGER_URL = GameRoute(
-    overseas=dict(
-        genshin="https://sg-hk4e-api.hoyolab.com/event/ysledgeros/month_info",
-        hkrpg="https://sg-public-api.hoyolab.com/event/srledger/month_info",
-        nap="https://sg-public-api.hoyolab.com/event/nap_ledger/month_info",
-    ),
-    chinese=dict(
-        genshin="https://hk4e-api.mihoyo.com/event/ys_ledger/monthInfo",
-        hkrpg="https://api-takumi.mihoyo.com/event/srledger/month_info",
-        nap="https://api-takumi.mihoyo.com/event/nap_ledger/month_info",
-    ),
+    overseas={
+        "genshin": "https://sg-hk4e-api.hoyolab.com/event/ysledgeros/month_info",
+        "hkrpg": "https://sg-public-api.hoyolab.com/event/srledger/month_info",
+        "nap": "https://sg-public-api.hoyolab.com/event/nap_ledger/month_info",
+    },
+    chinese={
+        "genshin": "https://hk4e-api.mihoyo.com/event/ys_ledger/monthInfo",
+        "hkrpg": "https://api-takumi.mihoyo.com/event/srledger/month_info",
+        "nap": "https://api-takumi.mihoyo.com/event/nap_ledger/month_info",
+    },
 )
 
 YSULOG_URL = InternationalRoute(
@@ -333,19 +333,19 @@ YSULOG_URL = InternationalRoute(
 HK4E_URL = Route("https://sg-hk4e-api.hoyoverse.com/common/hk4e_global/")
 
 CODE_URL = GameRoute(
-    overseas=dict(
-        genshin="https://sg-hk4e-api.hoyoverse.com/common/apicdkey/api/webExchangeCdkey",
-        hkrpg="https://sg-hkrpg-api.hoyoverse.com/common/apicdkey/api/webExchangeCdkeyRisk",
-        nap="https://public-operation-nap.hoyoverse.com/common/apicdkey/api/webExchangeCdkey",
-    ),
+    overseas={
+        "genshin": "https://sg-hk4e-api.hoyoverse.com/common/apicdkey/api/webExchangeCdkey",
+        "hkrpg": "https://sg-hkrpg-api.hoyoverse.com/common/apicdkey/api/webExchangeCdkeyRisk",
+        "nap": "https://public-operation-nap.hoyoverse.com/common/apicdkey/api/webExchangeCdkey",
+    },
     chinese={},
 )
 CODE_HOYOLAB_URL = GameRoute(
-    overseas=dict(
-        genshin="https://sg-hk4e-api.hoyolab.com/common/apicdkey/api/webExchangeCdkeyHyl",
-        hkrpg="https://sg-hkrpg-api.hoyolab.com/common/apicdkey/api/webExchangeCdkeyHyl",
-        nap="https://public-operation-nap.hoyoverse.com/common/apicdkey/api/webExchangeCdkey",
-    ),
+    overseas={
+        "genshin": "https://sg-hk4e-api.hoyolab.com/common/apicdkey/api/webExchangeCdkeyHyl",
+        "hkrpg": "https://sg-hkrpg-api.hoyolab.com/common/apicdkey/api/webExchangeCdkeyHyl",
+        "nap": "https://public-operation-nap.hoyoverse.com/common/apicdkey/api/webExchangeCdkey",
+    },
     chinese={},
 )
 
@@ -360,9 +360,9 @@ BBS_URL = InternationalRoute(
 
 SELF_HELP_URL = GameRoute(
     overseas={},
-    chinese=dict(
-        genshin="https://hk4e-api.mihoyo.com/common/hk4e_self_help_query",
-        hkrpg="https://api-takumi.mihoyo.com/common/hkrpg_self_help_inquiry",
-        nap="https://public-operation-nap.mihoyo.com/common/nap_self_help_query",
-    ),
+    chinese={
+        "genshin": "https://hk4e-api.mihoyo.com/common/hk4e_self_help_query",
+        "hkrpg": "https://api-takumi.mihoyo.com/common/hkrpg_self_help_inquiry",
+        "nap": "https://public-operation-nap.mihoyo.com/common/nap_self_help_query",
+    },
 )

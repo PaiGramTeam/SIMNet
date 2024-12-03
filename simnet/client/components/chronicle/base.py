@@ -1,10 +1,10 @@
-from typing import Optional, Any, List
+from typing import Any, Optional
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import RECORD_URL
 from simnet.errors import DataNotPublic
 from simnet.models.lab.record import RecordCard
-from simnet.utils.enums import Region, Game
+from simnet.utils.enums import Game, Region
 from simnet.utils.types import QueryParamTypes
 
 __all__ = ("BaseChronicleClient",)
@@ -52,11 +52,8 @@ class BaseChronicleClient(BaseClient):
         """
         base_url = RECORD_URL.get_url(region or self.region, game or Game.GENSHIN)
 
-        if game:
-            if game == Game.ZZZ:
-                base_url = base_url / endpoint_type / "zzz"
-            else:
-                base_url = base_url / game.value / endpoint_type
+        if game is not None:
+            base_url = base_url / endpoint_type / "zzz" if game == Game.ZZZ else base_url / game.value / endpoint_type
 
         url = base_url / endpoint
         new_ds = self.region == Region.CHINESE
@@ -96,7 +93,7 @@ class BaseChronicleClient(BaseClient):
 
         await self.request_game_record(
             "card/wapi/changeDataSwitch",
-            data=dict(switch_id=switch_id, is_public=on, game_id=game_id),
+            data={"switch_id": switch_id, "is_public": on, "game_id": game_id},
         )
 
     async def get_record_cards(
@@ -104,7 +101,7 @@ class BaseChronicleClient(BaseClient):
         account_id: Optional[int] = None,
         *,
         lang: Optional[str] = None,
-    ) -> List[RecordCard]:
+    ) -> list[RecordCard]:
         """Get a player record cards.
 
         Args:
@@ -122,7 +119,7 @@ class BaseChronicleClient(BaseClient):
         data = await self.request_game_record(
             "card/wapi/getGameRecordCard",
             lang=lang,
-            params=dict(uid=account_id),
+            params={"uid": account_id},
         )
         if not data["list"]:
             raise DataNotPublic({"retcode": 10102})

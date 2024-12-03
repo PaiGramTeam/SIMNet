@@ -1,6 +1,7 @@
 import asyncio
 import contextlib
-from typing import List, Dict, Callable, Any, Awaitable
+from collections.abc import Awaitable
+from typing import Any, Callable
 
 
 class WishPaginator:
@@ -16,13 +17,13 @@ class WishPaginator:
         self,
         end_id: int,
         min_id: int,
-        fetch_data: Callable[..., Awaitable[Dict[str, Any]]],
+        fetch_data: Callable[..., Awaitable[dict[str, Any]]],
     ):
         self.end_id = end_id
         self.min_id = min_id
         self.fetch_data = fetch_data
 
-    async def get(self, limit: int) -> List[Dict]:
+    async def get(self, limit: int) -> list[dict]:
         """
         Fetches and returns the items up to the specified limit.
 

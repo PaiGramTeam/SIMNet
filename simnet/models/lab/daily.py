@@ -1,7 +1,7 @@
 import datetime
 from typing import NamedTuple
 
-from simnet.models.base import APIModel, Field, DateTimeField, CN_TIMEZONE
+from simnet.models.base import CN_TIMEZONE, APIModel, DateTimeField, Field
 
 __all__ = ("ClaimedDailyReward", "DailyReward", "DailyRewardInfo")
 

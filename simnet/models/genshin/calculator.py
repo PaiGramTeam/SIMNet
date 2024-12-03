@@ -1,7 +1,7 @@
 """Genshin calculator models."""
 
 import collections
-from typing import Dict, Any, Literal, Optional, List
+from typing import Any, Literal, Optional
 
 from pydantic import field_validator
 
@@ -23,7 +23,7 @@ __all__ = (
     "CalculatorTalent",
     "CalculatorWeapon",
 )
-CALCULATOR_ELEMENTS: Dict[int, str] = {
+CALCULATOR_ELEMENTS: dict[int, str] = {
     1: "Pyro",
     2: "Anemo",
     3: "Geo",
@@ -32,14 +32,14 @@ CALCULATOR_ELEMENTS: Dict[int, str] = {
     6: "Hydro",
     7: "Cryo",
 }
-CALCULATOR_WEAPON_TYPES: Dict[int, str] = {
+CALCULATOR_WEAPON_TYPES: dict[int, str] = {
     1: "Sword",
     10: "Catalyst",
     11: "Claymore",
     12: "Bow",
     13: "Polearm",
 }
-CALCULATOR_ARTIFACTS: Dict[int, str] = {
+CALCULATOR_ARTIFACTS: dict[int, str] = {
     1: "Flower of Life",
     2: "Plume of Death",
     3: "Sands of Eon",
@@ -188,7 +188,7 @@ class CalculatorTalent(APIModel):
     max_level: int
 
     @property
-    def type(self) -> Optional[Literal["attack", "skill", "burst", "passive", "dash"]]:
+    def type(self) -> Optional[Literal["attack", "skill", "burst", "passive", "dash"]]:  # noqa: PLR0911
         """The type of the talent, parsed from the group ID.
 
         Returns:
@@ -257,12 +257,12 @@ class CalculatorCharacterDetails(APIModel):
     """
 
     weapon: Optional[CalculatorWeapon] = Field(None, alias="weapon")
-    talents: List[CalculatorTalent] = Field(alias="skill_list")
-    artifacts: List[CalculatorArtifact] = Field(alias="reliquary_list")
+    talents: list[CalculatorTalent] = Field(alias="skill_list")
+    artifacts: list[CalculatorArtifact] = Field(alias="reliquary_list")
 
     @field_validator("talents")
     @classmethod
-    def correct_talent_current_level(cls, v: List[CalculatorTalent]) -> List[CalculatorTalent]:
+    def correct_talent_current_level(cls, v: list[CalculatorTalent]) -> list[CalculatorTalent]:
         """Validates the current level of each calculator talent in the talents list and sets it to 1 if it is 0.
 
         Args:
@@ -273,20 +273,18 @@ class CalculatorCharacterDetails(APIModel):
             List[CalculatorTalent]: The list of validated calculator talents.
         """
         # passive talent have current levels at 0 for some reason
-        talents: List[CalculatorTalent] = []
+        talents: list[CalculatorTalent] = []
 
         for talent in v:
             if talent.max_level == 1 and talent.level == 0:
                 raw = talent.model_dump()
                 raw["level"] = 1
-                talent = CalculatorTalent(**raw)
-
-            talents.append(talent)
+                talents.append(CalculatorTalent(**raw))
 
         return v
 
     @property
-    def upgradeable_talents(self) -> List[CalculatorTalent]:
+    def upgradeable_talents(self) -> list[CalculatorTalent]:
         """Returns a list of all calculator talents that can be leveled up.
 
         Returns:
@@ -323,7 +321,7 @@ class CalculatorArtifactResult(APIModel):
     """
 
     artifact_id: int = Field(alias="reliquary_id")
-    consumable_list: List[CalculatorConsumable] = Field(alias="id_consume_list")
+    consumable_list: list[CalculatorConsumable] = Field(alias="id_consume_list")
 
 
 class CalculatorResult(APIModel):
@@ -337,13 +335,13 @@ class CalculatorResult(APIModel):
         artifacts (List[CalculatorArtifactResult]): Artifacts used.
     """
 
-    character: List[CalculatorConsumable] = Field(alias="avatar_consume")
-    weapon: List[CalculatorConsumable] = Field(alias="weapon_consume")
-    talents: List[CalculatorConsumable] = Field(alias="avatar_skill_consume")
-    artifacts: List[CalculatorArtifactResult] = Field(alias="reliquary_consume")
+    character: list[CalculatorConsumable] = Field(alias="avatar_consume")
+    weapon: list[CalculatorConsumable] = Field(alias="weapon_consume")
+    talents: list[CalculatorConsumable] = Field(alias="avatar_skill_consume")
+    artifacts: list[CalculatorArtifactResult] = Field(alias="reliquary_consume")
 
     @property
-    def total(self) -> List[CalculatorConsumable]:
+    def total(self) -> list[CalculatorConsumable]:
         """Returns the total consumables used across all categories.
 
         Returns:
@@ -353,11 +351,11 @@ class CalculatorResult(APIModel):
         artifacts = [i for a in self.artifacts for i in a.consumable_list]  # skipcq: PYL-E1133
         combined = self.character + self.weapon + self.talents + artifacts
 
-        grouped: Dict[int, List[CalculatorConsumable]] = collections.defaultdict(list)
+        grouped: dict[int, list[CalculatorConsumable]] = collections.defaultdict(list)
         for i in combined:
             grouped[i.id].append(i)
 
-        total = [
+        return [
             CalculatorConsumable(
                 id=x[0].id,
                 name=x[0].name,
@@ -366,8 +364,6 @@ class CalculatorResult(APIModel):
             )
             for x in grouped.values()
         ]
-
-        return total
 
 
 class CalculatorFurnishingResults(APIModel):
@@ -378,10 +374,10 @@ class CalculatorFurnishingResults(APIModel):
             furnishings used.
     """
 
-    furnishings: List[CalculatorConsumable] = Field(alias="list")
+    furnishings: list[CalculatorConsumable] = Field(alias="list")
 
     @property
-    def total(self) -> List[CalculatorConsumable]:
+    def total(self) -> list[CalculatorConsumable]:
         """Returns the total furnishings used.
 
         Returns:

@@ -37,7 +37,7 @@ def hex_digest(text):
     Returns:
         str: The MD5 hash digest of the given text.
     """
-    _md5 = hashlib.md5()  # nosec B303
+    _md5 = hashlib.md5()  # nosec B303  # noqa: S324
     _md5.update(text.encode())
     return _md5.hexdigest()
 
@@ -70,7 +70,7 @@ def generate_dynamic_secret(
     def new():
         """Create a new dynamic secret 2."""
         t = str(int(time.time()))
-        r = str(random.randint(100001, 200000))  # nosec
+        r = str(random.randint(100001, 200000))  # nosec  # noqa: S311
         b = json.dumps(data) if data else ""
         q = "&".join(f"{k}={v}" for k, v in sorted(params.items())) if params else ""
         c = hex_digest(f"salt={salt}&t={t}&r={r}&b={b}&q={q}")
@@ -97,18 +97,14 @@ def generate_dynamic_secret(
                 salt = MIYOUSHE_APP_DS
             else:
                 raise ValueError(f"Unknown ds_type: {ds_type}")
+        elif ds_type is None:
+            salt = MIYOUSHE_WEB_DS
+        elif ds_type == DSType.ANDROID:
+            salt = "t0qEgfub6cvueAPgR5m9aQWWVciEer7v"
+            client_type = "2"
         else:
-            if ds_type is None:
-                salt = MIYOUSHE_WEB_DS
-            elif ds_type == DSType.ANDROID:
-                salt = "t0qEgfub6cvueAPgR5m9aQWWVciEer7v"
-                client_type = "2"
-            else:
-                raise ValueError(f"Unknown ds_type: {ds_type}")
+            raise ValueError(f"Unknown ds_type: {ds_type}")
     else:
         raise ValueError(f"Unknown region: {region}")
-    if new_ds:
-        ds = new()
-    else:
-        ds = old()
+    ds = new() if new_ds else old()
     return app_version, client_type, ds

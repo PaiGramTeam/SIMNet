@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Optional
 
 from simnet.models.base import APIModel, Field
 from simnet.models.starrail.chronicle.base import PartialTime
@@ -30,15 +30,15 @@ class ZZZFloorMonster(APIModel):
     """Monster"""
 
     level: int
-    list: List[ZZZFloorMonsterInfo]
+    list: list[ZZZFloorMonsterInfo]
 
 
 class ZZZFloorNode(APIModel):
     """A node"""
 
-    avatars: List[ZZZChallengeCharacter]
+    avatars: list[ZZZChallengeCharacter]
     buddy: Optional[ZZZBaseBuddy] = None
-    element_type_list: List[int]
+    element_type_list: list[int]
     monster_info: ZZZFloorMonster
 
 
@@ -48,7 +48,7 @@ class ZZZFloor(APIModel):
     layer_index: int
     rating: str
     layer_id: int
-    buffs: List[ZZZFloorBuff]
+    buffs: list[ZZZFloorBuff]
     node_1: ZZZFloorNode
     node_2: ZZZFloorNode
     challenge_time: str
@@ -74,8 +74,8 @@ class ZZZChallenge(APIModel):
     max_layer: int
     has_data: bool
 
-    rating_list: List[ZZZChallengeRate]
-    floors: List[ZZZFloor] = Field(alias="all_floor_detail")
+    rating_list: list[ZZZChallengeRate]
+    floors: list[ZZZFloor] = Field(alias="all_floor_detail")
 
     @property
     def total_stars(self) -> int:

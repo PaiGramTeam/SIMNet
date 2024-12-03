@@ -1,19 +1,23 @@
 import asyncio
-from typing import Optional, Any, List, Dict, Union
+from typing import Any, Optional, Union
+
 from simnet.client.components.chronicle.base import BaseChronicleClient
 from simnet.client.routes import RECORD_URL
-from simnet.errors import DataNotPublic, BadRequest
+from simnet.errors import BadRequest, DataNotPublic
 from simnet.models.genshin.chronicle.abyss import SpiralAbyss, SpiralAbyssPair
 from simnet.models.genshin.chronicle.achievement import GenshinAchievementInfo
 from simnet.models.genshin.chronicle.act_calendar import GenshinActCalendar
-from simnet.models.genshin.chronicle.character_detail import GenshinCharacterListInfo, GenshinDetailCharacters
+from simnet.models.genshin.chronicle.character_detail import (
+    GenshinCharacterListInfo,
+    GenshinDetailCharacters,
+)
 from simnet.models.genshin.chronicle.characters import Character
 from simnet.models.genshin.chronicle.img_theater import ImgTheater
-from simnet.models.genshin.chronicle.notes import Notes, NotesWidget, NotesOverseaWidget
+from simnet.models.genshin.chronicle.notes import Notes, NotesOverseaWidget, NotesWidget
 from simnet.models.genshin.chronicle.stats import (
-    PartialGenshinUserStats,
-    GenshinUserStats,
     FullGenshinUserStats,
+    GenshinUserStats,
+    PartialGenshinUserStats,
 )
 from simnet.models.lab.record import RecordCard
 from simnet.utils.enums import Game, Region
@@ -36,7 +40,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         method: str = "GET",
         endpoint_type: str = "api",
         lang: Optional[str] = None,
-        payload: Optional[Dict[str, Any]] = None,
+        payload: Optional[dict[str, Any]] = None,
     ):
         """Get an arbitrary object from StarRail's battle chronicle.
 
@@ -62,7 +66,10 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
             raise ValueError("Player ID is not specified.")
 
         if payload is None:
-            payload = dict(role_id=player_id, server=recognize_genshin_server(player_id))
+            payload = {
+                "role_id": player_id,
+                "server": recognize_genshin_server(player_id),
+            }
         else:
             payload = dict(role_id=player_id, server=recognize_genshin_server(player_id), **payload)
 
@@ -105,7 +112,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         player_id: Optional[int] = None,
         *,
         lang: Optional[str] = None,
-    ) -> List[Character]:
+    ) -> list[Character]:
         """Get genshin user characters.
 
         Args:
@@ -117,10 +124,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         """
         characters = await self.get_genshin_character_list(player_id, lang=lang)
         details = await self.get_genshin_character_detail([char.id for char in characters], player_id, lang=lang)
-        data = []
-        for d in details.characters:
-            data.append(Character.from_detail(d))
-        return data
+        return [Character.from_detail(d) for d in details.characters]
 
     async def get_genshin_user(
         self,
@@ -158,7 +162,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         Returns:
             SpiralAbyss: genshin spiral abyss runs.
         """
-        payload = dict(schedule_type=2 if previous else 1)
+        payload = {"schedule_type": 2 if previous else 1}
         data = await self._request_genshin_record("spiralAbyss", player_id, lang=lang, payload=payload)
 
         return SpiralAbyss(**data)
@@ -250,7 +254,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
 
         return FullGenshinUserStats(**user, abyss=abyss, activities=activities)
 
-    async def get_genshin_activities(self, player_id: Optional[int] = None, *, lang: Optional[str] = None) -> Dict:
+    async def get_genshin_activities(self, player_id: Optional[int] = None, *, lang: Optional[str] = None) -> dict:
         """Get genshin activities.
 
         Args:
@@ -328,7 +332,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         player_id: Optional[int] = None,
         *,
         lang: Optional[str] = None,
-    ) -> List[GenshinCharacterListInfo]:
+    ) -> list[GenshinCharacterListInfo]:
         """Retrieve a list of Genshin Impact character information for a player.
 
         Args:
@@ -344,7 +348,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
 
     async def get_genshin_character_detail(
         self,
-        characters: List[int],
+        characters: list[int],
         player_id: Optional[int] = None,
         *,
         lang: Optional[str] = None,

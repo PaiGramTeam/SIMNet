@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Literal, Tuple, List, Optional, Dict, Any
+from typing import Any, Literal, Optional
 
 from pydantic import model_validator
 
@@ -50,7 +50,7 @@ class TransformerTimedelta(TimeDeltaField):
     """The model for a transformer recovery time."""
 
     @property
-    def timedata(self) -> Tuple[int, int, int, int]:
+    def timedata(self) -> tuple[int, int, int, int]:
         """A property that returns the transformer recovery time in days, hours, minutes, and seconds."""
         seconds: int = super().seconds
         days: int = super().days
@@ -132,8 +132,8 @@ class DailyTask(APIModel):
     total_num: int
     finished_num: int
     is_extra_task_reward_received: bool
-    task_rewards: List[TaskReward]
-    attendance_rewards: List[AttendanceReward]
+    task_rewards: list[TaskReward]
+    attendance_rewards: list[AttendanceReward]
     attendance_visible: bool
     stored_attendance: float
     stored_attendance_refresh_countdown: TimeDeltaField
@@ -174,7 +174,7 @@ class ArchonQuestProgress(APIModel):
         wiki_url (str): The wiki url.
     """
 
-    list: List[ArchonStatus]
+    list: list[ArchonStatus]
     is_open_archon_quest: bool
     is_finish_all_mainline: bool
     is_finish_all_interchapter: bool
@@ -227,7 +227,7 @@ class Notes(APIModel):
 
     remaining_transformer_recovery_time: Optional[TransformerTimedelta] = None
 
-    expeditions: List[Expedition]
+    expeditions: list[Expedition]
     max_expeditions: int = Field(alias="max_expedition_num")
 
     daily_task: DailyTask
@@ -249,12 +249,11 @@ class Notes(APIModel):
         if self.remaining_transformer_recovery_time is None:
             return None
 
-        remaining = datetime.now().astimezone() + self.remaining_transformer_recovery_time
-        return remaining
+        return datetime.now().astimezone() + self.remaining_transformer_recovery_time
 
     @model_validator(mode="before")
     @classmethod
-    def flatten_transformer(cls, values: Dict[str, Any]) -> Dict[str, Any]:
+    def flatten_transformer(cls, values: dict[str, Any]) -> dict[str, Any]:
         """A validator that flattens the transformer recovery time.
 
         This method flattens the transformer recovery time from a dictionary format to a TransformerTimedelta format.
@@ -330,7 +329,7 @@ class NotesWidget(APIModel):
     max_commissions: int = Field(alias="total_task_num")
     claimed_commission_reward: bool = Field(alias="is_extra_task_reward_received")
 
-    expeditions: List[ExpeditionWidget]
+    expeditions: list[ExpeditionWidget]
     max_expeditions: int = Field(alias="max_expedition_num")
 
     @property

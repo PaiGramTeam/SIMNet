@@ -1,21 +1,28 @@
 import logging
 import uuid
+from contextlib import AbstractAsyncContextManager
 from types import TracebackType
-from typing import AsyncContextManager, Type, Optional, Any, Union
+from typing import Any, Optional, Union
 
-from httpx import AsyncClient, TimeoutException, Response, HTTPError, Timeout
+from httpx import AsyncClient, HTTPError, Response, Timeout, TimeoutException
 
 from simnet.client.cookies import Cookies
 from simnet.client.headers import Headers
-from simnet.errors import TimedOut, NetworkError, BadRequest, raise_for_ret_code, NotSupported
-from simnet.utils.ds import generate_dynamic_secret, DSType, hex_digest
-from simnet.utils.enums import Region, Game
+from simnet.errors import (
+    BadRequest,
+    NetworkError,
+    NotSupported,
+    TimedOut,
+    raise_for_ret_code,
+)
+from simnet.utils.ds import DSType, generate_dynamic_secret, hex_digest
+from simnet.utils.enums import Game, Region
 from simnet.utils.types import (
     RT,
-    HeaderTypes,
     CookieTypes,
-    RequestData,
+    HeaderTypes,
     QueryParamTypes,
+    RequestData,
     TimeoutTypes,
     URLTypes,
 )
@@ -25,7 +32,7 @@ _LOGGER = logging.getLogger("SIMNet.BaseClient")
 __all__ = ("BaseClient",)
 
 
-class BaseClient(AsyncContextManager["BaseClient"]):
+class BaseClient(AbstractAsyncContextManager["BaseClient"]):
     """
     This is the base class for simnet clients. It provides common methods and properties for simnet clients.
 
@@ -145,14 +152,14 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         """Enter the async context manager and initialize the client."""
         try:
             await self.initialize()
-            return self
-        except Exception as exc:
+        except Exception:
             await self.shutdown()
-            raise exc
+            raise
+        return self
 
     async def __aexit__(
         self,
-        exc_type: Optional[Type[BaseException]],
+        exc_type: Optional[type[BaseException]],
         exc_val: Optional[BaseException],
         exc_tb: Optional[TracebackType],
     ) -> None:

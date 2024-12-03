@@ -1,5 +1,5 @@
 from functools import partial
-from typing import Optional, List
+from typing import Optional
 
 from simnet.client.components.wish.base import BaseWishClient
 from simnet.models.zzz.wish import ZZZWish
@@ -14,13 +14,13 @@ class ZZZWishClient(BaseWishClient):
 
     async def wish_history(
         self,
-        banner_types: Optional[List[int]] = None,
+        banner_types: Optional[list[int]] = None,
         limit: Optional[int] = None,
         lang: Optional[str] = None,
         authkey: Optional[str] = None,
         end_id: int = 0,
         min_id: int = 0,
-    ) -> List[ZZZWish]:
+    ) -> list[ZZZWish]:
         """
         Get the wish history for a list of banner types.
 
@@ -49,6 +49,7 @@ class ZZZWishClient(BaseWishClient):
                     self.get_wish_page,
                     banner_type=banner_type,
                     game=Game.ZZZ,
+                    lang=lang,
                     authkey=authkey,
                 ),
             )

@@ -1,8 +1,8 @@
-from typing import List, Dict, Any, Literal
+from typing import Any, Literal
 
 from pydantic import model_validator
 
-from simnet.models.base import APIModel, Field, DateTimeField
+from simnet.models.base import APIModel, DateTimeField, Field
 from simnet.models.genshin.character import BaseCharacter
 
 __all__ = (
@@ -53,24 +53,24 @@ class CharacterRanks(APIModel):
         most_skills_used (List[AbyssRankCharacter]): The characters that have used their elemental skill the most.
     """
 
-    most_played: List[AbyssRankCharacter] = Field(default=[], alias="reveal_rank")
-    most_kills: List[AbyssRankCharacter] = Field(
+    most_played: list[AbyssRankCharacter] = Field(default=[], alias="reveal_rank")
+    most_kills: list[AbyssRankCharacter] = Field(
         default=[],
         alias="defeat_rank",
     )
-    strongest_strike: List[AbyssRankCharacter] = Field(
+    strongest_strike: list[AbyssRankCharacter] = Field(
         default=[],
         alias="damage_rank",
     )
-    most_damage_taken: List[AbyssRankCharacter] = Field(
+    most_damage_taken: list[AbyssRankCharacter] = Field(
         default=[],
         alias="take_damage_rank",
     )
-    most_bursts_used: List[AbyssRankCharacter] = Field(
+    most_bursts_used: list[AbyssRankCharacter] = Field(
         default=[],
         alias="energy_skill_rank",
     )
-    most_skills_used: List[AbyssRankCharacter] = Field(
+    most_skills_used: list[AbyssRankCharacter] = Field(
         default=[],
         alias="normal_skill_rank",
     )
@@ -87,7 +87,7 @@ class Battle(APIModel):
 
     half: int = Field(alias="index")
     timestamp: DateTimeField
-    characters: List[AbyssCharacter] = Field(alias="avatars")
+    characters: list[AbyssCharacter] = Field(alias="avatars")
 
 
 class Chamber(APIModel):
@@ -103,7 +103,7 @@ class Chamber(APIModel):
     chamber: int = Field(alias="index")  # skipcq: PTC-W0052
     stars: int = Field(alias="star")
     max_stars: Literal[3] = Field(alias="max_star")
-    battles: List[Battle]
+    battles: list[Battle]
 
 
 class Floor(APIModel):
@@ -121,7 +121,7 @@ class Floor(APIModel):
     unlocked: Literal[True] = Field(alias="is_unlock")
     stars: int = Field(alias="star")
     max_stars: Literal[9] = Field(alias="max_star")  # maybe one day
-    chambers: List[Chamber] = Field(alias="levels")
+    chambers: list[Chamber] = Field(alias="levels")
 
 
 class SpiralAbyss(APIModel):
@@ -152,11 +152,11 @@ class SpiralAbyss(APIModel):
 
     ranks: CharacterRanks
 
-    floors: List[Floor]
+    floors: list[Floor]
 
     @model_validator(mode="before")
     @classmethod
-    def nest_ranks(cls, values: Dict[str, Any]) -> Dict[str, AbyssCharacter]:
+    def nest_ranks(cls, values: dict[str, Any]) -> dict[str, AbyssCharacter]:
         """By default, ranks are for some reason on the same level as the rest of the abyss."""
         values.setdefault("ranks", {}).update(values)
         return values

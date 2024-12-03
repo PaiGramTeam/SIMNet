@@ -1,6 +1,6 @@
 """Starrail chronicle stats."""
 
-import typing
+from collections.abc import Sequence
 
 from simnet.models.base import APIModel, Field
 from simnet.models.zzz import character
@@ -22,7 +22,7 @@ class ZZZStats(APIModel):
     world_level_name: str
     cur_period_zone_layer_count: int
     buddy_num: int
-    commemorative_coins_list: typing.Sequence[ZZZStatsCommemorativeCoin]
+    commemorative_coins_list: Sequence[ZZZStatsCommemorativeCoin]
     achievement_count: int
     climbing_tower_layer: int
     next_hundred_layer: str
@@ -31,13 +31,13 @@ class ZZZStats(APIModel):
 class ZZZAvatarBasic(APIModel):
     """Basic avatar"""
 
-    characters: typing.Sequence[character.ZZZPartialCharacter] = Field(alias="avatar_list")
+    characters: Sequence[character.ZZZPartialCharacter] = Field(alias="avatar_list")
 
 
 class ZZZBuddyBasic(APIModel):
     """Basic buddy"""
 
-    buddy_list: typing.Sequence[character.ZZZPartialBuddy] = Field(alias="list")
+    buddy_list: Sequence[character.ZZZPartialBuddy] = Field(alias="list")
 
 
 class ZZZCatNote(APIModel):
@@ -70,7 +70,7 @@ class ZZZGameDataShow(APIModel):
         title_main_color (str): The main color of the title.
         title_bottom_color (str): The bottom color of the title.
         title_bg_url (str): The background URL of the title.
-        medal_list (typing.Sequence[str]): A list of medals.
+        medal_list (Sequence[str]): A list of medals.
         card_url (str): The URL of the card.
     """
 
@@ -79,7 +79,7 @@ class ZZZGameDataShow(APIModel):
     title_bottom_color: str
     title_bg_url: str
 
-    medal_list: typing.Sequence[str]
+    medal_list: Sequence[str]
     card_url: str
 
 
@@ -88,6 +88,6 @@ class ZZZUserStats(ZZZAvatarBasic):
 
     stats: ZZZStats
     cur_head_icon_url: str
-    buddy_list: typing.Sequence[character.ZZZPartialBuddy]
-    cat_notes_list: typing.Sequence[ZZZCatNote]
+    buddy_list: Sequence[character.ZZZPartialBuddy]
+    cat_notes_list: Sequence[ZZZCatNote]
     game_data_show: ZZZGameDataShow

@@ -1,4 +1,4 @@
-from typing import List, Dict, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 from pydantic import field_validator
 
@@ -91,7 +91,7 @@ class ArtifactSet(APIModel):
 
     id: int
     name: str
-    effects: List[ArtifactSetEffect] = Field(alias="affixes")
+    effects: list[ArtifactSetEffect] = Field(alias="affixes")
 
 
 class Artifact(APIModel):
@@ -172,13 +172,13 @@ class Character(PartialCharacter):
     """
 
     weapon: CharacterWeapon
-    artifacts: List[Artifact] = Field(alias="reliquaries")
-    constellations: List[Constellation]
-    outfits: List[Outfit] = Field(alias="costumes")
+    artifacts: list[Artifact] = Field(alias="reliquaries")
+    constellations: list[Constellation]
+    outfits: list[Outfit] = Field(alias="costumes")
 
     @field_validator("artifacts")
     @classmethod
-    def add_artifact_effect_enabled(cls, artifacts: List[Artifact]) -> List[Artifact]:
+    def add_artifact_effect_enabled(cls, artifacts: list[Artifact]) -> list[Artifact]:
         """
         Determines which artifact set effects are enabled for the character's equipped artifacts.
 
@@ -189,7 +189,7 @@ class Character(PartialCharacter):
             List[Artifact]: The character's equipped artifacts with their corresponding artifact set effects enabled if
           applicable.
         """
-        sets: Dict[int, List[Artifact]] = {}
+        sets: dict[int, list[Artifact]] = {}
         for arti in artifacts:
             sets.setdefault(arti.set.id, []).append(arti)
 

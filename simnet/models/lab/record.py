@@ -1,6 +1,6 @@
 import enum
 import re
-from typing import Optional, Any, Dict, List, Union, Type
+from typing import Any, Optional, Union
 
 from pydantic import field_validator
 
@@ -22,7 +22,7 @@ __all__ = (
 )
 
 
-RECORD_CARD_MAP: Dict[int, Type["RecordCard"]] = {}
+RECORD_CARD_MAP: dict[int, type["RecordCard"]] = {}
 
 
 class Account(APIModel):
@@ -229,15 +229,15 @@ class BaseRecordCard(Account):
     game_biz: str = ""
     uid: int = Field(alias="game_role_id")
 
-    data: List[RecordCardData]
-    settings: List[RecordCardSetting] = Field(alias="data_switches")
+    data: list[RecordCardData]
+    settings: list[RecordCardSetting] = Field(alias="data_switches")
 
     public: bool = Field(alias="is_public")
     background_image: str
     has_uid: bool = Field(alias="has_role")
     url: str
 
-    def as_dict(self) -> Dict[str, Any]:
+    def as_dict(self) -> dict[str, Any]:
         """Returns the data as a dictionary.
 
         Returns:

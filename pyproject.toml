@@ -16,6 +16,7 @@ pytest = "^7.4.0"
 pytest-asyncio = "^0.23.0"
 python-dotenv = "^1.0.0"
 black = "^23.12.0"
+ruff = "^0.8.1"
 
 [build-system]
 requires = ["poetry-core"]
@@ -34,3 +35,92 @@ log_cli_date_format = "%Y-%m-%d %H:%M:%S"
 include = '\.pyi?$'
 line-length = 120
 target-version = ['py39', 'py310', 'py311', 'py312']
+
+[tool.ruff]
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+]
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "PL", # pylint
+    "UP",  # pyupgrade
+    "PERF", # Perflint
+    "FLY", # flynt
+    "B",  # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "PIE", # flake8-pie
+    "SIM", # flake8-simplify
+    "RET", # flake8-return
+    "RSE", # flake8-raise
+    "G", # flake8-logging-format
+    "ISC", # flake8-implicit-str-concat
+    "PT", # flake8-pytest-style
+    "ASYNC", # flake8-async
+    "TCH", # flake8-type-checking
+    "SLOT", # flake8-slots-slot
+    "PYI", # flake8-pyi
+    "Q", # flake8-quotes
+    "INP", # flake8-no-pep420
+    "YTT", # flake8-2020
+    "DTZ", # flake8-datetimez
+    "ARG", # flake8-unused-arguments
+    "S", # flake8-bandit
+    "ARG" , # flake8-print
+    "FURB", # refurb
+    "AIR", # Airflow
+    "TRY", # tryceratops
+]
+ignore = [
+    "E501",  # line too long, handled by black
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+    "W191", # indentation contains tabs
+    "PLR0913", # Too many arguments in function definition
+    "PLR0917", # Too many positional arguments
+    "TRY003", # Avoid specifying long messages outside the exception class
+    "TRY400", #  Use logging.exception instead of logging.xxxx
+    "PLR2004", #  Magic value used in comparison, consider replacing `x` with a constant variable
+    "ISC001", #  The following rule may cause conflicts when used with the formatter: ISC001
+]
+[tool.ruff.lint.per-file-ignores]
+"tests/*.py" = ["B018"] # Found useless expression. Either assign it to a variable or remove it.
+"tests/**.py" = [
+    "ASYNC230", # Async functions should not open files with blocking methods like open
+    "DTZ",
+    "ARG",
+    "ASYNC109", # Async function definition with a timeout parameter
+    "D",
+    "S",
+    "TRY"
+]

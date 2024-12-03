@@ -35,7 +35,7 @@ def cookies() -> "Cookies":  # skipcq: PY-D0003
 
     _cookies = Cookies(parse_cookie(cookies_str))
     if _cookies.account_id is None:
-        warnings.warn("can not found account id in cookies")
+        warnings.warn(UserWarning("can not found account id in cookies"), stacklevel=2)
 
     return _cookies
 
@@ -47,7 +47,7 @@ def starrail_cookies() -> Optional["Cookies"]:  # skipcq: PY-D0003
         return None
     _cookies = Cookies(parse_cookie(cookies_str))
     if _cookies.account_id is None:
-        warnings.warn("can not found account id in starrail cookies")
+        warnings.warn(UserWarning("can not found account id in starrail cookies"), stacklevel=2)
 
     return _cookies
 
@@ -59,7 +59,7 @@ def zzz_cookies() -> Optional["Cookies"]:
         return None
     _cookies = Cookies(parse_cookie(cookies_str))
     if _cookies.account_id is None:
-        warnings.warn("can not found account id in zzz cookies")
+        warnings.warn(UserWarning("can not found account id in zzz cookies"), stacklevel=2)
 
     return _cookies
 
@@ -68,7 +68,7 @@ def zzz_cookies() -> Optional["Cookies"]:
 def genshin_player_id() -> Optional[int]:  # skipcq: PY-D0003
     _player_id = os.environ.get("GENSHIN_PLAYER_ID")
     if not _player_id:
-        warnings.warn("No genshin player id set")
+        warnings.warn(UserWarning("No genshin player id set"), stacklevel=2)
         return None
     return int(_player_id)
 
@@ -77,7 +77,7 @@ def genshin_player_id() -> Optional[int]:  # skipcq: PY-D0003
 def starrail_player_id() -> Optional[int]:  # skipcq: PY-D0003
     _player_id = os.environ.get("STARRAIL_PLAYER_ID")
     if not _player_id:
-        warnings.warn("No starrail player id set")
+        warnings.warn(UserWarning("No starrail player id set"), stacklevel=2)
         return None
     return int(_player_id)
 
@@ -86,7 +86,7 @@ def starrail_player_id() -> Optional[int]:  # skipcq: PY-D0003
 def zzz_player_id() -> Optional[int]:
     _player_id = os.environ.get("ZZZ_PLAYER_ID")
     if not _player_id:
-        warnings.warn("No zzz player id set")
+        warnings.warn(UserWarning("No zzz player id set"), stacklevel=2)
         return None
     return int(_player_id)
 
@@ -109,17 +109,14 @@ def region() -> Region:  # skipcq: PY-D0003
 
 @pytest.fixture(scope="session")
 def stoken() -> Optional[str]:  # skipcq: PY-D0003
-    _stoken = os.environ.get("STOKEN")
-    return _stoken
+    return os.environ.get("STOKEN")
 
 
 @pytest.fixture(scope="session")
 def login_ticket() -> Optional[str]:  # skipcq: PY-D0003
-    _login_ticket = os.environ.get("LOGIN_TICKET")
-    return _login_ticket
+    return os.environ.get("LOGIN_TICKET")
 
 
 @pytest.fixture(scope="session")
 def if_test_build() -> bool:  # skipcq: PY-D0003
-    _test_build = bool(os.environ.get("TEST_BUILD", False))
-    return _test_build
+    return bool(os.environ.get("TEST_BUILD", False))

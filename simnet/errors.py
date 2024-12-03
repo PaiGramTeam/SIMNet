@@ -1,4 +1,4 @@
-from typing import Any, Optional, Dict, Union, Tuple, Type, NoReturn
+from typing import Any, NoReturn, Optional, Union
 
 
 class SIMNetException(Exception):
@@ -30,7 +30,7 @@ class BadRequest(SIMNetException):
 
     def __init__(
         self,
-        response: Optional[Dict[str, Any]] = None,
+        response: Optional[dict[str, Any]] = None,
         message: Optional[str] = None,
         status_code: Optional[int] = None,
     ) -> None:
@@ -60,7 +60,7 @@ class BadRequest(SIMNetException):
         return f"{type(self).__name__}({repr(response)})"
 
     @property
-    def response(self) -> Dict[str, Union[str, Any, None]]:
+    def response(self) -> dict[str, Union[str, Any, None]]:
         return {"retcode": self.ret_code, "message": self.original}
 
     @property
@@ -214,7 +214,7 @@ class RequestNotSupported(BadRequest):
     ret_code = -520
 
     def __init__(self, *args, **kwargs):
-        super().__init__(message="service not supported for this request.", *args, **kwargs)
+        super().__init__(*args, message="service not supported for this request.", **kwargs)
 
 
 class RedemptionClaimed(RedemptionException):
@@ -230,8 +230,8 @@ class InvalidDevice(BadRequest):
     message = "Device id and fp are invalid."
 
 
-_TBR = Type[BadRequest]
-_errors: Dict[int, Union[_TBR, str, Tuple[_TBR, Optional[str]]]] = {
+_TBR = type[BadRequest]
+_errors: dict[int, Union[_TBR, str, tuple[_TBR, Optional[str]]]] = {
     # misc hoyolab
     -3: InvalidCookies,
     -100: InvalidCookies,
@@ -280,13 +280,13 @@ _errors: Dict[int, Union[_TBR, str, Tuple[_TBR, Optional[str]]]] = {
     10041: InvalidDevice,
 }
 
-ERRORS: Dict[int, Tuple[_TBR, Optional[str]]] = {
+ERRORS: dict[int, tuple[_TBR, Optional[str]]] = {
     ret_code: ((exc, None) if isinstance(exc, type) else (BadRequest, exc) if isinstance(exc, str) else exc)
     for ret_code, exc in _errors.items()
 }
 
 
-def raise_for_ret_code(data: Dict[str, Any]) -> NoReturn:
+def raise_for_ret_code(data: dict[str, Any]) -> NoReturn:
     """Raise an equivalent error to a response.
 
     Args:

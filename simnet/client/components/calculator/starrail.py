@@ -1,4 +1,4 @@
-from typing import Optional, Any, Dict, List, Literal
+from typing import Any, Literal, Optional
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import CALCULATOR_URL
@@ -19,9 +19,9 @@ class StarrailCalculatorClient(BaseClient):
         *,
         method: str = "POST",
         lang: Optional[str] = None,
-        params: Optional[Dict[str, Any]] = None,
-        data: Optional[Dict[str, Any]] = None,
-    ) -> Dict[str, Any]:
+        params: Optional[dict[str, Any]] = None,
+        data: Optional[dict[str, Any]] = None,
+    ) -> dict[str, Any]:
         """Make a request towards the calculator endpoint.
 
         Args:
@@ -51,9 +51,7 @@ class StarrailCalculatorClient(BaseClient):
         if self.region == Region.CHINESE:
             headers["Referer"] = "https://webstatic.mihoyo.com/"
 
-        data = await self.request_lab(url, method=method, params=params, data=data, headers=headers)
-
-        return data
+        return await self.request_lab(url, method=method, params=params, data=data, headers=headers)
 
     async def get_calculator_characters(
         self,
@@ -62,7 +60,7 @@ class StarrailCalculatorClient(BaseClient):
         size: int = 100,
         player_id: Optional[int] = None,
         lang: Optional[str] = None,
-    ) -> List[StarrailCalculatorCharacter]:
+    ) -> list[StarrailCalculatorCharacter]:
         """Get all characters provided by the Enhancement Progression Calculator.
 
         Args:
@@ -106,13 +104,13 @@ class StarrailCalculatorClient(BaseClient):
             StarrailCalculatorCharacterDetails: The details of the character.
         """
         player_id = player_id or self.player_id
-        params = dict(
-            item_id=int(character),
-            uid=player_id,
-            region=recognize_starrail_server(player_id),
-            tab_from=tab_from,
-            change_target_level=0,
-        )
+        params = {
+            "item_id": int(character),
+            "uid": player_id,
+            "region": recognize_starrail_server(player_id),
+            "tab_from": tab_from,
+            "change_target_level": 0,
+        }
         data = await self.request_calculator(
             "avatar/detail",
             method="GET",

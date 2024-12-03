@@ -1,15 +1,16 @@
 import enum
-import typing
+from collections.abc import Mapping, Sequence
+from typing import Optional
 
 from pydantic import field_validator
 
 from simnet.models.base import APIModel, Field
 from simnet.models.genshin.chronicle.characters import (
-    PartialCharacter,
-    CharacterWeapon,
-    Outfit,
-    Constellation,
     Artifact,
+    CharacterWeapon,
+    Constellation,
+    Outfit,
+    PartialCharacter,
 )
 
 
@@ -50,7 +51,7 @@ class PropInfo(APIModel):
 
     type: int = Field(alias="property_type")
     name: str
-    icon: typing.Optional[str] = None
+    icon: Optional[str] = None
     filter_name: str
 
     @field_validator("name", "filter_name")
@@ -75,7 +76,7 @@ class DetailCharacterWeapon(CharacterWeapon):
     type_int: GenshinWeaponType = Field(alias="type")
 
     main_property: PropertyValue
-    sub_property: typing.Optional[PropertyValue] = None
+    sub_property: Optional[PropertyValue] = None
 
 
 class ArtifactProperty(APIModel):
@@ -90,7 +91,7 @@ class DetailArtifact(Artifact):
     """Detailed artifact with main/sub stats."""
 
     main_property: ArtifactProperty
-    sub_property_list: typing.Sequence[ArtifactProperty]
+    sub_property_list: Sequence[ArtifactProperty]
 
 
 class SkillAffix(APIModel):
@@ -109,7 +110,7 @@ class CharacterSkill(APIModel):
     level: int
 
     description: str = Field(alias="desc")
-    affixes: typing.Sequence[SkillAffix] = Field(alias="skill_affix_list")
+    affixes: Sequence[SkillAffix] = Field(alias="skill_affix_list")
     icon: str
     is_unlocked: bool = Field(alias="is_unlock")
 
@@ -119,23 +120,23 @@ class GenshinDetailCharacter(APIModel):
 
     base: GenshinCharacterListInfo
     weapon: DetailCharacterWeapon
-    artifacts: typing.Sequence[DetailArtifact] = Field(alias="relics")
+    artifacts: Sequence[DetailArtifact] = Field(alias="relics")
 
-    constellations: typing.Sequence[Constellation]
-    costumes: typing.Sequence[Outfit]
+    constellations: Sequence[Constellation]
+    costumes: Sequence[Outfit]
 
-    skills: typing.Sequence[CharacterSkill]
+    skills: Sequence[CharacterSkill]
 
-    selected_properties: typing.Sequence[PropertyValue]
-    base_properties: typing.Sequence[PropertyValue]
-    extra_properties: typing.Sequence[PropertyValue]
-    element_properties: typing.Sequence[PropertyValue]
+    selected_properties: Sequence[PropertyValue]
+    base_properties: Sequence[PropertyValue]
+    extra_properties: Sequence[PropertyValue]
+    element_properties: Sequence[PropertyValue]
 
 
 class GenshinDetailCharacters(APIModel):
     """Genshin character list."""
 
-    characters: typing.Sequence[GenshinDetailCharacter] = Field(alias="list")
+    characters: Sequence[GenshinDetailCharacter] = Field(alias="list")
 
-    property_map: typing.Mapping[str, PropInfo]
-    relic_property_options: typing.Mapping[str, typing.Sequence[int]]
+    property_map: Mapping[str, PropInfo]
+    relic_property_options: Mapping[str, Sequence[int]]

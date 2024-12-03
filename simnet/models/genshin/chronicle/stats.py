@@ -1,7 +1,7 @@
 import re
-from typing import Any, Optional, cast, List, Dict
+from typing import Any, Optional, cast
 
-from pydantic import field_validator, ValidationInfo
+from pydantic import ValidationInfo, field_validator
 
 from simnet.models.base import APIModel, Field
 from simnet.models.genshin.chronicle.abyss import SpiralAbyssPair
@@ -112,7 +112,7 @@ class Exploration(APIModel):
     cover: str
     map_url: str
 
-    offerings: List[Offering]
+    offerings: list[Offering]
 
     @property
     def explored(self) -> float:
@@ -125,7 +125,7 @@ class Exploration(APIModel):
 
     @field_validator("offerings", mode="before")
     @classmethod
-    def add_base_offering(cls, offerings: List[Any], info: ValidationInfo) -> List[Any]:
+    def add_base_offering(cls, offerings: list[Any], info: ValidationInfo) -> list[Any]:
         """Add a base offering if the exploration type is Reputation.
 
         Args:
@@ -136,7 +136,10 @@ class Exploration(APIModel):
             The updated list of offerings.
         """
         if info.data["type"] == "Reputation" and not any(info.data["type"] == o["name"] for o in offerings):
-            offerings = [*offerings, dict(name=info.data["type"], level=info.data["level"])]
+            offerings = [
+                *offerings,
+                {"name": info.data["type"], "level": info.data["level"]},
+            ]
 
         return offerings
 
@@ -176,7 +179,7 @@ class Teapot(APIModel):
         comfort_icon (str): The icon of the comfort level.
     """
 
-    realms: List[TeapotRealm]
+    realms: list[TeapotRealm]
     level: int
     visitors: int = Field(alias="visit_num")
     comfort: int = Field(alias="comfort_num")
@@ -198,13 +201,13 @@ class PartialGenshinUserStats(APIModel):
 
     info: UserInfo = Field(alias="role")
     stats: Stats
-    characters: List[PartialCharacter] = Field(alias="avatars")
-    explorations: List[Exploration] = Field(alias="world_explorations")
+    characters: list[PartialCharacter] = Field(alias="avatars")
+    explorations: list[Exploration] = Field(alias="world_explorations")
     teapot: Optional[Teapot] = Field(None, alias="homes")
 
     @field_validator("teapot", mode="before")
     @classmethod
-    def format_teapot(cls, v: Any) -> Optional[Dict[str, Any]]:
+    def format_teapot(cls, v: Any) -> Optional[dict[str, Any]]:
         """Format the user's Serenitea Teapot.
 
         Args:
@@ -216,7 +219,7 @@ class PartialGenshinUserStats(APIModel):
         if not v:
             return None
         if isinstance(v, dict):
-            return cast("Dict[str, Any]", v)
+            return cast("dict[str, Any]", v)
         return {**v[0], "realms": v}
 
 
@@ -233,4 +236,4 @@ class FullGenshinUserStats(GenshinUserStats):
     """
 
     abyss: SpiralAbyssPair
-    activities: Dict
+    activities: dict

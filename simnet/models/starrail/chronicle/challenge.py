@@ -1,7 +1,5 @@
 """Starrail chronicle challenge."""
 
-from typing import List
-
 from simnet.models.base import APIModel, Field
 from simnet.models.starrail.character import RogueCharacter
 
@@ -14,7 +12,7 @@ class FloorNode(APIModel):
     """Node for a floor."""
 
     challenge_time: PartialTime
-    avatars: List[RogueCharacter]
+    avatars: list[RogueCharacter]
 
 
 class StarRailFloor(APIModel):
@@ -42,4 +40,4 @@ class StarRailChallenge(APIModel):
     total_battles: int = Field(alias="battle_num")
     has_data: bool
 
-    floors: List[StarRailFloor] = Field(alias="all_floor_detail")
+    floors: list[StarRailFloor] = Field(alias="all_floor_detail")

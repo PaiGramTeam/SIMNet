@@ -1,5 +1,3 @@
-from typing import List
-
 from simnet.models.base import APIModel
 
 
@@ -44,4 +42,4 @@ class GenshinAchievementInfo(APIModel):
     """
 
     achievement_num: int
-    list: List[GenshinAchievementInfoList]
+    list: list[GenshinAchievementInfoList]

@@ -1,5 +1,3 @@
-from typing import List
-
 from simnet.models.base import APIModel
 
 
@@ -47,5 +45,5 @@ class StarRailAchievementInfo(APIModel):
     gold_num: int
     silver_num: int
     copper_num: int
-    list: List[StarRailAchievementInfoList]
+    list: list[StarRailAchievementInfoList]
     strategy_url: str

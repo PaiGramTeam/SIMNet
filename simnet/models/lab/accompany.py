@@ -1,5 +1,3 @@
-from typing import Dict
-
 from simnet.models.base import APIModel
 
 
@@ -95,4 +93,4 @@ class AccompanyRoleBasic(APIModel):
     game_id: int
     brief_name: str
 
-    attr: Dict
+    attr: dict

@@ -1,5 +1,3 @@
-from typing import List
-
 from simnet.models.base import APIModel, Field
 from simnet.models.diary import BaseDiary
 from simnet.models.starrail.chronicle.base import PartialTime
@@ -63,7 +61,7 @@ class MonthDiaryData(StarRailMonthDiaryDataBase):
         categories: List of diary categories.
     """
 
-    categories: List[DiaryActionCategory] = Field(alias="group_by")
+    categories: list[DiaryActionCategory] = Field(alias="group_by")
 
 
 class DayDiaryData(APIModel):
@@ -93,7 +91,7 @@ class StarRailDiary(BaseDiary):
     data: MonthDiaryData = Field(alias="month_data")
     day_data: DayDiaryData
     version: str
-    optional_month: List[str]
+    optional_month: list[str]
     current_month: str = Field(alias="month")
     start_month: str
 

@@ -1,15 +1,29 @@
 import asyncio
-from typing import Optional, List, Dict, Any
+from typing import Any, Optional
 
 from simnet.client.base import BaseClient
 from simnet.client.headers import Headers
-from simnet.client.routes import TAKUMI_URL, HK4E_URL, CODE_URL, CODE_HOYOLAB_URL, BBS_URL
-from simnet.models.lab.accompany import AccompanyRole, AccompanyRoleInfo, AccompanyRoleBasic
+from simnet.client.routes import (
+    BBS_URL,
+    CODE_HOYOLAB_URL,
+    CODE_URL,
+    HK4E_URL,
+    TAKUMI_URL,
+)
+from simnet.models.lab.accompany import (
+    AccompanyRole,
+    AccompanyRoleBasic,
+    AccompanyRoleInfo,
+)
 from simnet.models.lab.announcement import Announcement
-from simnet.models.lab.record import PartialUser, FullUser, Account
-from simnet.utils.enums import Region, Game
+from simnet.models.lab.record import Account, FullUser, PartialUser
+from simnet.utils.enums import Game, Region
 from simnet.utils.lang import create_short_lang_code
-from simnet.utils.player import recognize_genshin_server, recognize_server, recognize_game_biz
+from simnet.utils.player import (
+    recognize_game_biz,
+    recognize_genshin_server,
+    recognize_server,
+)
 from simnet.utils.types import HeaderTypes
 
 __all__ = ("LabClient",)
@@ -25,10 +39,10 @@ class LabClient(BaseClient):
         lang: Optional[str] = None,
         region: Optional[Region] = None,
         method: Optional[str] = None,
-        params: Optional[Dict[str, Any]] = None,
+        params: Optional[dict[str, Any]] = None,
         data: Any = None,
         headers: Optional[HeaderTypes] = None,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Makes a request to a bbs endpoint.
 
         Args:
@@ -53,7 +67,7 @@ class LabClient(BaseClient):
         if self.region == Region.CHINESE:
             headers["Referer"] = "https://www.miyoushe.com/"
 
-        data = await self.request_lab(
+        return await self.request_lab(
             url,
             method=method,
             params=params,
@@ -62,14 +76,13 @@ class LabClient(BaseClient):
             lang=lang,
             new_ds=self.region == Region.CHINESE,
         )
-        return data
 
     async def search_users(
         self,
         keyword: str,
         *,
         lang: Optional[str] = None,
-    ) -> List[PartialUser]:
+    ) -> list[PartialUser]:
         """Searches for users by keyword.
 
         Args:
@@ -82,7 +95,7 @@ class LabClient(BaseClient):
         data = await self.request_bbs(
             "community/search/wapi/search/user",
             lang=lang,
-            params=dict(keyword=keyword, page_size=20),
+            params={"keyword": keyword, "page_size": 20},
         )
         return [PartialUser(**i["user"]) for i in data["list"]]
 
@@ -111,11 +124,11 @@ class LabClient(BaseClient):
         data = await self.request_bbs(
             endpoint=url,
             lang=lang,
-            params=dict(uid=accident) if accident else None,
+            params={"uid": accident} if accident else None,
         )
         return FullUser(**data["user_info"])
 
-    async def get_recommended_users(self, *, limit: int = 200) -> List[PartialUser]:
+    async def get_recommended_users(self, *, limit: int = 200) -> list[PartialUser]:
         """Gets a list of recommended active users.
 
         Args:
@@ -126,7 +139,7 @@ class LabClient(BaseClient):
         """
         data = await self.request_bbs(
             "community/user/wapi/recommendActive",
-            params=dict(page_size=limit),
+            params={"page_size": limit},
         )
         return [PartialUser(**i["user"]) for i in data["list"]]
 
@@ -135,7 +148,7 @@ class LabClient(BaseClient):
         player_id: Optional[str] = None,
         *,
         lang: Optional[str] = None,
-    ) -> List[Announcement]:
+    ) -> list[Announcement]:
         """Gets a list of Genshin Impact game announcements.
 
         Args:
@@ -149,16 +162,16 @@ class LabClient(BaseClient):
         if player_id is None:
             player_id = 900000005
 
-        params = dict(
-            game="hk4e",
-            game_biz="hk4e_global",
-            bundle_id="hk4e_global",
-            platform="pc",
-            region=recognize_genshin_server(player_id),
-            uid=player_id,
-            level=8,
-            lang=lang or self.lang,
-        )
+        params = {
+            "game": "hk4e",
+            "game_biz": "hk4e_global",
+            "bundle_id": "hk4e_global",
+            "platform": "pc",
+            "region": recognize_genshin_server(player_id),
+            "uid": player_id,
+            "level": 8,
+            "lang": lang or self.lang,
+        }
 
         info, details = await asyncio.gather(
             self.request_bbs(
@@ -173,7 +186,7 @@ class LabClient(BaseClient):
             ),
         )
 
-        announcements: List[Dict[str, Any]] = []
+        announcements: list[dict[str, Any]] = []
         for sublist in info["list"]:
             for info in sublist["list"]:
                 detail = next((i for i in details["list"] if i["ann_id"] == info["ann_id"]), None)
@@ -197,13 +210,13 @@ class LabClient(BaseClient):
         """
         player_id = self.player_id or player_id
         url = CODE_URL.get_url(self.region, self.game)
-        params = dict(
-            uid=player_id,
-            region=recognize_server(player_id, self.game),
-            cdkey=code,
-            game_biz=recognize_game_biz(player_id, self.game),
-            lang=create_short_lang_code(lang or self.lang),
-        )
+        params = {
+            "uid": player_id,
+            "region": recognize_server(player_id, self.game),
+            "cdkey": code,
+            "game_biz": recognize_game_biz(player_id, self.game),
+            "lang": create_short_lang_code(lang or self.lang),
+        }
 
         if self.game is Game.STARRAIL:
             return await self.request_bbs(
@@ -231,16 +244,16 @@ class LabClient(BaseClient):
         """
         player_id = self.player_id or player_id
         url = CODE_HOYOLAB_URL.get_url(self.region, self.game)
-        params = dict(
-            uid=player_id,
-            region=recognize_server(player_id, self.game),
-            cdkey=code,
-            game_biz=recognize_game_biz(player_id, self.game),
-            lang=create_short_lang_code(lang or self.lang),
-        )
+        params = {
+            "uid": player_id,
+            "region": recognize_server(player_id, self.game),
+            "cdkey": code,
+            "game_biz": recognize_game_biz(player_id, self.game),
+            "lang": create_short_lang_code(lang or self.lang),
+        }
         return await self.request_bbs(url, params=params)
 
-    async def get_game_accounts(self, *, lang: Optional[str] = None) -> List[Account]:
+    async def get_game_accounts(self, *, lang: Optional[str] = None) -> list[Account]:
         """Get the game accounts of the currently logged-in user.
 
         Returns:
@@ -252,7 +265,7 @@ class LabClient(BaseClient):
         )
         return [Account(**i) for i in data["list"]]
 
-    async def get_genshin_accounts(self, *, lang: Optional[str] = None) -> List[Account]:
+    async def get_genshin_accounts(self, *, lang: Optional[str] = None) -> list[Account]:
         """Get the genshin accounts of the currently logged-in user.
 
         Returns:
@@ -261,7 +274,7 @@ class LabClient(BaseClient):
         accounts = await self.get_game_accounts(lang=lang)
         return [account for account in accounts if account.game == Game.GENSHIN]
 
-    async def get_starrail_accounts(self, *, lang: Optional[str] = None) -> List[Account]:
+    async def get_starrail_accounts(self, *, lang: Optional[str] = None) -> list[Account]:
         """Get the starrail accounts of the currently logged-in user.
 
         Returns:
@@ -270,7 +283,7 @@ class LabClient(BaseClient):
         accounts = await self.get_game_accounts(lang=lang)
         return [account for account in accounts if account.game == Game.STARRAIL]
 
-    async def get_zzz_accounts(self, *, lang: Optional[str] = None) -> List[Account]:
+    async def get_zzz_accounts(self, *, lang: Optional[str] = None) -> list[Account]:
         """Get the zzz accounts of the currently logged-in user.
 
         Returns:
@@ -290,7 +303,7 @@ class LabClient(BaseClient):
         Returns:
             AccompanyRole: An accompany role object.
         """
-        params = dict(role_id=role_id, topic_id=topic_id)
+        params = {"role_id": role_id, "topic_id": topic_id}
         data = await self.request_bbs(
             "community/apihub/api/user/accompany/role",
             lang=lang,
@@ -308,7 +321,7 @@ class LabClient(BaseClient):
         Returns:
             AccompanyRoleInfo: An accompany role info object.
         """
-        params = dict(role_id=role_id)
+        params = {"role_id": role_id}
         data = await self.request_bbs(
             "community/painter/api/role/user/accompany_info",
             lang=lang,
@@ -316,7 +329,7 @@ class LabClient(BaseClient):
         )
         return AccompanyRoleInfo(**data)
 
-    async def get_accompany_roles(self, *, lang: Optional[str] = None) -> List[AccompanyRoleBasic]:
+    async def get_accompany_roles(self, *, lang: Optional[str] = None) -> list[AccompanyRoleBasic]:
         """Get a list of accompany roles.
 
         Args:
@@ -334,5 +347,7 @@ class LabClient(BaseClient):
         roles = []
         for g in game:
             for r in g.get("role_list", []):
-                roles.append(AccompanyRoleBasic(**r["basic"]))
+                basic = r.get("basic")
+                if basic:  # 确保 "basic" 键存在且有有效值
+                    roles.append(AccompanyRoleBasic(**basic))
         return roles

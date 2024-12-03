@@ -1,10 +1,9 @@
 """A module for parsing cookies."""
 
 from http.cookies import SimpleCookie
-from typing import Dict
 
 
-def parse_cookie(cookie: str) -> Dict[str, str]:
+def parse_cookie(cookie: str) -> dict[str, str]:
     """
     Parses a cookie or header into a dictionary of key-value pairs.
 

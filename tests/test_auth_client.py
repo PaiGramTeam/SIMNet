@@ -5,7 +5,7 @@ import pytest_asyncio
 
 from simnet.client.components.auth import AuthClient
 from simnet.utils.enums import Region
-from simnet.utils.player import recognize_genshin_server, recognize_genshin_game_biz
+from simnet.utils.player import recognize_genshin_game_biz, recognize_genshin_server
 
 if TYPE_CHECKING:
     from simnet.client.cookies import Cookies

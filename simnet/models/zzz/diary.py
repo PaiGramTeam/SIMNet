@@ -1,5 +1,3 @@
-from typing import List
-
 from simnet.models.base import APIModel, Field
 from simnet.models.diary import BaseDiary
 
@@ -58,8 +56,8 @@ class ZZZMonthDiaryData(APIModel):
         categories: List of diary categories.
     """
 
-    list: List[ZZZDiaryDataList]
-    categories: List[ZZZDiaryActionCategory] = Field(alias="income_components")
+    list: list[ZZZDiaryDataList]
+    categories: list[ZZZDiaryActionCategory] = Field(alias="income_components")
 
 
 class ZZZDiaryRoleInfo(APIModel):
@@ -80,7 +78,7 @@ class ZZZDiary(BaseDiary):
     """
 
     data: ZZZMonthDiaryData = Field(alias="month_data")
-    optional_month: List[str]
+    optional_month: list[str]
     current_month: str
     data_month: str
     role_info: ZZZDiaryRoleInfo

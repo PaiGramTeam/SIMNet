@@ -46,7 +46,11 @@ class VerifyClient(BaseClient):
         """
         if self.region != Region.CHINESE:
             raise RegionNotSupported("This method is only available for the Chinese region.")
-        data = {"geetest_challenge": challenge, "geetest_validate": validate, "geetest_seccode": f"{validate}|jordan"}
+        data = {
+            "geetest_challenge": challenge,
+            "geetest_validate": validate,
+            "geetest_seccode": f"{validate}|jordan",
+        }
         return await self.request_lab(self.VERIFY_VERIFICATION_URL, data=data)
 
     async def request_verify_ajax(self, referer: str, gt: str, challenge: str) -> Optional[str]:

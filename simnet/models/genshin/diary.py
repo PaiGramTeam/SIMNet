@@ -1,9 +1,9 @@
 from datetime import datetime
-from typing import List, Optional, Dict, Any
+from typing import Any, Optional
 
 from pydantic import model_validator
 
-from simnet.models.base import APIModel, Field, DateTimeField
+from simnet.models.base import APIModel, DateTimeField, Field
 from simnet.models.diary import BaseDiary
 
 __all__ = (
@@ -51,11 +51,11 @@ class MonthDiaryData(APIModel):
     last_mora: int
     primogems_rate: int
     mora_rate: int
-    categories: List[DiaryActionCategory] = Field(alias="group_by")
+    categories: list[DiaryActionCategory] = Field(alias="group_by")
 
     @model_validator(mode="before")
     @classmethod
-    def alias_primogems_rate(cls, values: Dict[str, Any]) -> Dict[str, Any]:
+    def alias_primogems_rate(cls, values: dict[str, Any]) -> dict[str, Any]:
         """By default, alias primogem_rate primogems_rate."""
         values.setdefault("primogems_rate", values.get("primogem_rate"))
         return values
@@ -89,7 +89,7 @@ class Diary(BaseDiary):
     @property
     def data_id(self) -> int:
         """Get the data ID."""
-        date = (self.date or datetime.now().strftime("%Y-%m-%d")).split("-")
+        date = (self.date or datetime.now().strftime("%Y-%m-%d")).split("-")  # noqa: DTZ005
         year, month = int(date[0]), int(date[1])
         if month < self.month:
             year -= 1
@@ -123,4 +123,4 @@ class DiaryPage(BaseDiary):
         actions: List of diary actions.
     """
 
-    actions: List[DiaryAction] = Field(alias="list")
+    actions: list[DiaryAction] = Field(alias="list")
