@@ -2,6 +2,7 @@ import datetime
 import typing
 
 from pydantic import ConfigDict, BaseModel, Field as PydanticField, AfterValidator, BeforeValidator, WrapSerializer
+from pydantic_core import PydanticUndefined
 
 if typing.TYPE_CHECKING:
     from pydantic import SerializerFunctionWrapHandler, SerializationInfo
@@ -16,7 +17,7 @@ class APIModel(BaseModel):
 
 
 def Field(
-    default: typing.Any = None,
+    default: typing.Any = PydanticUndefined,
     alias: typing.Optional[str] = None,
     **kwargs: typing.Any,
 ):

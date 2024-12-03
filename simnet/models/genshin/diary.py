@@ -1,5 +1,7 @@
 from datetime import datetime
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
+
+from pydantic import model_validator
 
 from simnet.models.base import APIModel, Field, DateTimeField
 from simnet.models.diary import BaseDiary
@@ -47,9 +49,16 @@ class MonthDiaryData(APIModel):
     current_mora: int
     last_primogems: int
     last_mora: int
-    primogems_rate: int = Field(alias="primogem_rate")
+    primogems_rate: int
     mora_rate: int
     categories: List[DiaryActionCategory] = Field(alias="group_by")
+
+    @model_validator(mode="before")
+    @classmethod
+    def alias_primogems_rate(cls, values: Dict[str, Any]) -> Dict[str, Any]:
+        """By default, alias primogem_rate primogems_rate."""
+        values.setdefault("primogems_rate", values.get("primogem_rate"))
+        return values
 
 
 class DayDiaryData(APIModel):
