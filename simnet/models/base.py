@@ -1,5 +1,5 @@
 import datetime
-import typing
+from typing import TYPE_CHECKING, Annotated, Any, Optional, Union
 
 from pydantic import (
     AfterValidator,
@@ -11,7 +11,7 @@ from pydantic import (
 from pydantic import Field as PydanticField
 from pydantic_core import PydanticUndefined
 
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     from pydantic import SerializationInfo, SerializerFunctionWrapHandler
 
 CN_TIMEZONE = datetime.timezone(datetime.timedelta(hours=8))
@@ -24,9 +24,9 @@ class APIModel(BaseModel):
 
 
 def Field(
-    default: typing.Any = PydanticUndefined,
-    alias: typing.Optional[str] = None,
-    **kwargs: typing.Any,
+    default: Any = PydanticUndefined,
+    alias: Optional[str] = None,
+    **kwargs: Any,
 ):
     """Create an aliased field."""
     return PydanticField(default, alias=alias, **kwargs)
@@ -49,7 +49,7 @@ def str_time_date_plain(
     value: datetime.datetime,
     handler: "SerializerFunctionWrapHandler",
     info: "SerializationInfo",
-) -> typing.Union[str, datetime.datetime]:
+) -> Union[str, datetime.datetime]:
     """
     Converts a datetime object to its ISO 8601 string representation if the mode is JSON, otherwise uses the handler.
 
@@ -83,7 +83,7 @@ def str_time_delta_plain(
     value: datetime.timedelta,
     handler: "SerializerFunctionWrapHandler",
     info: "SerializationInfo",
-) -> typing.Union[float, datetime.timedelta]:
+) -> Union[float, datetime.timedelta]:
     """
     Converts a timedelta object to its total seconds as a float if the mode is JSON, otherwise uses the handler.
 
@@ -100,12 +100,12 @@ def str_time_delta_plain(
     return handler(value)
 
 
-DateTimeField = typing.Annotated[
+DateTimeField = Annotated[
     datetime.datetime,
     AfterValidator(add_timezone),
     WrapSerializer(str_time_date_plain),
 ]
-TimeDeltaField = typing.Annotated[
+TimeDeltaField = Annotated[
     datetime.timedelta,
     BeforeValidator(str_time_delta_parsing),
     WrapSerializer(str_time_delta_plain),

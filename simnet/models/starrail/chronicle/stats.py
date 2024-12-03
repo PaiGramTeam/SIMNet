@@ -1,6 +1,6 @@
 """Starrail chronicle stats."""
 
-import typing
+from collections.abc import Sequence
 
 from simnet.models.base import APIModel, Field
 
@@ -29,7 +29,7 @@ class PartialStarRailUserStats(APIModel):
     """User stats with characters without equipment."""
 
     stats: StarRailStats
-    characters: typing.Sequence[character.StarRailPartialCharacter] = Field(
+    characters: Sequence[character.StarRailPartialCharacter] = Field(
         alias="avatar_list"
     )
 
