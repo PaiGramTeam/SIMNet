@@ -79,6 +79,8 @@ ignore = [
     "PLR0917", # Too many positional arguments
     "TRY003", # Avoid specifying long messages outside the exception class
     "TRY400", #  Use logging.exception instead of logging.xxxx
+    "PLR2004", #  Magic value used in comparison, consider replacing `x` with a constant variable
+    "ISC001", #  The following rule may cause conflicts when used with the formatter: ISC001
 ]
 [tool.ruff.lint.per-file-ignores]
 "tests/*.py" = ["B018"] # Found useless expression. Either assign it to a variable or remove it.

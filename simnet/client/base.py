@@ -1,7 +1,8 @@
 import logging
 import uuid
+from contextlib import AbstractAsyncContextManager
 from types import TracebackType
-from typing import Any, AsyncContextManager, Optional, Type, Union
+from typing import Any, Optional, Union
 
 from httpx import AsyncClient, HTTPError, Response, Timeout, TimeoutException
 
@@ -31,7 +32,7 @@ _LOGGER = logging.getLogger("SIMNet.BaseClient")
 __all__ = ("BaseClient",)
 
 
-class BaseClient(AsyncContextManager["BaseClient"]):
+class BaseClient(AbstractAsyncContextManager["BaseClient"]):
     """
     This is the base class for simnet clients. It provides common methods and properties for simnet clients.
 
@@ -151,14 +152,15 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         """Enter the async context manager and initialize the client."""
         try:
             await self.initialize()
-            return self
-        except Exception as exc:
+        except Exception:
             await self.shutdown()
-            raise exc
+            raise
+        else:
+            return self
 
     async def __aexit__(
         self,
-        exc_type: Optional[Type[BaseException]],
+        exc_type: Optional[type[BaseException]],
         exc_val: Optional[BaseException],
         exc_tb: Optional[TracebackType],
     ) -> None:

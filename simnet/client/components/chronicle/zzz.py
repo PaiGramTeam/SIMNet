@@ -1,5 +1,5 @@
 from collections.abc import Mapping
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 from simnet.client.components.chronicle.base import BaseChronicleClient
 from simnet.errors import BadRequest, DataNotPublic
@@ -33,7 +33,7 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
         endpoint_type: str = "api",
         method: str = "GET",
         lang: Optional[str] = None,
-        payload: Optional[Dict[str, Any]] = None,
+        payload: Optional[dict[str, Any]] = None,
     ) -> Mapping[str, Any]:
         """Get an arbitrary object from ZZZ's battle chronicle.
 
@@ -202,7 +202,7 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
 
     async def get_zzz_character_info(
         self,
-        characters: List[int],
+        characters: list[int],
         player_id: Optional[int] = None,
         lang: Optional[str] = None,
     ) -> "ZZZCalculatorCharacterDetails":
@@ -270,7 +270,7 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
             BadRequest: If the request is invalid.
             DataNotPublic: If the requested data is not public.
         """
-        payload = dict(schedule_type=2 if previous else 1, need_all="true")
+        payload = {"schedule_type": 2 if previous else 1, "need_all": "true"}
         data = await self._request_zzz_record(
             "challenge", player_id, lang=lang, payload=payload
         )

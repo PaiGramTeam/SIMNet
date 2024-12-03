@@ -1,6 +1,6 @@
 import json as jsonlib
 import time
-from typing import Optional, Tuple, Union
+from typing import Optional, Union
 
 from simnet.client.base import BaseClient
 from simnet.client.cookies import CookiesModel
@@ -287,7 +287,7 @@ class AuthClient(BaseClient):
     async def gen_login_qrcode(
         self,
         app_id: str = "8",
-    ) -> Tuple[str, str]:
+    ) -> tuple[str, str]:
         """
         Generate login qrcode and return url and ticket
 
@@ -299,7 +299,7 @@ class AuthClient(BaseClient):
             Tuple[str, str]: The url and ticket of the qrcode.
         """
         if self.region != Region.CHINESE:
-            raise RegionNotSupported()
+            raise RegionNotSupported
         data = {"app_id": app_id, "device": self.get_device_id()}
         res_json = await self.request_api("POST", url=QRCODE_URL / "fetch", json=data)
         url = res_json.get("url", "")
@@ -323,7 +323,7 @@ class AuthClient(BaseClient):
             Union[bool, str]: The token of the qrcode if success, else False.
         """
         if self.region != Region.CHINESE:
-            raise RegionNotSupported()
+            raise RegionNotSupported
         data = {"app_id": app_id, "ticket": ticket, "device": self.get_device_id()}
         res_data = await self.request_api("POST", url=QRCODE_URL / "query", json=data)
         if res_data.get("stat", "") != "Confirmed":
@@ -343,7 +343,7 @@ class AuthClient(BaseClient):
             None
         """
         if self.region != Region.CHINESE:
-            raise RegionNotSupported()
+            raise RegionNotSupported
         self.check_stoken()
         if not url.startswith("https://user.mihoyo.com/qr_code_in_game.html"):
             raise ValueError("Invalid url")
@@ -369,7 +369,7 @@ class AuthClient(BaseClient):
 
     async def get_stoken_v2_and_mid_by_game_token(
         self, game_token: str
-    ) -> Tuple[str, str]:
+    ) -> tuple[str, str]:
         """
         Get stoken_v2 and mid by game token
 
@@ -380,7 +380,7 @@ class AuthClient(BaseClient):
             Tuple[str, str]: The stoken_v2 and mid.
         """
         if self.region != Region.CHINESE:
-            raise RegionNotSupported()
+            raise RegionNotSupported
         url = (
             PASSPORT_URL.get_url(self.region)
             / "../../ma-cn-session/app/getTokenByGameToken"
@@ -401,7 +401,7 @@ class AuthClient(BaseClient):
         self,
         stoken: Optional[str] = None,
         account_id: Optional[int] = None,
-    ) -> Tuple[str, str]:
+    ) -> tuple[str, str]:
         """
         Get stoken_v2 and mid by stoken_v1
 
@@ -415,7 +415,7 @@ class AuthClient(BaseClient):
             Tuple[str, str]: The stoken_v2 and mid.
         """
         if self.region != Region.CHINESE:
-            raise RegionNotSupported()
+            raise RegionNotSupported
         self.check_stoken(stoken, account_id)
         url = (
             PASSPORT_URL.get_url(self.region)
@@ -449,7 +449,7 @@ class AuthClient(BaseClient):
             CookiesModel: The stoken_v2, mid, ltoken and cookie_token.
         """
         if self.region != Region.OVERSEAS:
-            raise RegionNotSupported()
+            raise RegionNotSupported
         self.check_stoken(stoken, account_id, mid)
         account_id = account_id or self.account_id
         url = (
@@ -514,7 +514,7 @@ class AuthClient(BaseClient):
             str: The game token.
         """
         if self.region != Region.CHINESE:
-            raise RegionNotSupported()
+            raise RegionNotSupported
         self.check_stoken(stoken, account_id, mid)
         url = AUTH_URL.get_url(self.region) / "getGameToken"
         data = await self.request_lab(url, method="GET")

@@ -1,5 +1,5 @@
 from functools import partial
-from typing import List, Optional
+from typing import Optional
 
 from simnet.client.components.self_help.base import BaseSelfHelpClient
 from simnet.models.starrail.self_help import StarRailSelfHelpActionLog
@@ -18,7 +18,7 @@ class StarrailSelfHelpClient(BaseSelfHelpClient):
         min_id: int = 0,
         *,
         lang: Optional[str] = None,
-    ) -> List[StarRailSelfHelpActionLog]:
+    ) -> list[StarRailSelfHelpActionLog]:
         """
         Get the action log for a starrail user.
 

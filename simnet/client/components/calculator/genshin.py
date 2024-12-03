@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import CALCULATOR_URL
@@ -25,9 +25,9 @@ class CalculatorClient(BaseClient):
         *,
         method: str = "POST",
         lang: Optional[str] = None,
-        params: Optional[Dict[str, Any]] = None,
-        data: Optional[Dict[str, Any]] = None,
-    ) -> Dict[str, Any]:
+        params: Optional[dict[str, Any]] = None,
+        data: Optional[dict[str, Any]] = None,
+    ) -> dict[str, Any]:
         """Make a request towards the calculator endpoint.
 
         Args:
@@ -60,15 +60,13 @@ class CalculatorClient(BaseClient):
                 "utm_source=bbs&utm_medium=mys&utm_campaign=icon#/"
             )
 
-        data = await self.request_lab(
+        return await self.request_lab(
             url, method=method, params=params, data=data, headers=headers
         )
 
-        return data
-
     async def _execute_calculator(
         self,
-        data: Dict[str, Any],
+        data: dict[str, Any],
         *,
         lang: Optional[str] = None,
     ) -> CalculatorResult:
@@ -91,13 +89,13 @@ class CalculatorClient(BaseClient):
             enabled (bool): Whether to enable syncing (default True).
         """
         await self.request_calculator(
-            "avatar/auth", method="POST", data=dict(avatar_auth=int(enabled))
+            "avatar/auth", method="POST", data={"avatar_auth": int(enabled)}
         )
 
     async def _get_calculator_items(
         self,
         slug: str,
-        filters: Dict[str, Any],
+        filters: dict[str, Any],
         query: Optional[str] = None,
         *,
         player_id: Optional[int] = None,
@@ -105,7 +103,7 @@ class CalculatorClient(BaseClient):
         sync: bool = False,
         lang: Optional[str] = None,
         autoauth: bool = True,
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """Get all items of a specific slug from a calculator.
 
         Args:
@@ -129,7 +127,7 @@ class CalculatorClient(BaseClient):
 
             filters = dict(keywords=query, **filters)
 
-        payload: Dict[str, Any] = dict(page=1, size=69420, is_all=is_all, **filters)
+        payload: dict[str, Any] = dict(page=1, size=69420, is_all=is_all, **filters)
 
         if sync:
             player_id = player_id or self.player_id
@@ -153,13 +151,13 @@ class CalculatorClient(BaseClient):
         self,
         *,
         query: Optional[str] = None,
-        elements: Optional[List[int]] = None,
-        weapon_types: Optional[List[int]] = None,
+        elements: Optional[list[int]] = None,
+        weapon_types: Optional[list[int]] = None,
         include_traveler: bool = False,
         sync: bool = False,
         player_id: Optional[int] = None,
         lang: Optional[str] = None,
-    ) -> List[CalculatorCharacter]:
+    ) -> list[CalculatorCharacter]:
         """Get all characters provided by the Enhancement Progression Calculator.
 
         Args:
@@ -181,10 +179,10 @@ class CalculatorClient(BaseClient):
             sync=sync,
             player_id=player_id,
             query=query,
-            filters=dict(
-                element_attr_ids=elements or [],
-                weapon_cat_ids=weapon_types or [],
-            ),
+            filters={
+                "element_attr_ids": elements or [],
+                "weapon_cat_ids": weapon_types or [],
+            },
         )
         return [CalculatorCharacter(**i) for i in data]
 
@@ -192,10 +190,10 @@ class CalculatorClient(BaseClient):
         self,
         *,
         query: Optional[str] = None,
-        types: Optional[List[int]] = None,
-        rarities: Optional[List[int]] = None,
+        types: Optional[list[int]] = None,
+        rarities: Optional[list[int]] = None,
         lang: Optional[str] = None,
-    ) -> List[CalculatorWeapon]:
+    ) -> list[CalculatorWeapon]:
         """Get all weapons provided by the Enhancement Progression Calculator.
 
         Args:
@@ -212,10 +210,10 @@ class CalculatorClient(BaseClient):
             "weapon",
             lang=lang,
             query=query,
-            filters=dict(
-                weapon_cat_ids=types or [],
-                weapon_levels=rarities or [],
-            ),
+            filters={
+                "weapon_cat_ids": types or [],
+                "weapon_levels": rarities or [],
+            },
         )
         return [CalculatorWeapon(**i) for i in data]
 
@@ -225,7 +223,7 @@ class CalculatorClient(BaseClient):
         types: Optional[int] = None,
         rarities: Optional[int] = None,
         lang: Optional[str] = None,
-    ) -> List[CalculatorFurnishing]:
+    ) -> list[CalculatorFurnishing]:
         """
         Get all furnishings provided by the Enhancement Progression Calculator.
 
@@ -240,10 +238,10 @@ class CalculatorClient(BaseClient):
         data = await self._get_calculator_items(
             "furniture",
             lang=lang,
-            filters=dict(
-                cat_id=types or 0,
-                weapon_levels=rarities or 0,
-            ),
+            filters={
+                "cat_id": types or 0,
+                "weapon_levels": rarities or 0,
+            },
         )
         return [CalculatorFurnishing(**i) for i in data]
 
@@ -271,11 +269,11 @@ class CalculatorClient(BaseClient):
             "sync/avatar/detail",
             method="GET",
             lang=lang,
-            params=dict(
-                avatar_id=int(character),
-                uid=player_id,
-                region=recognize_genshin_server(player_id),
-            ),
+            params={
+                "avatar_id": int(character),
+                "uid": player_id,
+                "region": recognize_genshin_server(player_id),
+            },
         )
         return CalculatorCharacterDetails(**data)
 
@@ -284,7 +282,7 @@ class CalculatorClient(BaseClient):
         character: int,
         *,
         lang: Optional[str] = None,
-    ) -> List[CalculatorTalent]:
+    ) -> list[CalculatorTalent]:
         """Get the talents of a character.
 
         Args:
@@ -298,7 +296,7 @@ class CalculatorClient(BaseClient):
             "avatar/skill_list",
             method="GET",
             lang=lang,
-            params=dict(avatar_id=int(character)),
+            params={"avatar_id": int(character)},
         )
         return [CalculatorTalent(**i) for i in data["list"]]
 
@@ -307,7 +305,7 @@ class CalculatorClient(BaseClient):
         artifact: int,
         *,
         lang: Optional[str] = None,
-    ) -> List[CalculatorArtifact]:
+    ) -> list[CalculatorArtifact]:
         """
         Get all artifacts that share a set with a specified artifact.
 
@@ -322,11 +320,11 @@ class CalculatorClient(BaseClient):
             "reliquary/set",
             method="GET",
             lang=lang,
-            params=dict(reliquary_id=int(artifact)),
+            params={"reliquary_id": int(artifact)},
         )
         return [CalculatorArtifact(**i) for i in data["reliquary_list"]]
 
-    async def _get_all_artifact_ids(self, artifact_id: int) -> List[int]:
+    async def _get_all_artifact_ids(self, artifact_id: int) -> list[int]:
         """Get all artifact IDs in the same set as a given artifact ID.
 
         Args:
@@ -345,7 +343,7 @@ class CalculatorClient(BaseClient):
         region: Optional[str] = None,
         player_id: Optional[int] = None,
         lang: Optional[str] = None,
-    ) -> List[CalculatorFurnishing]:
+    ) -> list[CalculatorFurnishing]:
         """Get the furnishings used by a teapot replica blueprint.
 
         Args:
@@ -365,6 +363,6 @@ class CalculatorClient(BaseClient):
             "furniture/blueprint",
             method="GET",
             lang=lang,
-            params=dict(share_code=share_code, region=region),
+            params={"share_code": share_code, "region": region},
         )
         return [CalculatorFurnishing(**i) for i in data["list"]]

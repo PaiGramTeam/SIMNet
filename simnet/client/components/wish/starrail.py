@@ -1,5 +1,5 @@
 from functools import partial
-from typing import List, Optional
+from typing import Optional
 
 from simnet.client.components.wish.base import BaseWishClient
 from simnet.models.starrail.wish import StarRailWish
@@ -14,13 +14,13 @@ class StarRailWishClient(BaseWishClient):
 
     async def wish_history(
         self,
-        banner_types: Optional[List[int]] = None,
+        banner_types: Optional[list[int]] = None,
         limit: Optional[int] = None,
         lang: Optional[str] = None,
         authkey: Optional[str] = None,
         end_id: int = 0,
         min_id: int = 0,
-    ) -> List[StarRailWish]:
+    ) -> list[StarRailWish]:
         """
         Get the wish history for a list of banner types.
 
@@ -49,6 +49,7 @@ class StarRailWishClient(BaseWishClient):
                     self.get_wish_page,
                     banner_type=banner_type,
                     game=Game.STARRAIL,
+                    lang=lang,
                     authkey=authkey,
                 ),
             )

@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import List
 
 from simnet.models.base import APIModel, TimeDeltaField
 from simnet.models.genshin.character import BaseCharacter
@@ -24,8 +23,8 @@ class CardPoolListItem(APIModel):
     version_name: str
     pool_name: str
     pool_type: int
-    avatars: List[AvatarListItem]
-    weapon: List[EquipListItem]
+    avatars: list[AvatarListItem]
+    weapon: list[EquipListItem]
     start_timestamp: datetime
     end_timestamp: datetime
     jump_url: str
@@ -57,16 +56,16 @@ class ActListItem(APIModel):
     strategy: str
     countdown_seconds: TimeDeltaField
     status: int
-    reward_list: List[RewardItem]
+    reward_list: list[RewardItem]
     is_finished: bool
 
 
 class GenshinActCalendar(APIModel):
     """A model representing the StarRail act calendar."""
 
-    avatar_card_pool_list: List[CardPoolListItem]
-    weapon_card_pool_list: List[CardPoolListItem]
-    mixed_card_pool_list: List[CardPoolListItem]
+    avatar_card_pool_list: list[CardPoolListItem]
+    weapon_card_pool_list: list[CardPoolListItem]
+    mixed_card_pool_list: list[CardPoolListItem]
 
-    act_list: List[ActListItem]
-    fixed_act_list: List[ActListItem]
+    act_list: list[ActListItem]
+    fixed_act_list: list[ActListItem]

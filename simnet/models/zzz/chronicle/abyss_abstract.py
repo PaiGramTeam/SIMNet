@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Optional
 
 from simnet.models.base import APIModel, TimeDeltaField
 
@@ -116,7 +116,7 @@ class ZZZAbyssAbstract(APIModel):
     abyss_duty: Optional[ZZZAbyssDuty] = None
     abyss_talent: Optional[ZZZAbyssTalent] = None
     refresh_time: TimeDeltaField
-    abyss_collect: List[ZZZAbyssCollectItem]
+    abyss_collect: list[ZZZAbyssCollectItem]
     abyss_nest: Optional[ZZZAbyssNest] = None
     abyss_throne: Optional[ZZZAbyssThrone] = None
     unlock: bool

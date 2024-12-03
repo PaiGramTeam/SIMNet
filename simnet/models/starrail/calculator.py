@@ -1,6 +1,6 @@
 """Starrail calculator models."""
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 from pydantic import field_validator
 
@@ -19,7 +19,7 @@ __all__ = (
     "StarrailCalculatorSkill",
     "StarrailCalculatorCharacterDetails",
 )
-CALCULATOR_ELEMENTS: Dict[int, StarRailElement] = {
+CALCULATOR_ELEMENTS: dict[int, StarRailElement] = {
     1: StarRailElement.Physical,
     2: StarRailElement.Pyro,
     4: StarRailElement.Cryo,
@@ -28,7 +28,7 @@ CALCULATOR_ELEMENTS: Dict[int, StarRailElement] = {
     32: StarRailElement.Quantum,
     64: StarRailElement.Nombre,
 }
-CALCULATOR_DESTINIES: Dict[int, StarRailDestiny] = {
+CALCULATOR_DESTINIES: dict[int, StarRailDestiny] = {
     1: StarRailDestiny.HuiMie,
     2: StarRailDestiny.XunLie,
     3: StarRailDestiny.ZhiShi,
@@ -184,5 +184,5 @@ class StarrailCalculatorCharacterDetails(APIModel):
 
     avatar: StarrailCalculatorCharacter
     equipment: Optional[StarrailCalculatorWeapon] = None
-    skills: List[StarrailCalculatorSkill]
-    skills_other: List[StarrailCalculatorSkill]
+    skills: list[StarrailCalculatorSkill]
+    skills_other: list[StarrailCalculatorSkill]

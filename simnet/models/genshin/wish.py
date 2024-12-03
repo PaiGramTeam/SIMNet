@@ -1,7 +1,7 @@
 import re
 from datetime import datetime
 from enum import IntEnum
-from typing import Any, List, Optional
+from typing import Any, Optional
 
 from pydantic import field_validator
 
@@ -192,16 +192,16 @@ class BannerDetails(APIModel):
     r4_guarantee_prob: Optional[float] = Field(None, alias="r4_baodi_prob")
     r3_guarantee_prob: Optional[float] = Field(None, alias="r3_baodi_prob")
 
-    r5_up_items: List[BannerDetailsUpItem]
-    r4_up_items: List[BannerDetailsUpItem]
+    r5_up_items: list[BannerDetailsUpItem]
+    r4_up_items: list[BannerDetailsUpItem]
 
-    r5_items: List[BannerDetailItem] = Field(alias="r5_prob_list")
-    r4_items: List[BannerDetailItem] = Field(alias="r4_prob_list")
-    r3_items: List[BannerDetailItem] = Field(alias="r3_prob_list")
+    r5_items: list[BannerDetailItem] = Field(alias="r5_prob_list")
+    r4_items: list[BannerDetailItem] = Field(alias="r4_prob_list")
+    r3_items: list[BannerDetailItem] = Field(alias="r3_prob_list")
 
     @field_validator("r5_up_items", "r4_up_items", mode="before")
     @classmethod
-    def replace_none(cls, v: Optional[List[Any]]) -> List[Any]:
+    def replace_none(cls, v: Optional[list[Any]]) -> list[Any]:
         """Replaces NoneType attributes with an empty list.
 
         Args:
@@ -268,7 +268,7 @@ class BannerDetails(APIModel):
         return banners[self.banner_type]
 
     @property
-    def items(self) -> List[BannerDetailItem]:
+    def items(self) -> list[BannerDetailItem]:
         """Returns a list of all items in the banner sorted by their order.
 
         Returns:

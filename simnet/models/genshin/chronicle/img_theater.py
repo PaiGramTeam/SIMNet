@@ -200,5 +200,5 @@ class ImgTheaterData(APIModel):
 class ImgTheater(APIModel):
     """Imaginarium theater."""
 
-    data: typing.List[ImgTheaterData]
+    data: list[ImgTheaterData]
     unlocked: bool = Field(alias="is_unlock")

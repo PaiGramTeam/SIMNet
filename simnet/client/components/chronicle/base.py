@@ -1,4 +1,4 @@
-from typing import Any, List, Optional
+from typing import Any, Optional
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import RECORD_URL
@@ -98,7 +98,7 @@ class BaseChronicleClient(BaseClient):
 
         await self.request_game_record(
             "card/wapi/changeDataSwitch",
-            data=dict(switch_id=switch_id, is_public=on, game_id=game_id),
+            data={"switch_id": switch_id, "is_public": on, "game_id": game_id},
         )
 
     async def get_record_cards(
@@ -106,7 +106,7 @@ class BaseChronicleClient(BaseClient):
         account_id: Optional[int] = None,
         *,
         lang: Optional[str] = None,
-    ) -> List[RecordCard]:
+    ) -> list[RecordCard]:
         """Get a player record cards.
 
         Args:
@@ -124,7 +124,7 @@ class BaseChronicleClient(BaseClient):
         data = await self.request_game_record(
             "card/wapi/getGameRecordCard",
             lang=lang,
-            params=dict(uid=account_id),
+            params={"uid": account_id},
         )
         if not data["list"]:
             raise DataNotPublic({"retcode": 10102})

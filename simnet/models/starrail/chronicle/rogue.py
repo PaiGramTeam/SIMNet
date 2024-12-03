@@ -1,7 +1,5 @@
 """Starrail Rogue models."""
 
-from typing import List
-
 from simnet.models.base import APIModel
 
 from ..character import RogueCharacter
@@ -54,7 +52,7 @@ class RogueBuff(APIModel):
     """Rogue buff info."""
 
     base_type: RogueBuffType
-    items: List[RogueBuffItem]
+    items: list[RogueBuffItem]
 
 
 class RogueMiracle(APIModel):
@@ -71,11 +69,11 @@ class RogueRecordDetail(APIModel):
     name: str
     finish_time: PartialTime
     score: int
-    final_lineup: List[RogueCharacter]
-    base_type_list: List[RogueBuffType]
-    cached_avatars: List[RogueCharacter]
-    buffs: List[RogueBuff]
-    miracles: List[RogueMiracle]
+    final_lineup: list[RogueCharacter]
+    base_type_list: list[RogueBuffType]
+    cached_avatars: list[RogueCharacter]
+    buffs: list[RogueBuff]
+    miracles: list[RogueMiracle]
     difficulty: int
     progress: int
 
@@ -84,7 +82,7 @@ class RogueRecord(APIModel):
     """generic record data."""
 
     basic: RogueRecordBasic
-    records: List[RogueRecordDetail]
+    records: list[RogueRecordDetail]
     has_data: bool
 
 
@@ -117,7 +115,7 @@ class RogueLocustBasic(APIModel):
     """Rogue Locust Basic"""
 
     cnt: RogueLocustBasicCnt
-    destiny: List[RogueLocustBasicDestiny]
+    destiny: list[RogueLocustBasicDestiny]
 
 
 class RogueLocustRecordDetailBlock(APIModel):
@@ -140,14 +138,14 @@ class RogueLocustRecordDetail(APIModel):
 
     name: str
     finish_time: PartialTime
-    final_lineup: List[RogueCharacter]
-    base_type_list: List[RogueBuffType]
-    cached_avatars: List[RogueCharacter]
-    buffs: List[RogueBuff]
-    miracles: List[RogueMiracle]
-    blocks: List[RogueLocustRecordDetailBlock]
+    final_lineup: list[RogueCharacter]
+    base_type_list: list[RogueBuffType]
+    cached_avatars: list[RogueCharacter]
+    buffs: list[RogueBuff]
+    miracles: list[RogueMiracle]
+    blocks: list[RogueLocustRecordDetailBlock]
     difficulty: int
-    worm_weak: List[str]
+    worm_weak: list[str]
     fury: RogueLocustRecordDetailFury
 
     @property
@@ -162,7 +160,7 @@ class RogueLocustRecordDetail(APIModel):
 class RogueLocustRecords(APIModel):
     """Rogue Locust records"""
 
-    records: List[RogueLocustRecordDetail]
+    records: list[RogueLocustRecordDetail]
 
 
 class StarRailRogueLocust(APIModel):
@@ -199,7 +197,7 @@ class StarRailRogueNousRolling(APIModel):
     id: int
     name_mi18n: str
     icon: str
-    sides: List[StarRailRogueNousSide]
+    sides: list[StarRailRogueNousSide]
     main_buff_mi18n: str
     aeon_id: int
 
@@ -209,13 +207,13 @@ class StarRailRogueNousRecordDetail(APIModel):
 
     name_mi18n: str
     finish_time: PartialTime
-    final_lineup: List[RogueCharacter]
-    base_type_list: List[RogueBuffType]
-    cached_avatars: List[RogueCharacter]
-    buffs: List[RogueBuff]
-    miracles: List[RogueMiracle]
-    blocks: List[RogueLocustRecordDetailBlock]
-    boss_effect: List[str]
+    final_lineup: list[RogueCharacter]
+    base_type_list: list[RogueBuffType]
+    cached_avatars: list[RogueCharacter]
+    buffs: list[RogueBuff]
+    miracles: list[RogueMiracle]
+    blocks: list[RogueLocustRecordDetailBlock]
+    boss_effect: list[str]
     rolling: StarRailRogueNousRolling
 
     difficulty: int
@@ -237,7 +235,7 @@ class StarRailRogueNousRecordDetail(APIModel):
 class StarRailRogueNousRecords(APIModel):
     """Rogue Nous records"""
 
-    records: List[StarRailRogueNousRecordDetail]
+    records: list[StarRailRogueNousRecordDetail]
 
 
 class StarRailRogueNous(APIModel):

@@ -1,5 +1,3 @@
-from typing import List
-
 from simnet.models.base import APIModel
 from simnet.models.starrail.character import RogueCharacter
 from simnet.models.starrail.chronicle.base import PartialTime
@@ -73,12 +71,12 @@ class StarRailRogueTournRecord(APIModel):
     """Star Rail Rogue Tourn Record"""
 
     finish_time: PartialTime
-    final_lineup: List[RogueCharacter]
-    base_type_list: List[RogueBuffType]
-    buffs: List[RogueBuff]
-    miracles: List[RogueTournMiracle]
-    hex_miracles: List[RogueTournMiracle]
-    formula_list: List[RogueTournFormula]
+    final_lineup: list[RogueCharacter]
+    base_type_list: list[RogueBuffType]
+    buffs: list[RogueBuff]
+    miracles: list[RogueTournMiracle]
+    hex_miracles: list[RogueTournMiracle]
+    formula_list: list[RogueTournFormula]
     common_info: StarRailRogueTournCommonInfo
 
 
@@ -87,9 +85,9 @@ class StarRailRogueTournDetail(APIModel):
 
     challenge_id: int
     weekly_name: str
-    weekly_buff_desc: List[str]
+    weekly_buff_desc: list[str]
     weekly_challenge_counts: int
-    records: List[StarRailRogueTournRecord]
+    records: list[StarRailRogueTournRecord]
 
 
 class StarRailRogueTourn(APIModel):

@@ -1,6 +1,6 @@
 import asyncio
 from collections.abc import Mapping
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Optional, Union
 
 from simnet.client.components.chronicle.base import BaseChronicleClient
 from simnet.client.routes import RECORD_URL
@@ -45,7 +45,7 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         endpoint_type: str = "api",
         method: str = "GET",
         lang: Optional[str] = None,
-        payload: Optional[Dict[str, Any]] = None,
+        payload: Optional[dict[str, Any]] = None,
     ) -> Mapping[str, Any]:
         """Get an arbitrary object from StarRail's battle chronicle.
 
@@ -219,7 +219,7 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
             BadRequest: If the request is invalid.
             DataNotPublic: If the requested data is not public.
         """
-        payload = dict(schedule_type=2 if previous else 1, need_all="true")
+        payload = {"schedule_type": 2 if previous else 1, "need_all": "true"}
         data = await self._request_starrail_record(
             "challenge", player_id, lang=lang, payload=payload
         )
@@ -245,9 +245,11 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
             BadRequest: If the request is invalid.
             DataNotPublic: If the requested data is not public.
         """
-        payload = dict(
-            schedule_type=2 if previous else 1, need_all="true", type="story"
-        )
+        payload = {
+            "schedule_type": 2 if previous else 1,
+            "need_all": "true",
+            "type": "story",
+        }
         data = await self._request_starrail_record(
             "challenge_story", player_id, lang=lang, payload=payload
         )
@@ -273,7 +275,11 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
             BadRequest: If the request is invalid.
             DataNotPublic: If the requested data is not public.
         """
-        payload = dict(schedule_type=2 if previous else 1, need_all="true", type="boss")
+        payload = {
+            "schedule_type": 2 if previous else 1,
+            "need_all": "true",
+            "type": "boss",
+        }
         data = await self._request_starrail_record(
             "challenge_boss", player_id, lang=lang, payload=payload
         )
@@ -299,7 +305,7 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
             BadRequest: If the request is invalid.
             DataNotPublic: If the requested data is not public.
         """
-        payload = dict(schedule_type=schedule_type, need_detail="true")
+        payload = {"schedule_type": schedule_type, "need_detail": "true"}
         data = await self._request_starrail_record(
             "rogue", player_id, lang=lang, payload=payload
         )
@@ -323,7 +329,7 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
             BadRequest: If the request is invalid.
             DataNotPublic: If the requested data is not public.
         """
-        payload = dict(need_detail="true")
+        payload = {"need_detail": "true"}
         data = await self._request_starrail_record(
             "rogue_locust", player_id, lang=lang, payload=payload
         )
@@ -347,7 +353,7 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
             BadRequest: If the request is invalid.
             DataNotPublic: If the requested data is not public.
         """
-        payload = dict(need_detail="true")
+        payload = {"need_detail": "true"}
         data = await self._request_starrail_record(
             "rogue_nous", player_id, lang=lang, payload=payload
         )
@@ -371,7 +377,7 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
             BadRequest: If the request is invalid.
             DataNotPublic: If the requested data is not public.
         """
-        payload = dict(need_detail="true")
+        payload = {"need_detail": "true"}
         data = await self._request_starrail_record(
             "rogue_tourn", player_id, lang=lang, payload=payload
         )
@@ -438,7 +444,7 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
     async def set_starrail_avatar_recommend_property(
         self,
         avatar_id: int,
-        recommend_relic_properties: List[int] = None,
+        recommend_relic_properties: list[int] = None,
     ) -> None:
         """Set StarRail avatar recommend properties.
 
@@ -449,10 +455,10 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         Raises:
             InternalDatabaseError: If the request is invalid.
         """
-        payload = dict(
-            avatar_id=avatar_id,
-            recommend_relic_properties=recommend_relic_properties or [],
-        )
+        payload = {
+            "avatar_id": avatar_id,
+            "recommend_relic_properties": recommend_relic_properties or [],
+        }
         await self._request_starrail_record(
             "setAvatarRecommendRelicProperty", method="POST", payload=payload
         )

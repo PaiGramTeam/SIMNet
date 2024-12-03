@@ -1,6 +1,6 @@
 from collections.abc import Sequence
 from datetime import datetime, timedelta
-from typing import List, Literal
+from typing import Literal
 
 from simnet.models.base import APIModel, Field, TimeDeltaField
 
@@ -16,7 +16,7 @@ class StarRailExpedition(APIModel):
 
     """
 
-    avatars: List[str]
+    avatars: list[str]
     status: Literal["Ongoing", "Finished"]
     remaining_time: TimeDeltaField
     name: str

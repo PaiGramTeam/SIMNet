@@ -113,20 +113,16 @@ class CookiesModel(BaseModel, frozen=False):
 
     @property
     def is_v1(self) -> bool:
-        if self.account_id or self.cookie_token or self.ltoken or self.ltuid:
-            return True
-        return False
+        return bool(self.account_id or self.cookie_token or self.ltoken or self.ltuid)
 
     @property
     def is_v2(self) -> bool:
-        if (
+        return bool(
             self.account_mid_v2
             or self.cookie_token_v2
             or self.ltoken_v2
             or self.ltmid_v2
-        ):
-            return True
-        return False
+        )
 
     def remove_v2(self):
         """Remove the v2 cookies."""
@@ -144,7 +140,7 @@ class CookiesModel(BaseModel, frozen=False):
         return self.json(exclude_defaults=True)
 
     @property
-    def user_id(self) -> Optional[int]:
+    def user_id(self) -> Optional[int]:  # noqa: PLR0911
         if self.ltuid:
             return self.ltuid
         if self.account_id:

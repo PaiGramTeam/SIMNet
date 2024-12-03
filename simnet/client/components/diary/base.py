@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta, timezone
-from typing import Any, Dict, Optional, Union
+from typing import Any, Optional, Union
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import DETAIL_LEDGER_URL, INFO_LEDGER_URL
@@ -24,8 +24,8 @@ class BaseDiaryClient(BaseClient):
         detail: bool = False,
         month: Union[int, str, None] = None,
         lang: Optional[str] = None,
-        params: Optional[Dict[str, Any]] = None,
-    ) -> Dict[str, Any]:
+        params: Optional[dict[str, Any]] = None,
+    ) -> dict[str, Any]:
         """Make a request towards the ys ledger endpoint.
 
         Args:
@@ -46,7 +46,7 @@ class BaseDiaryClient(BaseClient):
         base_url = DETAIL_LEDGER_URL if detail else INFO_LEDGER_URL
         url = base_url.get_url(self.region, game)
 
-        if self.region == Region.OVERSEAS or game == Game.STARRAIL or game == Game.ZZZ:
+        if self.region == Region.OVERSEAS or game in (Game.STARRAIL, Game.ZZZ):
             params["uid"] = player_id
             params["region"] = recognize_server(player_id, game)
         elif self.region == Region.CHINESE:
@@ -92,6 +92,6 @@ class BaseDiaryClient(BaseClient):
             detail=True,
             month=month,
             lang=lang,
-            params=dict(type=diary_type, current_page=page, page_size=100),
+            params={"type": diary_type, "current_page": page, "page_size": 100},
         )
         return DiaryPage(**data)

@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 from urllib.parse import unquote
 
 from simnet.client.base import BaseClient
@@ -18,8 +18,8 @@ class BaseWishClient(BaseClient):
         game: Game,
         lang: Optional[str] = None,
         authkey: Optional[str] = None,
-        params: Optional[Dict[str, Any]] = None,
-    ) -> Dict[str, Any]:
+        params: Optional[dict[str, Any]] = None,
+    ) -> dict[str, Any]:
         """
         Make a request towards the gacha info endpoint.
 
@@ -54,12 +54,12 @@ class BaseWishClient(BaseClient):
 
     async def wish_history(
         self,
-        banner_types: List[int],
+        banner_types: list[int],
         limit: Optional[int] = None,
         lang: Optional[str] = None,
         authkey: Optional[str] = None,
         end_id: int = 0,
-    ) -> List[object]:
+    ) -> list[object]:
         """
         Get the wish history for a list of banner types.
 
@@ -84,7 +84,7 @@ class BaseWishClient(BaseClient):
         size: int = 20,
         lang: Optional[str] = None,
         authkey: Optional[str] = None,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Get a single page of wishes.
 
@@ -105,9 +105,12 @@ class BaseWishClient(BaseClient):
             game=game,
             lang=lang,
             authkey=authkey,
-            params=dict(
-                gacha_type=banner_type, size=size, end_id=end_id, game_biz=game.value
-            ),
+            params={
+                "gacha_type": banner_type,
+                "size": size,
+                "end_id": end_id,
+                "game_biz": game.value,
+            },
         )
 
     async def get_banner_names(
@@ -115,7 +118,7 @@ class BaseWishClient(BaseClient):
         game: Game,
         lang: Optional[str] = None,
         authkey: Optional[str] = None,
-    ) -> Dict[int, str]:
+    ) -> dict[int, str]:
         """
         Get a list of banner names.
 

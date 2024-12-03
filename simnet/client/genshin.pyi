@@ -1,5 +1,3 @@
-from typing import Optional
-
 from simnet.client.components.auth import AuthClient
 from simnet.client.components.calculator.genshin import CalculatorClient
 from simnet.client.components.chronicle.genshin import GenshinBattleChronicleClient
@@ -11,7 +9,6 @@ from simnet.client.components.verify import VerifyClient
 from simnet.client.components.wish.genshin import GenshinWishClient
 from simnet.utils.enums import Region
 from simnet.utils.types import CookieTypes, HeaderTypes, TimeoutTypes
-
 
 class GenshinClient(
     CalculatorClient,
@@ -26,13 +23,13 @@ class GenshinClient(
 ):
     def __init__(
         self,
-        cookies: Optional[CookieTypes] = None,
-        headers: Optional[HeaderTypes] = None,
-        account_id: Optional[int] = None,
-        player_id: Optional[int] = None,
+        cookies: CookieTypes | None = None,
+        headers: HeaderTypes | None = None,
+        account_id: int | None = None,
+        player_id: int | None = None,
         region: Region = ...,
         lang: str = "en-us",
-        timeout: Optional[TimeoutTypes] = None,
-        device_id: Optional[str] = None,
-        device_fp: Optional[str] = None,
+        timeout: TimeoutTypes | None = None,
+        device_id: str | None = None,
+        device_fp: str | None = None,
     ): ...

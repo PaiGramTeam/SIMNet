@@ -3,6 +3,7 @@
 import typing
 
 from simnet.models.base import APIModel, Field
+
 from .. import character
 
 __all__ = [

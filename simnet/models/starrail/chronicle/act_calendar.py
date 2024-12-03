@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List, Optional
+from typing import Optional
 
 from simnet.models.base import APIModel, DateTimeField
 
@@ -48,8 +48,8 @@ class CardPoolListItem(APIModel):
     id: str
     name: str
     type: CardPoolTypeEnum
-    avatar_list: List[AvatarListItem]
-    equip_list: List[EquipListItem]
+    avatar_list: list[AvatarListItem]
+    equip_list: list[EquipListItem]
     is_after_version: bool
     time_info: TimeInfo
     version: str
@@ -110,7 +110,7 @@ class ActListItem(APIModel):
     name: str
     act_type: ActTypeEnum
     act_status: ActStatusEnum
-    reward_list: List[RewardItem]
+    reward_list: list[RewardItem]
     total_progress: int
     current_progress: int
     time_info: TimeInfo
@@ -118,7 +118,7 @@ class ActListItem(APIModel):
     panel_desc: str
     strategy: str
     multiple_drop_type: int
-    multiple_drop_type_list: List[int]
+    multiple_drop_type_list: list[int]
     count_refresh_type: int
     count_value: int
     drop_multiple: int
@@ -158,7 +158,7 @@ class ChallengeListItem(APIModel):
     status: ChallengeStatusEnum
 
     time_info: TimeInfo
-    reward_list: List[RewardItem]
+    reward_list: list[RewardItem]
     special_reward: RewardItem
     show_text: str
 
@@ -166,9 +166,9 @@ class ChallengeListItem(APIModel):
 class StarRailActCalendar(APIModel):
     """A model representing the StarRail act calendar."""
 
-    avatar_card_pool_list: List[CardPoolListItem]
-    equip_card_pool_list: List[CardPoolListItem]
-    act_list: List[ActListItem]
-    challenge_list: List[ChallengeListItem]
+    avatar_card_pool_list: list[CardPoolListItem]
+    equip_card_pool_list: list[CardPoolListItem]
+    act_list: list[ActListItem]
+    challenge_list: list[ChallengeListItem]
     now: DateTimeField
     cur_game_version: str

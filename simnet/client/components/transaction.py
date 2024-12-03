@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Optional, Union
 from urllib import parse
 
 from simnet.client.base import BaseClient
@@ -22,8 +22,8 @@ class TransactionClient(BaseClient):
         *,
         method: str = "GET",
         lang: Optional[str] = None,
-        params: Optional[Dict[str, Any]] = None,
-    ) -> Dict[str, Any]:
+        params: Optional[dict[str, Any]] = None,
+    ) -> dict[str, Any]:
         """Make a request towards the transaction log endpoint.
 
         Args:
@@ -52,7 +52,7 @@ class TransactionClient(BaseClient):
         authkey: str,
         *,
         lang: Optional[str] = None,
-    ) -> List[BaseTransaction]:
+    ) -> list[BaseTransaction]:
         """Get a single page of transactions.
 
         Args:
@@ -68,10 +68,10 @@ class TransactionClient(BaseClient):
             endpoint,
             lang=lang,
             authkey=authkey,
-            params=dict(end_id=end_id, size=20),
+            params={"end_id": end_id, "size": 20},
         )
 
-        transactions: List[BaseTransaction] = []
+        transactions: list[BaseTransaction] = []
         for trans in data["list"]:
             model = ItemTransaction if "name" in trans else Transaction
             transactions.append(model(**trans, kind=kind, lang=lang or self.lang))
@@ -81,12 +81,12 @@ class TransactionClient(BaseClient):
     async def transaction_log(
         self,
         authkey: str,
-        kind: Optional[Union[str, List[str]]] = None,
+        kind: Optional[Union[str, list[str]]] = None,
         *,
         limit: Optional[int] = None,
         lang: Optional[str] = None,
         end_id: int = 0,
-    ) -> List[BaseTransaction]:
+    ) -> list[BaseTransaction]:
         """Get the transaction log of a user.
 
         Arg:
@@ -101,7 +101,7 @@ class TransactionClient(BaseClient):
         if isinstance(kinds, str):
             kinds = [kinds]
 
-        iterators: List[BaseTransaction] = []
+        iterators: list[BaseTransaction] = []
         for value in kinds:
             iterator = await self._get_transaction_page(
                 end_id, value, lang=lang, authkey=authkey

@@ -1,5 +1,5 @@
 from functools import partial
-from typing import List, Optional
+from typing import Optional
 
 from simnet.client.components.wish.base import BaseWishClient
 from simnet.models.genshin.wish import Wish
@@ -14,14 +14,14 @@ class GenshinWishClient(BaseWishClient):
 
     async def wish_history(
         self,
-        banner_types: Optional[List[int]] = None,
+        banner_types: Optional[list[int]] = None,
         limit: Optional[int] = None,
         lang: Optional[str] = None,
         authkey: Optional[str] = None,
         end_id: int = 0,
         min_id: int = 0,
         banner_default_name: Optional[str] = "",
-    ) -> List[Wish]:
+    ) -> list[Wish]:
         """Get the wish history for a list of banner types.
 
         Args:
