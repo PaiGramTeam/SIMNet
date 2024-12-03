@@ -155,8 +155,7 @@ class BaseClient(AbstractAsyncContextManager["BaseClient"]):
         except Exception:
             await self.shutdown()
             raise
-        else:
-            return self
+        return self
 
     async def __aexit__(
         self,
