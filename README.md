@@ -1,5 +1,7 @@
 # Semi-Intransient Matrix Network
 
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/PaiGramTeam/SIMNet/main.svg)](https://results.pre-commit.ci/latest/github/PaiGramTeam/SIMNet/main)
+
 Modern API wrapper for Genshin Impact & Honkai: Star Rail built on asyncio and pydantic.
 
 ## Requirements
