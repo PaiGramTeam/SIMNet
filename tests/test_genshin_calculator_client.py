@@ -39,8 +39,7 @@ async def genshin_battle_chronicle_client(genshin_player_id: int, region: "Regio
 class TestCalculatorClient:
     @staticmethod
     async def test_character_details(
-        calculator_client: "CalculatorClient",
-        genshin_battle_chronicle_client: "GenshinBattleChronicleClient",
+        calculator_client: "CalculatorClient", genshin_battle_chronicle_client: "GenshinBattleChronicleClient"
     ):
         characters = await genshin_battle_chronicle_client.get_genshin_characters()
         character_details = await calculator_client.get_character_details(characters[-1].id)

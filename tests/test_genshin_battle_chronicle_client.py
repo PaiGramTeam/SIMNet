@@ -26,9 +26,7 @@ async def genshin_client(genshin_player_id: int, region: "Region", cookies: "Coo
 @pytest.mark.asyncio
 class TestGenshinBattleChronicleClient:
     @staticmethod
-    async def test_get_partial_genshin_user(
-        genshin_client: GenshinBattleChronicleClient,
-    ):
+    async def test_get_partial_genshin_user(genshin_client: GenshinBattleChronicleClient):
         user = await genshin_client.get_partial_genshin_user()
         assert user.stats.days_active >= 0
 
@@ -46,16 +44,12 @@ class TestGenshinBattleChronicleClient:
         assert user.stats.days_active >= 0
 
     @staticmethod
-    async def test_get_genshin_spiral_abyss(
-        genshin_client: GenshinBattleChronicleClient,
-    ):
+    async def test_get_genshin_spiral_abyss(genshin_client: GenshinBattleChronicleClient):
         data = await genshin_client.get_genshin_spiral_abyss()
         assert data
 
     @staticmethod
-    async def test_get_genshin_imaginarium_theater(
-        genshin_client: GenshinBattleChronicleClient,
-    ):
+    async def test_get_genshin_imaginarium_theater(genshin_client: GenshinBattleChronicleClient):
         data = await genshin_client.get_genshin_imaginarium_theater()
         assert len(data.data) > 0
 
@@ -76,38 +70,28 @@ class TestGenshinBattleChronicleClient:
         assert data
 
     @staticmethod
-    async def test_get_genshin_notes_by_stoken(
-        genshin_client: GenshinBattleChronicleClient,
-    ):
+    async def test_get_genshin_notes_by_stoken(genshin_client: GenshinBattleChronicleClient):
         data = await genshin_client.get_genshin_notes_by_stoken()
         assert data
 
     @staticmethod
-    async def test_get_genshin_character_list(
-        genshin_client: GenshinBattleChronicleClient,
-    ):
+    async def test_get_genshin_character_list(genshin_client: GenshinBattleChronicleClient):
         data = await genshin_client.get_genshin_character_list()
         assert len(data) > 0
 
     @staticmethod
-    async def test_get_genshin_character_detail(
-        genshin_client: GenshinBattleChronicleClient,
-    ):
+    async def test_get_genshin_character_detail(genshin_client: GenshinBattleChronicleClient):
         data = await genshin_client.get_genshin_character_detail([10000021])
         assert data
         assert len(data.characters) > 0
         assert data.characters[0].base.id == 10000021
 
     @staticmethod
-    async def test_get_genshin_achievement_info(
-        genshin_client: GenshinBattleChronicleClient,
-    ):
+    async def test_get_genshin_achievement_info(genshin_client: GenshinBattleChronicleClient):
         data = await genshin_client.get_genshin_achievement_info()
         assert data
 
     @staticmethod
-    async def test_get_genshin_act_calendar(
-        genshin_client: GenshinBattleChronicleClient,
-    ):
+    async def test_get_genshin_act_calendar(genshin_client: GenshinBattleChronicleClient):
         data = await genshin_client.get_genshin_act_calendar()
         assert data

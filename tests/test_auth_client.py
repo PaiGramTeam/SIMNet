@@ -28,9 +28,7 @@ class TestAuthClient:
             pytest.skip("Test case test_get_hk4e_token_by_cookie_token skipped: No genshin player id set.")
         game_biz = recognize_genshin_game_biz(genshin_player_id)
         await auth_client.get_hk4e_token_by_cookie_token(
-            game_biz,
-            recognize_genshin_server(genshin_player_id),
-            player_id=genshin_player_id,
+            game_biz, recognize_genshin_server(genshin_player_id), player_id=genshin_player_id
         )
         hk4e_token = auth_client.client.cookies.get("e_hk4e_token")
         assert hk4e_token is not None
