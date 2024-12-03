@@ -36,6 +36,36 @@ include = '\.pyi?$'
 line-length = 120
 target-version = ['py39', 'py310', 'py311', 'py312']
 
+[tool.ruff]
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+]
+line-length = 120
 
 [tool.ruff.lint]
 select = [
@@ -93,17 +123,4 @@ ignore = [
     "D",
     "S",
     "TRY"
-]
-
-[tool.coverage.run]
-source = ["SIMNet"]
-omit = [
-    "tests/",
-]
-
-[tool.coverage.report]
-exclude_also = [
-    "@overload",
-    "@abstractmethod",
-    "if TYPE_CHECKING:"
 ]

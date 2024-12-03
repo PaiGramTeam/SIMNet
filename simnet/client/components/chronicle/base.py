@@ -52,11 +52,8 @@ class BaseChronicleClient(BaseClient):
         """
         base_url = RECORD_URL.get_url(region or self.region, game or Game.GENSHIN)
 
-        if game:
-            if game == Game.ZZZ:
-                base_url = base_url / endpoint_type / "zzz"
-            else:
-                base_url = base_url / game.value / endpoint_type
+        if game is not None:
+            base_url = base_url / endpoint_type / "zzz" if game == Game.ZZZ else base_url / game.value / endpoint_type
 
         url = base_url / endpoint
         new_ds = self.region == Region.CHINESE
