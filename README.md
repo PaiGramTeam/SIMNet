@@ -27,4 +27,5 @@ asyncio.run(main())
 ```
 
 ## Credits
-- [genshin.py](https://github.com/thesadru/genshin.py/): fork source 
+- [genshin.py](https://github.com/thesadru/genshin.py): fork source
+- [Snap.Hutao](https://github.com/DGP-Studio/Snap.Hutao): fp 

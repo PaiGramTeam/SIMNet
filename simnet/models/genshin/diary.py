@@ -1,9 +1,9 @@
 from datetime import datetime
-from typing import List, Optional, Dict, Any
+from typing import Any, Dict, List, Optional
 
 from pydantic import model_validator
 
-from simnet.models.base import APIModel, Field, DateTimeField
+from simnet.models.base import APIModel, DateTimeField, Field
 from simnet.models.diary import BaseDiary
 
 __all__ = (

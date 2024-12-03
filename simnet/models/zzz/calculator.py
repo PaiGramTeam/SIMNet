@@ -1,25 +1,25 @@
 import re
-from typing import List, Optional, Dict
+from typing import Dict, List, Optional
 
 from simnet.models.base import APIModel, Field
 from simnet.models.zzz.character import ZZZPartialCharacter
 
 
 def desc_to_html(desc: str) -> str:
-    output_text = re.sub(r"<color=(#[0-9a-fA-F]{6})>", r'<span style="color: \1">', desc)
+    output_text = re.sub(
+        r"<color=(#[0-9a-fA-F]{6})>", r'<span style="color: \1">', desc
+    )
     output_text = output_text.replace("</color>", "</span>")
     return output_text
 
 
 class ZZZCalculatorWeaponProperty(APIModel):
-
     property_name: str
     property_id: int
     base: str
 
 
 class ZZZCalculatorWeapon(APIModel):
-
     id: int
     level: int
     name: str
@@ -34,7 +34,6 @@ class ZZZCalculatorWeapon(APIModel):
 
 
 class ZZZCalculatorAvatarProperty(ZZZCalculatorWeaponProperty):
-
     add: str
     final: str
 
@@ -45,7 +44,6 @@ class ZZZCalculatorAvatarSkillItem(APIModel):
 
 
 class ZZZCalculatorAvatarSkill(APIModel):
-
     level: int
     skill_type: int
     items: List[ZZZCalculatorAvatarSkillItem]
@@ -56,7 +54,6 @@ class ZZZCalculatorAvatarSkill(APIModel):
 
 
 class ZZZCalculatorAvatarRank(APIModel):
-
     id: int
     name: str
     desc: str
@@ -65,7 +62,6 @@ class ZZZCalculatorAvatarRank(APIModel):
 
 
 class ZZZCalculatorEquipSuit(APIModel):
-
     suit_id: int
     name: str
     own: int
@@ -82,7 +78,6 @@ class ZZZCalculatorEquipSuit(APIModel):
 
 
 class ZZZCalculatorEquipment(APIModel):
-
     id: int
     level: int
     name: str
@@ -95,7 +90,6 @@ class ZZZCalculatorEquipment(APIModel):
 
 
 class ZZZCalculatorCharacter(ZZZPartialCharacter):
-
     equip: List[ZZZCalculatorEquipment]
     weapon: Optional[ZZZCalculatorWeapon] = None
     properties: List[ZZZCalculatorAvatarProperty]
@@ -104,7 +98,9 @@ class ZZZCalculatorCharacter(ZZZPartialCharacter):
 
     @property
     def equip_map(self) -> Dict[str, Optional[ZZZCalculatorEquipment]]:
-        data: Dict[str, Optional[ZZZCalculatorEquipment]] = {str(equip.equipment_type): equip for equip in self.equip}
+        data: Dict[str, Optional[ZZZCalculatorEquipment]] = {
+            str(equip.equipment_type): equip for equip in self.equip
+        }
         for i in range(1, 7):
             if str(i) not in data:
                 data[str(i)] = None
@@ -122,5 +118,4 @@ class ZZZCalculatorCharacter(ZZZPartialCharacter):
 
 
 class ZZZCalculatorCharacterDetails(APIModel):
-
     characters: List[ZZZCalculatorCharacter] = Field(alias="avatar_list")

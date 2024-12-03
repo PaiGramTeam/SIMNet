@@ -1,7 +1,7 @@
 import re
-from typing import Any, Optional, cast, List, Dict
+from typing import Any, Dict, List, Optional, cast
 
-from pydantic import field_validator, ValidationInfo
+from pydantic import ValidationInfo, field_validator
 
 from simnet.models.base import APIModel, Field
 from simnet.models.genshin.chronicle.abyss import SpiralAbyssPair
@@ -135,8 +135,13 @@ class Exploration(APIModel):
         Returns:
             The updated list of offerings.
         """
-        if info.data["type"] == "Reputation" and not any(info.data["type"] == o["name"] for o in offerings):
-            offerings = [*offerings, dict(name=info.data["type"], level=info.data["level"])]
+        if info.data["type"] == "Reputation" and not any(
+            info.data["type"] == o["name"] for o in offerings
+        ):
+            offerings = [
+                *offerings,
+                dict(name=info.data["type"], level=info.data["level"]),
+            ]
 
         return offerings
 

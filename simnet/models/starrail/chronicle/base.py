@@ -18,4 +18,6 @@ class PartialTime(APIModel):
 
     @property
     def datetime(self) -> datetime.datetime:
-        return datetime.datetime(self.year, self.month, self.day, self.hour, self.minute, self.second or 0)
+        return datetime.datetime(
+            self.year, self.month, self.day, self.hour, self.minute, self.second or 0
+        )

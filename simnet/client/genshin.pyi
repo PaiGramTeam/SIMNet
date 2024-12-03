@@ -12,6 +12,7 @@ from simnet.client.components.wish.genshin import GenshinWishClient
 from simnet.utils.enums import Region
 from simnet.utils.types import CookieTypes, HeaderTypes, TimeoutTypes
 
+
 class GenshinClient(
     CalculatorClient,
     GenshinBattleChronicleClient,
@@ -29,7 +30,7 @@ class GenshinClient(
         headers: Optional[HeaderTypes] = None,
         account_id: Optional[int] = None,
         player_id: Optional[int] = None,
-        region: Region = Region.OVERSEAS,
+        region: Region = ...,
         lang: str = "en-us",
         timeout: Optional[TimeoutTypes] = None,
         device_id: Optional[str] = None,

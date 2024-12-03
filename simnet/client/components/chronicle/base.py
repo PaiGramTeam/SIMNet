@@ -1,10 +1,10 @@
-from typing import Optional, Any, List
+from typing import Any, List, Optional
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import RECORD_URL
 from simnet.errors import DataNotPublic
 from simnet.models.lab.record import RecordCard
-from simnet.utils.enums import Region, Game
+from simnet.utils.enums import Game, Region
 from simnet.utils.types import QueryParamTypes
 
 __all__ = ("BaseChronicleClient",)
@@ -61,7 +61,9 @@ class BaseChronicleClient(BaseClient):
         url = base_url / endpoint
         new_ds = self.region == Region.CHINESE
 
-        return await self.request_lab(url, data=data, params=params, lang=lang, new_ds=new_ds)
+        return await self.request_lab(
+            url, data=data, params=params, lang=lang, new_ds=new_ds
+        )
 
     async def update_settings(
         self,

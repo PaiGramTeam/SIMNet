@@ -1,4 +1,4 @@
-from typing import Optional, Any, Dict, List, Literal
+from typing import Any, Dict, List, Literal, Optional
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import CALCULATOR_URL
@@ -51,7 +51,9 @@ class StarrailCalculatorClient(BaseClient):
         if self.region == Region.CHINESE:
             headers["Referer"] = "https://webstatic.mihoyo.com/"
 
-        data = await self.request_lab(url, method=method, params=params, data=data, headers=headers)
+        data = await self.request_lab(
+            url, method=method, params=params, data=data, headers=headers
+        )
 
         return data
 
@@ -83,7 +85,9 @@ class StarrailCalculatorClient(BaseClient):
             "uid": player_id,
             "region": recognize_starrail_server(player_id),
         }
-        data = await self.request_calculator("avatar/list", method="GET", params=params, lang=lang)
+        data = await self.request_calculator(
+            "avatar/list", method="GET", params=params, lang=lang
+        )
         return [StarrailCalculatorCharacter(**i) for i in data.get("list", [])]
 
     async def get_character_details(

@@ -1,15 +1,29 @@
 import asyncio
-from typing import Optional, List, Dict, Any
+from typing import Any, Dict, List, Optional
 
 from simnet.client.base import BaseClient
 from simnet.client.headers import Headers
-from simnet.client.routes import TAKUMI_URL, HK4E_URL, CODE_URL, CODE_HOYOLAB_URL, BBS_URL
-from simnet.models.lab.accompany import AccompanyRole, AccompanyRoleInfo, AccompanyRoleBasic
+from simnet.client.routes import (
+    BBS_URL,
+    CODE_HOYOLAB_URL,
+    CODE_URL,
+    HK4E_URL,
+    TAKUMI_URL,
+)
+from simnet.models.lab.accompany import (
+    AccompanyRole,
+    AccompanyRoleBasic,
+    AccompanyRoleInfo,
+)
 from simnet.models.lab.announcement import Announcement
-from simnet.models.lab.record import PartialUser, FullUser, Account
-from simnet.utils.enums import Region, Game
+from simnet.models.lab.record import Account, FullUser, PartialUser
+from simnet.utils.enums import Game, Region
 from simnet.utils.lang import create_short_lang_code
-from simnet.utils.player import recognize_genshin_server, recognize_server, recognize_game_biz
+from simnet.utils.player import (
+    recognize_game_biz,
+    recognize_genshin_server,
+    recognize_server,
+)
 from simnet.utils.types import HeaderTypes
 
 __all__ = ("LabClient",)
@@ -176,7 +190,9 @@ class LabClient(BaseClient):
         announcements: List[Dict[str, Any]] = []
         for sublist in info["list"]:
             for info in sublist["list"]:
-                detail = next((i for i in details["list"] if i["ann_id"] == info["ann_id"]), None)
+                detail = next(
+                    (i for i in details["list"] if i["ann_id"] == info["ann_id"]), None
+                )
                 announcements.append({**info, **(detail or {})})
 
         return [Announcement(**i) for i in announcements]
@@ -252,7 +268,9 @@ class LabClient(BaseClient):
         )
         return [Account(**i) for i in data["list"]]
 
-    async def get_genshin_accounts(self, *, lang: Optional[str] = None) -> List[Account]:
+    async def get_genshin_accounts(
+        self, *, lang: Optional[str] = None
+    ) -> List[Account]:
         """Get the genshin accounts of the currently logged-in user.
 
         Returns:
@@ -261,7 +279,9 @@ class LabClient(BaseClient):
         accounts = await self.get_game_accounts(lang=lang)
         return [account for account in accounts if account.game == Game.GENSHIN]
 
-    async def get_starrail_accounts(self, *, lang: Optional[str] = None) -> List[Account]:
+    async def get_starrail_accounts(
+        self, *, lang: Optional[str] = None
+    ) -> List[Account]:
         """Get the starrail accounts of the currently logged-in user.
 
         Returns:
@@ -279,7 +299,9 @@ class LabClient(BaseClient):
         accounts = await self.get_game_accounts(lang=lang)
         return [account for account in accounts if account.game == Game.ZZZ]
 
-    async def request_accompany_role(self, role_id: int, topic_id: int, *, lang: Optional[str] = None) -> AccompanyRole:
+    async def request_accompany_role(
+        self, role_id: int, topic_id: int, *, lang: Optional[str] = None
+    ) -> AccompanyRole:
         """Accompany a role to a topic.
 
         Args:
@@ -298,7 +320,9 @@ class LabClient(BaseClient):
         )
         return AccompanyRole(**data)
 
-    async def get_accompany_role(self, role_id: int, *, lang: Optional[str] = None) -> AccompanyRoleInfo:
+    async def get_accompany_role(
+        self, role_id: int, *, lang: Optional[str] = None
+    ) -> AccompanyRoleInfo:
         """Get the information related to an accompany role.
 
         Args:
@@ -316,7 +340,9 @@ class LabClient(BaseClient):
         )
         return AccompanyRoleInfo(**data)
 
-    async def get_accompany_roles(self, *, lang: Optional[str] = None) -> List[AccompanyRoleBasic]:
+    async def get_accompany_roles(
+        self, *, lang: Optional[str] = None
+    ) -> List[AccompanyRoleBasic]:
         """Get a list of accompany roles.
 
         Args:

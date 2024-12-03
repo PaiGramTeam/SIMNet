@@ -1,6 +1,7 @@
 """This module contains functions for recognizing servers associated with different player IDs."""
 
-from typing import Optional, Mapping, Sequence
+from collections.abc import Mapping, Sequence
+from typing import Optional
 
 from simnet.utils.enums import Game, Region
 

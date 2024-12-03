@@ -12,7 +12,12 @@ if TYPE_CHECKING:
 
 
 @pytest_asyncio.fixture
-async def zzz_client(zzz_player_id: int, region: "Region", cookies: "Cookies", zzz_cookies: Optional["Cookies"]):
+async def zzz_client(
+    zzz_player_id: int,
+    region: "Region",
+    cookies: "Cookies",
+    zzz_cookies: Optional["Cookies"],
+):
     if zzz_player_id is None:
         pytest.skip("Test case test_zzz skipped: No zzz player id set.")
     async with ZZZClient(

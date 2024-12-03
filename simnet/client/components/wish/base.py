@@ -1,4 +1,4 @@
-from typing import Optional, Any, List, Dict
+from typing import Any, Dict, List, Optional
 from urllib.parse import unquote
 
 from simnet.client.base import BaseClient
@@ -105,7 +105,9 @@ class BaseWishClient(BaseClient):
             game=game,
             lang=lang,
             authkey=authkey,
-            params=dict(gacha_type=banner_type, size=size, end_id=end_id, game_biz=game.value),
+            params=dict(
+                gacha_type=banner_type, size=size, end_id=end_id, game_biz=game.value
+            ),
         )
 
     async def get_banner_names(

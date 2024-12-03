@@ -1,4 +1,4 @@
-from typing import Any, Optional, Dict, Union, Tuple, Type, NoReturn
+from typing import Any, Dict, NoReturn, Optional, Tuple, Type, Union
 
 
 class SIMNetException(Exception):
@@ -47,7 +47,9 @@ class BadRequest(SIMNetException):
             self.message = message or self.original
 
         display_code = self.ret_code or self.status_code
-        display_message = f"[{display_code}] {self.message}" if display_code else self.message
+        display_message = (
+            f"[{display_code}] {self.message}" if display_code else self.message
+        )
 
         super().__init__(display_message)
 
@@ -214,7 +216,9 @@ class RequestNotSupported(BadRequest):
     ret_code = -520
 
     def __init__(self, *args, **kwargs):
-        super().__init__(message="service not supported for this request.", *args, **kwargs)
+        super().__init__(
+            message="service not supported for this request.", *args, **kwargs
+        )
 
 
 class RedemptionClaimed(RedemptionException):
@@ -281,7 +285,13 @@ _errors: Dict[int, Union[_TBR, str, Tuple[_TBR, Optional[str]]]] = {
 }
 
 ERRORS: Dict[int, Tuple[_TBR, Optional[str]]] = {
-    ret_code: ((exc, None) if isinstance(exc, type) else (BadRequest, exc) if isinstance(exc, str) else exc)
+    ret_code: (
+        (exc, None)
+        if isinstance(exc, type)
+        else (BadRequest, exc)
+        if isinstance(exc, str)
+        else exc
+    )
     for ret_code, exc in _errors.items()
 }
 

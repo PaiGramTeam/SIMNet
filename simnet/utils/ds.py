@@ -97,14 +97,13 @@ def generate_dynamic_secret(
                 salt = MIYOUSHE_APP_DS
             else:
                 raise ValueError(f"Unknown ds_type: {ds_type}")
+        elif ds_type is None:
+            salt = MIYOUSHE_WEB_DS
+        elif ds_type == DSType.ANDROID:
+            salt = "t0qEgfub6cvueAPgR5m9aQWWVciEer7v"
+            client_type = "2"
         else:
-            if ds_type is None:
-                salt = MIYOUSHE_WEB_DS
-            elif ds_type == DSType.ANDROID:
-                salt = "t0qEgfub6cvueAPgR5m9aQWWVciEer7v"
-                client_type = "2"
-            else:
-                raise ValueError(f"Unknown ds_type: {ds_type}")
+            raise ValueError(f"Unknown ds_type: {ds_type}")
     else:
         raise ValueError(f"Unknown region: {region}")
     if new_ds:

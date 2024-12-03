@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Optional
 
-from simnet.models.base import APIModel, Field, DateTimeField
+from simnet.models.base import APIModel, DateTimeField, Field
 
 
 class ZZZSelfHelpActionLogReason(str, Enum):

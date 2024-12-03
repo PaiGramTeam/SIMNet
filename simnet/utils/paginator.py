@@ -1,6 +1,7 @@
 import asyncio
 import contextlib
-from typing import List, Dict, Callable, Any, Awaitable
+from collections.abc import Awaitable
+from typing import Any, Callable, Dict, List
 
 
 class WishPaginator:

@@ -1,8 +1,8 @@
-from typing import List, Dict, Any, Literal
+from typing import Any, Dict, List, Literal
 
 from pydantic import model_validator
 
-from simnet.models.base import APIModel, Field, DateTimeField
+from simnet.models.base import APIModel, DateTimeField, Field
 from simnet.models.genshin.character import BaseCharacter
 
 __all__ = (

@@ -1,5 +1,5 @@
 from functools import partial
-from typing import Optional, List
+from typing import List, Optional
 
 from simnet.client.components.wish.base import BaseWishClient
 from simnet.models.zzz.wish import ZZZWish

@@ -1,4 +1,4 @@
-from typing import List, Dict, TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict, List
 
 from pydantic import field_validator
 

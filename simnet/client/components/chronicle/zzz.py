@@ -1,4 +1,5 @@
-from typing import Optional, Mapping, Dict, Any, List
+from collections.abc import Mapping
+from typing import Any, Dict, List, Optional
 
 from simnet.client.components.chronicle.base import BaseChronicleClient
 from simnet.errors import BadRequest, DataNotPublic
@@ -7,7 +8,11 @@ from simnet.models.zzz.calculator import ZZZCalculatorCharacterDetails
 from simnet.models.zzz.chronicle.abyss_abstract import ZZZAbyssAbstract
 from simnet.models.zzz.chronicle.challenge import ZZZChallenge
 from simnet.models.zzz.chronicle.notes import ZZZNote
-from simnet.models.zzz.chronicle.stats import ZZZUserStats, ZZZAvatarBasic, ZZZBuddyBasic
+from simnet.models.zzz.chronicle.stats import (
+    ZZZAvatarBasic,
+    ZZZBuddyBasic,
+    ZZZUserStats,
+)
 from simnet.utils.enums import Game
 from simnet.utils.player import recognize_region, recognize_zzz_server
 
@@ -49,7 +54,9 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
         payload = dict(payload or {})
 
         player_id = player_id or self.player_id
-        payload = dict(role_id=player_id, server=recognize_zzz_server(player_id), **payload)
+        payload = dict(
+            role_id=player_id, server=recognize_zzz_server(player_id), **payload
+        )
 
         data, params = None, None
         if method == "POST":
@@ -92,7 +99,9 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
         except DataNotPublic as e:
             # error raised only when real-time notes are not enabled
             if player_id and self.player_id != player_id:
-                raise BadRequest(e.response, "Cannot view real-time notes of other users.") from e
+                raise BadRequest(
+                    e.response, "Cannot view real-time notes of other users."
+                ) from e
             if not autoauth:
                 raise BadRequest(e.response, "Real-time notes are not enabled.") from e
             await self.update_settings(3, True, game=Game.ZZZ)
@@ -215,7 +224,9 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
         if isinstance(characters, int):
             ch = [characters]
         payload = {"need_wiki": "true", "id_list[]": ch}
-        data = await self._request_zzz_record("avatar/info", player_id, lang=lang, payload=payload)
+        data = await self._request_zzz_record(
+            "avatar/info", player_id, lang=lang, payload=payload
+        )
         return ZZZCalculatorCharacterDetails(**data)
 
     async def get_zzz_buddy_list(
@@ -260,7 +271,9 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
             DataNotPublic: If the requested data is not public.
         """
         payload = dict(schedule_type=2 if previous else 1, need_all="true")
-        data = await self._request_zzz_record("challenge", player_id, lang=lang, payload=payload)
+        data = await self._request_zzz_record(
+            "challenge", player_id, lang=lang, payload=payload
+        )
         return ZZZChallenge(**data)
 
     async def get_record_card(

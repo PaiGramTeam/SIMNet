@@ -1,16 +1,16 @@
-from typing import Optional, Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import CALCULATOR_URL
 from simnet.errors import BadRequest
 from simnet.models.genshin.calculator import (
-    CalculatorResult,
-    CalculatorCharacter,
-    CalculatorWeapon,
     CalculatorArtifact,
-    CalculatorFurnishing,
+    CalculatorCharacter,
     CalculatorCharacterDetails,
+    CalculatorFurnishing,
+    CalculatorResult,
     CalculatorTalent,
+    CalculatorWeapon,
 )
 from simnet.utils.enums import Region
 from simnet.utils.player import recognize_genshin_server
@@ -60,7 +60,9 @@ class CalculatorClient(BaseClient):
                 "utm_source=bbs&utm_medium=mys&utm_campaign=icon#/"
             )
 
-        data = await self.request_lab(url, method=method, params=params, data=data, headers=headers)
+        data = await self.request_lab(
+            url, method=method, params=params, data=data, headers=headers
+        )
 
         return data
 
@@ -88,7 +90,9 @@ class CalculatorClient(BaseClient):
         Args:
             enabled (bool): Whether to enable syncing (default True).
         """
-        await self.request_calculator("avatar/auth", method="POST", data=dict(avatar_auth=int(enabled)))
+        await self.request_calculator(
+            "avatar/auth", method="POST", data=dict(avatar_auth=int(enabled))
+        )
 
     async def _get_calculator_items(
         self,

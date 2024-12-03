@@ -1,9 +1,14 @@
-from typing import Dict, Any, Optional, List, Union
+from typing import Any, Dict, List, Optional, Union
 from urllib import parse
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import YSULOG_URL
-from simnet.models.genshin.transaction import BaseTransaction, TransactionKind, ItemTransaction, Transaction
+from simnet.models.genshin.transaction import (
+    BaseTransaction,
+    ItemTransaction,
+    Transaction,
+    TransactionKind,
+)
 from simnet.utils.lang import create_short_lang_code
 
 
@@ -98,7 +103,9 @@ class TransactionClient(BaseClient):
 
         iterators: List[BaseTransaction] = []
         for value in kinds:
-            iterator = await self._get_transaction_page(end_id, value, lang=lang, authkey=authkey)
+            iterator = await self._get_transaction_page(
+                end_id, value, lang=lang, authkey=authkey
+            )
             iterators.extend(iterator)
 
         return iterators[: min(len(iterators), limit)] if limit else iterators

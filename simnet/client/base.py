@@ -1,21 +1,27 @@
 import logging
 import uuid
 from types import TracebackType
-from typing import AsyncContextManager, Type, Optional, Any, Union
+from typing import Any, AsyncContextManager, Optional, Type, Union
 
-from httpx import AsyncClient, TimeoutException, Response, HTTPError, Timeout
+from httpx import AsyncClient, HTTPError, Response, Timeout, TimeoutException
 
 from simnet.client.cookies import Cookies
 from simnet.client.headers import Headers
-from simnet.errors import TimedOut, NetworkError, BadRequest, raise_for_ret_code, NotSupported
-from simnet.utils.ds import generate_dynamic_secret, DSType, hex_digest
-from simnet.utils.enums import Region, Game
+from simnet.errors import (
+    BadRequest,
+    NetworkError,
+    NotSupported,
+    TimedOut,
+    raise_for_ret_code,
+)
+from simnet.utils.ds import DSType, generate_dynamic_secret, hex_digest
+from simnet.utils.enums import Game, Region
 from simnet.utils.types import (
     RT,
-    HeaderTypes,
     CookieTypes,
-    RequestData,
+    HeaderTypes,
     QueryParamTypes,
+    RequestData,
     TimeoutTypes,
     URLTypes,
 )
@@ -221,7 +227,9 @@ class BaseClient(AsyncContextManager["BaseClient"]):
                 headers["x-rpc-lang"] = self.lang or lang
             headers["x-rpc-language"] = self.lang or lang
         if ds is None:
-            app_version, client_type, ds = generate_dynamic_secret(self.region, ds_type, new_ds, data, params)
+            app_version, client_type, ds = generate_dynamic_secret(
+                self.region, ds_type, new_ds, data, params
+            )
             headers["x-rpc-app_version"] = app_version
             headers["x-rpc-client_type"] = client_type
         headers["DS"] = ds
@@ -351,5 +359,9 @@ class BaseClient(AsyncContextManager["BaseClient"]):
         """
         if method is None:
             method = "POST" if data else "GET"
-        headers = self.get_lab_api_header(headers, ds_type=ds_type, new_ds=new_ds, lang=lang, data=data, params=params)
-        return await self.request_api(method=method, url=url, json=data, params=params, headers=headers)
+        headers = self.get_lab_api_header(
+            headers, ds_type=ds_type, new_ds=new_ds, lang=lang, data=data, params=params
+        )
+        return await self.request_api(
+            method=method, url=url, json=data, params=params, headers=headers
+        )

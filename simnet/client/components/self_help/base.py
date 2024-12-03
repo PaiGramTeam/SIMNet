@@ -1,4 +1,4 @@
-from typing import Optional, Any, Dict
+from typing import Any, Dict, Optional
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import SELF_HELP_URL

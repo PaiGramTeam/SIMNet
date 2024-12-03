@@ -3,10 +3,9 @@ from http.cookies import SimpleCookie
 from typing import Optional, TypeVar
 
 from httpx import Cookies as _Cookies
+from pydantic import BaseModel
 
 from simnet.utils.types import CookieTypes
-
-from pydantic import BaseModel
 
 IntStr = TypeVar("IntStr", int, str)
 
@@ -120,7 +119,12 @@ class CookiesModel(BaseModel, frozen=False):
 
     @property
     def is_v2(self) -> bool:
-        if self.account_mid_v2 or self.cookie_token_v2 or self.ltoken_v2 or self.ltmid_v2:
+        if (
+            self.account_mid_v2
+            or self.cookie_token_v2
+            or self.ltoken_v2
+            or self.ltmid_v2
+        ):
             return True
         return False
 

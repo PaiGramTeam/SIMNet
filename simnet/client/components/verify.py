@@ -30,7 +30,9 @@ class VerifyClient(BaseClient):
             str: The challenge.
         """
         if self.region != Region.CHINESE:
-            raise RegionNotSupported("This method is only available for the Chinese region.")
+            raise RegionNotSupported(
+                "This method is only available for the Chinese region."
+            )
         params = {"is_high": "true" if is_high else "false"}
         return await self.request_lab(self.CREATE_VERIFICATION_URL, params=params)
 
@@ -45,11 +47,19 @@ class VerifyClient(BaseClient):
             str: The verification result.
         """
         if self.region != Region.CHINESE:
-            raise RegionNotSupported("This method is only available for the Chinese region.")
-        data = {"geetest_challenge": challenge, "geetest_validate": validate, "geetest_seccode": f"{validate}|jordan"}
+            raise RegionNotSupported(
+                "This method is only available for the Chinese region."
+            )
+        data = {
+            "geetest_challenge": challenge,
+            "geetest_validate": validate,
+            "geetest_seccode": f"{validate}|jordan",
+        }
         return await self.request_lab(self.VERIFY_VERIFICATION_URL, data=data)
 
-    async def request_verify_ajax(self, referer: str, gt: str, challenge: str) -> Optional[str]:
+    async def request_verify_ajax(
+        self, referer: str, gt: str, challenge: str
+    ) -> Optional[str]:
         """Get the ajax validate code.
 
         Args:
@@ -61,7 +71,9 @@ class VerifyClient(BaseClient):
             Optional[str]: The ajax validate code.
         """
         if self.region != Region.CHINESE:
-            raise RegionNotSupported("This method is only available for the Chinese region.")
+            raise RegionNotSupported(
+                "This method is only available for the Chinese region."
+            )
         params = {
             "gt": gt,
             "challenge": challenge,
@@ -77,7 +89,9 @@ class VerifyClient(BaseClient):
         headers["x-rpc-device_id"] = self.get_device_id()
         headers["x-rpc-device_fp"] = self.get_device_fp()
         headers["referer"] = referer
-        response = await self.request("GET", self.AJAX_URL, params=params, headers=headers)
+        response = await self.request(
+            "GET", self.AJAX_URL, params=params, headers=headers
+        )
         text = response.text
         json_data = re.findall(r"^.*?\((\{.*?)\)$", text)[0]
         data = json.loads(json_data)

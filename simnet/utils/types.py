@@ -1,4 +1,5 @@
-from typing import TypeVar, Union, Mapping, Optional, Sequence, Dict, List, Tuple, Any
+from collections.abc import Mapping, Sequence
+from typing import Any, Dict, List, Optional, Tuple, TypeVar, Union
 
 RT = TypeVar("RT", bound="BaseClient")
 

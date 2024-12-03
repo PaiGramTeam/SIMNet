@@ -3,7 +3,6 @@
 import typing
 
 from simnet.models.base import APIModel, Field
-
 from .. import character
 
 __all__ = [
@@ -29,7 +28,9 @@ class PartialStarRailUserStats(APIModel):
     """User stats with characters without equipment."""
 
     stats: StarRailStats
-    characters: typing.Sequence[character.StarRailPartialCharacter] = Field(alias="avatar_list")
+    characters: typing.Sequence[character.StarRailPartialCharacter] = Field(
+        alias="avatar_list"
+    )
 
 
 class StarRailUserInfo(APIModel):

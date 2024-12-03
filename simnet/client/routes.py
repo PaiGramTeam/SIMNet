@@ -3,8 +3,8 @@ from urllib.parse import urljoin
 
 from httpx import URL as _URL
 
-from simnet.errors import RegionNotSupported, NotSupported
-from simnet.utils.enums import Region, Game
+from simnet.errors import NotSupported, RegionNotSupported
+from simnet.utils.enums import Game, Region
 
 URLTypes = Union["URL", str]
 
@@ -215,7 +215,9 @@ class GameRoute(BaseRoute):
             raise RegionNotSupported(f"URL does not support {region.name} region.")
 
         if not self.urls[region][game]:
-            raise NotSupported(f"URL does not support {game.name} game for {region.name} region.")
+            raise NotSupported(
+                f"URL does not support {game.name} game for {region.name} region."
+            )
 
         return self.urls[region][game]
 

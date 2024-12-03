@@ -5,14 +5,14 @@ from typing import Optional, Tuple, Union
 from simnet.client.base import BaseClient
 from simnet.client.cookies import CookiesModel
 from simnet.client.routes import (
-    AUTH_URL,
     AUTH_KEY_URL,
+    AUTH_URL,
+    GET_FP_URL,
     HK4E_LOGIN_URL,
     PASSPORT_URL,
-    WEB_ACCOUNT_URL,
     QRCODE_URL,
     URL,
-    GET_FP_URL,
+    WEB_ACCOUNT_URL,
 )
 from simnet.errors import RegionNotSupported
 from simnet.utils.enums import Region
@@ -72,7 +72,9 @@ class AuthClient(BaseClient):
             self.cookies["stuid"] = str(self.account_id)
         return stoken
 
-    async def get_cookie_token_by_login_ticket(self, login_ticket: Optional[str] = None) -> Optional[str]:
+    async def get_cookie_token_by_login_ticket(
+        self, login_ticket: Optional[str] = None
+    ) -> Optional[str]:
         """
         Retrieves a cookie token (`cookie_token`) using a login ticket (`login_ticket`).
 
@@ -306,7 +308,9 @@ class AuthClient(BaseClient):
         ticket = url.split("ticket=")[1]
         return url, ticket
 
-    async def check_login_qrcode(self, ticket: str, app_id: str = "8") -> Union[bool, str]:
+    async def check_login_qrcode(
+        self, ticket: str, app_id: str = "8"
+    ) -> Union[bool, str]:
         """
         Check login qrcode and return token if success
 
@@ -351,7 +355,11 @@ class AuthClient(BaseClient):
         data = {"ticket": ticket, "app_id": app_id, "device": self.get_device_id()}
         await self.request_lab(url=scan_url, data=data)
         game_token = await self.get_game_token_by_stoken()
-        raw = jsonlib.dumps({"uid": str(self.account_id), "token": game_token}, indent=4, ensure_ascii=False)
+        raw = jsonlib.dumps(
+            {"uid": str(self.account_id), "token": game_token},
+            indent=4,
+            ensure_ascii=False,
+        )
         data["payload"] = {
             "proto": "Account",
             "raw": raw,
@@ -359,7 +367,9 @@ class AuthClient(BaseClient):
         confirm_url = (QRCODE_URL / "confirm").replace("hk4e_cn", biz_key)
         await self.request_lab(url=confirm_url, data=data)
 
-    async def get_stoken_v2_and_mid_by_game_token(self, game_token: str) -> Tuple[str, str]:
+    async def get_stoken_v2_and_mid_by_game_token(
+        self, game_token: str
+    ) -> Tuple[str, str]:
         """
         Get stoken_v2 and mid by game token
 
@@ -371,7 +381,10 @@ class AuthClient(BaseClient):
         """
         if self.region != Region.CHINESE:
             raise RegionNotSupported()
-        url = PASSPORT_URL.get_url(self.region) / "../../ma-cn-session/app/getTokenByGameToken"
+        url = (
+            PASSPORT_URL.get_url(self.region)
+            / "../../ma-cn-session/app/getTokenByGameToken"
+        )
         data = {
             "account_id": self.account_id,
             "game_token": game_token,
@@ -404,7 +417,10 @@ class AuthClient(BaseClient):
         if self.region != Region.CHINESE:
             raise RegionNotSupported()
         self.check_stoken(stoken, account_id)
-        url = PASSPORT_URL.get_url(self.region) / "../../ma-cn-session/app/getTokenBySToken"
+        url = (
+            PASSPORT_URL.get_url(self.region)
+            / "../../ma-cn-session/app/getTokenBySToken"
+        )
         headers = {"x-rpc-app_id": "bll8iq97cem8"}
         data = await self.request_lab(url, method="POST", headers=headers)
         mid = data.get("user_info", {}).get("mid", "")
@@ -436,7 +452,10 @@ class AuthClient(BaseClient):
             raise RegionNotSupported()
         self.check_stoken(stoken, account_id, mid)
         account_id = account_id or self.account_id
-        url = AUTH_KEY_URL.get_url(self.region) / "../../../account/ma-passport/token/getBySToken"
+        url = (
+            AUTH_KEY_URL.get_url(self.region)
+            / "../../../account/ma-passport/token/getBySToken"
+        )
         headers = {"x-rpc-app_id": "c9oqaq3s3gu8"}
         data_ = {"dst_token_types": [1, 2, 4]}
         data = await self.request_lab(url, method="POST", headers=headers, data=data_)
@@ -526,7 +545,10 @@ class AuthClient(BaseClient):
         """
         self.check_stoken(stoken, account_id, mid)
         if self.region == Region.OVERSEAS:
-            url = AUTH_KEY_URL.get_url(self.region) / "../../../account/ma-passport/token/verifySToken"
+            url = (
+                AUTH_KEY_URL.get_url(self.region)
+                / "../../../account/ma-passport/token/verifySToken"
+            )
             headers = {"x-rpc-app_id": "c9oqaq3s3gu8"}
             await self.request_lab(url, method="POST", headers=headers)
         else:
@@ -562,7 +584,10 @@ class AuthClient(BaseClient):
         self.cookies.set("ltoken", ltoken)
         self.cookies.set("ltuid", str(ltuid))
         if self.region == Region.OVERSEAS:
-            url = AUTH_KEY_URL.get_url(self.region) / "../../../account/ma-passport/token/verifyLToken"
+            url = (
+                AUTH_KEY_URL.get_url(self.region)
+                / "../../../account/ma-passport/token/verifyLToken"
+            )
             headers = {"x-rpc-app_id": "c9oqaq3s3gu8"}
             data = None
         else:
@@ -604,7 +629,10 @@ class AuthClient(BaseClient):
         self.cookies.set("cookie_token", cookie_token)
         self.cookies.set("account_id", str(account_id))
         if self.region == Region.OVERSEAS:
-            url = AUTH_KEY_URL.get_url(self.region) / "../../../account/ma-passport/token/verifyCookieToken"
+            url = (
+                AUTH_KEY_URL.get_url(self.region)
+                / "../../../account/ma-passport/token/verifyCookieToken"
+            )
             headers = {"x-rpc-app_id": "c9oqaq3s3gu8"}
             data = None
         else:

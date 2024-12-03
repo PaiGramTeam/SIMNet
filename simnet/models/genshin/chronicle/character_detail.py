@@ -5,11 +5,11 @@ from pydantic import field_validator
 
 from simnet.models.base import APIModel, Field
 from simnet.models.genshin.chronicle.characters import (
-    PartialCharacter,
-    CharacterWeapon,
-    Outfit,
-    Constellation,
     Artifact,
+    CharacterWeapon,
+    Constellation,
+    Outfit,
+    PartialCharacter,
 )
 
 

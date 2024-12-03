@@ -13,10 +13,15 @@ if TYPE_CHECKING:
 
 @pytest_asyncio.fixture
 async def calculator_client(
-    starrail_player_id: int, region: "Region", cookies: "Cookies", starrail_cookies: Optional["Cookies"]
+    starrail_player_id: int,
+    region: "Region",
+    cookies: "Cookies",
+    starrail_cookies: Optional["Cookies"],
 ):
     if starrail_player_id is None:
-        pytest.skip("Test case test_starrail_calculator_client skipped: No starrail player id set.")
+        pytest.skip(
+            "Test case test_starrail_calculator_client skipped: No starrail player id set."
+        )
     async with StarrailCalculatorClient(
         player_id=starrail_player_id,
         cookies=starrail_cookies or cookies,
@@ -32,7 +37,9 @@ class TestCalculatorClient:
     @staticmethod
     async def test_character_details(calculator_client: "StarrailCalculatorClient"):
         characters = await calculator_client.get_calculator_characters()
-        character_details = await calculator_client.get_character_details(characters[-1].id)
+        character_details = await calculator_client.get_character_details(
+            characters[-1].id
+        )
         assert len(character_details.skills) == 4
         for talent in character_details.skills:
             assert talent.cur_level > -1

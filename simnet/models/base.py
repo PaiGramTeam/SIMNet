@@ -1,11 +1,18 @@
 import datetime
 import typing
 
-from pydantic import ConfigDict, BaseModel, Field as PydanticField, AfterValidator, BeforeValidator, WrapSerializer
+from pydantic import (
+    AfterValidator,
+    BaseModel,
+    BeforeValidator,
+    ConfigDict,
+    WrapSerializer,
+)
+from pydantic import Field as PydanticField
 from pydantic_core import PydanticUndefined
 
 if typing.TYPE_CHECKING:
-    from pydantic import SerializerFunctionWrapHandler, SerializationInfo
+    from pydantic import SerializationInfo, SerializerFunctionWrapHandler
 
 CN_TIMEZONE = datetime.timezone(datetime.timedelta(hours=8))
 
@@ -39,7 +46,9 @@ def add_timezone(value: datetime.datetime) -> datetime.datetime:
 
 
 def str_time_date_plain(
-    value: datetime.datetime, handler: "SerializerFunctionWrapHandler", info: "SerializationInfo"
+    value: datetime.datetime,
+    handler: "SerializerFunctionWrapHandler",
+    info: "SerializationInfo",
 ) -> typing.Union[str, datetime.datetime]:
     """
     Converts a datetime object to its ISO 8601 string representation if the mode is JSON, otherwise uses the handler.
@@ -71,7 +80,9 @@ def str_time_delta_parsing(v: str) -> datetime.timedelta:
 
 
 def str_time_delta_plain(
-    value: datetime.timedelta, handler: "SerializerFunctionWrapHandler", info: "SerializationInfo"
+    value: datetime.timedelta,
+    handler: "SerializerFunctionWrapHandler",
+    info: "SerializationInfo",
 ) -> typing.Union[float, datetime.timedelta]:
     """
     Converts a timedelta object to its total seconds as a float if the mode is JSON, otherwise uses the handler.

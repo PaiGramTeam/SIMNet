@@ -1,16 +1,20 @@
 """Daily reward component."""
 
 import asyncio
-from typing import Optional, Dict, Any, List
+from typing import Any, Dict, List, Optional
 
 from httpx import QueryParams
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import REWARD_URL
 from simnet.errors import GeetestTriggered
-from simnet.models.lab.daily import DailyRewardInfo, DailyReward, ClaimedDailyReward
+from simnet.models.lab.daily import ClaimedDailyReward, DailyReward, DailyRewardInfo
 from simnet.utils.enums import Game, Region
-from simnet.utils.player import recognize_genshin_server, recognize_starrail_server, recognize_zzz_server
+from simnet.utils.player import (
+    recognize_genshin_server,
+    recognize_starrail_server,
+    recognize_zzz_server,
+)
 
 __all__ = ("DailyRewardClient",)
 
@@ -196,13 +200,17 @@ class DailyRewardClient(BaseClient):
             if page >= 10:
                 break
 
-            fetched_items = await self._get_claimed_rewards_page(page, game=game or self.game, lang=lang)
+            fetched_items = await self._get_claimed_rewards_page(
+                page, game=game or self.game, lang=lang
+            )
             if not fetched_items:
                 break
 
             # Calculate how many items should be added
             items_to_add = (
-                limit - index if limit is not None and limit - index < len(fetched_items) else len(fetched_items)
+                limit - index
+                if limit is not None and limit - index < len(fetched_items)
+                else len(fetched_items)
             )
 
             result.extend(fetched_items[:items_to_add])

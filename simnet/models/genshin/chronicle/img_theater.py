@@ -2,7 +2,7 @@ import enum
 import typing
 from typing import Optional
 
-from simnet.models.base import APIModel, Field, DateTimeField
+from simnet.models.base import APIModel, DateTimeField, Field
 from simnet.models.genshin.character import BaseCharacter
 from simnet.models.starrail.chronicle.base import PartialTime
 from simnet.models.zzz.calculator import desc_to_html

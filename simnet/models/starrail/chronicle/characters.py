@@ -1,11 +1,10 @@
 """Starrail chronicle character."""
 
-from typing import List, Optional, Any, Dict
+from typing import Any, Dict, List, Optional
 
 from pydantic import field_validator
 
 from simnet.models.base import APIModel
-
 from .. import character
 
 __all__ = [
@@ -203,7 +202,9 @@ class StarRailDetailCharacters(APIModel):
     relic_properties: List[RelicProperty]
 
     @staticmethod
-    def _parse(v: Dict[str, Any], key: str = None, value_key: str = None) -> List[Dict[str, Any]]:
+    def _parse(
+        v: Dict[str, Any], key: str = None, value_key: str = None
+    ) -> List[Dict[str, Any]]:
         """Parse dict to list."""
         if isinstance(v, list):
             return v
@@ -236,7 +237,9 @@ class StarRailDetailCharacters(APIModel):
         """Parse recommend property."""
         return cls._parse(v, "id")
 
-    def get_recommend_property_by_cid(self, character_id: int) -> Optional[RecommendProperty]:
+    def get_recommend_property_by_cid(
+        self, character_id: int
+    ) -> Optional[RecommendProperty]:
         """Get recommend property by character id."""
         for i in self.recommend_property:
             if i.id == character_id:

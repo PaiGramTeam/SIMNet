@@ -1,5 +1,5 @@
 from functools import partial
-from typing import Optional, List
+from typing import List, Optional
 
 from simnet.client.components.self_help.base import BaseSelfHelpClient
 from simnet.models.starrail.self_help import StarRailSelfHelpActionLog

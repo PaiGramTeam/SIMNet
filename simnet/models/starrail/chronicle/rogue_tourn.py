@@ -3,7 +3,12 @@ from typing import List
 from simnet.models.base import APIModel
 from simnet.models.starrail.character import RogueCharacter
 from simnet.models.starrail.chronicle.base import PartialTime
-from simnet.models.starrail.chronicle.rogue import RogueUserRole, RogueBuff, RogueMiracle, RogueBuffType
+from simnet.models.starrail.chronicle.rogue import (
+    RogueBuff,
+    RogueBuffType,
+    RogueMiracle,
+    RogueUserRole,
+)
 
 
 class StarRailRogueTournCommonInfo(APIModel):

@@ -1,11 +1,15 @@
 """Starrail calculator models."""
 
-from typing import Dict, Any, Optional, List
+from typing import Any, Dict, List, Optional
 
 from pydantic import field_validator
 
 from simnet.models.base import APIModel, Field
-from simnet.models.starrail.character import StarRailBaseCharacter, StarRailElement, StarRailDestiny
+from simnet.models.starrail.character import (
+    StarRailBaseCharacter,
+    StarRailDestiny,
+    StarRailElement,
+)
 
 __all__ = (
     "CALCULATOR_ELEMENTS",

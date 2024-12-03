@@ -34,3 +34,73 @@ log_cli_date_format = "%Y-%m-%d %H:%M:%S"
 include = '\.pyi?$'
 line-length = 120
 target-version = ['py39', 'py310', 'py311', 'py312']
+
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "PL", # pylint
+    "UP",  # pyupgrade
+    "PERF", # Perflint
+    "FLY", # flynt
+    "B",  # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "PIE", # flake8-pie
+    "SIM", # flake8-simplify
+    "RET", # flake8-return
+    "RSE", # flake8-raise
+    "G", # flake8-logging-format
+    "ISC", # flake8-implicit-str-concat
+    "PT", # flake8-pytest-style
+    "ASYNC", # flake8-async
+    "TCH", # flake8-type-checking
+    "SLOT", # flake8-slots-slot
+    "PYI", # flake8-pyi
+    "Q", # flake8-quotes
+    "INP", # flake8-no-pep420
+    "YTT", # flake8-2020
+    "DTZ", # flake8-datetimez
+    "ARG", # flake8-unused-arguments
+    "S", # flake8-bandit
+    "ARG" , # flake8-print
+    "FURB", # refurb
+    "AIR", # Airflow
+    "TRY", # tryceratops
+]
+ignore = [
+    "E501",  # line too long, handled by black
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+    "W191", # indentation contains tabs
+    "PLR0913", # Too many arguments in function definition
+    "PLR0917", # Too many positional arguments
+    "TRY003", # Avoid specifying long messages outside the exception class
+    "TRY400", #  Use logging.exception instead of logging.xxxx
+]
+[tool.ruff.lint.per-file-ignores]
+"tests/*.py" = ["B018"] # Found useless expression. Either assign it to a variable or remove it.
+"tests/**.py" = [
+    "ASYNC230", # Async functions should not open files with blocking methods like open
+    "DTZ",
+    "ARG",
+    "ASYNC109", # Async function definition with a timeout parameter
+    "D",
+    "S",
+    "TRY"
+]
+
+[tool.coverage.run]
+source = ["SIMNet"]
+omit = [
+    "tests/",
+]
+
+[tool.coverage.report]
+exclude_also = [
+    "@overload",
+    "@abstractmethod",
+    "if TYPE_CHECKING:"
+]

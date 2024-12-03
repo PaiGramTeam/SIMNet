@@ -1,5 +1,6 @@
+from collections.abc import Sequence
 from datetime import datetime, timedelta
-from typing import List, Literal, Sequence
+from typing import List, Literal
 
 from simnet.models.base import APIModel, Field, TimeDeltaField
 

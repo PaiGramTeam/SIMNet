@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Literal
 
-from simnet.models.base import APIModel, Field, DateTimeField
+from simnet.models.base import APIModel, DateTimeField, Field
 
 __all__ = ("BaseTransaction", "ItemTransaction", "Transaction", "TransactionKind")
 
@@ -38,7 +38,9 @@ class BaseTransaction(APIModel):
 class Transaction(BaseTransaction):
     """Genshin transaction of currency."""
 
-    kind: Literal[TransactionKind.PRIMOGEM, TransactionKind.CRYSTAL, TransactionKind.RESIN]
+    kind: Literal[
+        TransactionKind.PRIMOGEM, TransactionKind.CRYSTAL, TransactionKind.RESIN
+    ]
 
 
 class ItemTransaction(BaseTransaction):

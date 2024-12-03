@@ -1,5 +1,5 @@
 from functools import partial
-from typing import Optional, List
+from typing import List, Optional
 
 from simnet.client.components.wish.base import BaseWishClient
 from simnet.models.genshin.wish import Wish
@@ -41,7 +41,9 @@ class GenshinWishClient(BaseWishClient):
         banner_types = banner_types or [100, 200, 301, 302, 500]
         if isinstance(banner_types, int):
             banner_types = [banner_types]
-        banner_names = await self.get_banner_names(game=Game.GENSHIN, lang=lang, authkey=authkey)
+        banner_names = await self.get_banner_names(
+            game=Game.GENSHIN, lang=lang, authkey=authkey
+        )
         wishes = []
         for banner_type in banner_types:
             paginator = WishPaginator(
@@ -56,7 +58,9 @@ class GenshinWishClient(BaseWishClient):
             )
             items = await paginator.get(limit)
             banner_name = (
-                banner_names.get(banner_type, banner_default_name) if banner_type != 400 else banner_names[301]
+                banner_names.get(banner_type, banner_default_name)
+                if banner_type != 400
+                else banner_names[301]
             )
             wishes.extend([Wish(**i, banner_name=banner_name) for i in items])
         return sorted(wishes, key=lambda wish: wish.time.timestamp())
