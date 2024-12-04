@@ -20,13 +20,13 @@ jobs:
 
       - name: Install Poetry and Twine
         run: |
-          pip install poetry twine
+          pip install uv twine
 
       - name: Install dependencies
-        run: poetry install
+        run: uv sync
 
       - name: Build wheel
-        run: poetry build
+        run: uv build
 
       - name: upload to pypi
         run: twine upload dist/*
