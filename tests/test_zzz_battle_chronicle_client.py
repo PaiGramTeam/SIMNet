@@ -51,10 +51,11 @@ class TestZZZBattleChronicleClient:
 
     @staticmethod
     async def test_get_zzz_character_info(zzz_client: "ZZZBattleChronicleClient"):
-        character_info = await zzz_client.get_zzz_character_info([1081])
+        character_info = await zzz_client.get_zzz_character_info([1081, 1121])
         assert character_info is not None
-        assert len(character_info.characters) == 1
+        assert len(character_info.characters) == 2
         assert character_info.characters[0].id == 1081
+        assert character_info.characters[1].id == 1121
 
     @staticmethod
     async def test_get_zzz_buddy_list(zzz_client: "ZZZBattleChronicleClient"):

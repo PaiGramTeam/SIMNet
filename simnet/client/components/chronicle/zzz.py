@@ -1,3 +1,4 @@
+import asyncio
 from collections.abc import Mapping
 from typing import Any, Optional
 
@@ -216,12 +217,29 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
             BadRequest: If the request is invalid.
             DataNotPublic: If the requested data is not public.
         """
+
+        def _get_payload(cid: int) -> dict:
+            """
+            Creates a payload dictionary for a given character ID.
+
+            Args:
+                cid (int): The character ID.
+
+            Returns:
+                dict: A dictionary containing the payload with the character ID.
+            """
+            return {"need_wiki": "true", "id_list[]": cid}
+
         ch = characters
         if isinstance(characters, int):
             ch = [characters]
-        payload = {"need_wiki": "true", "id_list[]": ch}
-        data = await self._request_zzz_record("avatar/info", player_id, lang=lang, payload=payload)
-        return ZZZCalculatorCharacterDetails(**data)
+        tasks = [
+            self._request_zzz_record("avatar/info", player_id, lang=lang, payload=_get_payload(character_id_))
+            for character_id_ in ch
+        ]
+        results = await asyncio.gather(*tasks)
+        data = [data["avatar_list"][0] for data in results]
+        return ZZZCalculatorCharacterDetails(**{"avatar_list": data})
 
     async def get_zzz_buddy_list(
         self,
