@@ -15,7 +15,7 @@ APP_KEYS = {
     },
     Game.ZZZ: {
         Region.OVERSEAS: "ff0f2776bf515d79d1f8ff1fb98b2a06",
-        Region.CHINESE: "4650f3a396d34d576c3d65df26415394",
+        Region.CHINESE: "8844b676f3268c082a56021d9f47a206",
     },
 }
 """App keys used for game login."""
