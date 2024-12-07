@@ -239,7 +239,7 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
         ]
         results = await asyncio.gather(*tasks)
         data = [data["avatar_list"][0] for data in results]
-        return ZZZCalculatorCharacterDetails(**{"avatar_list": data})
+        return ZZZCalculatorCharacterDetails(avatar_list=data)
 
     async def get_zzz_buddy_list(
         self,
