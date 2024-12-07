@@ -34,6 +34,7 @@ __all__ = (
     "GET_FP_URL",
     "BBS_URL",
     "SELF_HELP_URL",
+    "GAME_LOGIN_URL",
 )
 
 
@@ -364,5 +365,20 @@ SELF_HELP_URL = GameRoute(
         "genshin": "https://hk4e-api.mihoyo.com/common/hk4e_self_help_query",
         "hkrpg": "https://api-takumi.mihoyo.com/common/hkrpg_self_help_inquiry",
         "nap": "https://public-operation-nap.mihoyo.com/common/nap_self_help_query",
+    },
+)
+
+GAME_LOGIN_URL = GameRoute(
+    overseas={
+        "genshin": "https://hk4e-sdk-os.hoyoverse.com/hk4e_global/combo/granter/login/v2/login",
+        "honkai3rd": "https://bh3-sdk-os.hoyoverse.com/bh3_os/combo/granter/login/v2/login",
+        "hkrpg": "https://hkrpg-sdk-os.hoyoverse.com/hkrpg_global/combo/granter/login/v2/login",
+        "nap": "https://nap-sdk-os.hoyoverse.com/nap_global/combo/granter/login/v2/login",
+    },
+    chinese={
+        "genshin": "https://hk4e-sdk.mihoyo.com/hk4e_cn/combo/granter/login/v2/login",
+        "honkai3rd": "https://api-sdk.mihoyo.com/bh3_cn/combo/granter/login/v2/login",
+        "hkrpg": "https://hkrpg-sdk.mihoyo.com/hkrpg_cn/combo/granter/login/v2/login",
+        "nap": "https://nap-sdk.mihoyo.com/nap_cn/combo/granter/login/v2/login",
     },
 )

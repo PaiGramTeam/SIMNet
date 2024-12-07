@@ -2,7 +2,7 @@ import json as jsonlib
 import time
 from typing import Optional, Union
 
-from simnet.client.base import BaseClient
+from simnet.client.components.auth_client import AuthBaseClient
 from simnet.client.cookies import CookiesModel
 from simnet.client.routes import (
     AUTH_KEY_URL,
@@ -22,7 +22,7 @@ from simnet.utils.player import recognize_game_biz, recognize_server
 __all__ = ("AuthClient",)
 
 
-class AuthClient(BaseClient):
+class AuthClient(AuthBaseClient):
     """
     The AuthClient class is a client for authentication services.
     It is derived from the BaseClient class and provides methods for retrieving
