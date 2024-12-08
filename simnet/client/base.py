@@ -1,8 +1,8 @@
 import logging
+import typing
 import uuid
 from contextlib import AbstractAsyncContextManager
 from types import TracebackType
-from typing import Any, Optional, Union
 
 from httpx import AsyncClient, HTTPError, Response, Timeout, TimeoutException
 
@@ -12,6 +12,7 @@ from simnet.errors import (
     BadRequest,
     NetworkError,
     NotSupported,
+    RegionNotSupported,
     TimedOut,
     raise_for_ret_code,
 )
@@ -37,38 +38,38 @@ class BaseClient(AbstractAsyncContextManager["BaseClient"]):
     This is the base class for simnet clients. It provides common methods and properties for simnet clients.
 
     Args:
-        cookies (Optional[str, CookieTypes], optional): The cookies used for the client.
-        headers (Optional[HeaderTypes], optional): The headers used for the client.
-        account_id (Optional[int], optional): The account id used for the client.
-        player_id (Optional[int], optional): The player id used for the client.
-        region (Region, optional): The region used for the client.
-        lang (str, optional): The language used for the client.
-        timeout (Optional[TimeoutTypes], optional): Timeout configuration for the client.
+        cookies (typing.Optional[str, CookieTypes], typing.Optional): The cookies used for the client.
+        headers (typing.Optional[HeaderTypes], typing.Optional): The headers used for the client.
+        account_id (typing.Optional[int], typing.Optional): The account id used for the client.
+        player_id (typing.Optional[int], typing.Optional): The player id used for the client.
+        region (Region, typing.Optional): The region used for the client.
+        lang (str, typing.Optional): The language used for the client.
+        timeout (typing.Optional[TimeoutTypes], typing.Optional): Timeout configuration for the client.
 
     Attributes:
         headers (HeaderTypes): The headers used for the client.
-        account_id (Optional[int]): The account id used for the client.
-        player_id (Optional[int]): The player id used for the client.
+        account_id (typing.Optional[int]): The account id used for the client.
+        player_id (typing.Optional[int]): The player id used for the client.
         region (Region): The region used for the client.
         lang (str): The language used for the client.
-        game (Optional[Game]): The game used for the client.
+        game (typing.Optional[Game]): The game used for the client.
 
     """
 
-    game: Optional[Game] = None
+    game: typing.Optional[Game] = None
     __device_id = str(uuid.uuid3(uuid.NAMESPACE_URL, "SIMNet"))
 
     def __init__(
         self,
-        cookies: Optional[Union[str, CookieTypes]] = None,
-        headers: Optional[HeaderTypes] = None,
-        account_id: Optional[int] = None,
-        player_id: Optional[int] = None,
+        cookies: typing.Optional[typing.Union[str, CookieTypes]] = None,
+        headers: typing.Optional[HeaderTypes] = None,
+        account_id: typing.Optional[int] = None,
+        player_id: typing.Optional[int] = None,
         region: Region = Region.OVERSEAS,
         lang: str = "en-us",
-        timeout: Optional[TimeoutTypes] = None,
-        device_id: Optional[str] = None,
-        device_fp: Optional[str] = None,
+        timeout: typing.Optional[TimeoutTypes] = None,
+        device_id: typing.Optional[str] = None,
+        device_fp: typing.Optional[str] = None,
     ) -> None:
         """Initialize the client with the given parameters."""
         if timeout is None:
@@ -159,9 +160,9 @@ class BaseClient(AbstractAsyncContextManager["BaseClient"]):
 
     async def __aexit__(
         self,
-        exc_type: Optional[type[BaseException]],
-        exc_val: Optional[BaseException],
-        exc_tb: Optional[TracebackType],
+        exc_type: typing.Optional[type[BaseException]],
+        exc_val: typing.Optional[BaseException],
+        exc_tb: typing.Optional[TracebackType],
     ) -> None:
         """Exit the async context manager and shutdown the client."""
         await self.shutdown()
@@ -197,23 +198,23 @@ class BaseClient(AbstractAsyncContextManager["BaseClient"]):
     def get_lab_api_header(
         self,
         headers: HeaderTypes,
-        lang: Optional[str] = None,
+        lang: typing.Optional[str] = None,
         ds: str = None,
         ds_type: str = None,
         new_ds: bool = False,
-        data: Any = None,
-        params: Optional[QueryParamTypes] = None,
+        data: typing.Any = None,
+        params: typing.Optional[QueryParamTypes] = None,
     ):
         """Get the lab API header for API requests.
 
         Args:
             headers (HeaderTypes): The header to use.
-            lang (Optional[str], optional): The language to use for overseas regions. Defaults to None.
-            ds (str, optional): The DS string to use. Defaults to None.
-            ds_type (Optional[DSType], optional): The DS type to use. Defaults to None.
-            new_ds (bool, optional): Whether to generate a new DS. Defaults to False.
-            data (Any, optional): The data to use. Defaults to None.
-            params (Optional[QueryParamTypes], optional): The query parameters to use. Defaults to None.
+            lang (typing.Optional[str], typing.Optional): The language to use for overseas regions. Defaults to None.
+            ds (str, typing.Optional): The DS string to use. Defaults to None.
+            ds_type (typing.Optional[DSType], typing.Optional): The DS type to use. Defaults to None.
+            new_ds (bool, typing.Optional): Whether to generate a new DS. Defaults to False.
+            data (Any, typing.Optional): The data to use. Defaults to None.
+            params (typing.Optional[QueryParamTypes], typing.Optional): The query parameters to use. Defaults to None.
         Returns:
             Headers: The lab API header with added fields.
         """
@@ -238,10 +239,10 @@ class BaseClient(AbstractAsyncContextManager["BaseClient"]):
         self,
         method: str,
         url: URLTypes,
-        data: Optional[RequestData] = None,
-        json: Optional[Any] = None,
-        params: Optional[QueryParamTypes] = None,
-        headers: Optional[HeaderTypes] = None,
+        data: typing.Optional[RequestData] = None,
+        json: typing.Optional[typing.Any] = None,
+        params: typing.Optional[QueryParamTypes] = None,
+        headers: typing.Optional[HeaderTypes] = None,
     ) -> Response:
         """Make an HTTP request and return the response.
 
@@ -252,10 +253,10 @@ class BaseClient(AbstractAsyncContextManager["BaseClient"]):
         Args:
             method (str): The HTTP method to use for the request (e.g., "GET", "POST").
             url (URLTypes): The URL to send the request to.
-            data (Optional[RequestData]): The request data to include in the body of the request.
-            json (Optional[Any]): The JSON payload to include in the body of the request.
-            params (Optional[QueryParamTypes]): The query parameters to include in the request.
-            headers (Optional[HeaderTypes]): The headers to include in the request.
+            data (typing.Optional[RequestData]): The request data to include in the body of the request.
+            json (typing.Optional[Any]): The JSON payload to include in the body of the request.
+            params (typing.Optional[QueryParamTypes]): The query parameters to include in the request.
+            headers (typing.Optional[HeaderTypes]): The headers to include in the request.
 
         Returns:
             Response: A `Response` object representing the HTTP response.
@@ -283,9 +284,9 @@ class BaseClient(AbstractAsyncContextManager["BaseClient"]):
         self,
         method: str,
         url: URLTypes,
-        json: Optional[Any] = None,
-        params: Optional[QueryParamTypes] = None,
-        headers: Optional[HeaderTypes] = None,
+        json: typing.Optional[typing.Any] = None,
+        params: typing.Optional[QueryParamTypes] = None,
+        headers: typing.Optional[HeaderTypes] = None,
     ):
         """Make an API request and return the data.
 
@@ -296,9 +297,9 @@ class BaseClient(AbstractAsyncContextManager["BaseClient"]):
         Args:
             method (str): The HTTP method to use for the request (e.g., "GET", "POST").
             url (URLTypes): The URL to send the request to.
-            json (Optional[Any]): The JSON payload to include in the body of the request.
-            params (Optional[QueryParamTypes]): The query parameters to include in the request.
-            headers (Optional[HeaderTypes]): The headers to include in the request.
+            json (typing.Optional[Any]): The JSON payload to include in the body of the request.
+            params (typing.Optional[QueryParamTypes]): The query parameters to include in the request.
+            headers (typing.Optional[HeaderTypes]): The headers to include in the request.
 
         Returns:
             Any: The data returned by the API.
@@ -328,13 +329,13 @@ class BaseClient(AbstractAsyncContextManager["BaseClient"]):
     async def request_lab(
         self,
         url: URLTypes,
-        method: Optional[str] = None,
-        data: Optional[Any] = None,
-        params: Optional[QueryParamTypes] = None,
-        headers: Optional[HeaderTypes] = None,
-        lang: Optional[str] = None,
+        method: typing.Optional[str] = None,
+        data: typing.Optional[typing.Any] = None,
+        params: typing.Optional[QueryParamTypes] = None,
+        headers: typing.Optional[HeaderTypes] = None,
+        lang: typing.Optional[str] = None,
         new_ds: bool = False,
-        ds_type: Optional[DSType] = None,
+        ds_type: typing.Optional[DSType] = None,
     ):
         """Make a request to the lab API and return the data.
 
@@ -344,13 +345,13 @@ class BaseClient(AbstractAsyncContextManager["BaseClient"]):
 
         Args:
             url (URLTypes): The URL to send the request to.
-            method (Optional[str]): The HTTP method to use for the request (e.g., "GET", "POST").
-            data (Optional[Any]): The JSON payload to include in the body of the request.
-            params (Optional[QueryParamTypes]): The query parameters to include in the request.
-            headers (Optional[HeaderTypes]): The headers to include in the request.
-            lang (Optional[str]): The language of the request (e.g., "en", "zh").
+            method (typing.Optional[str]): The HTTP method to use for the request (e.g., "GET", "POST").
+            data (typing.Optional[Any]): The JSON payload to include in the body of the request.
+            params (typing.Optional[QueryParamTypes]): The query parameters to include in the request.
+            headers (typing.Optional[HeaderTypes]): The headers to include in the request.
+            lang (typing.Optional[str]): The language of the request (e.g., "en", "zh").
             new_ds (bool): Whether to use a new dataset for the request.
-            ds_type (Optional[DSType]): The type of dataset to use for the request (e.g., "news", "qa").
+            ds_type (typing.Optional[DSType]): The type of dataset to use for the request (e.g., "news", "qa").
 
         Returns:
             Any: The data returned by the lab API.
@@ -360,3 +361,10 @@ class BaseClient(AbstractAsyncContextManager["BaseClient"]):
             method = "POST" if data else "GET"
         headers = self.get_lab_api_header(headers, ds_type=ds_type, new_ds=new_ds, lang=lang, data=data, params=params)
         return await self.request_api(method=method, url=url, json=data, params=params, headers=headers)
+
+    def region_specific(self, cn: bool) -> None:
+        """Prevent function to be run with unsupported regions."""
+        if cn and self.region != Region.CHINESE:
+            raise RegionNotSupported
+        if not cn and self.region == Region.CHINESE:
+            raise RegionNotSupported

@@ -18,6 +18,7 @@ __all__ = (
     "GACHA_INFO_URL",
     "AUTH_URL",
     "PASSPORT_URL",
+    "PASSPORT_MA_URL",
     "WEB_ACCOUNT_URL",
     "AUTH_KEY_URL",
     "HK4E_LOGIN_URL",
@@ -34,6 +35,7 @@ __all__ = (
     "GET_FP_URL",
     "BBS_URL",
     "SELF_HELP_URL",
+    "GAME_LOGIN_URL",
 )
 
 
@@ -254,6 +256,10 @@ PASSPORT_URL = InternationalRoute(
     overseas="https://api-account-os.hoyoverse.com/account/auth/api/",
     chinese="https://passport-api.mihoyo.com/account/auth/api/",
 )
+PASSPORT_MA_URL = InternationalRoute(
+    overseas="https://api-account-os.hoyoverse.com/account/ma-passport/",
+    chinese="https://passport-api.mihoyo.com/account/ma-cn-session/",
+)
 WEB_ACCOUNT_URL = InternationalRoute(
     overseas="https://webapi-os.account.hoyoverse.com/Api/",
     chinese="https://webapi.account.mihoyo.com/Api/",
@@ -364,5 +370,20 @@ SELF_HELP_URL = GameRoute(
         "genshin": "https://hk4e-api.mihoyo.com/common/hk4e_self_help_query",
         "hkrpg": "https://api-takumi.mihoyo.com/common/hkrpg_self_help_inquiry",
         "nap": "https://public-operation-nap.mihoyo.com/common/nap_self_help_query",
+    },
+)
+
+GAME_LOGIN_URL = GameRoute(
+    overseas={
+        "genshin": "https://hk4e-sdk-os.hoyoverse.com/hk4e_global/combo/granter/login/v2/login",
+        "honkai3rd": "https://bh3-sdk-os.hoyoverse.com/bh3_os/combo/granter/login/v2/login",
+        "hkrpg": "https://hkrpg-sdk-os.hoyoverse.com/hkrpg_global/combo/granter/login/v2/login",
+        "nap": "https://nap-sdk-os.hoyoverse.com/nap_global/combo/granter/login/v2/login",
+    },
+    chinese={
+        "genshin": "https://hk4e-sdk.mihoyo.com/hk4e_cn/combo/granter/login/v2/login",
+        "honkai3rd": "https://api-sdk.mihoyo.com/bh3_cn/combo/granter/login/v2/login",
+        "hkrpg": "https://hkrpg-sdk.mihoyo.com/hkrpg_cn/combo/granter/login/v2/login",
+        "nap": "https://nap-sdk.mihoyo.com/nap_cn/combo/granter/login/v2/login",
     },
 )
