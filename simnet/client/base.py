@@ -1,4 +1,3 @@
-import functools
 import logging
 import typing
 import uuid
@@ -30,10 +29,6 @@ from simnet.utils.types import (
 )
 
 _LOGGER = logging.getLogger("SIMNet.BaseClient")
-
-T = typing.TypeVar("T")
-CallableT = typing.TypeVar("CallableT", bound="typing.Callable[..., object]")
-AsyncCallableT = typing.TypeVar("AsyncCallableT", bound="typing.Callable[..., typing.Awaitable[object]]")
 
 __all__ = ("BaseClient",)
 
@@ -367,20 +362,9 @@ class BaseClient(AbstractAsyncContextManager["BaseClient"]):
         headers = self.get_lab_api_header(headers, ds_type=ds_type, new_ds=new_ds, lang=lang, data=data, params=params)
         return await self.request_api(method=method, url=url, json=data, params=params, headers=headers)
 
-    @staticmethod
-    def region_specific(region: Region) -> typing.Callable[[AsyncCallableT], AsyncCallableT]:
+    def region_specific(self, cn: bool) -> None:
         """Prevent function to be run with unsupported regions."""
-
-        def decorator(func: AsyncCallableT) -> AsyncCallableT:
-            @functools.wraps(func)
-            async def wrapper(self: typing.Any, *args: typing.Any, **kwargs: typing.Any) -> typing.Any:
-                if not hasattr(self, "region"):
-                    raise TypeError("Cannot use @region_specific on a plain function.")
-                if region != self.region:
-                    raise RegionNotSupported
-
-                return await func(self, *args, **kwargs)
-
-            return typing.cast("AsyncCallableT", wrapper)
-
-        return decorator
+        if cn and self.region != Region.CHINESE:
+            raise RegionNotSupported
+        if not cn and self.region == Region.CHINESE:
+            raise RegionNotSupported

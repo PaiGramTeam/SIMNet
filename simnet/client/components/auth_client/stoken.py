@@ -153,7 +153,6 @@ class StokenAuthClient(BaseClient):
         data = await self.request_lab(url, data=json_data)
         return data.get("authkey")
 
-    @BaseClient.region_specific(Region.CHINESE)
     async def get_stoken_v2_and_mid_by_by_stoken(
         self,
         stoken: Optional[str] = None,
@@ -171,6 +170,7 @@ class StokenAuthClient(BaseClient):
         Returns:
             Tuple[str, str]: The stoken_v2 and mid.
         """
+        self.region_specific(True)
         self.check_stoken(stoken, account_id)
         url = PASSPORT_MA_URL.get_url(self.region) / "app/getTokenBySToken"
         headers = {"x-rpc-app_id": "bll8iq97cem8"}
@@ -181,7 +181,6 @@ class StokenAuthClient(BaseClient):
         self.cookies.set("stoken", stoken_v2)
         return stoken_v2, mid
 
-    @BaseClient.region_specific(Region.CHINESE)
     async def get_game_token_by_stoken(
         self,
         stoken: Optional[str] = None,
@@ -202,12 +201,12 @@ class StokenAuthClient(BaseClient):
         Returns:
             str: The game token.
         """
+        self.region_specific(True)
         self.check_stoken(stoken, account_id, mid)
         url = AUTH_URL.get_url(self.region) / "getGameToken"
         data = await self.request_lab(url, method="GET")
         return data.get("game_token", "")
 
-    @BaseClient.region_specific(Region.OVERSEAS)
     async def get_all_token_by_stoken(
         self,
         stoken: Optional[str] = None,
@@ -227,6 +226,7 @@ class StokenAuthClient(BaseClient):
         Returns:
             CookiesModel: The stoken_v2, mid, ltoken and cookie_token.
         """
+        self.region_specific(False)
         self.check_stoken(stoken, account_id, mid)
         account_id = account_id or self.account_id
         url = AUTH_KEY_URL.get_url(self.region) / "../../../account/ma-passport/token/getBySToken"
@@ -267,7 +267,6 @@ class StokenAuthClient(BaseClient):
             self.cookies.set("account_mid_v2", model.account_mid_v2)
         return model
 
-    @BaseClient.region_specific(Region.CHINESE)
     async def accept_login_qrcode(self, url: str) -> None:
         """
         Accept login qrcode
@@ -278,6 +277,7 @@ class StokenAuthClient(BaseClient):
         Returns:
             None
         """
+        self.region_specific(True)
         self.check_stoken()
         if not url.startswith("https://user.mihoyo.com/qr_code_in_game.html"):
             raise ValueError("Invalid url")
