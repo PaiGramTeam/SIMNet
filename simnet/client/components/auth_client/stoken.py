@@ -4,6 +4,7 @@ from typing import Optional
 from simnet.client.base import BaseClient
 from simnet.client.cookies import CookiesModel
 from simnet.client.routes import AUTH_KEY_URL, AUTH_URL, PASSPORT_MA_URL, PASSPORT_URL, QRCODE_URL, URL
+from simnet.utils.ds import DSType
 from simnet.utils.enums import Region
 from simnet.utils.player import recognize_game_biz, recognize_server
 
@@ -206,6 +207,43 @@ class StokenAuthClient(BaseClient):
         url = AUTH_URL.get_url(self.region) / "getGameToken"
         data = await self.request_lab(url, method="GET")
         return data.get("game_token", "")
+
+    async def get_auth_ticket_by_stoken(
+        self,
+        authorize_key: str,
+        package_name: str,
+        signature: str,
+        stoken: Optional[str] = None,
+        account_id: Optional[int] = None,
+        mid: Optional[str] = None,
+    ) -> str:
+        """
+        Get auth ticket by stoken
+
+        Args:
+            authorize_key (str): The authorize key to use to retrieve the game token.
+            package_name (str): The package name to use to retrieve the game token.
+            signature (str): The signature to use to retrieve the game token.
+            stoken (Optional[str]): The stoken_v1 to use to retrieve the game token.
+                If not provided, the `stoken` attribute value will be used.
+            account_id (Optional[int]): The account ID to use to retrieve the game token.
+                If not provided, the `account_id` attribute value will be used.
+            mid (Optional[str]): The mid to use to retrieve the game token.
+                If not provided, the `mid` attribute value will be used.
+
+        Returns:
+            str: The auth ticket.
+        """
+        self.region_specific(True)
+        self.check_stoken(stoken, account_id, mid)
+        url = PASSPORT_MA_URL.get_url(self.region) / "../ma-cn-verifier/app/createAuthTicket"
+        payload = {
+            "authorize_key": authorize_key,
+            "package_name": package_name,
+            "signature": signature,
+        }
+        data = await self.request_lab(url, data=payload, new_ds=True, ds_type=DSType.ANDROID)
+        return data.get("ticket")
 
     async def get_all_token_by_stoken(
         self,
