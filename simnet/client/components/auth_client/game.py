@@ -26,10 +26,7 @@ class GameAuthClient(BaseClient):
             "data": json.dumps({"uid": uid, "token": game_token, "guest": False, "is_new_register": False}),
         }
         payload["sign"] = generate_sign(payload, self.game, self.region)
-        print(payload)
         headers = get_game_login_headers(device, self.game, self.region)
-        print(headers)
 
         data = await self.request_api("POST", url, payload, headers=headers)
-
         return GameLoginResult(**data)

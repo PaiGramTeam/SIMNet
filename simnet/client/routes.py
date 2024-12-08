@@ -18,6 +18,7 @@ __all__ = (
     "GACHA_INFO_URL",
     "AUTH_URL",
     "PASSPORT_URL",
+    "PASSPORT_SESSION_URL",
     "WEB_ACCOUNT_URL",
     "AUTH_KEY_URL",
     "HK4E_LOGIN_URL",
@@ -255,6 +256,7 @@ PASSPORT_URL = InternationalRoute(
     overseas="https://api-account-os.hoyoverse.com/account/auth/api/",
     chinese="https://passport-api.mihoyo.com/account/auth/api/",
 )
+PASSPORT_SESSION_URL = Route("https://passport-api.mihoyo.com/account/ma-cn-session/app")
 WEB_ACCOUNT_URL = InternationalRoute(
     overseas="https://webapi-os.account.hoyoverse.com/Api/",
     chinese="https://webapi.account.mihoyo.com/Api/",
