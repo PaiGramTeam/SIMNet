@@ -387,3 +387,12 @@ GAME_LOGIN_URL = GameRoute(
         "nap": "https://nap-sdk.mihoyo.com/nap_cn/combo/granter/login/v2/login",
     },
 )
+
+CLOUD_GAME_URL = GameRoute(
+    overseas={},
+    chinese={
+        "genshin": "https://api-cloudgame.mihoyo.com/hk4e_cg_cn/",
+        "hkrpg": "https://cg-hkrpg-api.mihoyo.com/hkrpg_cn/cg/",
+        "nap": "https://cg-nap-api.mihoyo.com/nap_cn/cg/",
+    },
+)

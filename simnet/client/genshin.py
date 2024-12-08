@@ -3,6 +3,7 @@ from typing import Optional
 from simnet.client.components.auth import AuthClient
 from simnet.client.components.calculator.genshin import CalculatorClient
 from simnet.client.components.chronicle.genshin import GenshinBattleChronicleClient
+from simnet.client.components.cloud_game.base import BaseCloudGameClient
 from simnet.client.components.daily import DailyRewardClient
 from simnet.client.components.diary.genshin import GenshinDiaryClient
 from simnet.client.components.lab import LabClient
@@ -24,6 +25,7 @@ class GenshinClient(
     LabClient,
     TransactionClient,
     VerifyClient,
+    BaseCloudGameClient,
 ):
     """A simple http client for Genshin endpoints."""
 

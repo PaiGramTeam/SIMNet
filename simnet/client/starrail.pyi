@@ -1,6 +1,7 @@
 from simnet.client.components.auth import AuthClient
 from simnet.client.components.calculator.starrail import StarrailCalculatorClient
 from simnet.client.components.chronicle.starrail import StarRailBattleChronicleClient
+from simnet.client.components.cloud_game.base import BaseCloudGameClient
 from simnet.client.components.daily import DailyRewardClient
 from simnet.client.components.diary.starrail import StarrailDiaryClient
 from simnet.client.components.lab import LabClient
@@ -20,6 +21,7 @@ class StarRailClient(
     AuthClient,
     LabClient,
     VerifyClient,
+    BaseCloudGameClient,
 ):
     def __init__(
         self,
