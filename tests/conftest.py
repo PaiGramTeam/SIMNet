@@ -108,10 +108,5 @@ def region() -> Region:  # skipcq: PY-D0003
 
 
 @pytest.fixture(scope="session")
-def stoken() -> Optional[str]:  # skipcq: PY-D0003
-    return os.environ.get("STOKEN")
-
-
-@pytest.fixture(scope="session")
 def login_ticket() -> Optional[str]:  # skipcq: PY-D0003
     return os.environ.get("LOGIN_TICKET")

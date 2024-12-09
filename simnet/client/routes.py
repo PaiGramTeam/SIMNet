@@ -36,6 +36,7 @@ __all__ = (
     "BBS_URL",
     "SELF_HELP_URL",
     "GAME_LOGIN_URL",
+    "CLOUD_GAME_URL",
 )
 
 
@@ -385,5 +386,14 @@ GAME_LOGIN_URL = GameRoute(
         "honkai3rd": "https://api-sdk.mihoyo.com/bh3_cn/combo/granter/login/v2/login",
         "hkrpg": "https://hkrpg-sdk.mihoyo.com/hkrpg_cn/combo/granter/login/v2/login",
         "nap": "https://nap-sdk.mihoyo.com/nap_cn/combo/granter/login/v2/login",
+    },
+)
+
+CLOUD_GAME_URL = GameRoute(
+    overseas={},
+    chinese={
+        "genshin": "https://api-cloudgame.mihoyo.com/hk4e_cg_cn/",
+        "hkrpg": "https://cg-hkrpg-api.mihoyo.com/hkrpg_cn/cg/",
+        "nap": "https://cg-nap-api.mihoyo.com/nap_cn/cg/",
     },
 )
