@@ -3,7 +3,7 @@ from simnet.models.base import APIModel
 
 class CloudGameCoin(APIModel):
     """
-    Represents a cloud game coin containing various attributes related to the number of coins, free coins, coin limit, and exchange rate.
+    Represents a cloud game coin containing various attributes.
 
     Attributes:
         coin_num (int): The number of coins.
@@ -65,7 +65,7 @@ class CloudGameStat(APIModel):
 
 class CloudGamePlayCard(APIModel):
     """
-    Represents a cloud game play card containing various attributes related to its expiration, messages, limits, and remaining time.
+    Represents a cloud game play card containing various attributes.
 
     Attributes:
         expire (int): The expiration time of the play card.
@@ -86,7 +86,7 @@ class CloudGamePlayCard(APIModel):
 
 class CloudGameWallet(APIModel):
     """
-    Represents a cloud game wallet containing various attributes related to coins, free time, status, total time, statistics, and play cards.
+    Represents a cloud game wallet containing various attributes.
 
     Attributes:
         coin (CloudGameCoin): The coin information of the cloud game wallet.
