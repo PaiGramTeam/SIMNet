@@ -36,6 +36,7 @@ __all__ = (
     "BBS_URL",
     "SELF_HELP_URL",
     "GAME_LOGIN_URL",
+    "CLOUD_GAME_URL",
 )
 
 

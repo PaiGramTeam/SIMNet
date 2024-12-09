@@ -2,6 +2,7 @@ from typing import Any, Optional
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import CLOUD_GAME_URL
+from simnet.models.cloud_game.base import CloudGameWallet
 from simnet.utils.auth import get_combo_token
 from simnet.utils.enums import Game, Region
 from simnet.utils.types import QueryParamTypes
@@ -63,6 +64,29 @@ class BaseCloudGameClient(BaseClient):
 
         return await self.request_api(method, url, data, params, headers)
 
-    async def get_cloud_game_wallet(self):
+    async def check_cloud_game_token(self) -> dict[str, Any]:
+        """Check if the cloud game token is valid."""
+        return await self.request_cloud_game("POST", "gamer/api/login")
+
+    async def get_cloud_game_wallet(self) -> CloudGameWallet:
         """Get the wallet data for the cloud game."""
-        return await self.request_cloud_game("GET", "wallet/wallet/get")
+        data = await self.request_cloud_game("GET", "wallet/wallet/get")
+        return CloudGameWallet(**data)
+
+    async def get_cloud_game_notifications(
+        self, status: Optional[str] = None, notification_type: Optional[str] = None, is_sort: bool = True
+    ) -> dict[str, Any]:
+        """Get the notifications for the cloud game."""
+        status = status or "NotificationStatusUnread"
+        notification_type = notification_type or "NotificationTypePopup"
+        params = {
+            "status": status,
+            "type": notification_type,
+            "is_sort": is_sort,
+        }
+        return await self.request_cloud_game("GET", "gamer/api/listNotifications", params=params)
+
+    async def ask_cloud_game_notifications(self, notification_id: int) -> bool:
+        """Ask for the notifications for the cloud game."""
+        data = {"id": notification_id}
+        return await self.request_cloud_game("POST", "gamer/api/ackNotification", data=data)
