@@ -51,6 +51,7 @@ def get_game_login_headers(device_id: str, game: "Game", region: "Region") -> He
 
 
 def generate_sign_by_key(data: dict[str, typing.Any], key: str) -> str:
+    """Generate a sign for the given `data` and `key`."""
     string = ""
     for k in sorted(data.keys()):
         string += k + "=" + str(data[k]) + "&"
