@@ -45,6 +45,11 @@ class TestZZZBattleChronicleClient:
         assert abyss_abstract is not None
 
     @staticmethod
+    async def test_get_zzz_abysss2_abstract(zzz_client: "ZZZBattleChronicleClient"):
+        abysss2_abstract = await zzz_client.get_zzz_abysss2_abstract()
+        assert abysss2_abstract is not None
+
+    @staticmethod
     async def test_get_zzz_characters(zzz_client: "ZZZBattleChronicleClient"):
         characters = await zzz_client.get_zzz_characters()
         assert characters is not None
