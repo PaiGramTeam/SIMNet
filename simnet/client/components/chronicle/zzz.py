@@ -9,6 +9,7 @@ from simnet.models.zzz.calculator import ZZZCalculatorCharacterDetails
 from simnet.models.zzz.chronicle.abyss_abstract import ZZZAbyssAbstract
 from simnet.models.zzz.chronicle.abysss2_abstract import ZZZAbysss2Abstract
 from simnet.models.zzz.chronicle.challenge import ZZZChallenge
+from simnet.models.zzz.chronicle.challenge_mem import ZZZChallengeMem
 from simnet.models.zzz.chronicle.notes import ZZZNote
 from simnet.models.zzz.chronicle.stats import (
     ZZZAvatarBasic,
@@ -314,6 +315,30 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
         payload = {"schedule_type": 2 if previous else 1, "need_all": "true"}
         data = await self._request_zzz_record("challenge", player_id, lang=lang, payload=payload)
         return ZZZChallenge(**data)
+
+    async def get_zzz_challenge_mem(
+        self,
+        player_id: Optional[int] = None,
+        previous: bool = False,
+        lang: Optional[str] = None,
+    ) -> ZZZChallengeMem:
+        """Get zzz challenge mem runs.
+
+        Args:
+            player_id (Optional[int], optional): The player ID. Defaults to None.
+            previous (bool, optional): Whether to get previous runs. Defaults to False.
+            lang (Optional[str], optional): The language of the data. Defaults to None.
+
+        Returns:
+            ZZZChallengeMem: The requested challenge mem runs.
+
+        Raises:
+            BadRequest: If the request is invalid.
+            DataNotPublic: If the requested data is not public.
+        """
+        payload = {"schedule_type": 2 if previous else 1}
+        data = await self._request_zzz_record("mem_detail", player_id, lang=lang, payload=payload)
+        return ZZZChallengeMem(**data)
 
     async def get_record_card(
         self,

@@ -15,7 +15,17 @@ class ZZZFloorBuff(APIModel):
 class ZZZChallengeCharacter(ZZZBaseCharacter):
     """Challenge character"""
 
+    avatar_profession: Optional[int] = 0
     level: int
+    rank: Optional[int] = 0
+    icon: Optional[str] = Field(None, alias="role_square_url")
+    sub_element_type: Optional[int] = 0
+
+
+class ZZZChallengeBuddy(ZZZBaseBuddy):
+    """Challenge buddy"""
+
+    icon: Optional[str] = Field(None, alias="bangboo_rectangle_url")
 
 
 class ZZZFloorMonsterInfo(APIModel):
@@ -37,7 +47,7 @@ class ZZZFloorNode(APIModel):
     """A node"""
 
     avatars: list[ZZZChallengeCharacter]
-    buddy: Optional[ZZZBaseBuddy] = None
+    buddy: Optional[ZZZChallengeBuddy] = None
     element_type_list: list[int]
     monster_info: ZZZFloorMonster
 
