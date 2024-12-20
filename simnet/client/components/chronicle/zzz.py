@@ -7,6 +7,7 @@ from simnet.errors import BadRequest, DataNotPublic
 from simnet.models.lab.record import RecordCard
 from simnet.models.zzz.calculator import ZZZCalculatorCharacterDetails
 from simnet.models.zzz.chronicle.abyss_abstract import ZZZAbyssAbstract
+from simnet.models.zzz.chronicle.abysss2_abstract import ZZZAbysss2Abstract
 from simnet.models.zzz.chronicle.challenge import ZZZChallenge
 from simnet.models.zzz.chronicle.notes import ZZZNote
 from simnet.models.zzz.chronicle.stats import (
@@ -55,7 +56,13 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
         payload = dict(payload or {})
 
         player_id = player_id or self.player_id
-        payload = dict(role_id=player_id, server=recognize_zzz_server(player_id), **payload)
+        payload = dict(
+            role_id=player_id,
+            uid=player_id,
+            server=recognize_zzz_server(player_id),
+            region=recognize_zzz_server(player_id),
+            **payload,
+        )
 
         data, params = None, None
         if method == "POST":
@@ -175,6 +182,28 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
         """
         data = await self._request_zzz_record("abyss_abstract", player_id, lang=lang)
         return ZZZAbyssAbstract(**data)
+
+    async def get_zzz_abysss2_abstract(
+        self,
+        player_id: Optional[int] = None,
+        *,
+        lang: Optional[str] = None,
+    ) -> "ZZZAbysss2Abstract":
+        """Get ZZZ abysss2 abstract statistics.
+
+        Args:
+            player_id (Optional[int], optional): The player ID. Defaults to None.
+            lang (Optional[str], optional): The language of the data. Defaults to None.
+
+        Returns:
+            ZZZAbyssAbstract: The requested abyss abstract statistics.
+
+        Raises:
+            BadRequest: If the request is invalid.
+            DataNotPublic: If the requested data is not public.
+        """
+        data = await self._request_zzz_record("abysss2_abstract", player_id, lang=lang)
+        return ZZZAbysss2Abstract(**data)
 
     async def get_zzz_characters(
         self,
