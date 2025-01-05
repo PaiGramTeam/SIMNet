@@ -31,6 +31,7 @@ async def calculator_client(
 class TestCalculatorClient:
     @staticmethod
     async def test_character_details(calculator_client: "StarrailCalculatorClient"):
+        await calculator_client.get_calculator_characters(tab_from="TabAll")
         characters = await calculator_client.get_calculator_characters()
         character_details = await calculator_client.get_character_details(characters[-1].id)
         assert len(character_details.skills) == 4

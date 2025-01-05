@@ -36,6 +36,7 @@ CALCULATOR_DESTINIES: dict[int, StarRailDestiny] = {
     5: StarRailDestiny.XuWu,
     6: StarRailDestiny.CunHu,
     7: StarRailDestiny.FengRao,
+    8: StarRailDestiny.JiYi,
 }
 
 
