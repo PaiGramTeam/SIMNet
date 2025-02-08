@@ -59,6 +59,8 @@ class CalculatorClient(BaseClient):
                 "bbs_presentation_style=fullscreen&bbs_auth_required=true&"
                 "utm_source=bbs&utm_medium=mys&utm_campaign=icon#/"
             )
+        else:
+            headers["Referer"] = "https://act.hoyolab.com/"
 
         return await self.request_lab(url, method=method, params=params, data=data, headers=headers)
 

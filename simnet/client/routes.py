@@ -297,7 +297,7 @@ TAKUMI_URL = InternationalRoute(
 
 CALCULATOR_URL = GameRoute(
     overseas={
-        "genshin": "https://sg-public-api.hoyoverse.com/event/calculateos/",
+        "genshin": "https://sg-public-api.hoyolab.com/event/e20200928calculate/v1/",
         "hkrpg": "https://sg-public-api.hoyolab.com/event/rpgcalc/",
     },
     chinese={
