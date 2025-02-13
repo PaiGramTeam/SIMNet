@@ -34,6 +34,12 @@ class TestStarrailBattleChronicleClient:
         assert notes is not None
 
     @staticmethod
+    @pytest.mark.xfail(raises=NeedChallenge, reason="Challenge is needed, but not implemented yet.")
+    async def test_get_starrail_notes_by_stoken(starrail_client: "StarRailBattleChronicleClient"):
+        notes = await starrail_client.get_starrail_notes_by_stoken()
+        assert notes is not None
+
+    @staticmethod
     async def test_get_starrail_user(starrail_client: "StarRailBattleChronicleClient"):
         user = await starrail_client.get_starrail_user()
         assert user is not None

@@ -85,6 +85,8 @@ class StarRailNote(APIModel):
     """The max number of rogue tournament attempts"""
     rogue_tourn_weekly_cur: int
     """The current number of rogue tournament attempts"""
+    rogue_tourn_exp_is_full: bool
+    """Whether the rogue tournament expedition is full"""
 
 
 class StarRailNoteWidget(APIModel):
