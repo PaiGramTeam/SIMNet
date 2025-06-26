@@ -12,6 +12,7 @@ from simnet.models.genshin.chronicle.character_detail import (
     GenshinDetailCharacters,
 )
 from simnet.models.genshin.chronicle.characters import Character
+from simnet.models.genshin.chronicle.hard_challenge import GenshinHardChallenge
 from simnet.models.genshin.chronicle.img_theater import ImgTheater
 from simnet.models.genshin.chronicle.notes import Notes, NotesOverseaWidget, NotesWidget
 from simnet.models.genshin.chronicle.stats import (
@@ -193,6 +194,33 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         data = await self._request_genshin_record("role_combat", player_id, lang=lang, payload=payload)
 
         return ImgTheater(**data)
+
+    async def get_genshin_hard_challenge(
+        self,
+        player_id: Optional[int] = None,
+        need_detail: Optional[bool] = True,
+        *,
+        previous: bool = False,
+        lang: Optional[str] = None,
+    ) -> GenshinHardChallenge:
+        """Get genshin hard challenge runs.
+
+        Args:
+            player_id (Optional[int], optional): The player ID. Defaults to None.
+            need_detail (Optional[bool], optional): Whether to retrieve detailed data. Defaults to True.
+            previous (bool, optional): Whether to retrieve the data for the previous season of the Hard Challenge.
+            lang (Optional[str], optional): The language of the data. Defaults to None.
+
+        Returns:
+            GenshinHardChallenge: genshin hard challenge runs.
+        """
+        payload = {
+            "need_detail": need_detail,
+            "schedule_type": 2 if previous else 1,
+        }
+        data = await self._request_genshin_record("hard_challenge", player_id, lang=lang, payload=payload)
+
+        return GenshinHardChallenge(**data)
 
     async def get_genshin_notes(
         self,

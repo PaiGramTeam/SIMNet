@@ -54,6 +54,11 @@ class TestGenshinBattleChronicleClient:
         assert len(data.data) > 0
 
     @staticmethod
+    async def test_get_genshin_hard_challenge(genshin_client: GenshinBattleChronicleClient):
+        data = await genshin_client.get_genshin_hard_challenge()
+        assert len(data.data) > 0
+
+    @staticmethod
     async def test_get_genshin_notes(genshin_client: GenshinBattleChronicleClient):
         data = await genshin_client.get_genshin_notes()
         assert data
