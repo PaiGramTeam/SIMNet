@@ -37,7 +37,7 @@ class StarRailWishClient(BaseWishClient):
         Returns:
             List[StarRailWish]: A list of StarRailWish objects representing the retrieved wishes.
         """
-        banner_types = banner_types or [1, 2, 11, 12]
+        banner_types = banner_types or [1, 2, 11, 12, 21, 22]
         if isinstance(banner_types, int):
             banner_types = [banner_types]
         wishes = []

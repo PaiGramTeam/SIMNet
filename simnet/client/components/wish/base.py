@@ -100,8 +100,11 @@ class BaseWishClient(BaseClient):
         Returns:
             Dict[str, Any]: The response data as a dictionary.
         """
+        endpoint = "getGachaLog"
+        if game is Game.STARRAIL and banner_type in [21, 22]:
+            endpoint = "getLdGachaLog"
         return await self.request_gacha_info(
-            "getGachaLog",
+            endpoint,
             game=game,
             lang=lang,
             authkey=authkey,

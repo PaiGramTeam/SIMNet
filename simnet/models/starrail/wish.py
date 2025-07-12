@@ -22,6 +22,12 @@ class StarRailBannerType(IntEnum):
     WEAPON = 12
     """Rotating weapon banner."""
 
+    COLLABORATION_CHARACTER = 21
+    """Fate collaboration character banner."""
+
+    COLLABORATION_WEAPON = 22
+    """Fate collaboration weapon banner."""
+
 
 class StarRailWish(APIModel):
     """Wish made on any banner."""
