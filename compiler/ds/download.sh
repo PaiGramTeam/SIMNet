@@ -1,6 +1,6 @@
 #!/bin/bash
 
 # shellcheck disable=SC2154
-jsonData="$(curl -X GET "https://api-takumi.miyoushe.com/ptolemaios_api/api/getLatestRelease" -H "x-rpc-client_type: 2" -H "x-rpc-app_version: 2.80.1" -H "x-rpc-channel: miyousheluodi" -H "x-rpc-h265_supported: 1" -H "referer: https://app.mihoyo.com" -H "x-rpc-verify_key: bll8iq97cem8" -H "x-rpc-csm_source: " -H "user-agent: okhttp/4.9.3")"
-url="$(echo "$jsonData" | jq --raw-output '.data.package_url')"
+jsonData="$(curl -X POST 'https://yybadaccess.3g.qq.com/v2/dc_pcyyb_official' -H 'Content-Type: application/json' -d '{"head":{"cmd":"dc_pcyyb_official","authInfo":{"businessId":"AuthName"},"expSceneIds":"92215","hostAppInfo":{"scene":"game_detail"}},"body":{"bid":"yybhome","offset":0,"size":10,"preview":false,"listS":{"region":{"repStr":["CN"]},"pkgname":{"repStr":["com.mihoyo.hyperion"]}},"layout":"yybn_game_basic_info"}}')"
+url="$(echo "$jsonData" | jq --raw-output '.data.components[0].data.itemData[0].download_url')"
 curl -o mihoyobbs.apk "$url"
