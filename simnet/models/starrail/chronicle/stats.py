@@ -23,6 +23,7 @@ class StarRailStats(APIModel):
     chest_num: int
     abyss_process: str
     dream_paster_num: int
+    season_title: str
 
 
 class PartialStarRailUserStats(APIModel):
