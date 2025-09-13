@@ -9,13 +9,25 @@ from simnet.models.genshin.chronicle.characters import PartialCharacter
 from simnet.models.lab.record import UserInfo
 
 
-class StatsRoleCombat(APIModel):
-    """Role-based combat stats."""
+class StatsChallengeBase(APIModel):
+    """Base class for challenge-related stats."""
 
     is_unlock: bool
-    max_round_id: int
     has_data: bool
-    has_detail_data: bool
+
+
+class StatsRoleCombat(StatsChallengeBase):
+    """Role-based combat stats."""
+
+    max_round_id: Optional[int] = 0
+    has_detail_data: Optional[bool] = False
+
+
+class StatsHardChallenge(StatsChallengeBase):
+    """Hard challenge stats."""
+
+    difficulty: Optional[int] = 0
+    name: Optional[str] = ""
 
 
 class Stats(APIModel):
@@ -27,12 +39,15 @@ class Stats(APIModel):
         characters (int): Number of characters owned by the user.
         full_fetter_avatar_num (int): Number of characters with full fetters.
         spiral_abyss (str): The floor and level reached by the user in Spiral Abyss.
+
         anemoculi (int): Number of Anemoculus collected by the user.
         geoculi (int): Number of Geoculus collected by the user.
         dendroculi (int): Number of Dendroculus collected by the user.
         electroculi (int): Number of Electroculus collected by the user.
         hydroculi (int): Number of Hydroculus opened by the user.
         pyroculi (int): Number of Pyroculus opened by the user.
+        moonoculi (int): Number of Moon Oculi opened by the user.
+
         common_chests (int): Number of Common Chests opened by the user.
         exquisite_chests (int): Number of Exquisite Chests opened by the user.
         precious_chests (int): Number of Precious Chests opened by the user.
@@ -40,13 +55,16 @@ class Stats(APIModel):
         remarkable_chests (int): Number of Magic Chests opened by the user.
         unlocked_waypoints (int): Number of waypoints unlocked by the user.
         unlocked_domains (int): Number of domains unlocked by the user.
+
+        role_combat (StatsRoleCombat): Role-based combat stats.
+        hard_challenge (StatsHardChallenge): Hard challenge stats.
     """
 
     achievements: int = Field(alias="achievement_number")
     days_active: int = Field(alias="active_day_number")
     characters: int = Field(alias="avatar_number")
     full_fetter_avatar_num: int
-    spiral_abyss: str = Field(alias="spiral_abyss")
+    spiral_abyss: str
 
     anemoculi: int = Field(alias="anemoculus_number")
     geoculi: int = Field(alias="geoculus_number")
@@ -54,6 +72,7 @@ class Stats(APIModel):
     electroculi: int = Field(alias="electroculus_number")
     hydroculi: int = Field(alias="hydroculus_number")
     pyroculi: int = Field(alias="pyroculus_number")
+    moonoculi: int = Field(alias="moonoculus_number")
 
     common_chests: int = Field(alias="common_chest_number")
     exquisite_chests: int = Field(alias="exquisite_chest_number")
@@ -62,7 +81,9 @@ class Stats(APIModel):
     remarkable_chests: int = Field(alias="magic_chest_number")
     unlocked_waypoints: int = Field(alias="way_point_number")
     unlocked_domains: int = Field(alias="domain_number")
+
     role_combat: StatsRoleCombat
+    hard_challenge: StatsHardChallenge
 
 
 class Offering(APIModel):
