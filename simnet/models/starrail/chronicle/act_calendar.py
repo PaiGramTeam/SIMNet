@@ -136,6 +136,7 @@ class ChallengeTypeEnum(str, Enum):
     Chasm = "ChallengeTypeChasm"
     Story = "ChallengeTypeStory"
     Boss = "ChallengeTypeBoss"
+    Peak = "ChallengeTypePeak"
 
 
 class ChallengeStatusEnum(str, Enum):
@@ -159,7 +160,7 @@ class ChallengeListItem(APIModel):
 
     time_info: TimeInfo
     reward_list: list[RewardItem]
-    special_reward: RewardItem
+    special_reward: Optional[RewardItem] = None
     show_text: str
 
 
