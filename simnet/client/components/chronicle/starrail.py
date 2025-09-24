@@ -10,6 +10,7 @@ from simnet.models.starrail.chronicle.achievement import StarRailAchievementInfo
 from simnet.models.starrail.chronicle.act_calendar import StarRailActCalendar
 from simnet.models.starrail.chronicle.challenge import StarRailChallenge
 from simnet.models.starrail.chronicle.challenge_boss import StarRailChallengeBoss
+from simnet.models.starrail.chronicle.challenge_peak import StarRailChallengePeak
 from simnet.models.starrail.chronicle.challenge_story import StarRailChallengeStory
 from simnet.models.starrail.chronicle.characters import StarRailDetailCharacters
 from simnet.models.starrail.chronicle.notes import (
@@ -272,6 +273,34 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
         }
         data = await self._request_starrail_record("challenge_boss", player_id, lang=lang, payload=payload)
         return StarRailChallengeBoss(**data)
+
+    async def get_starrail_challenge_peak(
+        self,
+        player_id: Optional[int] = None,
+        previous: bool = False,
+        lang: Optional[str] = None,
+    ) -> StarRailChallengePeak:
+        """Get starrail challenge peak runs.
+
+        Args:
+            player_id (Optional[int], optional): The player ID. Defaults to None.
+            previous (bool, optional): Whether to get previous runs. Defaults to False.
+            lang (Optional[str], optional): The language of the data. Defaults to None.
+
+        Returns:
+            StarRailChallengePeak: The requested challenge peak runs.
+
+        Raises:
+            BadRequest: If the request is invalid.
+            DataNotPublic: If the requested data is not public.
+        """
+        payload = {
+            "schedule_type": 2 if previous else 1,
+            "need_all": "true",
+            "type": "peak",
+        }
+        data = await self._request_starrail_record("challenge_peak", player_id, lang=lang, payload=payload)
+        return StarRailChallengePeak(**data)
 
     async def get_starrail_rogue(
         self,

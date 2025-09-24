@@ -75,6 +75,12 @@ class TestStarrailBattleChronicleClient:
         assert len(challenge.groups) > 0
 
     @staticmethod
+    @pytest.mark.xfail(raises=NeedChallenge, reason="Challenge is needed, but not implemented yet.")
+    async def test_get_starrail_challenge_peak(starrail_client: "StarRailBattleChronicleClient"):
+        challenge = await starrail_client.get_starrail_challenge_peak()
+        assert len(challenge.challenge_peak_records) > 0
+
+    @staticmethod
     async def test_get_starrail_rogue(starrail_client: "StarRailBattleChronicleClient"):
         rogue = await starrail_client.get_starrail_rogue()
         assert rogue.role is not None
