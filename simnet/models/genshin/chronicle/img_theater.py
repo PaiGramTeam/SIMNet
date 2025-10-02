@@ -24,6 +24,7 @@ class TheaterDifficulty(enum.IntEnum):
     NORMAL = 2
     HARD = 3
     VISIONARY = 4
+    LUNAR = 5
 
 
 class ActCharacter(BaseCharacter):
