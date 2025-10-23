@@ -87,6 +87,57 @@ class Wish(APIModel):
         return int(v)
 
 
+class GenshinBeyondBannerType(IntEnum):
+    """
+    Enumeration of banner types in the Genshin Beyond system.
+
+    Attributes:
+        STANDARD (int): Represents the permanent standard banner.
+        EVENT (int): Represents the rotating event banner.
+    """
+
+    STANDARD = PERMANENT = 1000
+    """Permanent standard banner."""
+
+    EVENT = 2000
+    """Rotating event banner."""
+
+
+class GenshinBeyondWish(APIModel):
+    """
+    Represents a wish made in the Genshin Beyond system.
+
+    Attributes:
+        schedule_id (int): The schedule ID associated with the wish.
+        uid (int): The user ID of the player who made the wish.
+        region (str): The region where the wish was made.
+        id (int): The unique ID of the wish.
+        type (str): The type of the item obtained from the wish. This is aliased as "item_type".
+        item_id (int): The unique ID of the item obtained from the wish.
+        name (str): The name of the item obtained from the wish. This is aliased as "item_name".
+        rarity (int): The rarity of the item obtained from the wish. This is aliased as "rank_type".
+        time (datetime): The timestamp when the wish was made.
+        banner_type (GenshinBeyondBannerType): The type of banner the wish was made on. This is aliased as "op_gacha_type".
+        is_up (str): Indicates whether the item obtained has a rate-up on the banner.
+    """
+
+    schedule_id: int
+    uid: int
+    region: str
+
+    id: int
+    type: str = Field(alias="item_type")
+    item_id: int
+    name: str = Field(alias="item_name")
+    rarity: int = Field(alias="rank_type")
+    time: datetime
+
+    banner_type: GenshinBeyondBannerType
+    op_gacha_type: int
+
+    is_up: str
+
+
 class BannerDetailItem(APIModel):
     """Represents an item that may be obtained from a banner.
 

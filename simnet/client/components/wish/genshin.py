@@ -2,11 +2,11 @@ from functools import partial
 from typing import Optional
 
 from simnet.client.components.wish.base import BaseWishClient
-from simnet.models.genshin.wish import Wish
+from simnet.models.genshin.wish import GenshinBeyondWish, Wish
 from simnet.utils.enums import Game
 from simnet.utils.paginator import WishPaginator
 
-__all__ = ("GenshinWishClient",)
+__all__ = ("GenshinWishClient", "GenshinBeyondWishClient")
 
 
 class GenshinWishClient(BaseWishClient):
@@ -59,4 +59,52 @@ class GenshinWishClient(BaseWishClient):
                 banner_names.get(banner_type, banner_default_name) if banner_type != 400 else banner_names[301]
             )
             wishes.extend([Wish(**i, banner_name=banner_name) for i in items])
+        return sorted(wishes, key=lambda wish: wish.time.timestamp())
+
+
+class GenshinBeyondWishClient(BaseWishClient):
+    """The GenshinBeyondWishClient class for making requests towards the Wish API."""
+
+    async def beyond_wish_history(
+        self,
+        banner_types: Optional[list[int]] = None,
+        limit: Optional[int] = None,
+        lang: Optional[str] = None,
+        authkey: Optional[str] = None,
+        end_id: int = 0,
+        min_id: int = 0,
+    ) -> list[GenshinBeyondWish]:
+        """Get the wish history for a list of banner types.
+
+        Args:
+            banner_types (Optional[List[int]], optional): The banner types to get the wish history for.
+            limit (Optional[int] , optional): The maximum number of wishes to retrieve.
+                If not provided, all available wishes will be returned.
+            lang (Optional[str], optional): The language code to use for the request.
+                If not provided, the class default will be used.
+            authkey (Optional[str], optional): The authorization key for making the request.
+            end_id  (int, optional): The ending ID of the last wish to retrieve.
+            min_id (int, optional): The minimum ID of the first wish to retrieve.
+
+        Returns:
+            List[GenshinBeyondWish]: A list of GenshinBeyondWish objects representing the retrieved wishes.
+        """
+        banner_types = banner_types or [1000, 2000]
+        if isinstance(banner_types, int):
+            banner_types = [banner_types]
+        wishes = []
+        for banner_type in banner_types:
+            paginator = WishPaginator(
+                end_id,
+                min_id,
+                partial(
+                    self.get_wish_page,
+                    banner_type=banner_type,
+                    game=Game.GENSHIN,
+                    lang=lang,
+                    authkey=authkey,
+                ),
+            )
+            items = await paginator.get(limit)
+            wishes.extend([GenshinBeyondWish(**i, banner_type=banner_type) for i in items])
         return sorted(wishes, key=lambda wish: wish.time.timestamp())

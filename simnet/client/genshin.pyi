@@ -7,7 +7,10 @@ from simnet.client.components.diary.genshin import GenshinDiaryClient
 from simnet.client.components.lab import LabClient
 from simnet.client.components.transaction import TransactionClient
 from simnet.client.components.verify import VerifyClient
-from simnet.client.components.wish.genshin import GenshinWishClient
+from simnet.client.components.wish.genshin import (
+    GenshinBeyondWishClient,
+    GenshinWishClient,
+)
 from simnet.utils.enums import Region
 from simnet.utils.types import CookieTypes, HeaderTypes, TimeoutTypes
 
@@ -15,6 +18,7 @@ class GenshinClient(
     CalculatorClient,
     GenshinBattleChronicleClient,
     GenshinWishClient,
+    GenshinBeyondWishClient,
     GenshinDiaryClient,
     AuthClient,
     DailyRewardClient,

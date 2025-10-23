@@ -103,6 +103,8 @@ class BaseWishClient(BaseClient):
         endpoint = "getGachaLog"
         if game is Game.STARRAIL and banner_type in [21, 22]:
             endpoint = "getLdGachaLog"
+        elif game is Game.GENSHIN and banner_type in [1000, 2000]:
+            endpoint = "getBeyondGachaLog"
         return await self.request_gacha_info(
             endpoint,
             game=game,
