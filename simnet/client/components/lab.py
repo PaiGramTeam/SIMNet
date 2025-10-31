@@ -218,14 +218,14 @@ class LabClient(BaseClient):
             "lang": create_short_lang_code(lang or self.lang),
         }
 
-        if self.game is Game.STARRAIL:
+        if self.game is Game.GENSHIN:
             return await self.request_bbs(
                 url,
-                data=params,
+                params=params,
             )
         return await self.request_bbs(
             url,
-            params=params,
+            data=params,
         )
 
     async def redeem_code_by_hoyolab(

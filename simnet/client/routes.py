@@ -341,17 +341,17 @@ HK4E_URL = Route("https://sg-hk4e-api.hoyoverse.com/common/hk4e_global/")
 
 CODE_URL = GameRoute(
     overseas={
-        "genshin": "https://sg-hk4e-api.hoyoverse.com/common/apicdkey/api/webExchangeCdkey",
-        "hkrpg": "https://sg-hkrpg-api.hoyoverse.com/common/apicdkey/api/webExchangeCdkeyRisk",
-        "nap": "https://public-operation-nap.hoyoverse.com/common/apicdkey/api/webExchangeCdkey",
+        "genshin": "https://public-operation-hk4e.hoyoverse.com/common/apicdkey/api/webExchangeCdkey",
+        "hkrpg": "https://public-operation-hkrpg.hoyoverse.com/common/apicdkey/api/webExchangeCdkeyRisk",
+        "nap": "https://public-operation-nap.hoyoverse.com/common/apicdkey/api/webExchangeCdkeyRisk",
     },
     chinese={},
 )
 CODE_HOYOLAB_URL = GameRoute(
     overseas={
-        "genshin": "https://sg-hk4e-api.hoyolab.com/common/apicdkey/api/webExchangeCdkeyHyl",
-        "hkrpg": "https://sg-hkrpg-api.hoyolab.com/common/apicdkey/api/webExchangeCdkeyHyl",
-        "nap": "https://public-operation-nap.hoyoverse.com/common/apicdkey/api/webExchangeCdkey",
+        "genshin": "https://public-operation-hk4e.hoyoverse.com/common/apicdkey/api/webExchangeCdkeyHyl",
+        "hkrpg": "https://public-operation-hkrpg.hoyoverse.com/common/apicdkey/api/webExchangeCdkeyHyl",
+        "nap": "https://public-operation-nap.hoyoverse.com/common/apicdkey/api/webExchangeCdkeyHyl",
     },
     chinese={},
 )
