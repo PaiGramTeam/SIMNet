@@ -72,6 +72,7 @@ class ActTypeEnum(str, Enum):
     Sign = "ActivityTypeSign"
     Double = "ActivityTypeDouble"
     RogueTourn = "ActivityTypeRogueTourn"
+    GridFight = "ActivityTypeGridFight"
     Other = "ActivityTypeOther"
 
 
