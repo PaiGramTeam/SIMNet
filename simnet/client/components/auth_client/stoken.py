@@ -252,6 +252,78 @@ class StokenAuthClient(BaseClient):
         mid: Optional[str] = None,
     ) -> CookiesModel:
         """
+        Retrieves all tokens (stoken_v2, mid, ltoken, and cookie_token) using a given stoken.
+
+        This method determines the region (Chinese or Overseas) and calls the appropriate
+        region-specific method to retrieve the tokens.
+
+        Args:
+            stoken (Optional[str]): The stoken_v1 to use to retrieve the tokens. If not provided,
+                the `stoken` attribute value will be used.
+            account_id (Optional[int]): The account ID to use to retrieve the tokens. If not provided,
+                the `account_id` attribute value will be used.
+            mid (Optional[str]): The mid to use to retrieve the tokens. If not provided, the `mid`
+                attribute value will be used.
+
+        Returns:
+            CookiesModel: A model containing the retrieved tokens (stoken_v2, mid, ltoken, and cookie_token).
+        """
+        if self.region is Region.CHINESE:
+            return await self.get_all_token_by_stoken_cn(stoken, account_id, mid)
+        return await self.get_all_token_by_stoken_os(stoken, account_id, mid)
+
+    async def get_all_token_by_stoken_cn(
+        self,
+        stoken: Optional[str] = None,
+        account_id: Optional[int] = None,
+        mid: Optional[str] = None,
+    ) -> CookiesModel:
+        """
+        Retrieves all tokens (stoken_v2, mid, ltoken, and cookie_token) for the Chinese region using a given stoken.
+
+        This method validates the provided stoken, account_id, and mid, retrieves the stoken_v2 and mid,
+        and then fetches the cookie_token and ltoken. The retrieved tokens are stored in the cookies
+        and returned as a `CookiesModel` instance.
+
+        Args:
+            stoken (Optional[str]): The stoken_v1 to use to retrieve the tokens. If not provided,
+                the `stoken` attribute value will be used.
+            account_id (Optional[int]): The account ID to use to retrieve the tokens. If not provided,
+                the `account_id` attribute value will be used.
+            mid (Optional[str]): The mid to use to retrieve the tokens. If not provided, the `mid`
+                attribute value will be used.
+
+        Returns:
+            CookiesModel: A model containing the retrieved tokens (stoken_v2, mid, ltoken, and cookie_token).
+        """
+        self.region_specific(True)
+        self.check_stoken(stoken, account_id, mid)
+        account_id = account_id or self.account_id
+
+        stoken, mid = await self.get_stoken_v2_and_mid_by_by_stoken()
+        cookie_token = await self.get_cookie_token_by_stoken(stoken, mid=mid)
+        ltoken = await self.get_ltoken_by_stoken(stoken, mid=mid)
+
+        model = CookiesModel(stoken=stoken, cookie_token=cookie_token, ltoken=ltoken)
+        model.set_mid(mid)
+        model.set_uid(account_id)
+        model.set_v2_uid(account_id)
+
+        self.cookies.set("mid", model.mid)
+        self.cookies.set("stoken", model.stoken)
+        if model.ltoken:
+            self.cookies.set("ltoken", model.ltoken)
+        if model.cookie_token:
+            self.cookies.set("cookie_token", model.cookie_token)
+        return model
+
+    async def get_all_token_by_stoken_os(
+        self,
+        stoken: Optional[str] = None,
+        account_id: Optional[int] = None,
+        mid: Optional[str] = None,
+    ) -> CookiesModel:
+        """
         Get stoken_v2, mid, ltoken and cookie_token by stoken v1 or v2
 
         Args:

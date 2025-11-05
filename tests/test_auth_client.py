@@ -102,6 +102,18 @@ class TestAuthClient:
             assert mid
 
     @staticmethod
+    async def test_get_all_token_by_stoken(auth_client: "AuthClient", region: "Region"):
+        if auth_client.cookies.get("stoken") is None:
+            pytest.skip("Test case test_get_all_token_by_stoken skipped: stoken is None")
+        async with AuthClient(
+            cookies=auth_client.cookies,
+            region=region,
+        ) as client_instance:
+            tokens = await client_instance.get_all_token_by_stoken()
+            assert (tokens.cookie_token or tokens.cookie_token_v2) is not None
+            assert (tokens.ltoken or tokens.ltoken_v2) is not None
+
+    @staticmethod
     async def test_verify_cookie_token(auth_client: "AuthClient"):
         if auth_client.cookies.get("cookie_token") is None:
             pytest.skip("Test case test_verify_cookie_token skipped: cookie_token is None")
