@@ -10,6 +10,7 @@ from simnet.models.zzz.chronicle.abyss_abstract import ZZZAbyssAbstract
 from simnet.models.zzz.chronicle.abysss2_abstract import ZZZAbysss2Abstract
 from simnet.models.zzz.chronicle.challenge import ZZZChallenge
 from simnet.models.zzz.chronicle.challenge_mem import ZZZChallengeMem
+from simnet.models.zzz.chronicle.gacha_detail import ZZZGachaDetail
 from simnet.models.zzz.chronicle.notes import ZZZNote
 from simnet.models.zzz.chronicle.stats import (
     ZZZAvatarBasic,
@@ -339,6 +340,28 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
         payload = {"schedule_type": 2 if previous else 1}
         data = await self._request_zzz_record("mem_detail", player_id, lang=lang, payload=payload)
         return ZZZChallengeMem(**data)
+
+    async def get_zzz_cur_gacha_detail(
+        self,
+        player_id: Optional[int] = None,
+        lang: Optional[str] = None,
+    ) -> ZZZGachaDetail:
+        """
+        Retrieve the current gacha detail for a ZZZ player.
+
+        Args:
+            player_id (Optional[int]): The target player's ID. If None, the client's default player ID is used.
+            lang (Optional[str]): Optional language code for localized data (e.g. "en", "zh-CN").
+
+        Returns:
+            ZZZGachaDetail: Parsed detail object for the current gacha pool.
+
+        Raises:
+            BadRequest: If the request parameters are invalid or the request fails.
+            DataNotPublic: If the requested data is not publicly available.
+        """
+        data = await self._request_zzz_record("cur_gacha_detail", player_id, lang=lang)
+        return ZZZGachaDetail(**data)
 
     async def get_record_card(
         self,

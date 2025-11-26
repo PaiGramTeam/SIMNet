@@ -76,3 +76,8 @@ class TestZZZBattleChronicleClient:
     async def test_get_zzz_challenge_mem(zzz_client: "ZZZBattleChronicleClient"):
         challenge_list = await zzz_client.get_zzz_challenge_mem()
         assert challenge_list is not None
+
+    @staticmethod
+    async def test_get_zzz_cur_gacha_detail(zzz_client: "ZZZBattleChronicleClient"):
+        gacha_detail = await zzz_client.get_zzz_cur_gacha_detail()
+        assert gacha_detail is not None
