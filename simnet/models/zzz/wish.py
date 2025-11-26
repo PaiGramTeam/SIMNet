@@ -1,10 +1,27 @@
 from datetime import datetime
-from enum import IntEnum
+from enum import IntEnum, StrEnum
 from typing import Any
 
 from pydantic import field_validator
 
 from simnet.models.base import APIModel, Field
+from simnet.models.starrail.chronicle.base import PartialTime
+
+
+class ZZZBannerTypeHoyolab(IntEnum):
+    """Banner types in wish histories."""
+
+    GACHA_TYPE_PERMANENT = 1
+    """Permanent standard banner."""
+
+    GACHA_TYPE_CHARACTER_UP = 2
+    """Rotating character banner."""
+
+    GACHA_TYPE_WEAPON_UP = 3
+    """Rotating weapon banner."""
+
+    GACHA_TYPE_BANGBOO = 5
+    """BangBoo banner."""
 
 
 class ZZZBannerType(IntEnum):
@@ -64,3 +81,42 @@ class ZZZWish(APIModel):
     def add_rarity(cls, v: int) -> int:
         """Add rarity 1."""
         return v + 1
+
+    @classmethod
+    def from_hoyolab(cls, data: dict, player_id: int, banner_type: int) -> "ZZZWish":
+        item_type_enum = ZZZWishItemTypeHoyolab(data["item_type"])
+        item_type = {
+            ZZZWishItemTypeHoyolab.AGENT: "代理人",
+            ZZZWishItemTypeHoyolab.SOUND_ENGINE: "音擎",
+            ZZZWishItemTypeHoyolab.BANGBOO: "邦布",
+        }[item_type_enum]
+        rarity = {
+            "S": 4,
+            "A": 3,
+            "B": 2,
+        }[data["rarity"].upper()]
+        time = PartialTime.model_validate(data["date"])
+        return cls(
+            uid=player_id,
+            id=data["id"],
+            item_type=item_type,
+            item_id=data["item_id"],
+            name=data["item_name"],
+            rank_type=rarity,
+            time=time.datetime,
+            gacha_id=0,
+            gacha_type=banner_type,
+        )
+
+
+class ZZZWishItemTypeHoyolab(StrEnum):
+    """Types of items that can be wished for."""
+
+    AGENT = "ITEM_TYPE_AVATAR"
+    """Agent type item."""
+
+    SOUND_ENGINE = "ITEM_TYPE_WEAPON"
+    """Sound Engine type item."""
+
+    BANGBOO = "ITEM_TYPE_BANGBOO"
+    """BangBoo type item."""

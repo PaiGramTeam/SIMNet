@@ -18,10 +18,12 @@ class WishPaginator:
         end_id: int,
         min_id: int,
         fetch_data: Callable[..., Awaitable[dict[str, Any]]],
+        list_key: str = "list",
     ):
         self.end_id = end_id
         self.min_id = min_id
         self.fetch_data = fetch_data
+        self.list_key = list_key
 
     async def get(self, limit: int) -> list[dict]:
         """
@@ -38,7 +40,7 @@ class WishPaginator:
 
         while True:
             raw_data = await self.fetch_data(end_id=current_end_id)
-            items = raw_data["list"]
+            items = raw_data[self.list_key]
             if not items:
                 break
 
@@ -46,7 +48,7 @@ class WishPaginator:
 
             filtered_items, need_break = [], False
             for item in items:
-                if item["id"] == self.end_id:
+                if int(item["id"]) == self.end_id:
                     need_break = True
                     continue
                 if self.min_id:
@@ -57,6 +59,8 @@ class WishPaginator:
                 filtered_items.append(item)
             all_items.extend(filtered_items)
 
+            if "has_more" in raw_data:
+                need_break = need_break or raw_data["has_more"] is False
             if need_break:
                 break
             if limit and len(all_items) >= limit:

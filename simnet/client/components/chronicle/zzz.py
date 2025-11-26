@@ -363,6 +363,23 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
         data = await self._request_zzz_record("cur_gacha_detail", player_id, lang=lang)
         return ZZZGachaDetail(**data)
 
+    async def get_wish_page_by_hoyolab(
+        self,
+        end_id: int,
+        banner_type: str,
+        player_id: Optional[int] = None,
+        lang: Optional[str] = None,
+    ) -> Mapping[str, Any]:
+        return await self._request_zzz_record(
+            "gacha_record",
+            player_id,
+            lang=lang,
+            payload={
+                "gacha_type": banner_type,
+                "end_id": end_id,
+            },
+        )
+
     async def get_record_card(
         self,
         account_id: Optional[int] = None,

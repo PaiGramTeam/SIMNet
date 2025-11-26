@@ -1,8 +1,10 @@
+from abc import abstractmethod
+from collections.abc import Mapping
 from functools import partial
-from typing import Optional
+from typing import Any, Optional
 
 from simnet.client.components.wish.base import BaseWishClient
-from simnet.models.zzz.wish import ZZZWish
+from simnet.models.zzz.wish import ZZZBannerTypeHoyolab, ZZZWish
 from simnet.utils.enums import Game
 from simnet.utils.paginator import WishPaginator
 
@@ -55,4 +57,46 @@ class ZZZWishClient(BaseWishClient):
             )
             items = await paginator.get(limit)
             wishes.extend([ZZZWish(**i) for i in items])
-        return sorted(wishes, key=lambda wish: wish.time.timestamp())
+        return sorted(wishes, key=lambda wish: (wish.time, wish.id))
+
+    @abstractmethod
+    async def get_wish_page_by_hoyolab(
+        self,
+        end_id: int,
+        banner_type: str,
+        player_id: Optional[int] = None,
+        lang: Optional[str] = None,
+    ) -> Mapping[str, Any]: ...
+
+    async def wish_history_by_hoyolab(
+        self,
+        banner_types: Optional[list[int]] = None,
+        limit: Optional[int] = None,
+        player_id: Optional[int] = None,
+        lang: Optional[str] = None,
+        end_id: int = 0,
+        min_id: int = 0,
+    ) -> list[ZZZWish]:
+        banner_types = banner_types or [1, 2, 3, 5]
+        if isinstance(banner_types, int):
+            banner_types = [banner_types]
+        real_banner_types = [ZZZBannerTypeHoyolab(i) for i in banner_types]
+
+        player_id = player_id or self.player_id
+
+        wishes = []
+        for banner_type in real_banner_types:
+            paginator = WishPaginator(
+                end_id,
+                min_id,
+                partial(
+                    self.get_wish_page_by_hoyolab,
+                    banner_type=banner_type.name,
+                    player_id=player_id,
+                    lang=lang,
+                ),
+                list_key="gacha_item_list",
+            )
+            items = await paginator.get(limit)
+            wishes.extend([ZZZWish.from_hoyolab(i, player_id, banner_type.value) for i in items])
+        return sorted(wishes, key=lambda wish: (wish.time, wish.id))

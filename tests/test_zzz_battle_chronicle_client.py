@@ -81,3 +81,8 @@ class TestZZZBattleChronicleClient:
     async def test_get_zzz_cur_gacha_detail(zzz_client: "ZZZBattleChronicleClient"):
         gacha_detail = await zzz_client.get_zzz_cur_gacha_detail()
         assert gacha_detail is not None
+
+    @staticmethod
+    async def test_get_zzz_wish_history_by_hoyolab(zzz_client: "ZZZBattleChronicleClient"):
+        gacha_detail = await zzz_client.get_wish_page_by_hoyolab(0, "GACHA_TYPE_PERMANENT")
+        assert gacha_detail is not None

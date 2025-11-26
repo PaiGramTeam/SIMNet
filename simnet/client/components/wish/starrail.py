@@ -55,4 +55,4 @@ class StarRailWishClient(BaseWishClient):
             )
             items = await paginator.get(limit)
             wishes.extend([StarRailWish(**i) for i in items])
-        return sorted(wishes, key=lambda wish: wish.time.timestamp())
+        return sorted(wishes, key=lambda wish: (wish.time, wish.id))
