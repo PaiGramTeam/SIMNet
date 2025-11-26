@@ -203,6 +203,7 @@ class Notes(APIModel):
         remaining_transformer_recovery_time (Optional[TransformerTimedelta]): The remaining time until
             transformer recovery.
         expeditions (List[Expedition]): The list of expeditions.
+        current_expeditions (int): The current number of expeditions.
         max_expeditions (int): The maximum number of expeditions.
 
     Raises:
@@ -228,6 +229,7 @@ class Notes(APIModel):
     remaining_transformer_recovery_time: Optional[TransformerTimedelta] = None
 
     expeditions: list[Expedition]
+    current_expeditions: int = Field(alias="current_expedition_num")
     max_expeditions: int = Field(alias="max_expedition_num")
 
     daily_task: DailyTask
@@ -311,6 +313,7 @@ class NotesWidget(APIModel):
         max_commissions (int): The maximum number of commissions.
         claimed_commission_reward (bool): Whether the commission reward has been claimed.
         expeditions (List[Expedition]): The list of expeditions.
+        current_expeditions (int): The current number of expeditions.
         max_expeditions (int): The maximum number of expeditions.
 
     Raises:
@@ -330,6 +333,7 @@ class NotesWidget(APIModel):
     claimed_commission_reward: bool = Field(alias="is_extra_task_reward_received")
 
     expeditions: list[ExpeditionWidget]
+    current_expeditions: int = Field(alias="current_expedition_num")
     max_expeditions: int = Field(alias="max_expedition_num")
 
     @property
