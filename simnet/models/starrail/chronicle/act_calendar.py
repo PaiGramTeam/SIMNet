@@ -89,7 +89,9 @@ class ActStatusEnum(str, Enum):
     DoubleRewardActStatusProgress = "DoubleRewardActStatusProgress"
     DoubleRewardActStatusFinish = "DoubleRewardActStatusFinish"
 
+    RogueTournActStatusUnopened = "RogueTournActStatusUnopened"
     RogueTournActStatusProgress = "RogueTournActStatusProgress"
+    RogueTournActStatusFinish = "RogueTournActStatusFinish"
 
     OtherActStatusUnopened = "OtherActStatusUnopened"
     OtherActStatusUnFinish = "OtherActStatusUnFinish"
