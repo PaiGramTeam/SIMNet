@@ -9,6 +9,33 @@ from simnet.utils.player import recognize_game_biz, recognize_server
 class CookieTokenAuthClient(BaseClient):
     """Cookie token sub client for AuthClient."""
 
+    def check_cookie_token(
+        self,
+        cookie_token: Optional[str] = None,
+        account_id: Optional[int] = None,
+    ) -> tuple[str, int]:
+        """
+        Check if the cookie token (`cookie_token`) exists in the cookies.
+
+        Args:
+            cookie_token (Optional[str]): The cookie token to check.
+                If not provided, the `cookie_token` cookie value will be used.
+            account_id (Optional[int]): The account ID to check.
+                If not provided, the `account_id` cookie value will be used.
+
+        Returns:
+            Tuple[str, int]: The cookie token and account ID.
+        """
+        cookie_token = cookie_token or self.cookies.get("cookie_token") or self.cookies.get("cookie_token_v2")
+        account_id = account_id or self.account_id
+        if cookie_token is None:
+            raise ValueError("The 'cookie_token' argument cannot be None.")
+        if account_id is None:
+            raise ValueError("The 'account_id' argument cannot be None.")
+        self.cookies.set("cookie_token", cookie_token)
+        self.cookies.set("account_id", str(account_id))
+        return cookie_token, account_id
+
     async def get_hk4e_token_by_cookie_token(
         self,
         game_biz: Optional[str] = None,
@@ -28,9 +55,7 @@ class CookieTokenAuthClient(BaseClient):
         Raises:
             ValueError: If `cookie_token` is not found in the cookies.
         """
-        cookie_token = self.cookies.get("cookie_token")
-        if cookie_token is None:
-            raise ValueError("cookie_token not found in cookies.")
+        self.check_cookie_token()
         uid = self.player_id or player_id
         if not uid:
             raise ValueError("player_id not found.")
@@ -66,14 +91,7 @@ class CookieTokenAuthClient(BaseClient):
             ValueError: If the `cookie_token` argument is `None`, or if the `account_id` argument is `None`.
             InvalidCookies: If the cookie_token is invalid.
         """
-        cookie_token = cookie_token or self.cookies.get("cookie_token")
-        account_id = account_id or self.account_id
-        if cookie_token is None:
-            raise ValueError("The 'cookie_token' argument cannot be None.")
-        if account_id is None:
-            raise ValueError("The 'account_id' argument cannot be None.")
-        self.cookies.set("cookie_token", cookie_token)
-        self.cookies.set("account_id", str(account_id))
+        cookie_token, account_id = self.check_cookie_token(cookie_token, account_id)
         if self.region == Region.OVERSEAS:
             url = PASSPORT_MA_URL.get_url(self.region) / "token/verifyCookieToken"
             headers = {"x-rpc-app_id": "c9oqaq3s3gu8"}

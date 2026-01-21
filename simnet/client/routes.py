@@ -254,11 +254,11 @@ AUTH_URL = InternationalRoute(
     chinese="https://api-takumi.mihoyo.com/auth/api",
 )
 PASSPORT_URL = InternationalRoute(
-    overseas="https://api-account-os.hoyoverse.com/account/auth/api/",
+    overseas="https://api-account-sg.hoyoverse.com/account/auth/api/",
     chinese="https://passport-api.mihoyo.com/account/auth/api/",
 )
 PASSPORT_MA_URL = InternationalRoute(
-    overseas="https://api-account-os.hoyoverse.com/account/ma-passport/",
+    overseas="https://passport-api-sg.hoyoverse.com/account/ma-passport/",
     chinese="https://passport-api.mihoyo.com/account/ma-cn-session/",
 )
 WEB_ACCOUNT_URL = InternationalRoute(
