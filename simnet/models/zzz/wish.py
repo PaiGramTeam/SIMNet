@@ -20,6 +20,12 @@ class ZZZBannerTypeHoyolab(IntEnum):
     GACHA_TYPE_WEAPON_UP = 3
     """Rotating weapon banner."""
 
+    GACHA_TYPE_CHARACTER_RETURN = 102
+    """Returning character banner."""
+
+    GACHA_TYPE_WEAPON_RETURN = 103
+    """Returning weapon banner."""
+
     GACHA_TYPE_BANGBOO = 5
     """BangBoo banner."""
 
@@ -35,6 +41,12 @@ class ZZZBannerType(IntEnum):
 
     WEAPON = 3
     """Rotating weapon banner."""
+
+    CHARACTER_RETURN = 102
+    """Returning character banner."""
+
+    WEAPON_RETURN = 103
+    """Returning weapon banner."""
 
     BANGBOO = 5
     """BangBoo banner."""

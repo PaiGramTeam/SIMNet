@@ -39,7 +39,7 @@ class ZZZWishClient(BaseWishClient):
         Returns:
             List[ZZZWish]: A list of ZZZWish objects representing the retrieved wishes.
         """
-        banner_types = banner_types or [1, 2, 3, 5]
+        banner_types = banner_types or [1, 2, 3, 5, 102, 103]
         if isinstance(banner_types, int):
             banner_types = [banner_types]
         wishes = []
@@ -77,7 +77,7 @@ class ZZZWishClient(BaseWishClient):
         end_id: int = 0,
         min_id: int = 0,
     ) -> list[ZZZWish]:
-        banner_types = banner_types or [1, 2, 3, 5]
+        banner_types = banner_types or [1, 2, 3, 5, 102, 103]
         if isinstance(banner_types, int):
             banner_types = [banner_types]
         real_banner_types = [ZZZBannerTypeHoyolab(i) for i in banner_types]
