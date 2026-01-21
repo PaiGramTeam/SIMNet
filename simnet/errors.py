@@ -319,6 +319,8 @@ def raise_for_ret_code(data: dict[str, Any]) -> NoReturn:
         if r == -101:
             raise AuthkeyTimeout(data)
         raise AuthkeyException(data)
+    if m.startswith("auth key") and r == -1:
+        raise AuthkeyTimeout(data)
 
     if r in ERRORS:
         exc_type, msg = ERRORS[r]
