@@ -11,6 +11,7 @@ from simnet.models.zzz.chronicle.abysss2_abstract import ZZZAbysss2Abstract
 from simnet.models.zzz.chronicle.challenge import ZZZChallenge
 from simnet.models.zzz.chronicle.challenge_mem import ZZZChallengeMem
 from simnet.models.zzz.chronicle.gacha_detail import ZZZGachaDetail
+from simnet.models.zzz.chronicle.hadal import ZZZHadalInfo
 from simnet.models.zzz.chronicle.notes import ZZZNote
 from simnet.models.zzz.chronicle.stats import (
     ZZZAvatarBasic,
@@ -316,6 +317,30 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
         payload = {"schedule_type": 2 if previous else 1, "need_all": "true"}
         data = await self._request_zzz_record("challenge", player_id, lang=lang, payload=payload)
         return ZZZChallenge(**data)
+
+    async def get_zzz_hadal_info_v2(
+        self,
+        player_id: Optional[int] = None,
+        previous: bool = False,
+        lang: Optional[str] = None,
+    ) -> ZZZHadalInfo:
+        """Retrieve Hadal information for a ZZZ player.
+
+        Args:
+            player_id (Optional[int], optional): The player ID. Defaults to None.
+            previous (bool, optional): Whether to retrieve previous Hadal information. Defaults to False.
+            lang (Optional[str], optional): The language of the data. Defaults to None.
+
+        Returns:
+            ZZZHadalInfo: The requested Hadal information.
+
+        Raises:
+            BadRequest: If the request parameters are invalid or the request fails.
+            DataNotPublic: If the requested data is not publicly available.
+        """
+        payload = {"schedule_type": 2 if previous else 1, "need_all": "true"}
+        data = await self._request_zzz_record("hadal_info_v2", player_id, lang=lang, payload=payload)
+        return ZZZHadalInfo(**data)
 
     async def get_zzz_challenge_mem(
         self,
