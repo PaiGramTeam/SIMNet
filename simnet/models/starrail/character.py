@@ -16,6 +16,7 @@ class StarRailDestiny(str, Enum):
     TongXie = "同谐"
     XuWu = "虚无"
     JiYi = "记忆"
+    HuanYu = "欢愉"
 
 
 class StarRailElement(str, Enum):
