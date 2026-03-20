@@ -1,9 +1,11 @@
-import json
+import time
+from asyncio import sleep
 from typing import Optional
 
 from simnet.client.base import BaseClient
 from simnet.client.cookies import CookiesModel
-from simnet.client.routes import AUTH_KEY_URL, AUTH_URL, PASSPORT_MA_URL, PASSPORT_URL, QRCODE_URL, URL
+from simnet.client.routes import AUTH_KEY_URL, AUTH_URL, PASSPORT_CN_URL, PASSPORT_MA_URL, PASSPORT_URL, QRCODE_URL, URL
+from simnet.utils.constants import APP_CLOUD_IDS
 from simnet.utils.ds import DSType
 from simnet.utils.enums import Region
 from simnet.utils.player import recognize_game_biz, recognize_server
@@ -387,29 +389,77 @@ class StokenAuthClient(BaseClient):
         Returns:
             None
         """
+        if url.startswith("https://user.mihoyo.com/qr_code_in_game.html"):
+            return await self.accept_login_qrcode_v1(url)
+        if url.startswith("https://user.mihoyo.com/login-platform/"):
+            return await self.accept_login_qrcode_v2(url)
+        raise ValueError("Invalid url")
+
+    async def accept_login_qrcode_v1(self, url: str) -> None:
+        """
+        Accept login qrcode
+
+        Args:
+            url (str): The url of the qrcode.
+
+        Returns:
+            None
+        """
         self.region_specific(True)
         self.check_stoken()
         if not url.startswith("https://user.mihoyo.com/qr_code_in_game.html"):
             raise ValueError("Invalid url")
         u = URL(url)
         ticket = u.params.get("ticket")
-        app_id = u.params.get("app_id")
+        app_id = int(u.params.get("app_id"))
         biz_key = u.params.get("biz_key")
         scan_url = (QRCODE_URL / "scan").replace("hk4e_cn", biz_key)
-        data = {"ticket": ticket, "app_id": app_id, "device": self.get_device_id()}
-        await self.request_lab(url=scan_url, data=data)
-        game_token = await self.get_game_token_by_stoken()
-        raw = json.dumps(
-            {"uid": str(self.account_id), "token": game_token},
-            indent=4,
-            ensure_ascii=False,
-        )
-        data["payload"] = {
-            "proto": "Account",
-            "raw": raw,
+        json_data = {
+            "passport_app_id": APP_CLOUD_IDS["1"],
+            "ticket": ticket,
+            "app_id": app_id,
+            "device": self.get_device_id(),
+            "ts": int(time.time()),
         }
-        confirm_url = (QRCODE_URL / "confirm").replace("hk4e_cn", biz_key)
-        await self.request_lab(url=confirm_url, data=data)
+        req = await self.request_lab(url=scan_url, data=json_data)
+        return await self.accept_login_qrcode_v2(req["passport_qr_url"])
+
+    async def accept_login_qrcode_v2(self, url: str) -> None:
+        """
+        Accept login qrcode
+
+        Args:
+            url (str): The url of the qrcode.
+
+        Returns:
+            None
+        """
+        self.region_specific(True)
+        self.check_stoken()
+        if not url.startswith("https://user.mihoyo.com/login-platform/"):
+            raise ValueError("Invalid url")
+        u = URL(url)
+        ticket = u.params.get("tk")
+        token_type = u.params.get("token_types")
+
+        url1 = PASSPORT_CN_URL / "app/scanQRLogin"
+        headers = {
+            "x-rpc-app_id": APP_CLOUD_IDS["1"],
+            "x-rpc-device_fp": self.get_device_fp(),
+            "x-rpc-device_id": self.get_device_id(),
+        }
+        json_data = {
+            "ticket": ticket,
+            "token_types": [
+                token_type,
+            ],
+        }
+        await self.request_api("POST", url=url1, json=json_data, headers=headers)
+
+        await sleep(1)
+
+        url2 = PASSPORT_CN_URL / "app/confirmQRLogin"
+        await self.request_api("POST", url=url2, json=json_data, headers=headers)
 
     async def verify_stoken(
         self,

@@ -1,5 +1,5 @@
 from simnet.client.base import BaseClient
-from simnet.client.routes import PASSPORT_MA_URL
+from simnet.client.routes import PASSPORT_CN_URL
 
 
 class AuthTicketAuthClient(BaseClient):
@@ -17,7 +17,7 @@ class AuthTicketAuthClient(BaseClient):
             str: The game token v2.
         """
         self.region_specific(True)
-        url = PASSPORT_MA_URL.get_url(self.region) / "../ma-cn-passport/app/loginByAuthTicket"
+        url = PASSPORT_CN_URL / "app/loginByAuthTicket"
         payload = {"ticket": auth_ticket}
         headers = {"x-rpc-app_id": app_id}
         res_data = await self.request_api("POST", url=url, json=payload, headers=headers)

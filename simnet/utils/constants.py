@@ -39,6 +39,12 @@ APP_IDS = {
     },
 }
 """App IDs used for game login."""
+APP_CLOUD_IDS = {
+    "1": "bll8iq97cem8",
+    "4": "c76ync6mutq8",
+    "8": "c90mr1bwo2rk",
+    "12": "d47umitaylmo",
+}
 
 GAME_BIZS = {
     Region.OVERSEAS: {

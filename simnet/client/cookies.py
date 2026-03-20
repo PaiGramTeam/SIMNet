@@ -43,6 +43,7 @@ class Cookies(_Cookies):
             self.jar = cookies  # type: ignore
 
     COOKIE_USER_ID_NAMES = ("ltuid", "account_id", "stuid", "ltuid_v2", "account_id_v2")
+    COOKIE_MID_NAMES = ("mid", "account_mid_v2", "ltmid_v2")
 
     @property
     def account_id(self) -> Optional[int]:
@@ -58,6 +59,22 @@ class Cookies(_Cookies):
             value = self.get(name)
             if value is not None:
                 return int(value)
+        return None
+
+    @property
+    def account_mid(self) -> Optional[str]:
+        """Return the user mid if present in the cookies.
+
+        If one of the mid cookies exists in the cookies, return its integer value.
+        Otherwise, return `None`.
+
+        Returns:
+            Optional[str]: The user mid, or `None` if it is not present in the cookies.
+        """
+        for name in self.COOKIE_MID_NAMES:
+            value = self.get(name)
+            if value is not None:
+                return str(value)
         return None
 
     def get(
@@ -163,6 +180,9 @@ class CookiesModel(BaseModel, frozen=False):
             self.account_id = user_id
         if self.ltuid is None and self.ltoken:
             self.ltuid = user_id
+
+    def get_mid(self) -> Optional[str]:
+        return self.mid or self.account_mid_v2 or self.ltmid_v2
 
     def set_mid(self, mid: str):
         """Set the mid for the v1 cookies."""
