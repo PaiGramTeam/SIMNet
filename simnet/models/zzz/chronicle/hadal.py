@@ -12,19 +12,18 @@ class ZZZHadalBrief(APIModel):
         cur_period_zone_layer_count (int): The current period zone layer count.
         score (int): The score achieved.
         rank_percent (int): The rank percentage.
-        battle_time (int): The total battle time.
         rating (str): The rating achieved.
-        challenge_time (PartialTime): The time of the challenge.
         max_score (int): The maximum score achieved.
     """
 
     cur_period_zone_layer_count: int
     score: int
     rank_percent: int
-    battle_time: int
     rating: str
-    challenge_time: PartialTime
     max_score: int
+
+    battle_time: Optional[int] = None
+    challenge_time: Optional[PartialTime] = None
 
 
 class ZZZHadalBuffer(APIModel):
@@ -40,19 +39,21 @@ class ZZZHadalBuffer(APIModel):
 
 
 class ZZZHadalInfoFourthLayerInfoDetail(APIModel):
-    """Details of the fourth layer information in Hadal.
+    """Represents detailed information for the fourth layer in Hadal.
 
     Attributes:
-        layer_id (int): The ID of the layer.
-        battle_time (int): The battle time for the layer.
-        avatar_list (list[ZZZChallengeCharacter]): The list of challenge characters.
-        buddy (Optional[ZZZChallengeBuddy]): The buddy information, if available.
+        layer_id (int): The identifier of the layer.
+        challenge_time (PartialTime): The time when the challenge was completed.
+        avatar_list (list[ZZZChallengeCharacter]): The list of characters used in the challenge.
+        buddy (Optional[ZZZChallengeBuddy]): The buddy assistant used in the challenge, if available.
     """
 
     layer_id: int
-    battle_time: int
+    challenge_time: Optional[PartialTime] = None
     avatar_list: list[ZZZChallengeCharacter]
     buddy: Optional[ZZZChallengeBuddy]
+
+    battle_time: Optional[int] = None
 
 
 class ZZZHadalInfoFourthLayerDetail(APIModel):
