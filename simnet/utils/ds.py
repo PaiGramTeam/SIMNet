@@ -9,9 +9,9 @@ from typing import Any, Optional
 from simnet.utils.enums import Region
 from simnet.utils.types import QueryParamTypes
 
-MIYOUSHE_VERSION = "2.103.0"
-MIYOUSHE_APP_DS = "358c1a3c0f560ba4ac29cf2f5e4bd57e"
-MIYOUSHE_WEB_DS = "1c671e6b10ddde6af8704e6d34ca639c"
+MIYOUSHE_VERSION = "2.104.0"
+MIYOUSHE_APP_DS = "bf0e9e2166cda7541d58c932824f011f"
+MIYOUSHE_WEB_DS = "452b7084002e3736e1f571ec4760eb7c"
 
 
 class DSType(Enum):
