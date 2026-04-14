@@ -137,6 +137,21 @@ class GenshinBeyondWish(APIModel):
 
     is_up: str
 
+    @field_validator("rarity", mode="before")
+    @classmethod
+    def parse_rarity(cls, v: Any) -> int:
+        """Parses the rarity value and returns an integer.
+
+        Args:
+            v (int): The value to be parsed.
+
+        Returns:
+            int: The parsed integer value.
+        """
+        if not v:
+            return 0
+        return int(v)
+
 
 class BannerDetailItem(APIModel):
     """Represents an item that may be obtained from a banner.
