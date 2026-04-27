@@ -108,6 +108,11 @@ class StarRailNote(APIModel):
     grid_fight_weekly_max: int
     """The max number of grid fight attempts"""
 
+    period_score: int
+    """The current score of the weekly challenge"""
+    period_max_score: int
+    """The max score of the weekly challenge"""
+
 
 class StarRailNoteWidget(APIModel):
     """Represents a StarRail Note.
