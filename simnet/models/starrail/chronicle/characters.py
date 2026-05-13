@@ -122,6 +122,9 @@ class StarRailDetailCharacter(character.StarRailPartialCharacter):
     skills: list[Skill]
     base_type: int
     figure_path: str
+    element_id: int
+    avatar_ld_type: str
+    cur_enhanced_id: int
 
     @property
     def skills_map(self) -> list[list[Skill]]:
