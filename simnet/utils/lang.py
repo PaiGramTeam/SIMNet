@@ -12,4 +12,4 @@ def create_short_lang_code(lang: str) -> str:
     Returns:
         str: The shortened language code.
     """
-    return lang if "zh" in lang else lang.split("-")[0]
+    return lang if "zh" in lang else lang.split("-", maxsplit=1)[0]
