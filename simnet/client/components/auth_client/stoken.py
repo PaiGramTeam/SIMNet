@@ -19,7 +19,7 @@ class StokenAuthClient(BaseClient):
         stoken: Optional[str] = None,
         account_id: Optional[int] = None,
         mid: Optional[str] = None,
-    ) -> None:
+    ) -> tuple[str, str]:
         """
         Checks and sets the stoken, account_id, and mid for a user.
 
@@ -38,7 +38,7 @@ class StokenAuthClient(BaseClient):
             ValueError: If the stoken, account_id, or mid (when stoken starts with 'v2_') is not provided.
 
         Returns:
-            None: This function modifies instance properties and does not return a value.
+            tuple[str, str]: The stoken and mid.
         """
         stoken = stoken or self.cookies.get("stoken")
         account_id = account_id or self.account_id
@@ -54,6 +54,7 @@ class StokenAuthClient(BaseClient):
         self.cookies.set("mid", mid)
         self.cookies.set("stuid", str(account_id))
         self.cookies.set("stoken", stoken)
+        return stoken, mid
 
     async def get_cookie_token_by_stoken(
         self,
@@ -272,7 +273,7 @@ class StokenAuthClient(BaseClient):
             CookiesModel: A model containing the retrieved tokens (stoken_v2, mid, ltoken, and cookie_token).
         """
         self.region_specific(True)
-        self.check_stoken(stoken, account_id, mid)
+        stoken, mid = self.check_stoken(stoken, account_id, mid)
         account_id = account_id or self.account_id
 
         cookie_token = await self.get_cookie_token_by_stoken(stoken, mid=mid)
