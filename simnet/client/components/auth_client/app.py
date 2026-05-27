@@ -82,10 +82,11 @@ class AppAuthClient(BaseClient):
             Tuple[str, str]: The url and ticket of the qrcode.
         """
         self.region_specific(True)
-        url = PASSPORT_CN_URL / "web/createQRLogin"
+        app_id_str, qr_type, client_type = APP_CLOUD_IDS[str(app_id)]
+        url = PASSPORT_CN_URL / qr_type / "createQRLogin"
         headers = {
-            "x-rpc-app_id": APP_CLOUD_IDS[str(app_id)],
-            "x-rpc-client_type": "22",
+            "x-rpc-app_id": app_id_str,
+            "x-rpc-client_type": client_type,
             "x-rpc-device_fp": self.get_device_fp(),
             "x-rpc-device_id": self.get_device_id(),
             "x-rpc-device_name": self.device_name,
@@ -115,10 +116,11 @@ class AppAuthClient(BaseClient):
             May raise network request related exceptions, handled by the underlying client
         """
         self.region_specific(True)
-        url = PASSPORT_CN_URL / "web/queryQRLoginStatus"
+        app_id_str, qr_type, client_type = APP_CLOUD_IDS[str(app_id)]
+        url = PASSPORT_CN_URL / qr_type / "queryQRLoginStatus"
         headers = {
-            "x-rpc-app_id": APP_CLOUD_IDS[str(app_id)],
-            "x-rpc-client_type": "22",
+            "x-rpc-app_id": app_id_str,
+            "x-rpc-client_type": client_type,
             "x-rpc-device_fp": self.get_device_fp(),
             "x-rpc-device_id": self.get_device_id(),
             "x-rpc-device_name": self.device_name,

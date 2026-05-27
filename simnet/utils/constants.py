@@ -40,10 +40,11 @@ APP_IDS = {
 }
 """App IDs used for game login."""
 APP_CLOUD_IDS = {
-    "1": "bll8iq97cem8",
-    "4": "c76ync6mutq8",
-    "8": "c90mr1bwo2rk",
-    "12": "d47umitaylmo",
+    "0": ("ddxf5dufpuyo", "app", "3"),
+    "1": ("bll8iq97cem8", "app", "2"),
+    "4": ("c76ync6mutq8", "web", "22"),
+    "8": ("c90mr1bwo2rk", "web", "22"),
+    "12": ("d47umitaylmo", "web", "22"),
 }
 
 GAME_BIZS = {

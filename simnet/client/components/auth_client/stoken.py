@@ -47,10 +47,11 @@ class StokenAuthClient(BaseClient):
             raise ValueError("The 'stoken' argument cannot be None.")
         if account_id is None:
             raise ValueError("The 'account_id' argument cannot be None.")
-        if stoken.startswith("v2_"):
-            if mid is None:
-                raise ValueError("The 'mid' argument cannot be None.")
-            self.cookies.set("mid", mid)
+        if not stoken.startswith("v2_"):
+            raise ValueError("The 'stoken' argument must be v2")
+        if mid is None:
+            raise ValueError("The 'mid' argument cannot be None.")
+        self.cookies.set("mid", mid)
         self.cookies.set("stuid", str(account_id))
         self.cookies.set("stoken", stoken)
 
@@ -155,34 +156,6 @@ class StokenAuthClient(BaseClient):
         }
         data = await self.request_lab(url, data=json_data)
         return data.get("authkey")
-
-    async def get_stoken_v2_and_mid_by_by_stoken(
-        self,
-        stoken: Optional[str] = None,
-        account_id: Optional[int] = None,
-    ) -> tuple[str, str]:
-        """
-        Get stoken_v2 and mid by stoken_v1
-
-        Args:
-            stoken (Optional[str]): The stoken_v1 to use to retrieve the stoken_v2 and mid.
-                If not provided, the `stoken` attribute value will be used.
-            account_id (Optional[int]): The account ID to use to retrieve the stoken_v2 and mid.
-                If not provided, the `account_id` attribute value will be used.
-
-        Returns:
-            Tuple[str, str]: The stoken_v2 and mid.
-        """
-        self.region_specific(True)
-        self.check_stoken(stoken, account_id)
-        url = PASSPORT_MA_URL.get_url(self.region) / "app/getTokenBySToken"
-        headers = {"x-rpc-app_id": "bll8iq97cem8"}
-        data = await self.request_lab(url, method="POST", headers=headers)
-        mid = data.get("user_info", {}).get("mid", "")
-        stoken_v2 = data.get("token", {}).get("token", "")
-        self.cookies.set("mid", mid)
-        self.cookies.set("stoken", stoken_v2)
-        return stoken_v2, mid
 
     async def get_game_token_by_stoken(
         self,
@@ -302,7 +275,6 @@ class StokenAuthClient(BaseClient):
         self.check_stoken(stoken, account_id, mid)
         account_id = account_id or self.account_id
 
-        stoken, mid = await self.get_stoken_v2_and_mid_by_by_stoken()
         cookie_token = await self.get_cookie_token_by_stoken(stoken, mid=mid)
         ltoken = await self.get_ltoken_by_stoken(stoken, mid=mid)
 
@@ -415,7 +387,7 @@ class StokenAuthClient(BaseClient):
         biz_key = u.params.get("biz_key")
         scan_url = (QRCODE_URL / "scan").replace("hk4e_cn", biz_key)
         json_data = {
-            "passport_app_id": APP_CLOUD_IDS["1"],
+            "passport_app_id": APP_CLOUD_IDS["1"][0],
             "ticket": ticket,
             "app_id": app_id,
             "device": self.get_device_id(),
@@ -444,7 +416,7 @@ class StokenAuthClient(BaseClient):
 
         url1 = PASSPORT_CN_URL / "app/scanQRLogin"
         headers = {
-            "x-rpc-app_id": APP_CLOUD_IDS["1"],
+            "x-rpc-app_id": APP_CLOUD_IDS["1"][0],
             "x-rpc-device_fp": self.get_device_fp(),
             "x-rpc-device_id": self.get_device_id(),
         }
