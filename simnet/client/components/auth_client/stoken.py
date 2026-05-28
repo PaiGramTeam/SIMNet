@@ -158,6 +158,36 @@ class StokenAuthClient(BaseClient):
         data = await self.request_lab(url, data=json_data)
         return data.get("authkey")
 
+    async def get_stoken_v2_by_stoken_v2(
+        self,
+        stoken: Optional[str] = None,
+        mid: Optional[str] = None,
+    ) -> str:
+        """
+        Get stoken_v2 and mid by stoken_v1
+
+        Args:
+            stoken (Optional[str]): The stoken_v1 to use to retrieve the stoken_v2 and mid.
+                If not provided, the `stoken` attribute value will be used.
+            mid (Optional[str]): The m ID to use to retrieve the stoken_v2 and mid.
+                If not provided, the `account_id` attribute value will be used.
+
+        Returns:
+            str: The stoken_v2.
+        """
+        self.region_specific(True)
+        stoken, mid = self.check_stoken(stoken, mid=mid)
+        url = PASSPORT_MA_URL.get_url(self.region) / "app/verify"
+        headers = {"x-rpc-app_id": "bll8iq97cem8"}
+        d = {"mid": mid, "refresh": True, "token": {"token": stoken, "token_type": 1}}
+        data = await self.request_lab(url, method="POST", data=d, headers=headers)
+        mid = data.get("user_info", {}).get("mid", "") or mid
+        if new_token := data.get("new_token"):
+            stoken = new_token.get("token", "") or stoken
+        self.cookies.set("mid", mid)
+        self.cookies.set("stoken", stoken)
+        return stoken
+
     async def get_game_token_by_stoken(
         self,
         stoken: Optional[str] = None,
@@ -276,6 +306,7 @@ class StokenAuthClient(BaseClient):
         stoken, mid = self.check_stoken(stoken, account_id, mid)
         account_id = account_id or self.account_id
 
+        stoken = await self.get_stoken_v2_by_stoken_v2(stoken, mid=mid)
         cookie_token = await self.get_cookie_token_by_stoken(stoken, mid=mid)
         ltoken = await self.get_ltoken_by_stoken(stoken, mid=mid)
 
