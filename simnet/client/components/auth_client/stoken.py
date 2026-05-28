@@ -5,6 +5,7 @@ from typing import Optional
 from simnet.client.base import BaseClient
 from simnet.client.cookies import CookiesModel
 from simnet.client.routes import AUTH_KEY_URL, AUTH_URL, PASSPORT_CN_URL, PASSPORT_MA_URL, PASSPORT_URL, QRCODE_URL, URL
+from simnet.errors import InvalidCookies
 from simnet.utils.constants import APP_CLOUD_IDS
 from simnet.utils.ds import DSType
 from simnet.utils.enums import Region
@@ -44,13 +45,13 @@ class StokenAuthClient(BaseClient):
         account_id = account_id or self.account_id
         mid = mid or self.cookies.get("mid")
         if stoken is None:
-            raise ValueError("The 'stoken' argument cannot be None.")
+            raise InvalidCookies(message="The 'stoken' argument cannot be None.")
         if account_id is None:
-            raise ValueError("The 'account_id' argument cannot be None.")
+            raise InvalidCookies(message="The 'account_id' argument cannot be None.")
         if not stoken.startswith("v2_"):
-            raise ValueError("The 'stoken' argument must be v2")
+            raise InvalidCookies(message="The 'stoken' argument must be v2")
         if mid is None:
-            raise ValueError("The 'mid' argument cannot be None.")
+            raise InvalidCookies(message="The 'mid' argument cannot be None.")
         self.cookies.set("mid", mid)
         self.cookies.set("stuid", str(account_id))
         self.cookies.set("stoken", stoken)

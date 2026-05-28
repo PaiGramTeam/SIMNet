@@ -2,6 +2,7 @@ from typing import Optional
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import PASSPORT_MA_URL, PASSPORT_URL
+from simnet.errors import InvalidCookies
 from simnet.utils.enums import Region
 
 
@@ -32,9 +33,9 @@ class LTokenAuthClient(BaseClient):
         ltoken = ltoken or self.cookies.get("ltoken")
         ltuid = ltuid or self.account_id
         if ltoken is None:
-            raise ValueError("The 'ltoken' argument cannot be None.")
+            raise InvalidCookies(message="The 'ltoken' argument cannot be None.")
         if ltuid is None:
-            raise ValueError("The 'account_id' argument cannot be None.")
+            raise InvalidCookies(message="The 'account_id' argument cannot be None.")
         self.cookies.set("ltoken", ltoken)
         self.cookies.set("ltuid", str(ltuid))
         if self.region == Region.OVERSEAS:

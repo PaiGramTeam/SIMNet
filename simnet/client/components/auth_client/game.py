@@ -3,6 +3,7 @@ from typing import Optional
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import GAME_LOGIN_URL, GAME_WEB_LOGIN_URL
+from simnet.errors import InvalidCookies
 from simnet.models.auth.cookie import GameLoginResult
 from simnet.utils.auth import generate_sign, get_game_login_headers
 from simnet.utils.constants import APP_IDS
@@ -45,7 +46,7 @@ class GameAuthClient(BaseClient):
         mid = mid or self.cookies.account_mid
         cookie_token = cookie_token or self.cookies.get("cookie_token_v2") or self.cookies.get("cookie_token")
         if not cookie_token.startswith("v2_"):
-            raise ValueError("Cookie token must start with 'v2_'.")
+            raise InvalidCookies(message="Cookie token must start with 'v2_'.")
 
         url = GAME_WEB_LOGIN_URL.get_url(self.region, self.game)
         cookies = {

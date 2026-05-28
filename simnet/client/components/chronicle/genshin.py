@@ -3,7 +3,7 @@ from typing import Any, Optional, Union
 
 from simnet.client.components.chronicle.base import BaseChronicleClient
 from simnet.client.routes import RECORD_URL
-from simnet.errors import BadRequest, DataNotPublic
+from simnet.errors import BadRequest, DataNotPublic, InvalidCookies
 from simnet.models.genshin.chronicle.abyss import SpiralAbyss, SpiralAbyssPair
 from simnet.models.genshin.chronicle.achievement import GenshinAchievementInfo
 from simnet.models.genshin.chronicle.act_calendar import GenshinActCalendar
@@ -339,10 +339,10 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         """
         stoken = self.cookies.get("stoken")
         if stoken is None:
-            raise ValueError("stoken not found in cookies.")
+            raise InvalidCookies(message="stoken not found in cookies.")
         stuid = self.cookies.get("stuid")
         if stuid is None and self.account_id is None:
-            raise ValueError("account_id or stuid not found")
+            raise InvalidCookies(message="account_id or stuid not found")
         if self.account_id is not None and stuid is None:
             self.cookies.set("stuid", str(self.account_id))
         if self.region == Region.OVERSEAS:

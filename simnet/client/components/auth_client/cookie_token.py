@@ -2,6 +2,7 @@ from typing import Optional
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import HK4E_LOGIN_URL, PASSPORT_MA_URL, PASSPORT_URL
+from simnet.errors import InvalidCookies
 from simnet.utils.enums import Region
 from simnet.utils.player import recognize_game_biz, recognize_server
 
@@ -29,9 +30,9 @@ class CookieTokenAuthClient(BaseClient):
         cookie_token = cookie_token or self.cookies.get("cookie_token") or self.cookies.get("cookie_token_v2")
         account_id = account_id or self.account_id
         if cookie_token is None:
-            raise ValueError("The 'cookie_token' argument cannot be None.")
+            raise InvalidCookies(message="The 'cookie_token' argument cannot be None.")
         if account_id is None:
-            raise ValueError("The 'account_id' argument cannot be None.")
+            raise InvalidCookies(message="The 'account_id' argument cannot be None.")
         self.cookies.set("cookie_token", cookie_token)
         self.cookies.set("account_id", str(account_id))
         return cookie_token, account_id

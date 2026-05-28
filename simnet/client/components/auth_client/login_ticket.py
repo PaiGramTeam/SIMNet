@@ -2,6 +2,7 @@ from typing import Optional
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import AUTH_URL, WEB_ACCOUNT_URL
+from simnet.errors import InvalidCookies
 
 
 class LoginTicketAuthClient(BaseClient):
@@ -29,9 +30,9 @@ class LoginTicketAuthClient(BaseClient):
         login_ticket = login_ticket or self.cookies.get("login_ticket")
         account_id = account_id or self.account_id
         if login_ticket is None:
-            raise ValueError("The 'login_ticket' argument cannot be None.")
+            raise InvalidCookies(message="The 'login_ticket' argument cannot be None.")
         if account_id is None:
-            raise ValueError("The 'account_id' argument cannot be None.")
+            raise InvalidCookies(message="The 'account_id' argument cannot be None.")
         params = {
             "login_ticket": login_ticket,
             "uid": account_id,
@@ -67,12 +68,12 @@ class LoginTicketAuthClient(BaseClient):
         url = WEB_ACCOUNT_URL.get_url(self.region) / "cookie_accountinfo_by_loginticket"
         login_ticket = login_ticket or self.cookies.get("login_ticket")
         if login_ticket is None:
-            raise ValueError("The 'login_ticket' argument cannot be None.")
+            raise InvalidCookies(message="The 'login_ticket' argument cannot be None.")
         params = {"login_ticket": login_ticket}
         data = await self.request_lab(url, params=params)
         cookie_info = data.get("cookie_info")
         if not cookie_info:
-            raise ValueError("The 'login_ticket' is expired.")
+            raise InvalidCookies(message="The 'login_ticket' is expired.")
         account_id = cookie_info.get("account_id")
         cookie_token = cookie_info.get("cookie_token")
         if account_id:
