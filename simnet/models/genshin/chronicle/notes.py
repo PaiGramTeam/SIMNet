@@ -13,6 +13,7 @@ __all__ = [
     "AttendanceReward",
     "DailyTask",
     "Expedition",
+    "GenshinNoteWeekActiveProgress",
     "Notes",
     "ExpeditionWidget",
     "NotesWidget",
@@ -185,6 +186,34 @@ class ArchonQuestProgress(APIModel):
         return self.is_finish_all_mainline and self.is_finish_all_interchapter
 
 
+class GenshinNoteWeekActiveProgress(APIModel):
+    """Data model representing weekly active progress information in Genshin Impact game notes.
+
+    This class stores progress tracking data for weekly activities and engagement metrics
+    in the Genshin Impact game notes feature. It captures both overall progress and
+    period-specific progress for the current active week.
+
+    Attributes:
+        progress_current: Current progress value toward the weekly active goal.
+        progress_total: Total or target progress value needed to complete the weekly goal.
+        period_progress_current: Progress value for the current active period within the week.
+        period_progress_total: Total progress value for the current period.
+        unlock: Boolean indicating whether the weekly progress tracking is unlocked for the user.
+        progress_current_arr: Array of progress values for each day of the current week.
+        is_active_period: Boolean indicating whether the current time falls within an active period.
+        current_weekday: Integer representing the current day of the week (1-7).
+    """
+
+    progress_current: int
+    progress_total: int
+    period_progress_current: int
+    period_progress_total: int
+    unlock: bool
+    progress_current_arr: list[int]
+    is_active_period: bool
+    current_weekday: int
+
+
 class Notes(APIModel):
     """The model for real-time notes.
 
@@ -234,6 +263,7 @@ class Notes(APIModel):
 
     daily_task: DailyTask
     archon_quest_progress: ArchonQuestProgress
+    week_active_progress: GenshinNoteWeekActiveProgress
 
     @property
     def resin_recovery_time(self) -> datetime:
