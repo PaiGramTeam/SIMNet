@@ -35,6 +35,7 @@ class StarRailChallengeBossGroup(APIModel):
     name_mi18n: str
     upper_boss: StarRailChallengeBossBoss
     lower_boss: StarRailChallengeBossBoss
+    tierce_boss: Optional[StarRailChallengeBossBoss] = None
 
 
 class StarRailChallengeBossBuff(APIModel):
@@ -68,14 +69,18 @@ class StarRailChallengeBossFloor(APIModel):
     star_num: int
     node_1: StarRailChallengeBossFloorNode
     node_2: StarRailChallengeBossFloorNode
+    node_3: Optional[StarRailChallengeBossFloorNode] = None
     is_fast: bool
     maze_id: int
     last_update_time: PartialTime
+    extra_star_num: Optional[int] = 0
+    is_tierce: Optional[bool] = False
 
     @property
     def score(self) -> int:
         """Get the score."""
-        return self.node_1.score + self.node_2.score
+        node_3_score = self.node_3.score if self.node_3 else 0
+        return self.node_1.score + self.node_2.score + node_3_score
 
 
 class StarRailChallengeBoss(APIModel):
@@ -87,5 +92,6 @@ class StarRailChallengeBoss(APIModel):
     max_floor_id: int
     total_battles: int = Field(alias="battle_num")
     has_data: bool
+    extra_star_num: Optional[int] = 0
 
     floors: list[StarRailChallengeBossFloor] = Field(alias="all_floor_detail")
