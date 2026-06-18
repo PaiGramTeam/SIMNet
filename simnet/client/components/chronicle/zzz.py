@@ -12,6 +12,7 @@ from simnet.models.zzz.chronicle.challenge import ZZZChallenge
 from simnet.models.zzz.chronicle.challenge_mem import ZZZChallengeMem
 from simnet.models.zzz.chronicle.gacha_detail import ZZZGachaDetail
 from simnet.models.zzz.chronicle.hadal import ZZZHadalInfo
+from simnet.models.zzz.chronicle.holo_boss_detail import ZZZHoloBossDetail
 from simnet.models.zzz.chronicle.notes import ZZZNote
 from simnet.models.zzz.chronicle.stats import (
     ZZZAvatarBasic,
@@ -365,6 +366,30 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
         payload = {"schedule_type": 2 if previous else 1}
         data = await self._request_zzz_record("mem_detail", player_id, lang=lang, payload=payload)
         return ZZZChallengeMem(**data)
+
+    async def get_zzz_challenge_holo(
+        self,
+        player_id: Optional[int] = None,
+        previous: bool = False,
+        lang: Optional[str] = None,
+    ) -> ZZZHoloBossDetail:
+        """Get zzz challenge holo runs.
+
+        Args:
+            player_id (Optional[int], optional): The player ID. Defaults to None.
+            previous (bool, optional): Whether to get previous runs. Defaults to False.
+            lang (Optional[str], optional): The language of the data. Defaults to None.
+
+        Returns:
+            ZZZHoloBossDetail: The requested challenge holo runs.
+
+        Raises:
+            BadRequest: If the request is invalid.
+            DataNotPublic: If the requested data is not public.
+        """
+        payload = {"schedule_type": 2 if previous else 1}
+        data = await self._request_zzz_record("holo_boss_detail", player_id, lang=lang, payload=payload)
+        return ZZZHoloBossDetail(**data)
 
     async def get_zzz_cur_gacha_detail(
         self,
