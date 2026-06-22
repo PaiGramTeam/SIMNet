@@ -51,13 +51,17 @@ class StarRailChallengeStoryFloor(APIModel):
     star_num: int
     node_1: StarRailChallengeStoryFloorNode
     node_2: StarRailChallengeStoryFloorNode
+    node_3: Optional[StarRailChallengeStoryFloorNode] = None
     is_fast: bool
     maze_id: int
+    extra_star_num: Optional[int] = 0
+    is_tierce: Optional[bool] = False
 
     @property
     def score(self) -> int:
         """Get the score."""
-        return self.node_1.score + self.node_2.score
+        node_3_score = self.node_3.score if self.node_3 else 0
+        return self.node_1.score + self.node_2.score + node_3_score
 
 
 class StarRailChallengeStory(APIModel):
@@ -69,5 +73,6 @@ class StarRailChallengeStory(APIModel):
     max_floor_id: int
     total_battles: int = Field(alias="battle_num")
     has_data: bool
+    extra_star_num: Optional[int] = 0
 
     floors: list[StarRailChallengeStoryFloor] = Field(alias="all_floor_detail")
