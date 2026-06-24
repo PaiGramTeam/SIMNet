@@ -25,7 +25,7 @@ UID_RANGE: Mapping[Game, Mapping[Region, Sequence[int]]] = {
         Region.CHINESE: (3, 4),
     },
     Game.ZZZ: {
-        Region.OVERSEAS: (13,),
+        Region.OVERSEAS: (10, 13, 15, 17),
     },
 }
 
