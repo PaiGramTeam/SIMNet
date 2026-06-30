@@ -1,9 +1,9 @@
 """Daily reward component."""
 
 import asyncio
-from typing import Any, Optional
+from typing import Any
 
-from httpx import QueryParams
+from httpx2 import QueryParams
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import REWARD_URL
@@ -27,11 +27,11 @@ class DailyRewardClient(BaseClient):
         endpoint: str,
         *,
         method: str = "GET",
-        challenge: Optional[str] = None,
-        validate: Optional[str] = None,
-        game: Optional[Game] = None,
-        lang: Optional[str] = None,
-        params: Optional[dict[str, Any]] = None,
+        challenge: str | None = None,
+        validate: str | None = None,
+        game: Game | None = None,
+        lang: str | None = None,
+        params: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         """
         Makes a request to the daily reward endpoint.
@@ -115,8 +115,8 @@ class DailyRewardClient(BaseClient):
     async def get_reward_info(
         self,
         *,
-        game: Optional[Game] = None,
-        lang: Optional[str] = None,
+        game: Game | None = None,
+        lang: str | None = None,
     ) -> DailyRewardInfo:
         """Gets the daily reward info for the current user.
 
@@ -133,8 +133,8 @@ class DailyRewardClient(BaseClient):
     async def get_monthly_rewards(
         self,
         *,
-        game: Optional[Game] = None,
-        lang: Optional[str] = None,
+        game: Game | None = None,
+        lang: str | None = None,
     ) -> list[DailyReward]:
         """Gets a list of all available rewards for the current month.
 
@@ -156,8 +156,8 @@ class DailyRewardClient(BaseClient):
         self,
         page: int,
         *,
-        game: Optional[Game] = None,
-        lang: Optional[str] = None,
+        game: Game | None = None,
+        lang: str | None = None,
     ) -> list[ClaimedDailyReward]:
         """Gets a single page of claimed rewards for the current user.
 
@@ -178,9 +178,9 @@ class DailyRewardClient(BaseClient):
     async def claimed_rewards(
         self,
         *,
-        limit: Optional[int] = None,
-        game: Optional[Game] = None,
-        lang: Optional[str] = None,
+        limit: int | None = None,
+        game: Game | None = None,
+        lang: str | None = None,
     ) -> list[ClaimedDailyReward]:
         """Gets all claimed rewards for the current user.
 
@@ -222,12 +222,12 @@ class DailyRewardClient(BaseClient):
     async def claim_daily_reward(
         self,
         *,
-        challenge: Optional[str] = None,
-        validate: Optional[str] = None,
-        game: Optional[Game] = None,
-        lang: Optional[str] = None,
+        challenge: str | None = None,
+        validate: str | None = None,
+        game: Game | None = None,
+        lang: str | None = None,
         reward: bool = True,
-    ) -> Optional[DailyReward]:
+    ) -> DailyReward | None:
         """
         Signs into lab and claims the daily reward.
 

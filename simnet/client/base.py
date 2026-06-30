@@ -4,7 +4,7 @@ import uuid
 from contextlib import AbstractAsyncContextManager
 from types import TracebackType
 
-from httpx import AsyncClient, HTTPError, Response, Timeout, TimeoutException
+from httpx2 import AsyncClient, HTTPError, Response, Timeout, TimeoutException
 
 from simnet.client.cookies import Cookies
 from simnet.client.headers import Headers
@@ -56,20 +56,20 @@ class BaseClient(AbstractAsyncContextManager["BaseClient"]):
 
     """
 
-    game: typing.Optional[Game] = None
+    game: Game | None = None
     __device_id = str(uuid.uuid3(uuid.NAMESPACE_URL, "SIMNet"))
 
     def __init__(
         self,
-        cookies: typing.Optional[typing.Union[str, CookieTypes]] = None,
-        headers: typing.Optional[HeaderTypes] = None,
-        account_id: typing.Optional[int] = None,
-        player_id: typing.Optional[int] = None,
+        cookies: str | CookieTypes | None = None,
+        headers: HeaderTypes | None = None,
+        account_id: int | None = None,
+        player_id: int | None = None,
         region: Region = Region.OVERSEAS,
         lang: str = "en-us",
-        timeout: typing.Optional[TimeoutTypes] = None,
-        device_id: typing.Optional[str] = None,
-        device_fp: typing.Optional[str] = None,
+        timeout: TimeoutTypes | None = None,
+        device_id: str | None = None,
+        device_fp: str | None = None,
     ) -> None:
         """Initialize the client with the given parameters."""
         if timeout is None:
@@ -160,9 +160,9 @@ class BaseClient(AbstractAsyncContextManager["BaseClient"]):
 
     async def __aexit__(
         self,
-        exc_type: typing.Optional[type[BaseException]],
-        exc_val: typing.Optional[BaseException],
-        exc_tb: typing.Optional[TracebackType],
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
     ) -> None:
         """Exit the async context manager and shutdown the client."""
         await self.shutdown()
@@ -198,12 +198,12 @@ class BaseClient(AbstractAsyncContextManager["BaseClient"]):
     def get_lab_api_header(
         self,
         headers: HeaderTypes,
-        lang: typing.Optional[str] = None,
+        lang: str | None = None,
         ds: str = None,
         ds_type: str = None,
         new_ds: bool = False,
         data: typing.Any = None,
-        params: typing.Optional[QueryParamTypes] = None,
+        params: QueryParamTypes | None = None,
     ):
         """Get the lab API header for API requests.
 
@@ -239,10 +239,10 @@ class BaseClient(AbstractAsyncContextManager["BaseClient"]):
         self,
         method: str,
         url: URLTypes,
-        data: typing.Optional[RequestData] = None,
-        json: typing.Optional[typing.Any] = None,
-        params: typing.Optional[QueryParamTypes] = None,
-        headers: typing.Optional[HeaderTypes] = None,
+        data: RequestData | None = None,
+        json: typing.Any | None = None,
+        params: QueryParamTypes | None = None,
+        headers: HeaderTypes | None = None,
     ) -> Response:
         """Make an HTTP request and return the response.
 
@@ -284,9 +284,9 @@ class BaseClient(AbstractAsyncContextManager["BaseClient"]):
         self,
         method: str,
         url: URLTypes,
-        json: typing.Optional[typing.Any] = None,
-        params: typing.Optional[QueryParamTypes] = None,
-        headers: typing.Optional[HeaderTypes] = None,
+        json: typing.Any | None = None,
+        params: QueryParamTypes | None = None,
+        headers: HeaderTypes | None = None,
     ):
         """Make an API request and return the data.
 
@@ -329,13 +329,13 @@ class BaseClient(AbstractAsyncContextManager["BaseClient"]):
     async def request_lab(
         self,
         url: URLTypes,
-        method: typing.Optional[str] = None,
-        data: typing.Optional[typing.Any] = None,
-        params: typing.Optional[QueryParamTypes] = None,
-        headers: typing.Optional[HeaderTypes] = None,
-        lang: typing.Optional[str] = None,
+        method: str | None = None,
+        data: typing.Any | None = None,
+        params: QueryParamTypes | None = None,
+        headers: HeaderTypes | None = None,
+        lang: str | None = None,
         new_ds: bool = False,
-        ds_type: typing.Optional[DSType] = None,
+        ds_type: DSType | None = None,
     ):
         """Make a request to the lab API and return the data.
 

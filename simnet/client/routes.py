@@ -1,7 +1,7 @@
 from typing import Union
 from urllib.parse import urljoin
 
-from httpx import URL as _URL
+from httpx2 import URL as _URL
 
 from simnet.errors import NotSupported, RegionNotSupported
 from simnet.utils.enums import Game, Region

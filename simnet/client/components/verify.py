@@ -1,9 +1,8 @@
 import json
 import re
 import time
-from typing import Optional
 
-from httpx import Headers
+from httpx2 import Headers
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import URL
@@ -49,7 +48,7 @@ class VerifyClient(BaseClient):
         }
         return await self.request_lab(self.VERIFY_VERIFICATION_URL, data=data)
 
-    async def request_verify_ajax(self, referer: str, gt: str, challenge: str) -> Optional[str]:
+    async def request_verify_ajax(self, referer: str, gt: str, challenge: str) -> str | None:
         """Get the ajax validate code.
 
         Args:

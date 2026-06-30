@@ -1,8 +1,8 @@
 from http.cookiejar import CookieJar
 from http.cookies import SimpleCookie
-from typing import Optional, TypeVar
+from typing import TypeVar
 
-from httpx import Cookies as _Cookies
+from httpx2 import Cookies as _Cookies
 from pydantic import BaseModel
 
 from simnet.utils.types import CookieTypes
@@ -20,7 +20,7 @@ class Cookies(_Cookies):
 
     jar: CookieJar
 
-    def __init__(self, cookies: Optional[CookieTypes] = None):  # skipcq: PYL-W0231
+    def __init__(self, cookies: CookieTypes | None = None):  # skipcq: PYL-W0231
         self.jar = CookieJar()
         if cookies is None or isinstance(cookies, dict):
             if isinstance(cookies, dict):
@@ -46,7 +46,7 @@ class Cookies(_Cookies):
     COOKIE_MID_NAMES = ("mid", "account_mid_v2", "ltmid_v2")
 
     @property
-    def account_id(self) -> Optional[int]:
+    def account_id(self) -> int | None:
         """Return the user account ID if present in the cookies.
 
         If one of the user ID cookies exists in the cookies, return its integer value.
@@ -62,7 +62,7 @@ class Cookies(_Cookies):
         return None
 
     @property
-    def account_mid(self) -> Optional[str]:
+    def account_mid(self) -> str | None:
         """Return the user mid if present in the cookies.
 
         If one of the mid cookies exists in the cookies, return its integer value.
@@ -80,10 +80,10 @@ class Cookies(_Cookies):
     def get(
         self,
         name: str,
-        default: Optional[str] = None,
-        domain: Optional[str] = None,
-        path: Optional[str] = None,
-    ) -> Optional[str]:
+        default: str | None = None,
+        domain: str | None = None,
+        path: str | None = None,
+    ) -> str | None:
         """
         Get a cookie by name. May optionally include domain and path
         in order to specify exactly which cookie to retrieve.
@@ -107,26 +107,26 @@ class Cookies(_Cookies):
 class CookiesModel(BaseModel, frozen=False):
     """A model that represents the cookies used by the client."""
 
-    login_uid: Optional[IntStr] = None
-    login_ticket: Optional[str] = None
+    login_uid: IntStr | None = None
+    login_ticket: str | None = None
 
-    stoken: Optional[str] = None
-    stuid: Optional[IntStr] = None
-    mid: Optional[str] = None
+    stoken: str | None = None
+    stuid: IntStr | None = None
+    mid: str | None = None
 
-    account_id: Optional[IntStr] = None
-    cookie_token: Optional[str] = None
+    account_id: IntStr | None = None
+    cookie_token: str | None = None
 
-    ltoken: Optional[str] = None
-    ltuid: Optional[IntStr] = None
+    ltoken: str | None = None
+    ltuid: IntStr | None = None
 
-    account_mid_v2: Optional[str] = None
-    cookie_token_v2: Optional[str] = None
-    account_id_v2: Optional[IntStr] = None
+    account_mid_v2: str | None = None
+    cookie_token_v2: str | None = None
+    account_id_v2: IntStr | None = None
 
-    ltoken_v2: Optional[str] = None
-    ltmid_v2: Optional[str] = None
-    ltuid_v2: Optional[IntStr] = None
+    ltoken_v2: str | None = None
+    ltmid_v2: str | None = None
+    ltuid_v2: IntStr | None = None
 
     @property
     def is_v1(self) -> bool:
@@ -152,7 +152,7 @@ class CookiesModel(BaseModel, frozen=False):
         return self.json(exclude_defaults=True)
 
     @property
-    def user_id(self) -> Optional[int]:  # noqa: PLR0911
+    def user_id(self) -> int | None:  # noqa: PLR0911
         if self.ltuid:
             return self.ltuid
         if self.account_id:
@@ -181,7 +181,7 @@ class CookiesModel(BaseModel, frozen=False):
         if self.ltuid is None and self.ltoken:
             self.ltuid = user_id
 
-    def get_mid(self) -> Optional[str]:
+    def get_mid(self) -> str | None:
         return self.mid or self.account_mid_v2 or self.ltmid_v2
 
     def set_mid(self, mid: str):

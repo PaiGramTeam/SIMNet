@@ -1,4 +1,4 @@
-from httpx import Headers as _Headers
+from httpx2 import Headers as _Headers
 
 __all__ = ("Headers",)
 
