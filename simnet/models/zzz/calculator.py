@@ -74,16 +74,40 @@ class ZZZCalculatorEquipSuit(APIModel):
         return desc_to_html(self.desc2)
 
 
+class ZZZCalculatorEquipmentProperty(ZZZCalculatorWeaponProperty):
+    level: int
+    valid: bool
+    system_id: int
+    add: int
+
+
 class ZZZCalculatorEquipment(APIModel):
     id: int
     level: int
     name: str
     icon: str
     rarity: str
-    properties: list[ZZZCalculatorWeaponProperty]
-    main_properties: list[ZZZCalculatorWeaponProperty]
+    properties: list[ZZZCalculatorEquipmentProperty]
+    main_properties: list[ZZZCalculatorEquipmentProperty]
     equip_suit: ZZZCalculatorEquipSuit
     equipment_type: int
+
+
+class ZZZCalculatorCharacterEquipPlanProperty(APIModel):
+    id: int
+    name: str
+    full_name: str
+    system_id: int
+    is_select: bool
+
+
+class ZZZCalculatorCharacterEquipPlanInfo(APIModel):
+    type: int
+    valid_property_cnt: int
+    plan_only_special_property: bool
+    equip_rating: str
+    plan_effective_property_list: list[ZZZCalculatorCharacterEquipPlanProperty]
+    equip_rating_score: float
 
 
 class ZZZCalculatorCharacter(ZZZPartialCharacter):
@@ -92,6 +116,7 @@ class ZZZCalculatorCharacter(ZZZPartialCharacter):
     properties: list[ZZZCalculatorAvatarProperty]
     skills: list[ZZZCalculatorAvatarSkill]
     ranks: list[ZZZCalculatorAvatarRank]
+    equip_plan_info: Optional[ZZZCalculatorCharacterEquipPlanInfo] = None
 
     @property
     def equip_map(self) -> dict[str, Optional[ZZZCalculatorEquipment]]:
