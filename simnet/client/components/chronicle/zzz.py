@@ -364,7 +364,7 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
             DataNotPublic: If the requested data is not public.
         """
         payload = {"schedule_type": 2 if previous else 1}
-        data = await self._request_zzz_record("mem_detail", player_id, lang=lang, payload=payload)
+        data = await self._request_zzz_record("hadal_mem_detail_v2", player_id, lang=lang, payload=payload)
         return ZZZChallengeMem(**data)
 
     async def get_zzz_challenge_holo(

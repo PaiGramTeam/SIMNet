@@ -71,12 +71,17 @@ class ZZZChallengeMem(APIModel):
         begin_time (Optional[PartialTime]): The start time of the challenge.
         end_time (Optional[PartialTime]): The end time of the challenge.
         rank_percent (int): The rank percentage in the challenge.
+        hard_rank_percent (Optional[int]): The hard rank percentage in the challenge.
+        hard_list (Optional[list[ZZZChallengeMemItem]]): The hard list of items in the challenge.
         list (list[ZZZChallengeMemItem]): The list of items in the challenge.
-        has_data (bool): Indicates if data is available.
         nick_name (str): The nickname of the participant.
         avatar_icon (str): The avatar icon of the participant.
         total_score (int): The total score of the challenge.
         total_star (int): The total star rating of the challenge.
+        total_max_score (Optional[int]): The total maximum score of the challenge.
+        room_max_score (Optional[int]): The room maximum score of the challenge.
+        has_hard (Optional[bool]): Indicates if the challenge is hard.
+        has_data (bool): Indicates if data is available.
     """
 
     season: int = Field(alias="zone_id")
@@ -84,10 +89,16 @@ class ZZZChallengeMem(APIModel):
     end_time: Optional[PartialTime] = Field(None, alias="end_time")
 
     rank_percent: int
+    hard_rank_percent: Optional[int] = 0
+    hard_list: list[ZZZChallengeMemItem] | None = None
     list: list[ZZZChallengeMemItem]
     nick_name: str
     avatar_icon: str
     total_score: int
     total_star: int
 
+    total_max_score: Optional[int] = 0
+    room_max_score: Optional[int] = 0
+
+    has_hard: Optional[bool] = False
     has_data: bool
