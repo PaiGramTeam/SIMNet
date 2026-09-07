@@ -18,12 +18,14 @@ A very simple example of how SIMNet would be used:
 import asyncio
 import simnet
 
+
 async def main():
-    cookies = {} # write your cookies
+    cookies = {}  # write your cookies
     player_id = 123456789
     async with simnet.StarRailClient(cookies, player_id=player_id) as client:
         data = await client.get_starrail_user()
         print(f"Player has a total of {data.stats.avatar_num} characters")
+
 
 asyncio.run(main())
 ```
