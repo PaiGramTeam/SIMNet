@@ -1,24 +1,23 @@
 [project]
 name = "SIMNet"
-version = "0.2.0"
+version = "0.3.0"
 authors = [
     {name = "PaiGramTeam", email = "team@paigram.org"},
 ]
 description = "Modern API wrapper for Genshin Impact & Honkai: Star Rail built on asyncio and pydantic."
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 dependencies = [
-    "httpx>=0.25.0",
+    "httpx2>=2.0.0",
     "pydantic>=2.0.0,<3.0.0",
 ]
 
 [dependency-groups]
 dev = [
-    "black>=24.8.0",
-    "pytest-asyncio>=0.24.0",
-    "pytest>=8.3.3",
-    "ruff>=0.6.4",
-    "python-dotenv>=1.0.1",
+    "pytest-asyncio>=1.4.1",
+    "pytest>=9.2.0",
+    "ruff>=0.17.3",
+    "python-dotenv>=1.2.4",
 ]
 
 [tool.hatch.build]
@@ -34,12 +33,6 @@ log_cli = true
 log_cli_level = "INFO"
 log_cli_format = "%(message)s"
 log_cli_date_format = "%Y-%m-%d %H:%M:%S"
-
-
-[tool.black]
-include = '\.pyi?$'
-line-length = 120
-target-version = ['py39', 'py310', 'py311', 'py312']
 
 [tool.ruff]
 exclude = [

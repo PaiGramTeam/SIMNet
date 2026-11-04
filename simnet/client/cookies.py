@@ -2,7 +2,7 @@ from http.cookiejar import CookieJar
 from http.cookies import SimpleCookie
 from typing import TypeVar
 
-from httpx import Cookies as _Cookies
+from httpx2 import Cookies as _Cookies
 from pydantic import BaseModel
 
 from simnet.utils.types import CookieTypes
@@ -16,7 +16,7 @@ __all__ = (
 
 
 class Cookies(_Cookies):
-    """A wrapper around `httpx.Cookies` that provides additional functionality."""
+    """A wrapper around `httpx2.Cookies` that provides additional functionality."""
 
     jar: CookieJar
 

@@ -3,7 +3,7 @@
 import asyncio
 from typing import Any
 
-from httpx import QueryParams
+from httpx2 import QueryParams
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import REWARD_URL

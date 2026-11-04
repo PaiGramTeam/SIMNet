@@ -2,7 +2,7 @@ import json
 import re
 import time
 
-from httpx import Headers
+from httpx2 import Headers
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import URL

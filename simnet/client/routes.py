@@ -1,7 +1,7 @@
 from typing import Union
 from urllib.parse import urljoin
 
-from httpx import URL as _URL
+from httpx2 import URL as _URL
 
 from simnet.errors import NotSupported, RegionNotSupported
 from simnet.utils.enums import Game, Region
@@ -43,7 +43,7 @@ __all__ = (
 
 
 class URL(_URL):
-    """A subclass of httpx's URL class, with additional convenience methods for URL manipulation."""
+    """A subclass of httpx2's URL class, with additional convenience methods for URL manipulation."""
 
     def join(self, url: URLTypes) -> "URL":
         """

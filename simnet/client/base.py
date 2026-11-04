@@ -4,7 +4,7 @@ import uuid
 from contextlib import AbstractAsyncContextManager
 from types import TracebackType
 
-from httpx import AsyncClient, HTTPError, Response, Timeout, TimeoutException
+from httpx2 import AsyncClient, HTTPError, Response, Timeout, TimeoutException
 
 from simnet.client.cookies import Cookies
 from simnet.client.headers import Headers

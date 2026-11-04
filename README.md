@@ -7,7 +7,7 @@ Modern API wrapper for Genshin Impact & Honkai: Star Rail built on asyncio and p
 ## Requirements
 
 - Python 3.8+
-- httpx
+- httpx2
 - Pydantic
 
 ## Example

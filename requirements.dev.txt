@@ -2,3 +2,4 @@ pytest
 pytest-asyncio
 python-dotenv
 pre-commit
+ruff
