@@ -1,4 +1,4 @@
-from typing import Any, Optional, Union
+from typing import Any
 from urllib import parse
 
 from simnet.client.base import BaseClient
@@ -21,8 +21,8 @@ class TransactionClient(BaseClient):
         authkey: str,
         *,
         method: str = "GET",
-        lang: Optional[str] = None,
-        params: Optional[dict[str, Any]] = None,
+        lang: str | None = None,
+        params: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         """Make a request towards the transaction log endpoint.
 
@@ -51,7 +51,7 @@ class TransactionClient(BaseClient):
         kind: str,
         authkey: str,
         *,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> list[BaseTransaction]:
         """Get a single page of transactions.
 
@@ -81,10 +81,10 @@ class TransactionClient(BaseClient):
     async def transaction_log(
         self,
         authkey: str,
-        kind: Optional[Union[str, list[str]]] = None,
+        kind: str | list[str] | None = None,
         *,
-        limit: Optional[int] = None,
-        lang: Optional[str] = None,
+        limit: int | None = None,
+        lang: str | None = None,
         end_id: int = 0,
     ) -> list[BaseTransaction]:
         """Get the transaction log of a user.

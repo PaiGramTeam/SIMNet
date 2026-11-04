@@ -1,5 +1,3 @@
-from typing import Optional
-
 from simnet.client.components.diary.base import BaseDiaryClient
 from simnet.models.zzz.diary import ZZZDiary
 from simnet.utils.enums import Game
@@ -10,10 +8,10 @@ class ZZZDiaryClient(BaseDiaryClient):
 
     async def get_zzz_diary(
         self,
-        player_id: Optional[int] = None,
+        player_id: int | None = None,
         *,
-        month: Optional[str] = None,
-        lang: Optional[str] = None,
+        month: str | None = None,
+        lang: str | None = None,
     ) -> ZZZDiary:
         """Get a traveler's diary with earning details for the month.
 

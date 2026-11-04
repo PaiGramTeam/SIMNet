@@ -1,6 +1,6 @@
 import asyncio
 from collections.abc import Mapping
-from typing import Any, Optional, Union
+from typing import Any
 
 from simnet.client.components.chronicle.base import BaseChronicleClient
 from simnet.client.routes import RECORD_URL
@@ -42,11 +42,11 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
     async def _request_starrail_record(
         self,
         endpoint: str,
-        player_id: Optional[int] = None,
+        player_id: int | None = None,
         endpoint_type: str = "api",
         method: str = "GET",
-        lang: Optional[str] = None,
-        payload: Optional[dict[str, Any]] = None,
+        lang: str | None = None,
+        payload: dict[str, Any] | None = None,
     ) -> Mapping[str, Any]:
         """Get an arbitrary object from StarRail's battle chronicle.
 
@@ -87,8 +87,8 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
 
     async def get_starrail_notes(
         self,
-        player_id: Optional[int] = None,
-        lang: Optional[str] = None,
+        player_id: int | None = None,
+        lang: str | None = None,
         autoauth: bool = True,
     ) -> StarRailNote:
         """Get StarRail's real-time notes.
@@ -120,9 +120,9 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
 
     async def get_starrail_user(
         self,
-        player_id: Optional[int] = None,
+        player_id: int | None = None,
         *,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> StarRailUserStats:
         """Get StarRail user statistics.
 
@@ -146,8 +146,8 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
 
     async def get_starrail_characters(
         self,
-        player_id: Optional[int] = None,
-        lang: Optional[str] = None,
+        player_id: int | None = None,
+        lang: str | None = None,
     ) -> StarRailDetailCharacters:
         """Get StarRail character information.
 
@@ -168,10 +168,10 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
 
     async def get_record_card(
         self,
-        account_id: Optional[int] = None,
+        account_id: int | None = None,
         *,
-        lang: Optional[str] = None,
-    ) -> Optional[RecordCard]:
+        lang: str | None = None,
+    ) -> RecordCard | None:
         """Get a starrail player record cards.
 
         Args:
@@ -196,9 +196,9 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
 
     async def get_starrail_challenge(
         self,
-        player_id: Optional[int] = None,
+        player_id: int | None = None,
         previous: bool = False,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> StarRailChallenge:
         """Get starrail challenge runs.
 
@@ -220,9 +220,9 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
 
     async def get_starrail_challenge_story(
         self,
-        player_id: Optional[int] = None,
+        player_id: int | None = None,
         previous: bool = False,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> StarRailChallengeStory:
         """Get starrail challenge story runs.
 
@@ -248,9 +248,9 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
 
     async def get_starrail_challenge_boss(
         self,
-        player_id: Optional[int] = None,
+        player_id: int | None = None,
         previous: bool = False,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> StarRailChallengeBoss:
         """Get starrail challenge boss runs.
 
@@ -276,9 +276,9 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
 
     async def get_starrail_challenge_peak(
         self,
-        player_id: Optional[int] = None,
+        player_id: int | None = None,
         previous: bool = False,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> StarRailChallengePeak:
         """Get starrail challenge peak runs.
 
@@ -304,9 +304,9 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
 
     async def get_starrail_rogue(
         self,
-        player_id: Optional[int] = None,
+        player_id: int | None = None,
         schedule_type: int = 3,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> StarRailRogue:
         """Get starrail rogue runs.
 
@@ -328,8 +328,8 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
 
     async def get_starrail_rogue_locust(
         self,
-        player_id: Optional[int] = None,
-        lang: Optional[str] = None,
+        player_id: int | None = None,
+        lang: str | None = None,
     ) -> StarRailRogueLocust:
         """Get starrail rogue locust runs.
 
@@ -350,8 +350,8 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
 
     async def get_starrail_rogue_nous(
         self,
-        player_id: Optional[int] = None,
-        lang: Optional[str] = None,
+        player_id: int | None = None,
+        lang: str | None = None,
     ) -> StarRailRogueNous:
         """Get starrail rogue nous runs.
 
@@ -372,8 +372,8 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
 
     async def get_starrail_rogue_tourn(
         self,
-        player_id: Optional[int] = None,
-        lang: Optional[str] = None,
+        player_id: int | None = None,
+        lang: str | None = None,
     ) -> StarRailRogueTourn:
         """Get starrail rogue tourn runs.
 
@@ -394,8 +394,8 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
 
     async def get_starrail_act_calendar(
         self,
-        uid: Optional[int] = None,
-        lang: Optional[str] = None,
+        uid: int | None = None,
+        lang: str | None = None,
     ) -> StarRailActCalendar:
         """Get starrail act calendar.
 
@@ -415,8 +415,8 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
 
     async def get_starrail_notes_by_stoken(
         self,
-        lang: Optional[str] = None,
-    ) -> Union[StarRailNoteWidget, StarRailNoteOverseaWidget]:
+        lang: str | None = None,
+    ) -> StarRailNoteWidget | StarRailNoteOverseaWidget:
         """Get StarRail's real-time notes.
 
         Args:
@@ -467,8 +467,8 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
 
     async def get_starrail_ledger_month_info(
         self,
-        uid: Optional[int] = None,
-        lang: Optional[str] = None,
+        uid: int | None = None,
+        lang: str | None = None,
     ) -> StarRailLedgerMonthInfo:
         """Get StarRail ledger month info.
 
@@ -488,8 +488,8 @@ class StarRailBattleChronicleClient(BaseChronicleClient):
 
     async def get_starrail_achievement_info(
         self,
-        uid: Optional[int] = None,
-        lang: Optional[str] = None,
+        uid: int | None = None,
+        lang: str | None = None,
     ) -> StarRailAchievementInfo:
         """Get StarRail achievement info.
 

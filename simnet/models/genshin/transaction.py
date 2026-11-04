@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import StrEnum
 from typing import Literal
 
 from simnet.models.base import APIModel, DateTimeField, Field
@@ -6,7 +6,7 @@ from simnet.models.base import APIModel, DateTimeField, Field
 __all__ = ("BaseTransaction", "ItemTransaction", "Transaction", "TransactionKind")
 
 
-class TransactionKind(str, Enum):
+class TransactionKind(StrEnum):
     """Possible kind of transaction.
 
     Attributes:

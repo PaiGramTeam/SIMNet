@@ -1,5 +1,3 @@
-from typing import Optional
-
 from simnet.client.base import BaseClient
 from simnet.client.routes import PASSPORT_MA_URL, PASSPORT_URL
 from simnet.errors import InvalidCookies
@@ -11,8 +9,8 @@ class LTokenAuthClient(BaseClient):
 
     async def verify_ltoken(
         self,
-        ltoken: Optional[str] = None,
-        ltuid: Optional[int] = None,
+        ltoken: str | None = None,
+        ltuid: int | None = None,
     ) -> None:
         """
         Verify ltoken

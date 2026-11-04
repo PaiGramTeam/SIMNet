@@ -1,5 +1,3 @@
-from typing import Optional
-
 from simnet.client.components.auth import AuthClient
 from simnet.client.components.calculator.starrail import StarrailCalculatorClient
 from simnet.client.components.chronicle.starrail import StarRailBattleChronicleClient
@@ -29,4 +27,4 @@ class StarRailClient(
 ):
     """A simple http client for StarRail endpoints."""
 
-    game: Optional[Game] = Game.STARRAIL
+    game: Game | None = Game.STARRAIL

@@ -1,6 +1,6 @@
 """Starrail chronicle character."""
 
-from typing import Any, Optional
+from typing import Any
 
 from pydantic import field_validator
 
@@ -114,7 +114,7 @@ class StarRailDetailCharacter(character.StarRailPartialCharacter):
     """StarRail character with equipment and relics."""
 
     image: str
-    equip: Optional[StarRailEquipment] = None
+    equip: StarRailEquipment | None = None
     relics: list[Relic]
     ornaments: list[Relic]
     ranks: list[Rank]
@@ -231,7 +231,7 @@ class StarRailDetailCharacters(APIModel):
         """Parse recommend property."""
         return cls._parse(v, "id")
 
-    def get_recommend_property_by_cid(self, character_id: int) -> Optional[RecommendProperty]:
+    def get_recommend_property_by_cid(self, character_id: int) -> RecommendProperty | None:
         """Get recommend property by character id."""
         for i in self.recommend_property:
             if i.id == character_id:

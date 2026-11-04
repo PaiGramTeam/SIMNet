@@ -1,5 +1,3 @@
-from typing import Optional
-
 from simnet.models.base import APIModel, Field
 from simnet.models.starrail.chronicle.base import PartialTime
 from simnet.models.zzz.chronicle.challenge import ZZZChallengeBuddy, ZZZChallengeCharacter
@@ -22,8 +20,8 @@ class ZZZHadalBrief(APIModel):
     rating: str
     max_score: int
 
-    battle_time: Optional[int] = None
-    challenge_time: Optional[PartialTime] = None
+    battle_time: int | None = None
+    challenge_time: PartialTime | None = None
 
 
 class ZZZHadalBuffer(APIModel):
@@ -49,11 +47,11 @@ class ZZZHadalInfoFourthLayerInfoDetail(APIModel):
     """
 
     layer_id: int
-    challenge_time: Optional[PartialTime] = None
+    challenge_time: PartialTime | None = None
     avatar_list: list[ZZZChallengeCharacter]
-    buddy: Optional[ZZZChallengeBuddy]
+    buddy: ZZZChallengeBuddy | None
 
-    battle_time: Optional[int] = None
+    battle_time: int | None = None
 
 
 class ZZZHadalInfoFourthLayerDetail(APIModel):
@@ -118,14 +116,14 @@ class ZZZHadalInfoV2(APIModel):
     """
 
     season: int = Field(alias="zone_id")
-    begin_time: Optional[PartialTime] = Field(None, alias="hadal_begin_time")
-    end_time: Optional[PartialTime] = Field(None, alias="hadal_end_time")
+    begin_time: PartialTime | None = Field(None, alias="hadal_begin_time")
+    end_time: PartialTime | None = Field(None, alias="hadal_end_time")
 
     pass_fifth_floor: bool
 
-    brief: Optional[ZZZHadalBrief]
-    fitfh_layer_detail: Optional[ZZZHadalInfoFitfhLayerDetail]
-    fourth_layer_detail: Optional[ZZZHadalInfoFourthLayerDetail]
+    brief: ZZZHadalBrief | None
+    fitfh_layer_detail: ZZZHadalInfoFitfhLayerDetail | None
+    fourth_layer_detail: ZZZHadalInfoFourthLayerDetail | None
 
 
 class ZZZHadalInfo(APIModel):
@@ -140,5 +138,5 @@ class ZZZHadalInfo(APIModel):
 
     hadal_ver: str
     hadal_info_v2: ZZZHadalInfoV2
-    nick_name: Optional[str] = None
-    icon: Optional[str] = None
+    nick_name: str | None = None
+    icon: str | None = None

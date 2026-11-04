@@ -3,7 +3,7 @@ import enum as _enum
 __all__ = ("Region", "Game")
 
 
-class Region(str, _enum.Enum):
+class Region(_enum.StrEnum):
     """
     Represents a region where a game is being played.
 
@@ -16,7 +16,7 @@ class Region(str, _enum.Enum):
     CHINESE = "cn"
 
 
-class Game(str, _enum.Enum):
+class Game(_enum.StrEnum):
     """
     Represents a game that can be played in different regions.
 

@@ -1,4 +1,4 @@
-from typing import Any, Literal, Optional
+from typing import Any, Literal
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import CALCULATOR_URL
@@ -18,9 +18,9 @@ class StarrailCalculatorClient(BaseClient):
         endpoint: str,
         *,
         method: str = "POST",
-        lang: Optional[str] = None,
-        params: Optional[dict[str, Any]] = None,
-        data: Optional[dict[str, Any]] = None,
+        lang: str | None = None,
+        params: dict[str, Any] | None = None,
+        data: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         """Make a request towards the calculator endpoint.
 
@@ -58,8 +58,8 @@ class StarrailCalculatorClient(BaseClient):
         tab_from: Literal["TabOwned", "TabAll"] = "TabOwned",
         page: int = 1,
         size: int = 100,
-        player_id: Optional[int] = None,
-        lang: Optional[str] = None,
+        player_id: int | None = None,
+        lang: str | None = None,
     ) -> list[StarrailCalculatorCharacter]:
         """Get all characters provided by the Enhancement Progression Calculator.
 
@@ -88,8 +88,8 @@ class StarrailCalculatorClient(BaseClient):
         self,
         character: int,
         tab_from: Literal["TabOwned", "TabAll"] = "TabOwned",
-        player_id: Optional[int] = None,
-        lang: Optional[str] = None,
+        player_id: int | None = None,
+        lang: str | None = None,
     ) -> StarrailCalculatorCharacterDetails:
         """
         Get the weapon, artifacts and talents of a character.

@@ -1,5 +1,3 @@
-from typing import Optional
-
 from simnet.models.base import APIModel, TimeDeltaField
 from simnet.models.zzz.chronicle.abyss_abstract import ZZZAbyssCollectItem, ZZZAbyssDuty, ZZZAbyssLevel
 
@@ -50,10 +48,10 @@ class ZZZAbysss2Abstract(APIModel):
         unlock (bool): Indicates if the abyss is unlocked.
     """
 
-    abyss_level: Optional[ZZZAbyssLevel] = None
-    abyss_task: Optional[ZZZAbyssTask] = None
-    abyss_duty: Optional[ZZZAbyssDuty] = None
+    abyss_level: ZZZAbyssLevel | None = None
+    abyss_task: ZZZAbyssTask | None = None
+    abyss_duty: ZZZAbyssDuty | None = None
     refresh_time: TimeDeltaField
-    abyss_max: Optional[ZZZAbyssMax] = None
+    abyss_max: ZZZAbyssMax | None = None
     abyss_collect: list[ZZZAbyssCollectItem]
     unlock: bool

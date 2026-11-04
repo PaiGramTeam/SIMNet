@@ -1,6 +1,5 @@
 import time
 from asyncio import sleep
-from typing import Optional
 
 from simnet.client.base import BaseClient
 from simnet.client.cookies import CookiesModel
@@ -17,9 +16,9 @@ class StokenAuthClient(BaseClient):
 
     def check_stoken(
         self,
-        stoken: Optional[str] = None,
-        account_id: Optional[int] = None,
-        mid: Optional[str] = None,
+        stoken: str | None = None,
+        account_id: int | None = None,
+        mid: str | None = None,
     ) -> tuple[str, str]:
         """
         Checks and sets the stoken, account_id, and mid for a user.
@@ -59,10 +58,10 @@ class StokenAuthClient(BaseClient):
 
     async def get_cookie_token_by_stoken(
         self,
-        stoken: Optional[str] = None,
-        account_id: Optional[int] = None,
-        mid: Optional[str] = None,
-    ) -> Optional[str]:
+        stoken: str | None = None,
+        account_id: int | None = None,
+        mid: str | None = None,
+    ) -> str | None:
         """
         Retrieves a cookie token (`cookie_token`) using a super ticket (`stoken`).
 
@@ -92,10 +91,10 @@ class StokenAuthClient(BaseClient):
 
     async def get_ltoken_by_stoken(
         self,
-        stoken: Optional[str] = None,
-        account_id: Optional[int] = None,
-        mid: Optional[str] = None,
-    ) -> Optional[str]:
+        stoken: str | None = None,
+        account_id: int | None = None,
+        mid: str | None = None,
+    ) -> str | None:
         """
         Retrieves a login token (`ltoken`) using a super ticket (`stoken`).
 
@@ -126,9 +125,9 @@ class StokenAuthClient(BaseClient):
     async def get_authkey_by_stoken(
         self,
         auth_appid: str,
-        game_biz: Optional[str] = None,
-        region: Optional[str] = None,
-    ) -> Optional[str]:
+        game_biz: str | None = None,
+        region: str | None = None,
+    ) -> str | None:
         """
         Get the auth key (`authkey`) for a game and region using a super ticket (`stoken`).
 
@@ -161,8 +160,8 @@ class StokenAuthClient(BaseClient):
 
     async def get_stoken_v2_by_stoken_v2(
         self,
-        stoken: Optional[str] = None,
-        mid: Optional[str] = None,
+        stoken: str | None = None,
+        mid: str | None = None,
     ) -> str:
         """
         Get stoken_v2 and mid by stoken_v1
@@ -191,9 +190,9 @@ class StokenAuthClient(BaseClient):
 
     async def get_game_token_by_stoken(
         self,
-        stoken: Optional[str] = None,
-        account_id: Optional[int] = None,
-        mid: Optional[str] = None,
+        stoken: str | None = None,
+        account_id: int | None = None,
+        mid: str | None = None,
     ) -> str:
         """
         Get game token by stoken
@@ -220,9 +219,9 @@ class StokenAuthClient(BaseClient):
         authorize_key: str,
         package_name: str,
         signature: str,
-        stoken: Optional[str] = None,
-        account_id: Optional[int] = None,
-        mid: Optional[str] = None,
+        stoken: str | None = None,
+        account_id: int | None = None,
+        mid: str | None = None,
     ) -> str:
         """
         Get auth ticket by stoken
@@ -254,9 +253,9 @@ class StokenAuthClient(BaseClient):
 
     async def get_all_token_by_stoken(
         self,
-        stoken: Optional[str] = None,
-        account_id: Optional[int] = None,
-        mid: Optional[str] = None,
+        stoken: str | None = None,
+        account_id: int | None = None,
+        mid: str | None = None,
     ) -> CookiesModel:
         """
         Retrieves all tokens (stoken_v2, mid, ltoken, and cookie_token) using a given stoken.
@@ -281,9 +280,9 @@ class StokenAuthClient(BaseClient):
 
     async def get_all_token_by_stoken_cn(
         self,
-        stoken: Optional[str] = None,
-        account_id: Optional[int] = None,
-        mid: Optional[str] = None,
+        stoken: str | None = None,
+        account_id: int | None = None,
+        mid: str | None = None,
     ) -> CookiesModel:
         """
         Retrieves all tokens (stoken_v2, mid, ltoken, and cookie_token) for the Chinese region using a given stoken.
@@ -326,9 +325,9 @@ class StokenAuthClient(BaseClient):
 
     async def get_all_token_by_stoken_os(
         self,
-        stoken: Optional[str] = None,
-        account_id: Optional[int] = None,
-        mid: Optional[str] = None,
+        stoken: str | None = None,
+        account_id: int | None = None,
+        mid: str | None = None,
     ) -> CookiesModel:
         """
         Get stoken_v2, mid, ltoken and cookie_token by stoken v1 or v2
@@ -468,9 +467,9 @@ class StokenAuthClient(BaseClient):
 
     async def verify_stoken(
         self,
-        stoken: Optional[str] = None,
-        account_id: Optional[int] = None,
-        mid: Optional[str] = None,
+        stoken: str | None = None,
+        account_id: int | None = None,
+        mid: str | None = None,
     ) -> None:
         """
         Verify stoken

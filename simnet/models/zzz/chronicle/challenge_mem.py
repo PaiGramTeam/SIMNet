@@ -1,5 +1,3 @@
-from typing import Optional
-
 from simnet.models.base import APIModel, Field
 from simnet.models.starrail.chronicle.base import PartialTime
 from simnet.models.zzz.chronicle.challenge import ZZZChallengeBuddy, ZZZChallengeCharacter
@@ -59,7 +57,7 @@ class ZZZChallengeMemItem(APIModel):
     boss: list[ZZZChallengeMemBos]
     buffer: list[ZZZChallengeMemBufferItem]
     avatar_list: list[ZZZChallengeCharacter]
-    buddy: Optional[ZZZChallengeBuddy] = None
+    buddy: ZZZChallengeBuddy | None = None
 
 
 class ZZZChallengeMem(APIModel):
@@ -85,11 +83,11 @@ class ZZZChallengeMem(APIModel):
     """
 
     season: int = Field(alias="zone_id")
-    begin_time: Optional[PartialTime] = Field(None, alias="start_time")
-    end_time: Optional[PartialTime] = Field(None, alias="end_time")
+    begin_time: PartialTime | None = Field(None, alias="start_time")
+    end_time: PartialTime | None = Field(None, alias="end_time")
 
     rank_percent: int
-    hard_rank_percent: Optional[int] = 0
+    hard_rank_percent: int | None = 0
     hard_list: list[ZZZChallengeMemItem] | None = None
     list: list[ZZZChallengeMemItem]
     nick_name: str
@@ -97,8 +95,8 @@ class ZZZChallengeMem(APIModel):
     total_score: int
     total_star: int
 
-    total_max_score: Optional[int] = 0
-    room_max_score: Optional[int] = 0
+    total_max_score: int | None = 0
+    room_max_score: int | None = 0
 
-    has_hard: Optional[bool] = False
+    has_hard: bool | None = False
     has_data: bool

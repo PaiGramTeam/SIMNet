@@ -1,6 +1,5 @@
 import json as jsonlib
 import time
-from typing import Optional
 
 from simnet.client.components.auth_client import AuthBaseClient
 from simnet.client.routes import GET_FP_URL
@@ -18,9 +17,9 @@ class AuthClient(AuthBaseClient):
 
     async def get_fp(
         self,
-        device_id: Optional[str] = None,
-        device_fp: Optional[str] = None,
-        extend_properties: Optional[dict] = None,
+        device_id: str | None = None,
+        device_fp: str | None = None,
+        extend_properties: dict | None = None,
         app_name: str = "bbs_cn",
         platform: int = 2,
     ) -> str:

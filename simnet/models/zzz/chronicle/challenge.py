@@ -1,5 +1,3 @@
-from typing import Optional
-
 from simnet.models.base import APIModel, Field
 from simnet.models.starrail.chronicle.base import PartialTime
 from simnet.models.zzz.character import ZZZBaseBuddy, ZZZBaseCharacter
@@ -15,17 +13,17 @@ class ZZZFloorBuff(APIModel):
 class ZZZChallengeCharacter(ZZZBaseCharacter):
     """Challenge character"""
 
-    avatar_profession: Optional[int] = 0
+    avatar_profession: int | None = 0
     level: int
-    rank: Optional[int] = 0
-    icon: Optional[str] = Field(None, alias="role_square_url")
-    sub_element_type: Optional[int] = 0
+    rank: int | None = 0
+    icon: str | None = Field(None, alias="role_square_url")
+    sub_element_type: int | None = 0
 
 
 class ZZZChallengeBuddy(ZZZBaseBuddy):
     """Challenge buddy"""
 
-    icon: Optional[str] = Field(None, alias="bangboo_rectangle_url")
+    icon: str | None = Field(None, alias="bangboo_rectangle_url")
 
 
 class ZZZFloorMonsterInfo(APIModel):
@@ -47,7 +45,7 @@ class ZZZFloorNode(APIModel):
     """A node"""
 
     avatars: list[ZZZChallengeCharacter]
-    buddy: Optional[ZZZChallengeBuddy] = None
+    buddy: ZZZChallengeBuddy | None = None
     element_type_list: list[int]
     monster_info: ZZZFloorMonster
 
@@ -77,8 +75,8 @@ class ZZZChallenge(APIModel):
     """Challenge in a season."""
 
     season: int = Field(alias="schedule_id")
-    begin_time: Optional[PartialTime] = Field(None, alias="hadal_begin_time")
-    end_time: Optional[PartialTime] = Field(None, alias="hadal_end_time")
+    begin_time: PartialTime | None = Field(None, alias="hadal_begin_time")
+    end_time: PartialTime | None = Field(None, alias="hadal_end_time")
 
     fast_layer_time: int
     max_layer: int

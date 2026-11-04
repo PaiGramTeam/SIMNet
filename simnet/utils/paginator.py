@@ -1,7 +1,7 @@
 import asyncio
 import contextlib
-from collections.abc import Awaitable
-from typing import Any, Callable
+from collections.abc import Awaitable, Callable
+from typing import Any
 
 
 class WishPaginator:

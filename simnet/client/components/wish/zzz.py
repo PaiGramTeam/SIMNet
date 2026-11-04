@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from collections.abc import Mapping
 from functools import partial
-from typing import Any, Optional
+from typing import Any
 
 from simnet.client.components.wish.base import BaseWishClient
 from simnet.models.zzz.wish import ZZZBannerTypeHoyolab, ZZZWish
@@ -16,10 +16,10 @@ class ZZZWishClient(BaseWishClient):
 
     async def wish_history(
         self,
-        banner_types: Optional[list[int]] = None,
-        limit: Optional[int] = None,
-        lang: Optional[str] = None,
-        authkey: Optional[str] = None,
+        banner_types: list[int] | None = None,
+        limit: int | None = None,
+        lang: str | None = None,
+        authkey: str | None = None,
         end_id: int = 0,
         min_id: int = 0,
     ) -> list[ZZZWish]:
@@ -64,16 +64,16 @@ class ZZZWishClient(BaseWishClient):
         self,
         end_id: int,
         banner_type: str,
-        player_id: Optional[int] = None,
-        lang: Optional[str] = None,
+        player_id: int | None = None,
+        lang: str | None = None,
     ) -> Mapping[str, Any]: ...
 
     async def wish_history_by_hoyolab(
         self,
-        banner_types: Optional[list[int]] = None,
-        limit: Optional[int] = None,
-        player_id: Optional[int] = None,
-        lang: Optional[str] = None,
+        banner_types: list[int] | None = None,
+        limit: int | None = None,
+        player_id: int | None = None,
+        lang: str | None = None,
         end_id: int = 0,
         min_id: int = 0,
     ) -> list[ZZZWish]:

@@ -1,5 +1,5 @@
 import datetime
-from typing import TYPE_CHECKING, Annotated, Any, Optional, Union
+from typing import TYPE_CHECKING, Annotated, Any
 
 from pydantic import (
     AfterValidator,
@@ -25,7 +25,7 @@ class APIModel(BaseModel):
 
 def Field(
     default: Any = PydanticUndefined,
-    alias: Optional[str] = None,
+    alias: str | None = None,
     **kwargs: Any,
 ):
     """Create an aliased field."""
@@ -49,7 +49,7 @@ def str_time_date_plain(
     value: datetime.datetime,
     handler: "SerializerFunctionWrapHandler",
     info: "SerializationInfo",
-) -> Union[str, datetime.datetime]:
+) -> str | datetime.datetime:
     """
     Converts a datetime object to its ISO 8601 string representation if the mode is JSON, otherwise uses the handler.
 
@@ -83,7 +83,7 @@ def str_time_delta_plain(
     value: datetime.timedelta,
     handler: "SerializerFunctionWrapHandler",
     info: "SerializationInfo",
-) -> Union[float, datetime.timedelta]:
+) -> float | datetime.timedelta:
     """
     Converts a timedelta object to its total seconds as a float if the mode is JSON, otherwise uses the handler.
 

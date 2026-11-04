@@ -1,5 +1,3 @@
-from typing import Optional
-
 from simnet.models.base import APIModel
 
 __all__ = ("BaseCharacter",)
@@ -22,10 +20,10 @@ class BaseCharacter(APIModel):
     """
 
     id: int
-    name: Optional[str] = None
-    element: Optional[str] = None
-    rarity: Optional[int] = None
-    icon: Optional[str] = None
+    name: str | None = None
+    element: str | None = None
+    rarity: int | None = None
+    icon: str | None = None
 
     collab: bool = False
 

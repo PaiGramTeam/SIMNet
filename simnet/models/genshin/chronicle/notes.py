@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
-from enum import Enum
-from typing import Any, Literal, Optional
+from enum import StrEnum
+from typing import Any, Literal
 
 from pydantic import model_validator
 
@@ -76,7 +76,7 @@ class TransformerTimedelta(TimeDeltaField):
         return self.timedata[3]
 
 
-class TaskRewardStatus(str, Enum):
+class TaskRewardStatus(StrEnum):
     """The enum for task reward statuses."""
 
     Invalid = "TaskRewardStatusInvalid"
@@ -95,7 +95,7 @@ class TaskReward(APIModel):
     status: TaskRewardStatus
 
 
-class AttendanceRewardStatus(str, Enum):
+class AttendanceRewardStatus(StrEnum):
     """The enum for attendance reward statuses."""
 
     Invalid = "AttendanceRewardStatusInvalid"
@@ -140,7 +140,7 @@ class DailyTask(APIModel):
     stored_attendance_refresh_countdown: TimeDeltaField
 
 
-class ArchonStatusEnum(str, Enum):
+class ArchonStatusEnum(StrEnum):
     """The enum for archon statuses."""
 
     StatusFinished = "StatusFinished"
@@ -255,7 +255,7 @@ class Notes(APIModel):
     remaining_resin_discounts: int = Field(alias="remain_resin_discount_num")
     max_resin_discounts: int = Field(alias="resin_discount_num_limit")
 
-    remaining_transformer_recovery_time: Optional[TransformerTimedelta] = None
+    remaining_transformer_recovery_time: TransformerTimedelta | None = None
 
     expeditions: list[Expedition]
     current_expeditions: int = Field(alias="current_expedition_num")
@@ -276,7 +276,7 @@ class Notes(APIModel):
         return datetime.now().astimezone() + self.remaining_realm_currency_recovery_time
 
     @property
-    def transformer_recovery_time(self) -> Optional[datetime]:
+    def transformer_recovery_time(self) -> datetime | None:
         """A property that returns the time when the transformer will be fully recovered."""
         if self.remaining_transformer_recovery_time is None:
             return None

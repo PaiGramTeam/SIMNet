@@ -1,6 +1,6 @@
 from collections.abc import Sequence
 from datetime import datetime, timedelta
-from typing import Literal, Optional
+from typing import Literal
 
 from simnet.models.base import APIModel, DateTimeField, Field, TimeDeltaField
 
@@ -20,9 +20,9 @@ class StarRailExpedition(APIModel):
     avatars: list[str]
     status: Literal["Ongoing", "Finished"]
     remaining_time: TimeDeltaField
-    finish_ts: Optional[DateTimeField] = None
+    finish_ts: DateTimeField | None = None
     name: str
-    item_url: Optional[str] = None
+    item_url: str | None = None
 
     @property
     def finished(self) -> bool:

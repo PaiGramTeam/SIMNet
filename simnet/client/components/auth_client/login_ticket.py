@@ -1,5 +1,3 @@
-from typing import Optional
-
 from simnet.client.base import BaseClient
 from simnet.client.routes import AUTH_URL, WEB_ACCOUNT_URL
 from simnet.errors import InvalidCookies
@@ -9,8 +7,8 @@ class LoginTicketAuthClient(BaseClient):
     """Login ticket sub client for AuthClient."""
 
     async def get_stoken_by_login_ticket(
-        self, login_ticket: Optional[str] = None, account_id: Optional[int] = None
-    ) -> Optional[str]:
+        self, login_ticket: str | None = None, account_id: int | None = None
+    ) -> str | None:
         """
         Retrieves a super ticket (`stoken`) using a login ticket (`login_ticket`) .
 
@@ -51,7 +49,7 @@ class LoginTicketAuthClient(BaseClient):
             self.cookies["stuid"] = str(self.account_id)
         return stoken
 
-    async def get_cookie_token_by_login_ticket(self, login_ticket: Optional[str] = None) -> Optional[str]:
+    async def get_cookie_token_by_login_ticket(self, login_ticket: str | None = None) -> str | None:
         """
         Retrieves a cookie token (`cookie_token`) using a login ticket (`login_ticket`).
 

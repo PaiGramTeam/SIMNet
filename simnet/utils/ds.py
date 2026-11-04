@@ -4,7 +4,7 @@ import random
 import string
 import time
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
 from simnet.utils.enums import Region
 from simnet.utils.types import QueryParamTypes
@@ -44,10 +44,10 @@ def hex_digest(text):
 
 def generate_dynamic_secret(
     region: Region,
-    ds_type: Optional[DSType] = None,
+    ds_type: DSType | None = None,
     new_ds: bool = False,
     data: Any = None,
-    params: Optional[QueryParamTypes] = None,
+    params: QueryParamTypes | None = None,
 ):
     """
     Generates a dynamic secret.

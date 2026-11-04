@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 from pydantic import model_validator
 
@@ -84,7 +84,7 @@ class Diary(BaseDiary):
 
     data: MonthDiaryData = Field(alias="month_data")
     day_data: DayDiaryData
-    date: Optional[str] = ""
+    date: str | None = ""
 
     @property
     def data_id(self) -> int:

@@ -1,5 +1,3 @@
-from typing import Optional
-
 from simnet.client.components.auth import AuthClient
 from simnet.client.components.calculator.genshin import CalculatorClient
 from simnet.client.components.chronicle.genshin import GenshinBattleChronicleClient
@@ -33,4 +31,4 @@ class GenshinClient(
 ):
     """A simple http client for Genshin endpoints."""
 
-    game: Optional[Game] = Game.GENSHIN
+    game: Game | None = Game.GENSHIN

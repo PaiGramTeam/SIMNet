@@ -1,5 +1,3 @@
-from typing import Optional
-
 from simnet.client.base import BaseClient
 from simnet.client.routes import HK4E_LOGIN_URL, PASSPORT_MA_URL, PASSPORT_URL
 from simnet.errors import InvalidCookies
@@ -12,8 +10,8 @@ class CookieTokenAuthClient(BaseClient):
 
     def check_cookie_token(
         self,
-        cookie_token: Optional[str] = None,
-        account_id: Optional[int] = None,
+        cookie_token: str | None = None,
+        account_id: int | None = None,
     ) -> tuple[str, int]:
         """
         Check if the cookie token (`cookie_token`) exists in the cookies.
@@ -39,9 +37,9 @@ class CookieTokenAuthClient(BaseClient):
 
     async def get_hk4e_token_by_cookie_token(
         self,
-        game_biz: Optional[str] = None,
-        region: Optional[str] = None,
-        player_id: Optional[int] = None,
+        game_biz: str | None = None,
+        region: str | None = None,
+        player_id: int | None = None,
     ) -> None:
         """
         Get HK4E token (`hk4e_token`) using cookie token (`cookie_token`).
@@ -73,8 +71,8 @@ class CookieTokenAuthClient(BaseClient):
 
     async def verify_cookie_token(
         self,
-        cookie_token: Optional[str] = None,
-        account_id: Optional[int] = None,
+        cookie_token: str | None = None,
+        account_id: int | None = None,
     ) -> None:
         """
         Verify cookie token

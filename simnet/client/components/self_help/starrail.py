@@ -1,5 +1,4 @@
 from functools import partial
-from typing import Optional
 
 from simnet.client.components.self_help.base import BaseSelfHelpClient
 from simnet.models.starrail.self_help import StarRailSelfHelpActionLog
@@ -13,11 +12,11 @@ class StarrailSelfHelpClient(BaseSelfHelpClient):
     async def get_starrail_action_log(
         self,
         authkey: str,
-        limit: Optional[int] = None,
+        limit: int | None = None,
         end_id: int = 0,
         min_id: int = 0,
         *,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> list[StarRailSelfHelpActionLog]:
         """
         Get the action log for a starrail user.

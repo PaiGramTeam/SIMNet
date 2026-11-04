@@ -1,10 +1,9 @@
-from enum import Enum
-from typing import Optional
+from enum import StrEnum
 
 from simnet.models.base import APIModel, DateTimeField, Field
 
 
-class ZZZSelfHelpActionLogReason(str, Enum):
+class ZZZSelfHelpActionLogReason(StrEnum):
     """
     Possible reasons for a ZZZ self-help action log.
 
@@ -33,7 +32,7 @@ class ZZZSelfHelpActionLog(APIModel):
     uid: int
     time: DateTimeField = Field(alias="datetime")
     reason: ZZZSelfHelpActionLogReason = Field(alias="action_name")
-    client_ip: Optional[str] = ""
+    client_ip: str | None = ""
 
     @property
     def status(self) -> int:

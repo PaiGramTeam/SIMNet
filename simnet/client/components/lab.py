@@ -1,5 +1,5 @@
 import asyncio
-from typing import Any, Optional
+from typing import Any
 
 from simnet.client.base import BaseClient
 from simnet.client.headers import Headers
@@ -36,12 +36,12 @@ class LabClient(BaseClient):
         self,
         endpoint: str,
         *,
-        lang: Optional[str] = None,
-        region: Optional[Region] = None,
-        method: Optional[str] = None,
-        params: Optional[dict[str, Any]] = None,
+        lang: str | None = None,
+        region: Region | None = None,
+        method: str | None = None,
+        params: dict[str, Any] | None = None,
         data: Any = None,
-        headers: Optional[HeaderTypes] = None,
+        headers: HeaderTypes | None = None,
     ) -> dict[str, Any]:
         """Makes a request to a bbs endpoint.
 
@@ -81,7 +81,7 @@ class LabClient(BaseClient):
         self,
         keyword: str,
         *,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> list[PartialUser]:
         """Searches for users by keyword.
 
@@ -101,9 +101,9 @@ class LabClient(BaseClient):
 
     async def get_user_info(
         self,
-        accident: Optional[int] = None,
+        accident: int | None = None,
         *,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> FullUser:
         """Gets user information for the current or specified user.
 
@@ -145,9 +145,9 @@ class LabClient(BaseClient):
 
     async def get_genshin_announcements(
         self,
-        player_id: Optional[str] = None,
+        player_id: str | None = None,
         *,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> list[Announcement]:
         """Gets a list of Genshin Impact game announcements.
 
@@ -197,9 +197,9 @@ class LabClient(BaseClient):
     async def redeem_code(
         self,
         code: str,
-        player_id: Optional[int] = None,
+        player_id: int | None = None,
         *,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> dict:
         """Redeems a gift code for the current or specified user.
 
@@ -231,9 +231,9 @@ class LabClient(BaseClient):
     async def redeem_code_by_hoyolab(
         self,
         code: str,
-        player_id: Optional[int] = None,
+        player_id: int | None = None,
         *,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> dict:
         """Redeems a gift code for the current or specified user.
 
@@ -253,7 +253,7 @@ class LabClient(BaseClient):
         }
         return await self.request_bbs(url, params=params)
 
-    async def get_game_accounts(self, *, lang: Optional[str] = None) -> list[Account]:
+    async def get_game_accounts(self, *, lang: str | None = None) -> list[Account]:
         """Get the game accounts of the currently logged-in user.
 
         Returns:
@@ -265,7 +265,7 @@ class LabClient(BaseClient):
         )
         return [Account(**i) for i in data["list"]]
 
-    async def get_genshin_accounts(self, *, lang: Optional[str] = None) -> list[Account]:
+    async def get_genshin_accounts(self, *, lang: str | None = None) -> list[Account]:
         """Get the genshin accounts of the currently logged-in user.
 
         Returns:
@@ -274,7 +274,7 @@ class LabClient(BaseClient):
         accounts = await self.get_game_accounts(lang=lang)
         return [account for account in accounts if account.game == Game.GENSHIN]
 
-    async def get_starrail_accounts(self, *, lang: Optional[str] = None) -> list[Account]:
+    async def get_starrail_accounts(self, *, lang: str | None = None) -> list[Account]:
         """Get the starrail accounts of the currently logged-in user.
 
         Returns:
@@ -283,7 +283,7 @@ class LabClient(BaseClient):
         accounts = await self.get_game_accounts(lang=lang)
         return [account for account in accounts if account.game == Game.STARRAIL]
 
-    async def get_zzz_accounts(self, *, lang: Optional[str] = None) -> list[Account]:
+    async def get_zzz_accounts(self, *, lang: str | None = None) -> list[Account]:
         """Get the zzz accounts of the currently logged-in user.
 
         Returns:
@@ -292,7 +292,7 @@ class LabClient(BaseClient):
         accounts = await self.get_game_accounts(lang=lang)
         return [account for account in accounts if account.game == Game.ZZZ]
 
-    async def request_accompany_role(self, role_id: int, topic_id: int, *, lang: Optional[str] = None) -> AccompanyRole:
+    async def request_accompany_role(self, role_id: int, topic_id: int, *, lang: str | None = None) -> AccompanyRole:
         """Accompany a role to a topic.
 
         Args:
@@ -311,7 +311,7 @@ class LabClient(BaseClient):
         )
         return AccompanyRole(**data)
 
-    async def get_accompany_role(self, role_id: int, *, lang: Optional[str] = None) -> AccompanyRoleInfo:
+    async def get_accompany_role(self, role_id: int, *, lang: str | None = None) -> AccompanyRoleInfo:
         """Get the information related to an accompany role.
 
         Args:
@@ -329,7 +329,7 @@ class LabClient(BaseClient):
         )
         return AccompanyRoleInfo(**data)
 
-    async def get_accompany_roles(self, *, lang: Optional[str] = None) -> list[AccompanyRoleBasic]:
+    async def get_accompany_roles(self, *, lang: str | None = None) -> list[AccompanyRoleBasic]:
         """Get a list of accompany roles.
 
         Args:

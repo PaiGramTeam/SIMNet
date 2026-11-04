@@ -1,9 +1,9 @@
-from enum import Enum
+from enum import StrEnum
 
 from simnet.models.base import APIModel
 
 
-class ZZZGachaDetailTicketType(str, Enum):
+class ZZZGachaDetailTicketType(StrEnum):
     """
     Represents the different types of gacha tickets in the ZZZ game.
 

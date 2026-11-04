@@ -1,5 +1,3 @@
-from typing import Optional
-
 from simnet.models.base import APIModel, TimeDeltaField
 
 
@@ -111,14 +109,14 @@ class ZZZAbyssAbstract(APIModel):
         unlock (bool): A boolean indicating if the abyss is unlocked.
     """
 
-    abyss_level: Optional[ZZZAbyssLevel] = None
-    abyss_point: Optional[ZZZAbyssPoint] = None
-    abyss_duty: Optional[ZZZAbyssDuty] = None
-    abyss_talent: Optional[ZZZAbyssTalent] = None
+    abyss_level: ZZZAbyssLevel | None = None
+    abyss_point: ZZZAbyssPoint | None = None
+    abyss_duty: ZZZAbyssDuty | None = None
+    abyss_talent: ZZZAbyssTalent | None = None
     refresh_time: TimeDeltaField
     abyss_collect: list[ZZZAbyssCollectItem]
-    abyss_nest: Optional[ZZZAbyssNest] = None
-    abyss_throne: Optional[ZZZAbyssThrone] = None
+    abyss_nest: ZZZAbyssNest | None = None
+    abyss_throne: ZZZAbyssThrone | None = None
     unlock: bool
 
     @property

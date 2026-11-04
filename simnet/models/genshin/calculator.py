@@ -1,7 +1,7 @@
 """Genshin calculator models."""
 
 import collections
-from typing import Any, Literal, Optional
+from typing import Any, Literal
 
 from pydantic import field_validator
 
@@ -188,7 +188,7 @@ class CalculatorTalent(APIModel):
     max_level: int
 
     @property
-    def type(self) -> Optional[Literal["attack", "skill", "burst", "passive", "dash"]]:  # noqa: PLR0911
+    def type(self) -> Literal["attack", "skill", "burst", "passive", "dash"] | None:  # noqa: PLR0911
         """The type of the talent, parsed from the group ID.
 
         Returns:
@@ -244,7 +244,7 @@ class CalculatorFurnishing(APIModel):
     icon: str = Field(alias="icon_url")
     rarity: int = Field(alias="level")
 
-    amount: Optional[int] = Field(None, alias="num")
+    amount: int | None = Field(None, alias="num")
 
 
 class CalculatorCharacterDetails(APIModel):
@@ -256,7 +256,7 @@ class CalculatorCharacterDetails(APIModel):
         artifacts (List[CalculatorArtifact]): A list of calculator artifacts.
     """
 
-    weapon: Optional[CalculatorWeapon] = Field(None, alias="weapon")
+    weapon: CalculatorWeapon | None = Field(None, alias="weapon")
     talents: list[CalculatorTalent] = Field(alias="skill_list")
     artifacts: list[CalculatorArtifact] = Field(alias="reliquary_list")
 

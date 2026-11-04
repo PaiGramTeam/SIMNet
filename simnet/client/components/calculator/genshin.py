@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import CALCULATOR_URL
@@ -24,9 +24,9 @@ class CalculatorClient(BaseClient):
         endpoint: str,
         *,
         method: str = "POST",
-        lang: Optional[str] = None,
-        params: Optional[dict[str, Any]] = None,
-        data: Optional[dict[str, Any]] = None,
+        lang: str | None = None,
+        params: dict[str, Any] | None = None,
+        data: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         """Make a request towards the calculator endpoint.
 
@@ -68,7 +68,7 @@ class CalculatorClient(BaseClient):
         self,
         data: dict[str, Any],
         *,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> CalculatorResult:
         """Calculate the results of a builder.
 
@@ -94,12 +94,12 @@ class CalculatorClient(BaseClient):
         self,
         slug: str,
         filters: dict[str, Any],
-        query: Optional[str] = None,
+        query: str | None = None,
         *,
-        player_id: Optional[int] = None,
+        player_id: int | None = None,
         is_all: bool = False,
         sync: bool = False,
-        lang: Optional[str] = None,
+        lang: str | None = None,
         autoauth: bool = True,
     ) -> list[dict[str, Any]]:
         """Get all items of a specific slug from a calculator.
@@ -148,13 +148,13 @@ class CalculatorClient(BaseClient):
     async def get_calculator_characters(
         self,
         *,
-        query: Optional[str] = None,
-        elements: Optional[list[int]] = None,
-        weapon_types: Optional[list[int]] = None,
+        query: str | None = None,
+        elements: list[int] | None = None,
+        weapon_types: list[int] | None = None,
         include_traveler: bool = False,
         sync: bool = False,
-        player_id: Optional[int] = None,
-        lang: Optional[str] = None,
+        player_id: int | None = None,
+        lang: str | None = None,
     ) -> list[CalculatorCharacter]:
         """Get all characters provided by the Enhancement Progression Calculator.
 
@@ -187,10 +187,10 @@ class CalculatorClient(BaseClient):
     async def get_calculator_weapons(
         self,
         *,
-        query: Optional[str] = None,
-        types: Optional[list[int]] = None,
-        rarities: Optional[list[int]] = None,
-        lang: Optional[str] = None,
+        query: str | None = None,
+        types: list[int] | None = None,
+        rarities: list[int] | None = None,
+        lang: str | None = None,
     ) -> list[CalculatorWeapon]:
         """Get all weapons provided by the Enhancement Progression Calculator.
 
@@ -218,9 +218,9 @@ class CalculatorClient(BaseClient):
     async def get_calculator_furnishings(
         self,
         *,
-        types: Optional[int] = None,
-        rarities: Optional[int] = None,
-        lang: Optional[str] = None,
+        types: int | None = None,
+        rarities: int | None = None,
+        lang: str | None = None,
     ) -> list[CalculatorFurnishing]:
         """
         Get all furnishings provided by the Enhancement Progression Calculator.
@@ -247,8 +247,8 @@ class CalculatorClient(BaseClient):
         self,
         character: int,
         *,
-        player_id: Optional[int] = None,
-        lang: Optional[str] = None,
+        player_id: int | None = None,
+        lang: str | None = None,
     ) -> CalculatorCharacterDetails:
         """
         Get the weapon, artifacts and talents of a character.
@@ -279,7 +279,7 @@ class CalculatorClient(BaseClient):
         self,
         character: int,
         *,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> list[CalculatorTalent]:
         """Get the talents of a character.
 
@@ -302,7 +302,7 @@ class CalculatorClient(BaseClient):
         self,
         artifact: int,
         *,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> list[CalculatorArtifact]:
         """
         Get all artifacts that share a set with a specified artifact.
@@ -338,9 +338,9 @@ class CalculatorClient(BaseClient):
         self,
         share_code: int,
         *,
-        region: Optional[str] = None,
-        player_id: Optional[int] = None,
-        lang: Optional[str] = None,
+        region: str | None = None,
+        player_id: int | None = None,
+        lang: str | None = None,
     ) -> list[CalculatorFurnishing]:
         """Get the furnishings used by a teapot replica blueprint.
 

@@ -1,7 +1,6 @@
 """This module contains functions for recognizing servers associated with different player IDs."""
 
 from collections.abc import Mapping, Sequence
-from typing import Optional
 
 from simnet.utils.enums import Game, Region
 
@@ -136,7 +135,7 @@ def recognize_zzz_server(player_id: int) -> str:
     raise ValueError(f"player id {player_id} isn't associated with any server")
 
 
-def recognize_region(player_id: int, game: Game) -> Optional[Region]:
+def recognize_region(player_id: int, game: Game) -> Region | None:
     """
     Recognizes the region of a player ID for a given game.
 

@@ -1,5 +1,4 @@
 import json
-from typing import Optional
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import GAME_LOGIN_URL, GAME_WEB_LOGIN_URL
@@ -12,7 +11,7 @@ from simnet.utils.constants import APP_IDS
 class GameAuthClient(BaseClient):
     """Game sub client for AuthClient."""
 
-    async def login_game_by_game_token(self, game_token: str, uid: Optional[str] = None) -> GameLoginResult:
+    async def login_game_by_game_token(self, game_token: str, uid: str | None = None) -> GameLoginResult:
         """Log in to the game."""
         if self.game is None:
             raise ValueError("No default game set.")
@@ -36,7 +35,7 @@ class GameAuthClient(BaseClient):
         return GameLoginResult(**data)
 
     async def login_web_game_by_cookie_token_v2(
-        self, mid: Optional[str] = None, cookie_token: Optional[str] = None
+        self, mid: str | None = None, cookie_token: str | None = None
     ) -> GameLoginResult:
         """Log in to the web game."""
         if self.game is None:

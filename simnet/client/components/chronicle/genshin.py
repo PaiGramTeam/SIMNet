@@ -1,5 +1,5 @@
 import asyncio
-from typing import Any, Optional, Union
+from typing import Any
 
 from simnet.client.components.chronicle.base import BaseChronicleClient
 from simnet.client.routes import RECORD_URL
@@ -37,11 +37,11 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
     async def _request_genshin_record(
         self,
         endpoint: str,
-        player_id: Optional[int] = None,
+        player_id: int | None = None,
         method: str = "GET",
         endpoint_type: str = "api",
-        lang: Optional[str] = None,
-        payload: Optional[dict[str, Any]] = None,
+        lang: str | None = None,
+        payload: dict[str, Any] | None = None,
     ):
         """Get an arbitrary object from StarRail's battle chronicle.
 
@@ -92,9 +92,9 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
 
     async def get_partial_genshin_user(
         self,
-        player_id: Optional[int] = None,
+        player_id: int | None = None,
         *,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> PartialGenshinUserStats:
         """Get partial genshin user without character equipment.
 
@@ -110,9 +110,9 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
 
     async def get_genshin_characters(
         self,
-        player_id: Optional[int] = None,
+        player_id: int | None = None,
         *,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> list[Character]:
         """Get genshin user characters.
 
@@ -129,9 +129,9 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
 
     async def get_genshin_user(
         self,
-        player_id: Optional[int] = None,
+        player_id: int | None = None,
         *,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> GenshinUserStats:
         """Get genshin user stats.
 
@@ -147,10 +147,10 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
 
     async def get_genshin_spiral_abyss(
         self,
-        player_id: Optional[int] = None,
+        player_id: int | None = None,
         *,
         previous: bool = False,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> SpiralAbyss:
         """Get genshin spiral abyss runs.
 
@@ -170,11 +170,11 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
 
     async def get_genshin_imaginarium_theater(
         self,
-        player_id: Optional[int] = None,
-        need_detail: Optional[bool] = True,
+        player_id: int | None = None,
+        need_detail: bool | None = True,
         *,
         previous: bool = False,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> ImgTheater:
         """Get genshin imaginarium theater runs.
 
@@ -197,11 +197,11 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
 
     async def get_genshin_hard_challenge(
         self,
-        player_id: Optional[int] = None,
-        need_detail: Optional[bool] = True,
+        player_id: int | None = None,
+        need_detail: bool | None = True,
         *,
         previous: bool = False,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> GenshinHardChallenge:
         """Get genshin hard challenge runs.
 
@@ -224,9 +224,9 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
 
     async def get_genshin_notes(
         self,
-        player_id: Optional[int] = None,
+        player_id: int | None = None,
         *,
-        lang: Optional[str] = None,
+        lang: str | None = None,
         autoauth: bool = True,
     ) -> Notes:
         """Get Genshin's real-time notes.
@@ -259,9 +259,9 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
 
     async def get_full_genshin_user(
         self,
-        player_id: Optional[int] = None,
+        player_id: int | None = None,
         *,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> FullGenshinUserStats:
         """Get a genshin user with all their possible data.
 
@@ -282,7 +282,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
 
         return FullGenshinUserStats(**user, abyss=abyss, activities=activities)
 
-    async def get_genshin_activities(self, player_id: Optional[int] = None, *, lang: Optional[str] = None) -> dict:
+    async def get_genshin_activities(self, player_id: int | None = None, *, lang: str | None = None) -> dict:
         """Get genshin activities.
 
         Args:
@@ -296,10 +296,10 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
 
     async def get_record_card(
         self,
-        account_id: Optional[int] = None,
+        account_id: int | None = None,
         *,
-        lang: Optional[str] = None,
-    ) -> Optional[RecordCard]:
+        lang: str | None = None,
+    ) -> RecordCard | None:
         """Get a genshin player record cards.
 
         Args:
@@ -324,8 +324,8 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
 
     async def get_genshin_notes_by_stoken(
         self,
-        lang: Optional[str] = None,
-    ) -> Union[NotesWidget, NotesOverseaWidget]:
+        lang: str | None = None,
+    ) -> NotesWidget | NotesOverseaWidget:
         """Get Genshin's real-time notes.
 
         Args:
@@ -357,9 +357,9 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
 
     async def get_genshin_character_list(
         self,
-        player_id: Optional[int] = None,
+        player_id: int | None = None,
         *,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> list[GenshinCharacterListInfo]:
         """Retrieve a list of Genshin Impact character information for a player.
 
@@ -377,9 +377,9 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
     async def get_genshin_character_detail(
         self,
         characters: list[int],
-        player_id: Optional[int] = None,
+        player_id: int | None = None,
         *,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> GenshinDetailCharacters:
         """Retrieve detailed information about Genshin Impact characters.
 
@@ -400,7 +400,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         return GenshinDetailCharacters(**data)
 
     async def get_genshin_achievement_info(
-        self, player_id: Optional[int] = None, *, lang: Optional[str] = None
+        self, player_id: int | None = None, *, lang: str | None = None
     ) -> GenshinAchievementInfo:
         """Get genshin achievement info.
 
@@ -415,7 +415,7 @@ class GenshinBattleChronicleClient(BaseChronicleClient):
         return GenshinAchievementInfo(**data)
 
     async def get_genshin_act_calendar(
-        self, player_id: Optional[int] = None, *, lang: Optional[str] = None
+        self, player_id: int | None = None, *, lang: str | None = None
     ) -> GenshinActCalendar:
         """Get genshin act calendar.
 

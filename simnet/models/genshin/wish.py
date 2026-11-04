@@ -1,7 +1,7 @@
 import re
 from datetime import datetime
 from enum import IntEnum
-from typing import Any, Optional
+from typing import Any
 
 from pydantic import field_validator
 
@@ -249,14 +249,14 @@ class BannerDetails(APIModel):
     content: str
     date_range: str
 
-    r5_up_prob: Optional[float] = None
-    r4_up_prob: Optional[float] = None
-    r5_prob: Optional[float] = None
-    r4_prob: Optional[float] = None
-    r3_prob: Optional[float] = None
-    r5_guarantee_prob: Optional[float] = Field(None, alias="r5_baodi_prob")
-    r4_guarantee_prob: Optional[float] = Field(None, alias="r4_baodi_prob")
-    r3_guarantee_prob: Optional[float] = Field(None, alias="r3_baodi_prob")
+    r5_up_prob: float | None = None
+    r4_up_prob: float | None = None
+    r5_prob: float | None = None
+    r4_prob: float | None = None
+    r3_prob: float | None = None
+    r5_guarantee_prob: float | None = Field(None, alias="r5_baodi_prob")
+    r4_guarantee_prob: float | None = Field(None, alias="r4_baodi_prob")
+    r3_guarantee_prob: float | None = Field(None, alias="r3_baodi_prob")
 
     r5_up_items: list[BannerDetailsUpItem]
     r4_up_items: list[BannerDetailsUpItem]
@@ -267,7 +267,7 @@ class BannerDetails(APIModel):
 
     @field_validator("r5_up_items", "r4_up_items", mode="before")
     @classmethod
-    def replace_none(cls, v: Optional[list[Any]]) -> list[Any]:
+    def replace_none(cls, v: list[Any] | None) -> list[Any]:
         """Replaces NoneType attributes with an empty list.
 
         Args:
@@ -291,7 +291,7 @@ class BannerDetails(APIModel):
         mode="before",
     )
     @classmethod
-    def parse_percentage(cls, v: Optional[str]) -> Optional[float]:
+    def parse_percentage(cls, v: str | None) -> float | None:
         """Parses percentage strings into float values.
 
         Args:

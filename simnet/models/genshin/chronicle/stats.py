@@ -1,5 +1,5 @@
 import re
-from typing import Any, Optional, cast
+from typing import Any, cast
 
 from pydantic import ValidationInfo, field_validator
 
@@ -19,15 +19,15 @@ class StatsChallengeBase(APIModel):
 class StatsRoleCombat(StatsChallengeBase):
     """Role-based combat stats."""
 
-    max_round_id: Optional[int] = 0
-    has_detail_data: Optional[bool] = False
+    max_round_id: int | None = 0
+    has_detail_data: bool | None = False
 
 
 class StatsHardChallenge(StatsChallengeBase):
     """Hard challenge stats."""
 
-    difficulty: Optional[int] = 0
-    name: Optional[str] = ""
+    difficulty: int | None = 0
+    name: str | None = ""
 
 
 class Stats(APIModel):
@@ -224,11 +224,11 @@ class PartialGenshinUserStats(APIModel):
     stats: Stats
     characters: list[PartialCharacter] = Field(alias="avatars")
     explorations: list[Exploration] = Field(alias="world_explorations")
-    teapot: Optional[Teapot] = Field(None, alias="homes")
+    teapot: Teapot | None = Field(None, alias="homes")
 
     @field_validator("teapot", mode="before")
     @classmethod
-    def format_teapot(cls, v: Any) -> Optional[dict[str, Any]]:
+    def format_teapot(cls, v: Any) -> dict[str, Any] | None:
         """Format the user's Serenitea Teapot.
 
         Args:

@@ -1,11 +1,11 @@
 """Starrail base character model."""
 
-from enum import Enum
+from enum import StrEnum
 
 from simnet.models.base import APIModel
 
 
-class StarRailDestiny(str, Enum):
+class StarRailDestiny(StrEnum):
     """命途"""
 
     HuiMie = "毁灭"
@@ -19,7 +19,7 @@ class StarRailDestiny(str, Enum):
     HuanYu = "欢愉"
 
 
-class StarRailElement(str, Enum):
+class StarRailElement(StrEnum):
     """属性"""
 
     Physical = "物理"

@@ -1,5 +1,4 @@
-from enum import Enum
-from typing import Optional
+from enum import StrEnum
 
 from simnet.models.base import APIModel, Field
 
@@ -98,11 +97,11 @@ class StarRailChallengePeakMobRecord(APIModel):
 
     maze_id: int
     has_challenge_record: bool
-    challenge_time: Optional[PartialTime] = None
+    challenge_time: PartialTime | None = None
     avatars: list[RogueCharacter]
     round_num: int
     star_num: int
-    is_fast: Optional[bool] = False
+    is_fast: bool | None = False
 
 
 class StarRailChallengePeakBossRecord(StarRailChallengePeakMobRecord):
@@ -148,13 +147,13 @@ class StarRailChallengePeakRecord(APIModel):
     mob_infos: list[StarRailChallengePeakMobInfo]
     has_challenge_record: bool
     battle_num: int
-    boss_record: Optional[StarRailChallengePeakBossRecord] = None
+    boss_record: StarRailChallengePeakBossRecord | None = None
     mob_records: list[StarRailChallengePeakMobRecord]
     boss_stars: int
     mob_stars: int
 
 
-class StarRailChallengePeakRankIconType(str, Enum):
+class StarRailChallengePeakRankIconType(StrEnum):
     """
     Enumeration for the types of rank icons in the Star Rail Challenge Peak.
     """

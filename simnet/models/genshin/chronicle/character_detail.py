@@ -1,6 +1,5 @@
 import enum
 from collections.abc import Mapping, Sequence
-from typing import Optional
 
 from pydantic import field_validator
 
@@ -51,7 +50,7 @@ class PropInfo(APIModel):
 
     type: int = Field(alias="property_type")
     name: str
-    icon: Optional[str] = None
+    icon: str | None = None
     filter_name: str
 
     @field_validator("name", "filter_name")
@@ -76,7 +75,7 @@ class DetailCharacterWeapon(CharacterWeapon):
     type_int: GenshinWeaponType = Field(alias="type")
 
     main_property: PropertyValue
-    sub_property: Optional[PropertyValue] = None
+    sub_property: PropertyValue | None = None
 
 
 class ArtifactProperty(APIModel):

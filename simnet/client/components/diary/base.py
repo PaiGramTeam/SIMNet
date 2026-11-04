@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta, timezone
-from typing import Any, Optional, Union
+from typing import Any
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import DETAIL_LEDGER_URL, INFO_LEDGER_URL
@@ -18,13 +18,13 @@ class BaseDiaryClient(BaseClient):
 
     async def request_ledger(
         self,
-        player_id: Optional[int] = None,
+        player_id: int | None = None,
         *,
-        game: Optional[Game] = None,
+        game: Game | None = None,
         detail: bool = False,
-        month: Union[int, str, None] = None,
-        lang: Optional[str] = None,
-        params: Optional[dict[str, Any]] = None,
+        month: int | str | None = None,
+        lang: str | None = None,
+        params: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         """Make a request towards the ys ledger endpoint.
 
@@ -67,11 +67,11 @@ class BaseDiaryClient(BaseClient):
         self,
         page: int,
         *,
-        game: Optional[Game] = None,
-        player_id: Optional[int] = None,
+        game: Game | None = None,
+        player_id: int | None = None,
         diary_type: int = DiaryType.PRIMOGEMS,
-        month: Optional[int] = None,
-        lang: Optional[str] = None,
+        month: int | None = None,
+        lang: str | None = None,
     ) -> DiaryPage:
         """Get a diary page.
 

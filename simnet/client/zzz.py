@@ -1,5 +1,3 @@
-from typing import Optional
-
 from simnet.client.components.auth import AuthClient
 from simnet.client.components.chronicle.zzz import ZZZBattleChronicleClient
 from simnet.client.components.cloud_game.base import BaseCloudGameClient
@@ -27,4 +25,4 @@ class ZZZClient(
 ):
     """A simple http client for StarRail endpoints."""
 
-    game: Optional[Game] = Game.ZZZ
+    game: Game | None = Game.ZZZ

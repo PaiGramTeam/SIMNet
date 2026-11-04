@@ -1,6 +1,6 @@
 import asyncio
 from collections.abc import Mapping
-from typing import Any, Optional
+from typing import Any
 
 from simnet.client.components.chronicle.base import BaseChronicleClient
 from simnet.errors import BadRequest, DataNotPublic, InvalidCookies
@@ -35,11 +35,11 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
     async def _request_zzz_record(
         self,
         endpoint: str,
-        player_id: Optional[int] = None,
+        player_id: int | None = None,
         endpoint_type: str = "api",
         method: str = "GET",
-        lang: Optional[str] = None,
-        payload: Optional[dict[str, Any]] = None,
+        lang: str | None = None,
+        payload: dict[str, Any] | None = None,
     ) -> Mapping[str, Any]:
         """Get an arbitrary object from ZZZ's battle chronicle.
 
@@ -86,8 +86,8 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
 
     async def get_zzz_notes(
         self,
-        player_id: Optional[int] = None,
-        lang: Optional[str] = None,
+        player_id: int | None = None,
+        lang: str | None = None,
         autoauth: bool = True,
     ) -> ZZZNote:
         """Get ZZZ's real-time notes.
@@ -119,7 +119,7 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
 
     async def get_zzz_notes_by_stoken(
         self,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> ZZZNote:
         """Get zzz's real-time notes.
 
@@ -145,9 +145,9 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
 
     async def get_zzz_user(
         self,
-        player_id: Optional[int] = None,
+        player_id: int | None = None,
         *,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> "ZZZUserStats":
         """Get ZZZ user statistics.
 
@@ -167,9 +167,9 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
 
     async def get_zzz_abyss_abstract(
         self,
-        player_id: Optional[int] = None,
+        player_id: int | None = None,
         *,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> "ZZZAbyssAbstract":
         """Get ZZZ abyss abstract statistics.
 
@@ -189,9 +189,9 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
 
     async def get_zzz_abysss2_abstract(
         self,
-        player_id: Optional[int] = None,
+        player_id: int | None = None,
         *,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> "ZZZAbysss2Abstract":
         """Get ZZZ abysss2 abstract statistics.
 
@@ -211,8 +211,8 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
 
     async def get_zzz_characters(
         self,
-        player_id: Optional[int] = None,
-        lang: Optional[str] = None,
+        player_id: int | None = None,
+        lang: str | None = None,
     ) -> "ZZZAvatarBasic":
         """Get ZZZ character basic information.
 
@@ -233,8 +233,8 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
     async def get_zzz_character_info(
         self,
         characters: list[int],
-        player_id: Optional[int] = None,
-        lang: Optional[str] = None,
+        player_id: int | None = None,
+        lang: str | None = None,
     ) -> "ZZZCalculatorCharacterDetails":
         """Get ZZZ character detail information.
 
@@ -276,8 +276,8 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
 
     async def get_zzz_buddy_list(
         self,
-        player_id: Optional[int] = None,
-        lang: Optional[str] = None,
+        player_id: int | None = None,
+        lang: str | None = None,
     ) -> "ZZZBuddyBasic":
         """Get ZZZ buddy basic information.
 
@@ -297,9 +297,9 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
 
     async def get_zzz_challenge(
         self,
-        player_id: Optional[int] = None,
+        player_id: int | None = None,
         previous: bool = False,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> ZZZChallenge:
         """Get zzz challenge runs.
 
@@ -321,9 +321,9 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
 
     async def get_zzz_hadal_info_v2(
         self,
-        player_id: Optional[int] = None,
+        player_id: int | None = None,
         previous: bool = False,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> ZZZHadalInfo:
         """Retrieve Hadal information for a ZZZ player.
 
@@ -345,9 +345,9 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
 
     async def get_zzz_challenge_mem(
         self,
-        player_id: Optional[int] = None,
+        player_id: int | None = None,
         previous: bool = False,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> ZZZChallengeMem:
         """Get zzz challenge mem runs.
 
@@ -369,9 +369,9 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
 
     async def get_zzz_challenge_holo(
         self,
-        player_id: Optional[int] = None,
+        player_id: int | None = None,
         previous: bool = False,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> ZZZHoloBossDetail:
         """Get zzz challenge holo runs.
 
@@ -393,8 +393,8 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
 
     async def get_zzz_cur_gacha_detail(
         self,
-        player_id: Optional[int] = None,
-        lang: Optional[str] = None,
+        player_id: int | None = None,
+        lang: str | None = None,
     ) -> ZZZGachaDetail:
         """
         Retrieve the current gacha detail for a ZZZ player.
@@ -417,8 +417,8 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
         self,
         end_id: int,
         banner_type: str,
-        player_id: Optional[int] = None,
-        lang: Optional[str] = None,
+        player_id: int | None = None,
+        lang: str | None = None,
     ) -> Mapping[str, Any]:
         return await self._request_zzz_record(
             "gacha_record",
@@ -432,10 +432,10 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
 
     async def get_record_card(
         self,
-        account_id: Optional[int] = None,
+        account_id: int | None = None,
         *,
-        lang: Optional[str] = None,
-    ) -> Optional[RecordCard]:
+        lang: str | None = None,
+    ) -> RecordCard | None:
         """Get a zzz player record cards.
 
         Args:

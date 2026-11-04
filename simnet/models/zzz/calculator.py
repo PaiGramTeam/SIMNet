@@ -1,5 +1,4 @@
 import re
-from typing import Optional
 
 from simnet.models.base import APIModel, Field
 from simnet.models.zzz.character import ZZZPartialCharacter
@@ -112,15 +111,15 @@ class ZZZCalculatorCharacterEquipPlanInfo(APIModel):
 
 class ZZZCalculatorCharacter(ZZZPartialCharacter):
     equip: list[ZZZCalculatorEquipment]
-    weapon: Optional[ZZZCalculatorWeapon] = None
+    weapon: ZZZCalculatorWeapon | None = None
     properties: list[ZZZCalculatorAvatarProperty]
     skills: list[ZZZCalculatorAvatarSkill]
     ranks: list[ZZZCalculatorAvatarRank]
-    equip_plan_info: Optional[ZZZCalculatorCharacterEquipPlanInfo] = None
+    equip_plan_info: ZZZCalculatorCharacterEquipPlanInfo | None = None
 
     @property
-    def equip_map(self) -> dict[str, Optional[ZZZCalculatorEquipment]]:
-        data: dict[str, Optional[ZZZCalculatorEquipment]] = {str(equip.equipment_type): equip for equip in self.equip}
+    def equip_map(self) -> dict[str, ZZZCalculatorEquipment | None]:
+        data: dict[str, ZZZCalculatorEquipment | None] = {str(equip.equipment_type): equip for equip in self.equip}
         for i in range(1, 7):
             if str(i) not in data:
                 data[str(i)] = None

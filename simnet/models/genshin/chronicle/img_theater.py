@@ -1,6 +1,5 @@
 import enum
 from collections.abc import Sequence
-from typing import Optional
 
 from simnet.models.base import APIModel, DateTimeField, Field
 from simnet.models.genshin.character import BaseCharacter
@@ -42,8 +41,8 @@ class TheaterBuff(APIModel):
     name: str
     icon: str
     desc: str
-    is_enhanced: Optional[bool] = False
-    id: Optional[int] = None
+    is_enhanced: bool | None = False
+    id: int | None = None
 
     @property
     def desc_html(self) -> str:
@@ -128,8 +127,8 @@ class Act(APIModel):
     round_id: int
     finish_time: DateTimeField
     finish_date_time: PartialTime
-    enemies: Optional[Sequence[TheaterEnemy]] = None
-    splendour_buff: Optional[TheaterSplendourBuff] = None
+    enemies: Sequence[TheaterEnemy] | None = None
+    splendour_buff: TheaterSplendourBuff | None = None
 
 
 class TheaterStats(APIModel):
@@ -170,10 +169,10 @@ class ImgTheaterFightStaticAvatar(BaseCharacter):
 
 
 class ImgTheaterFightStatic(APIModel):
-    max_defeat_avatar: Optional[ImgTheaterFightStaticAvatar] = None
-    max_damage_avatar: Optional[ImgTheaterFightStaticAvatar] = None
-    max_take_damage_avatar: Optional[ImgTheaterFightStaticAvatar] = None
-    total_coin_consumed: Optional[ImgTheaterFightStaticAvatar] = None
+    max_defeat_avatar: ImgTheaterFightStaticAvatar | None = None
+    max_damage_avatar: ImgTheaterFightStaticAvatar | None = None
+    max_take_damage_avatar: ImgTheaterFightStaticAvatar | None = None
+    total_coin_consumed: ImgTheaterFightStaticAvatar | None = None
     shortest_avatar_list: Sequence[ImgTheaterFightStaticAvatar]
     total_use_time: int
     is_show_battle_stats: bool
@@ -185,13 +184,13 @@ class ImgTheaterDetailData(APIModel):
     rounds_data: Sequence[Act]
     detail_stat: TheaterStats
     backup_avatars: Sequence[ActCharacter]
-    fight_statisic: Optional[ImgTheaterFightStatic] = None
+    fight_statisic: ImgTheaterFightStatic | None = None
 
 
 class ImgTheaterData(APIModel):
     """Imaginarium theater data."""
 
-    detail: Optional[ImgTheaterDetailData] = None
+    detail: ImgTheaterDetailData | None = None
     stat: TheaterStats
     schedule: TheaterSchedule
     has_data: bool

@@ -1,6 +1,5 @@
 import datetime
 import enum
-from typing import Optional
 
 from simnet.models.base import APIModel, TimeDeltaField
 
@@ -50,7 +49,7 @@ class ZZZNoteVitality(APIModel):
     current: int
 
 
-class ZZZNoteVhsSaleState(str, enum.Enum):
+class ZZZNoteVhsSaleState(enum.StrEnum):
     """
     Represents the state of the vhs sale of the user.
     """
@@ -71,7 +70,7 @@ class ZZZNoteVhsSale(APIModel):
     sale_state: ZZZNoteVhsSaleState
 
 
-class ZZZNoteCardSignState(str, enum.Enum):
+class ZZZNoteCardSignState(enum.StrEnum):
     """
     Represents the state of the card sign of the user.
     """
@@ -125,7 +124,7 @@ class ZZZNoteWeeklyTask(APIModel):
     refresh_time: TimeDeltaField
 
 
-class ZZZNoteTempleRunningExpeditionState(str, enum.Enum):
+class ZZZNoteTempleRunningExpeditionState(enum.StrEnum):
     """
     Represents the state of the temple running expedition of the user.
     """
@@ -136,7 +135,7 @@ class ZZZNoteTempleRunningExpeditionState(str, enum.Enum):
     End = "ExpeditionStateEnd"
 
 
-class ZZZNoteTempleRunningBenchState(str, enum.Enum):
+class ZZZNoteTempleRunningBenchState(enum.StrEnum):
     """
     Represents the state of the temple running bench of the user.
     """
@@ -146,7 +145,7 @@ class ZZZNoteTempleRunningBenchState(str, enum.Enum):
     CanProduce = "BenchStateCanProduce"
 
 
-class ZZZNoteTempleRunningShelveState(str, enum.Enum):
+class ZZZNoteTempleRunningShelveState(enum.StrEnum):
     """
     Represents the state of the temple running shelve of the user.
     """
@@ -200,10 +199,10 @@ class ZZZNote(APIModel):
     vitality: ZZZNoteVitality
     vhs_sale: ZZZNoteVhsSale
     card_sign: ZZZNoteCardSignState
-    bounty_commission: Optional[ZZZNoteBountyCommission] = None
-    survey_points: Optional[ZZZNoteSurveyPoints] = None
-    weekly_task: Optional[ZZZNoteWeeklyTask] = None
-    temple_running: Optional[ZZZNoteTempleRunning] = None
+    bounty_commission: ZZZNoteBountyCommission | None = None
+    survey_points: ZZZNoteSurveyPoints | None = None
+    weekly_task: ZZZNoteWeeklyTask | None = None
+    temple_running: ZZZNoteTempleRunning | None = None
     abyss_refresh: TimeDeltaField
 
     @property

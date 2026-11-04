@@ -1,7 +1,5 @@
 """Starrail chronicle challenge story."""
 
-from typing import Optional
-
 from simnet.models.base import APIModel, Field
 from simnet.models.starrail.character import RogueCharacter
 
@@ -35,7 +33,7 @@ class StarRailChallengeBossGroup(APIModel):
     name_mi18n: str
     upper_boss: StarRailChallengeBossBoss
     lower_boss: StarRailChallengeBossBoss
-    tierce_boss: Optional[StarRailChallengeBossBoss] = None
+    tierce_boss: StarRailChallengeBossBoss | None = None
 
 
 class StarRailChallengeBossBuff(APIModel):
@@ -50,9 +48,9 @@ class StarRailChallengeBossBuff(APIModel):
 class StarRailChallengeBossFloorNode(APIModel):
     """Node for a floor."""
 
-    challenge_time: Optional[PartialTime] = None
+    challenge_time: PartialTime | None = None
     avatars: list[RogueCharacter]
-    buff: Optional[StarRailChallengeBossBuff] = None
+    buff: StarRailChallengeBossBuff | None = None
     score: int
     boss_defeated: bool
 
@@ -69,12 +67,12 @@ class StarRailChallengeBossFloor(APIModel):
     star_num: int
     node_1: StarRailChallengeBossFloorNode
     node_2: StarRailChallengeBossFloorNode
-    node_3: Optional[StarRailChallengeBossFloorNode] = None
+    node_3: StarRailChallengeBossFloorNode | None = None
     is_fast: bool
     maze_id: int
     last_update_time: PartialTime
-    extra_star_num: Optional[int] = 0
-    is_tierce: Optional[bool] = False
+    extra_star_num: int | None = 0
+    is_tierce: bool | None = False
 
     @property
     def score(self) -> int:
@@ -92,6 +90,6 @@ class StarRailChallengeBoss(APIModel):
     max_floor_id: int
     total_battles: int = Field(alias="battle_num")
     has_data: bool
-    extra_star_num: Optional[int] = 0
+    extra_star_num: int | None = 0
 
     floors: list[StarRailChallengeBossFloor] = Field(alias="all_floor_detail")

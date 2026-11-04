@@ -1,7 +1,6 @@
 """Starrail Chronicle Base Model."""
 
 import datetime
-from typing import Optional
 
 from simnet.models.base import APIModel
 
@@ -14,7 +13,7 @@ class PartialTime(APIModel):
     day: int
     hour: int
     minute: int
-    second: Optional[int] = None
+    second: int | None = None
 
     @property
     def datetime(self) -> datetime.datetime:

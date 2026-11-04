@@ -1,7 +1,5 @@
 """Starrail chronicle challenge."""
 
-from typing import Optional
-
 from simnet.models.base import APIModel, Field
 from simnet.models.starrail.character import RogueCharacter
 
@@ -25,12 +23,12 @@ class StarRailFloor(APIModel):
     star_num: int
     node_1: FloorNode
     node_2: FloorNode
-    node_3: Optional[FloorNode] = None
+    node_3: FloorNode | None = None
     is_chaos: bool
     is_fast: bool
     maze_id: int
-    extra_star_num: Optional[int] = 0
-    is_tierce: Optional[bool] = False
+    extra_star_num: int | None = 0
+    is_tierce: bool | None = False
 
 
 class StarRailChallenge(APIModel):
@@ -44,6 +42,6 @@ class StarRailChallenge(APIModel):
     max_floor: str
     total_battles: int = Field(alias="battle_num")
     has_data: bool
-    extra_star_num: Optional[int] = 0
+    extra_star_num: int | None = 0
 
     floors: list[StarRailFloor] = Field(alias="all_floor_detail")

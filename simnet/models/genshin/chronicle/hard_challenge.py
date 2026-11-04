@@ -1,5 +1,4 @@
 import enum
-from typing import Optional
 
 from simnet.models.base import APIModel, DateTimeField, Field
 from simnet.models.genshin.character import BaseCharacter
@@ -12,8 +11,8 @@ class HardChallengeSchedule(APIModel):
     start_time: DateTimeField
     end_time: DateTimeField
     id: int = Field(alias="schedule_id")
-    start_date_time: Optional[PartialTime] = None
-    end_date_time: Optional[PartialTime] = None
+    start_date_time: PartialTime | None = None
+    end_date_time: PartialTime | None = None
 
     is_valid: bool
     name: str
@@ -125,7 +124,7 @@ class HardChallengeSingleData(APIModel):
         has_data (bool): Indicates whether the single challenge contains valid data.
     """
 
-    best: Optional[HardChallengeSingleBestData] = None
+    best: HardChallengeSingleBestData | None = None
     challenge: list[HardChallengeSingleChallengeData]
     has_data: bool
 

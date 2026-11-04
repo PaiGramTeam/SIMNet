@@ -1,11 +1,10 @@
 from datetime import datetime
-from enum import Enum
-from typing import Optional
+from enum import StrEnum
 
 from simnet.models.base import APIModel
 
 
-class StarRailSelfHelpActionLogReason(str, Enum):
+class StarRailSelfHelpActionLogReason(StrEnum):
     """
     Possible reasons for a StarRail self-help action log.
 
@@ -34,7 +33,7 @@ class StarRailSelfHelpActionLog(APIModel):
     uid: int
     time: datetime
     reason: StarRailSelfHelpActionLogReason
-    client_ip: Optional[str] = ""
+    client_ip: str | None = ""
 
     @property
     def status(self) -> int:

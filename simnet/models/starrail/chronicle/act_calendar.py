@@ -1,5 +1,4 @@
-from enum import Enum
-from typing import Optional
+from enum import StrEnum
 
 from simnet.models.base import APIModel, DateTimeField
 
@@ -9,7 +8,7 @@ class EquipListItem(APIModel):
 
     item_id: str
     item_name: str
-    item_url: Optional[str] = ""
+    item_url: str | None = ""
     rarity: int
     avatar_base_type: str
     is_forward: bool
@@ -35,7 +34,7 @@ class TimeInfo(APIModel):
     now: DateTimeField
 
 
-class CardPoolTypeEnum(str, Enum):
+class CardPoolTypeEnum(StrEnum):
     """An enumeration class representing the type of card pool in the StarRail act calendar."""
 
     Role = "CardPoolRole"
@@ -66,7 +65,7 @@ class RewardItem(APIModel):
     rarity: str
 
 
-class ActTypeEnum(str, Enum):
+class ActTypeEnum(StrEnum):
     """An enumeration class representing the type of act in the StarRail act calendar."""
 
     Sign = "ActivityTypeSign"
@@ -76,7 +75,7 @@ class ActTypeEnum(str, Enum):
     Other = "ActivityTypeOther"
 
 
-class ActStatusEnum(str, Enum):
+class ActStatusEnum(StrEnum):
     """An enumeration class representing the status of an act in the StarRail act calendar."""
 
     SignStatusUnopened = "SignStatusUnopened"
@@ -98,7 +97,7 @@ class ActStatusEnum(str, Enum):
     OtherActStatusFinish = "OtherActStatusFinish"
 
 
-class ActTimeTypeEnum(str, Enum):
+class ActTimeTypeEnum(StrEnum):
     """An enumeration class representing the time type of an act in the StarRail act calendar."""
 
     Default = "ActTimeTypeDefault"
@@ -133,7 +132,7 @@ class ActListItem(APIModel):
     act_time_type: ActTimeTypeEnum
 
 
-class ChallengeTypeEnum(str, Enum):
+class ChallengeTypeEnum(StrEnum):
     """An enumeration class representing the type of challenge in the StarRail act calendar."""
 
     Chasm = "ChallengeTypeChasm"
@@ -142,7 +141,7 @@ class ChallengeTypeEnum(str, Enum):
     Peak = "ChallengeTypePeak"
 
 
-class ChallengeStatusEnum(str, Enum):
+class ChallengeStatusEnum(StrEnum):
     """An enumeration class representing the status of a challenge in the StarRail act calendar."""
 
     Unopened = "challengeStatusUnopened"
@@ -163,7 +162,7 @@ class ChallengeListItem(APIModel):
 
     time_info: TimeInfo
     reward_list: list[RewardItem]
-    special_reward: Optional[RewardItem] = None
+    special_reward: RewardItem | None = None
     show_text: str
 
 

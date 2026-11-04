@@ -65,7 +65,7 @@ def zzz_cookies() -> Optional["Cookies"]:
 
 
 @pytest.fixture(scope="session")
-def genshin_player_id() -> Optional[int]:  # skipcq: PY-D0003
+def genshin_player_id() -> int | None:  # skipcq: PY-D0003
     _player_id = os.environ.get("GENSHIN_PLAYER_ID")
     if not _player_id:
         warnings.warn(UserWarning("No genshin player id set"), stacklevel=2)
@@ -74,7 +74,7 @@ def genshin_player_id() -> Optional[int]:  # skipcq: PY-D0003
 
 
 @pytest.fixture(scope="session")
-def starrail_player_id() -> Optional[int]:  # skipcq: PY-D0003
+def starrail_player_id() -> int | None:  # skipcq: PY-D0003
     _player_id = os.environ.get("STARRAIL_PLAYER_ID")
     if not _player_id:
         warnings.warn(UserWarning("No starrail player id set"), stacklevel=2)
@@ -83,7 +83,7 @@ def starrail_player_id() -> Optional[int]:  # skipcq: PY-D0003
 
 
 @pytest.fixture(scope="session")
-def zzz_player_id() -> Optional[int]:
+def zzz_player_id() -> int | None:
     _player_id = os.environ.get("ZZZ_PLAYER_ID")
     if not _player_id:
         warnings.warn(UserWarning("No zzz player id set"), stacklevel=2)
@@ -92,7 +92,7 @@ def zzz_player_id() -> Optional[int]:
 
 
 @pytest.fixture(scope="session")
-def account_id() -> Optional[int]:  # skipcq: PY-D0003
+def account_id() -> int | None:  # skipcq: PY-D0003
     _account_id = os.environ.get("ACCOUNT_ID")
     if not _account_id:
         return None
@@ -108,5 +108,5 @@ def region() -> Region:  # skipcq: PY-D0003
 
 
 @pytest.fixture(scope="session")
-def login_ticket() -> Optional[str]:  # skipcq: PY-D0003
+def login_ticket() -> str | None:  # skipcq: PY-D0003
     return os.environ.get("LOGIN_TICKET")

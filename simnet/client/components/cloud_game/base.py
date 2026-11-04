@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import CLOUD_GAME_URL
@@ -27,11 +27,11 @@ class BaseCloudGameClient(BaseClient):
         self,
         method: str,
         endpoint: str,
-        data: Optional[Any] = None,
-        params: Optional[QueryParamTypes] = None,
-        lang: Optional[str] = None,
-        region: Optional[Region] = None,
-        game: Optional[Game] = None,
+        data: Any | None = None,
+        params: QueryParamTypes | None = None,
+        lang: str | None = None,
+        region: Region | None = None,
+        game: Game | None = None,
     ):
         """Make a request towards the cloud game endpoint.
 
@@ -74,7 +74,7 @@ class BaseCloudGameClient(BaseClient):
         return CloudGameWallet(**data)
 
     async def get_cloud_game_notifications(
-        self, status: Optional[str] = None, notification_type: Optional[str] = None, is_sort: bool = True
+        self, status: str | None = None, notification_type: str | None = None, is_sort: bool = True
     ) -> dict[str, Any]:
         """Get the notifications for the cloud game."""
         status = status or "NotificationStatusUnread"

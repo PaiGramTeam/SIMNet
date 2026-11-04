@@ -1,4 +1,4 @@
-from typing import Any, NoReturn, Optional, Union
+from typing import Any, NoReturn
 
 
 class SIMNetException(Exception):
@@ -30,9 +30,9 @@ class BadRequest(SIMNetException):
 
     def __init__(
         self,
-        response: Optional[dict[str, Any]] = None,
-        message: Optional[str] = None,
-        status_code: Optional[int] = None,
+        response: dict[str, Any] | None = None,
+        message: str | None = None,
+        status_code: int | None = None,
     ) -> None:
         if status_code is not None:
             self.status_code = status_code
@@ -60,7 +60,7 @@ class BadRequest(SIMNetException):
         return f"{type(self).__name__}({repr(response)})"
 
     @property
-    def response(self) -> dict[str, Union[str, Any, None]]:
+    def response(self) -> dict[str, str | Any | None]:
         return {"retcode": self.ret_code, "message": self.original}
 
     @property
@@ -231,7 +231,7 @@ class InvalidDevice(BadRequest):
 
 
 _TBR = type[BadRequest]
-_errors: dict[int, Union[_TBR, str, tuple[_TBR, Optional[str]]]] = {
+_errors: dict[int, _TBR | str | tuple[_TBR, str | None]] = {
     # misc hoyolab
     -3: InvalidCookies,
     -100: InvalidCookies,
@@ -280,7 +280,7 @@ _errors: dict[int, Union[_TBR, str, tuple[_TBR, Optional[str]]]] = {
     10041: InvalidDevice,
 }
 
-ERRORS: dict[int, tuple[_TBR, Optional[str]]] = {
+ERRORS: dict[int, tuple[_TBR, str | None]] = {
     ret_code: ((exc, None) if isinstance(exc, type) else (BadRequest, exc) if isinstance(exc, str) else exc)
     for ret_code, exc in _errors.items()
 }

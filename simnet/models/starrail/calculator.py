@@ -1,6 +1,6 @@
 """Starrail calculator models."""
 
-from typing import Any, Optional
+from typing import Any
 
 from pydantic import field_validator
 
@@ -185,6 +185,6 @@ class StarrailCalculatorCharacterDetails(APIModel):
     """
 
     avatar: StarrailCalculatorCharacter
-    equipment: Optional[StarrailCalculatorWeapon] = None
+    equipment: StarrailCalculatorWeapon | None = None
     skills: list[StarrailCalculatorSkill]
     skills_other: list[StarrailCalculatorSkill]

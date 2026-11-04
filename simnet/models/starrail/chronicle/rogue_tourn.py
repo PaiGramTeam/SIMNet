@@ -1,5 +1,3 @@
-from typing import Optional
-
 from simnet.models.base import APIModel
 from simnet.models.starrail.character import RogueCharacter
 from simnet.models.starrail.chronicle.base import PartialTime
@@ -15,7 +13,7 @@ class StarRailRogueTournCommonInfo(APIModel):
     """Star Rail Tourn Common Info"""
 
     area_id: int
-    difficulty: Optional[int] = 0
+    difficulty: int | None = 0
     exist_data: bool
 
     @property
@@ -42,9 +40,9 @@ class StarRailRogueTournRecordBrief(APIModel):
 
     title: str
     icon: str
-    color: Optional[str] = None
-    common_info: Optional[StarRailRogueTournCommonInfo] = None
-    common_info_v2: Optional[StarRailRogueTournCommonInfoV2] = None
+    color: str | None = None
+    common_info: StarRailRogueTournCommonInfo | None = None
+    common_info_v2: StarRailRogueTournCommonInfoV2 | None = None
 
     @property
     def exist_data(self) -> bool:
@@ -86,10 +84,10 @@ class StarRailRogueTournBasic(APIModel):
     normal_record_brief: StarRailRogueTournRecordBrief
     weekly_record_brief: StarRailRogueTournRecordBrief
     finished_weekly: bool
-    rogue_tourn_exp_is_full: Optional[bool] = False
-    titan_total: Optional[int] = None
-    titan_current: Optional[int] = None
-    season_title_list: Optional[list[StarRailRogueTournBasicSeason]] = None
+    rogue_tourn_exp_is_full: bool | None = False
+    titan_total: int | None = None
+    titan_current: int | None = None
+    season_title_list: list[StarRailRogueTournBasicSeason] | None = None
 
 
 class RogueTournMiracle(RogueMiracle):
@@ -137,11 +135,11 @@ class StarRailRogueTournRecord(APIModel):
     miracles: list[RogueTournMiracle]
     hex_miracles: list[RogueTournMiracle]
     formula_list: list[RogueTournFormula]
-    common_info: Optional[StarRailRogueTournCommonInfo] = None
-    easy_mode: Optional[int] = None
-    rank_mode: Optional[str] = None
-    titan_bless_list: Optional[list[RogueTournTitanBless]] = None
-    common_info_v2: Optional[StarRailRogueTournCommonInfoV2] = None
+    common_info: StarRailRogueTournCommonInfo | None = None
+    easy_mode: int | None = None
+    rank_mode: str | None = None
+    titan_bless_list: list[RogueTournTitanBless] | None = None
+    common_info_v2: StarRailRogueTournCommonInfoV2 | None = None
 
 
 class StarRailRogueTournDetail(APIModel):

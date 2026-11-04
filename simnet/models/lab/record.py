@@ -1,6 +1,6 @@
 import enum
 import re
-from typing import Any, Optional, Union
+from typing import Any
 
 from pydantic import field_validator
 
@@ -45,7 +45,7 @@ class Account(APIModel):
     server_name: str = Field(alias="region_name")
 
     @property
-    def game(self) -> Union[Game, str]:
+    def game(self) -> Game | str:
         """Returns the game associated with the account.
 
         Returns:
@@ -141,8 +141,8 @@ class PartialUser(APIModel):
     accident_id: int = Field(alias="uid")
     nickname: str
     introduction: str = Field(alias="introduce")
-    avatar_id: Optional[str] = Field(None, alias="avatar")
-    avatar_url: Optional[str] = ""
+    avatar_id: str | None = Field(None, alias="avatar")
+    avatar_url: str | None = ""
     gender: Gender
     icon: str = Field(alias="avatar_url")
 
@@ -169,8 +169,8 @@ class UserCertification(APIModel):
         type (int): The certification's type, e.g. 2 for artist.
     """
 
-    icon_url: Optional[str] = None
-    description: Optional[str] = Field(alias="desc", default=None)
+    icon_url: str | None = None
+    description: str | None = Field(alias="desc", default=None)
     type: int
 
 
@@ -203,11 +203,11 @@ class FullUser(PartialUser):
         pc_bg_url (Optional[str]): The user's PC background URL.
     """
 
-    certification: Optional[UserCertification] = None
-    level: Optional[UserLevel] = None
+    certification: UserCertification | None = None
+    level: UserLevel | None = None
     pendant_url: str = Field(alias="pendant")
-    bg_url: Optional[str] = None
-    pc_bg_url: Optional[str] = None
+    bg_url: str | None = None
+    pc_bg_url: str | None = None
 
 
 class BaseRecordCard(Account):

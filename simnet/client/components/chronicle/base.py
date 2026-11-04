@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any
 
 from simnet.client.base import BaseClient
 from simnet.client.routes import RECORD_URL
@@ -25,11 +25,11 @@ class BaseChronicleClient(BaseClient):
         self,
         endpoint: str,
         endpoint_type: str = "api",
-        data: Optional[Any] = None,
-        params: Optional[QueryParamTypes] = None,
-        lang: Optional[str] = None,
-        region: Optional[Region] = None,
-        game: Optional[Game] = None,
+        data: Any | None = None,
+        params: QueryParamTypes | None = None,
+        lang: str | None = None,
+        region: Region | None = None,
+        game: Game | None = None,
     ):
         """Make a request towards the game record endpoint.
 
@@ -65,7 +65,7 @@ class BaseChronicleClient(BaseClient):
         switch_id: int,
         on: bool,
         *,
-        game: Optional[Game] = None,
+        game: Game | None = None,
     ) -> None:
         """Update user settings for the Battle Chronicle.
 
@@ -98,9 +98,9 @@ class BaseChronicleClient(BaseClient):
 
     async def get_record_cards(
         self,
-        account_id: Optional[int] = None,
+        account_id: int | None = None,
         *,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> list[RecordCard]:
         """Get a player record cards.
 
