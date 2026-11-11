@@ -266,11 +266,18 @@ class ZZZBattleChronicleClient(BaseChronicleClient):
         ch = characters
         if isinstance(characters, int):
             ch = [characters]
-        tasks = [
-            self._request_zzz_record("avatar/info", player_id, lang=lang, payload=_get_payload(character_id_))
-            for character_id_ in ch
-        ]
-        results = await asyncio.gather(*tasks)
+
+        chunk_size = 5
+        results: list[Mapping[str, Any]] = []
+        for i in range(0, len(ch), chunk_size):
+            chunk = ch[i : i + chunk_size]
+            tasks = [
+                self._request_zzz_record("avatar/info", player_id, lang=lang, payload=_get_payload(cid))
+                for cid in chunk
+            ]
+            batch_results = await asyncio.gather(*tasks)
+            results.extend(batch_results)
+
         data = [data["avatar_list"][0] for data in results]
         return ZZZCalculatorCharacterDetails(avatar_list=data)
 
