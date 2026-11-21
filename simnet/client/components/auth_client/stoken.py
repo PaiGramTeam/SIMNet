@@ -3,7 +3,7 @@ from asyncio import sleep
 
 from simnet.client.base import BaseClient
 from simnet.client.cookies import CookiesModel
-from simnet.client.routes import AUTH_KEY_URL, AUTH_URL, PASSPORT_CN_URL, PASSPORT_MA_URL, PASSPORT_URL, QRCODE_URL, URL
+from simnet.client.routes import AUTH_KEY_URL, AUTH_URL, PASSPORT_CN_URL, PASSPORT_MA_URL, QRCODE_URL, URL
 from simnet.errors import InvalidCookies
 from simnet.utils.constants import APP_CLOUD_IDS
 from simnet.utils.ds import DSType
@@ -56,6 +56,45 @@ class StokenAuthClient(BaseClient):
         self.cookies.set("stoken", stoken)
         return stoken, mid
 
+    async def get_token_by_stoken(
+        self,
+        token_type: int = 4,
+        stoken: str | None = None,
+        account_id: int | None = None,
+        mid: str | None = None,
+    ) -> str | None:
+        """
+        Exchanges a super ticket (`stoken`) for a token of the specified type.
+
+        The stoken, account_id and mid are resolved from the given arguments, falling
+        back to the cookies/attributes when not provided. The stoken is then exchanged
+        through the passport `app/exchange` endpoint for the destination token type
+        (e.g. `4` for a cookie token, `2` for a ltoken).
+
+        Args:
+            token_type (int): The type of the token to exchange the stoken for.
+                For example, `4` for a cookie token and `2` for a ltoken. Defaults to `4`.
+            stoken (Optional[str]): The super ticket to use to retrieve the token. If not provided, the
+                `stoken` cookie value will be used.
+            account_id (Optional[int]): The account ID to use to retrieve the token. If not provided, the
+                `account_id` attribute value will be used.
+            mid (Optional[str]): The machine ID to use to retrieve the token. If not provided, the `mid`
+                cookie value will be used.
+
+        Returns:
+            Optional[str]: The retrieved token, or None if the response contains no token.
+
+        Raises:
+            InvalidCookies: If the `stoken`, `account_id` or `mid` argument is `None`, or if the stoken is invalid.
+        """
+        self.region_specific(True)
+        stoken, mid = self.check_stoken(stoken, account_id, mid)
+        url = PASSPORT_MA_URL.get_url(self.region) / "app/exchange"
+        headers = {"x-rpc-app_id": "bll8iq97cem8"}
+        data_ = {"dst_token_type": token_type, "mid": mid, "src_token": {"token": stoken, "token_type": 1}}
+        data = await self.request_lab(url, method="POST", headers=headers, data=data_)
+        return data.get("token", {}).get("token")
+
     async def get_cookie_token_by_stoken(
         self,
         stoken: str | None = None,
@@ -79,11 +118,7 @@ class StokenAuthClient(BaseClient):
         Raises:
             ValueError: If the `login_ticket` argument is `None`, or if the `account_id` argument is `None`.
         """
-        self.check_stoken(stoken, account_id, mid)
-        url = PASSPORT_URL.get_url(self.region) / "getCookieAccountInfoBySToken"
-        method = "GET" if self.region == Region.CHINESE else "POST"
-        data = await self.request_lab(url, method=method)
-        cookie_token = data.get("cookie_token")
+        cookie_token = await self.get_token_by_stoken(4, stoken, account_id, mid)
         if cookie_token:
             self.cookies["cookie_token"] = cookie_token
             self.cookies["account_id"] = str(self.account_id)
@@ -112,11 +147,7 @@ class StokenAuthClient(BaseClient):
         Raises:
             ValueError: If the `login_ticket` argument is `None`, or if the `account_id` argument is `None`.
         """
-        self.check_stoken(stoken, account_id, mid)
-        url = PASSPORT_URL.get_url(self.region) / "getLTokenBySToken"
-        method = "GET" if self.region == Region.CHINESE else "POST"
-        data = await self.request_lab(url, method=method)
-        ltoken = data.get("ltoken", "")
+        ltoken = await self.get_token_by_stoken(2, stoken, account_id, mid)
         if ltoken:
             self.cookies["ltoken"] = ltoken
             self.cookies["ltuid"] = str(self.account_id)
@@ -345,7 +376,7 @@ class StokenAuthClient(BaseClient):
         self.region_specific(False)
         self.check_stoken(stoken, account_id, mid)
         account_id = account_id or self.account_id
-        url = AUTH_KEY_URL.get_url(self.region) / "../../../account/ma-passport/token/getBySToken"
+        url = PASSPORT_MA_URL.get_url(self.region) / "token/getBySToken"
         headers = {"x-rpc-app_id": "c9oqaq3s3gu8"}
         data_ = {"dst_token_types": [1, 2, 4]}
         data = await self.request_lab(url, method="POST", headers=headers, data=data_)

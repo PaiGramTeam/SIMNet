@@ -28,7 +28,7 @@ class LTokenAuthClient(BaseClient):
             ValueError: If the `ltoken` argument is `None`, or if the `account_id` argument is `None`.
             InvalidCookies: If the ltoken is invalid.
         """
-        ltoken = ltoken or self.cookies.get("ltoken")
+        ltoken = ltoken or self.cookies.get("ltoken") or self.cookies.get("ltoken_v2")
         ltuid = ltuid or self.account_id
         if ltoken is None:
             raise InvalidCookies(message="The 'ltoken' argument cannot be None.")

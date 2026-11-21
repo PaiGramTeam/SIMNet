@@ -99,15 +99,17 @@ class TestAuthClient:
 
     @staticmethod
     async def test_verify_cookie_token(auth_client: "AuthClient"):
-        if auth_client.cookies.get("cookie_token") is None:
-            pytest.skip("Test case test_verify_cookie_token skipped: cookie_token is None")
+        ck = auth_client.cookies.get("cookie_token") or auth_client.cookies.get("cookie_token_v2")
+        if ck is None:
+            pytest.skip("Test case test_verify_cookie_token skipped: cookie_token or cookie_token_v2 is None")
         await auth_client.verify_cookie_token()
         assert True
 
     @staticmethod
     async def test_verify_ltoken(auth_client: "AuthClient"):
-        if auth_client.cookies.get("ltoken") is None:
-            pytest.skip("Test case test_verify_ltoken skipped: ltoken is None")
+        lt = auth_client.cookies.get("ltoken") or auth_client.cookies.get("ltoken_v2")
+        if lt is None:
+            pytest.skip("Test case test_verify_ltoken skipped: ltoken or ltoken_v2 is None")
         await auth_client.verify_ltoken()
         assert True
 
@@ -119,11 +121,19 @@ class TestAuthClient:
         assert True
 
     @staticmethod
-    async def test_gen_login_qrcode_v1(auth_client: "AuthClient"):
+    async def test_gen_login_qrcode_v1(auth_client: "AuthClient", region: "Region"):
+        if region != Region.CHINESE:
+            pytest.skip(
+                "Test case test_get_authkey_by_stoken skipped:This method is only available for the Chinese region."
+            )
         await auth_client.gen_login_qrcode()
         assert True
 
     @staticmethod
-    async def test_gen_login_qrcode_v2(auth_client: "AuthClient"):
+    async def test_gen_login_qrcode_v2(auth_client: "AuthClient", region: "Region"):
+        if region != Region.CHINESE:
+            pytest.skip(
+                "Test case test_get_authkey_by_stoken skipped:This method is only available for the Chinese region."
+            )
         await auth_client.gen_login_qrcode_v2()
         assert True
